@@ -1,0 +1,1533 @@
+{
+  "schema_version": 1,
+  "basis": "Lexical current consumer inventory and focused type/allocator/UUID checks; not compilation or execution",
+  "qualification": "NotRun",
+  "factor_row_identity": "Database-owned noncycling bigint; retained/deleted rows never determine allocation",
+  "enrollment_identity": "Existing immutable request/TOTP enrollment UUID; pending replacement changes enrollment UUID, not row slot",
+  "display_order": "Existing required/priority fields; row identity remains a deterministic tie-breaker only",
+  "widened_function_contracts": [
+    "begin_authenticator_app_setup",
+    "begin_twofactor_setup",
+    "complete_authenticator_app_setup_and_rotate_session",
+    "cor08_authorized_begin_authenticator_app_setup",
+    "cor16_begin_twofactor_setup",
+    "cor16_bind_setup",
+    "get_password_reset_totp_enrollment",
+    "get_pending_authenticator_app_setup",
+    "get_verified_totp_enrollment_for_account",
+    "mark_password_reset_totp_step_used",
+    "mark_totp_step_used"
+  ],
+  "files": [
+    {
+      "path": "Repos/AccountRepo.cs",
+      "sha256": "2359bb5a084116c0d7c26c302e939ef74b629c91c784a9f21cb0277c5939404b",
+      "references": [
+        {
+          "line": 106,
+          "text": "long? TwoFactorIndex,"
+        },
+        {
+          "line": 1803,
+          "text": "long? twoFactorIndex = reader.IsDBNull(2) ? null : reader.GetInt64(2);"
+        },
+        {
+          "line": 1805,
+          "text": "return new TwoFactorSetupCommandResult(result, code, twoFactorIndex, expiration);"
+        }
+      ]
+    },
+    {
+      "path": "Repos/AuthenticatorAppEnrollmentRepo.cs",
+      "sha256": "0683d0165db2478a93f036c0dfde44c50e1a00d548465eab802db9dc5c7413b5",
+      "references": [
+        {
+          "line": 17,
+          "text": "long? TwoFactorIndex,"
+        },
+        {
+          "line": 23,
+          "text": "long? TwoFactorIndex,"
+        },
+        {
+          "line": 43,
+          "text": "long? TwoFactorIndex, treehammock.DataLayer.Entitlements.EntitlementProjection? Entitlements = null);"
+        },
+        {
+          "line": 49,
+          "text": "long TwoFactorIndex,"
+        },
+        {
+          "line": 141,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 554,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 563,
+          "text": "await using var operation = await _activeDatabase.SecurityOperations.BeginAsync(\"AuthenticatorAppEnrollmentRepo.MarkTotpStepUsedAsync\", new { accountId, twoFactorIndex, timeStep, enrollmentId }, accountId, null, null, cancellationToken);"
+        },
+        {
+          "line": 573,
+          "text": "\"twoFactorIndex\","
+        },
+        {
+          "line": 577,
+          "text": "command.Parameters.Add(\"@twoFactorIndex\", NpgsqlDbType.Bigint).Value = twoFactorIndex;"
+        },
+        {
+          "line": 595,
+          "text": "await RollbackAndLogAsync(tran, ex, procedure, new { accountId, twoFactorIndex, timeStep, enrollmentId }, stage: dependencyStage);"
+        },
+        {
+          "line": 602,
+          "text": "LogRepositoryFailure(ex, nameof(MarkTotpStepUsedAsync), new { accountId, twoFactorIndex, timeStep, enrollmentId }, stage: dependencyStage);"
+        }
+      ]
+    },
+    {
+      "path": "Repos/PasswordResetTotpRepo.cs",
+      "sha256": "5a68e5662341868e49cad26aa4b2a4dbcc153ec45ddaa789d3d6cbe9f5c2fb60",
+      "references": [
+        {
+          "line": 14,
+          "text": "long TwoFactorIndex,"
+        },
+        {
+          "line": 33,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 125,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 134,
+          "text": "await using var operation = await _activeDatabase.SecurityOperations.BeginAsync(\"PasswordResetTotpRepo.MarkPasswordResetTotpStepUsedAsync\", new { accountId, twoFactorIndex, timeStep, enrollmentId }, accountId, null, null, cancellationToken);"
+        },
+        {
+          "line": 144,
+          "text": "\"twoFactorIndex\","
+        },
+        {
+          "line": 148,
+          "text": "command.Parameters.Add(\"@twoFactorIndex\", NpgsqlDbType.Bigint).Value = twoFactorIndex;"
+        },
+        {
+          "line": 177,
+          "text": "await RollbackAndLogAsync(tran, ex, procedure, new { accountId, twoFactorIndex, timeStep, enrollmentId }, stage: dependencyStage);"
+        },
+        {
+          "line": 185,
+          "text": "LogRepositoryFailure(ex, nameof(MarkPasswordResetTotpStepUsedAsync), new { accountId, twoFactorIndex, timeStep, enrollmentId }, stage: dependencyStage);"
+        }
+      ]
+    },
+    {
+      "path": "Rigging/Database/Baseline/000_canonical_database.sql",
+      "sha256": "1743da64491c5e7d715c4276fdb9f610d2310c8964b4e3f1655ab52bf5bb80a6",
+      "references": [
+        {
+          "line": 160,
+          "text": "two_factor_index bigint generated by default as identity (minvalue 0 start with 0 no cycle) not null,"
+        },
+        {
+          "line": 201,
+          "text": "primary key(account_id, two_factor_index)"
+        },
+        {
+          "line": 405,
+          "text": "perform 1 from two_factor_authentications t where t.account_id = p_id order by t.two_factor_index for update;"
+        },
+        {
+          "line": 560,
+          "text": "select encode(digest(coalesce(jsonb_agg(jsonb_build_array(t.two_factor_index,t.method,t.required,t.expiration,"
+        },
+        {
+          "line": 562,
+          "text": "t.totp_secret_version,t.phone_number,t.email_address) order by t.two_factor_index)::text,'[]'),'sha256'),'hex')"
+        },
+        {
+          "line": 740,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 768,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 777,
+          "text": "select t.two_factor_index into target_index from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 780,
+          "text": "values(p_accountId, p_setupTokenHash, nullif(trim(p_authId), ''), p_createdOn, p_expiration - p_createdOn, p_expiration, 3, false, 0, null, null, null, null, coalesce(p_required, true), p_totpSecretCiphertext, p_totpSecretNonce, p_totpSecretTag, p_totpSecretVersion, p_totpKeyId, p_totpEnrollmentId, p_totpAlgorithm, p_totpDigits, p_totpPeriodSeconds, p_totpClockSkewSteps, null, provider_type, null, null, 0, null, null) returning two_factor_authentications.two_factor_index into target_index;"
+        },
+        {
+          "line": 782,
+          "text": "update two_factor_authentications t set token = p_setupTokenHash, auth_id = nullif(trim(p_authId), ''), created_on = p_createdOn, lifespan = p_expiration - p_createdOn, expiration = p_expiration, method = 3, verified = false, priority = 0, country = null, email_address = null, phone_number = null, phone_country_code = null, required = coalesce(p_required, true), totp_secret_ciphertext = p_totpSecretCiphertext, totp_secret_nonce = p_totpSecretNonce, totp_secret_tag = p_totpSecretTag, totp_secret_version = p_totpSecretVersion, totp_key_id = p_totpKeyId, totp_enrollment_id = p_totpEnrollmentId, totp_algorithm = p_totpAlgorithm, totp_digits = p_totpDigits, totp_period_seconds = p_totpPeriodSeconds, totp_clock_skew_steps = p_totpClockSkewSteps, totp_last_used_step = null, totp_provider_type = provider_type, totp_provider_enrollment_id = null, totp_provider_account_binding_hash = null, setup_attempts = 0, revoked_at = null, revoked_reason = null where t.account_id = p_accountId and t.two_factor_index = target_index and t.verified = false and t.revoked_at is null;"
+        },
+        {
+          "line": 787,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=target_index;"
+        },
+        {
+          "line": 788,
+          "text": "delete from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null and t.two_factor_index <> target_index;"
+        },
+        {
+          "line": 2608,
+          "text": "order by t.required desc,t.priority desc,t.two_factor_index"
+        },
+        {
+          "line": 3550,
+          "text": "t.two_factor_index asc;"
+        },
+        {
+          "line": 3565,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 3643,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and t.setup_request_id=p_requestId and t.setup_version=p_requestVersion and not t.verified;"
+        },
+        {
+          "line": 3650,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and not t.verified and t.revoked_at is null and"
+        },
+        {
+          "line": 3703,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 3716,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone, setup_attempts smallint, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_provider_type smallint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3725,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_FOUND'::text, t.two_factor_index, t.expiration, t.setup_attempts, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_provider_type, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash and (t.expiration is null or t.expiration > coalesce(p_now, now())) and t.totp_provider_type = 1 and t.totp_secret_ciphertext is not null and t.totp_secret_nonce is not null and t.totp_secret_tag is not null order by t.created_on desc, t.two_factor_index desc limit 1;"
+        },
+        {
+          "line": 3748,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3752,
+          "text": "update two_factor_authentications set token = null, expiration = moment, lifespan = moment - created_on, setup_attempts = safe_max_attempts, totp_secret_ciphertext = null, totp_secret_nonce = null, totp_secret_tag = null where account_id = p_accountId and two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3764,
+          "text": "and t.two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3792,
+          "text": "returns table(result boolean, code text, account_security_stamp uuid, two_factor_index bigint)"
+        },
+        {
+          "line": 3818,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3821,
+          "text": "if setup_record.expiration is not null and setup_record.expiration <= moment then return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3822,
+          "text": "if setup_record.totp_provider_type <> 1 or setup_record.totp_secret_ciphertext is null or setup_record.totp_secret_nonce is null or setup_record.totp_secret_tag is null then return query select false, 'AUTHENTICATOR_SETUP_INVALID_SECRET'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3823,
+          "text": "if setup_record.totp_last_used_step is not null and p_timeStep <= setup_record.totp_last_used_step then return query select false, 'TOTP_REPLAY_DETECTED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3824,
+          "text": "if exists (select 1 from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = true and t.revoked_at is null and t.two_factor_index <> setup_record.two_factor_index) then return query select false, 'TWO_FACTOR_AUTHENTICATOR_APP_ALREADY_ATTACHED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3826,
+          "text": "if new_cutoff is not null and new_cutoff <= moment then return query select false, 'SESSION_CUT_OFF_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3827,
+          "text": "update two_factor_authentications tfa set verified = true, token = null, expiration = null, lifespan = null, setup_attempts = 0, priority = greatest(tfa.priority, 1), totp_last_used_step = p_timeStep, revoked_at = null, revoked_reason = null where tfa.account_id = p_accountId and tfa.two_factor_index = setup_record.two_factor_index and tfa.verified = false and tfa.revoked_at is null and tfa.setup_request_id=setup_record.setup_request_id and tfa.setup_version=setup_record.setup_version;"
+        },
+        {
+          "line": 3867,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_VERIFIED_SESSION_ROTATED'::text, new_account_stamp, setup_record.two_factor_index;"
+        },
+        {
+          "line": 3871,
+          "text": "return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index;"
+        },
+        {
+          "line": 3901,
+          "text": "returns table(account_id uuid, two_factor_index bigint, method smallint, totp_provider_type smallint, totp_provider_enrollment_id text, totp_provider_account_binding_hash text, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3905,
+          "text": "select t.account_id, t.two_factor_index, t.method, t.totp_provider_type, t.totp_provider_enrollment_id, t.totp_provider_account_binding_hash, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version"
+        },
+        {
+          "line": 3913,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 3919,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 3927,
+          "text": "select t.totp_last_used_step, t.totp_provider_type into existing_step, provider_type from two_factor_authentications t where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null for update;"
+        },
+        {
+          "line": 3931,
+          "text": "update two_factor_authentications t set totp_last_used_step = p_timeStep where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null and t.totp_provider_type = 1;"
+        },
+        {
+          "line": 4116,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc limit 1"
+        },
+        {
+          "line": 4438,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 4473,
+          "text": "two_factor_index bigint,"
+        },
+        {
+          "line": 4484,
+          "text": "e.two_factor_index,"
+        },
+        {
+          "line": 4497,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 4506,
+          "text": "from mark_totp_step_used(p_accountId, p_twoFactorIndex, p_timeStep, p_enrollmentId);"
+        },
+        {
+          "line": 4848,
+          "text": "order by t.two_factor_index) from two_factor_authentications t where t.account_id=p_account))::text,'sha256'),'hex')"
+        },
+        {
+          "line": 5253,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 5993,
+          "text": "else (select jsonb_agg(jsonb_build_array(t.two_factor_index,t.token,t.verified,t.revoked_at) order by t.two_factor_index) from two_factor_authentications t where t.account_id=a.account_id and t.method=right(p_purpose,1)::smallint)"
+        },
+        {
+          "line": 6419,
+          "text": "where t.account_id=p_account and t.two_factor_index=p_index and not t.verified and t.revoked_at is null and t.token is not null;"
+        },
+        {
+          "line": 6441,
+          "text": "returns table(result boolean,code text,two_factor_index bigint,expiration timestamptz)"
+        },
+        {
+          "line": 6461,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 6467,
+          "text": "idx:=prior.two_factor_index;version:=p_expectedVersion+1;"
+        },
+        {
+          "line": 6477,
+          "text": "case when p_method=2 then btrim(p_phoneNumber) end,case when p_method=2 then btrim(p_phoneCountryCode) end,p_required) returning two_factor_authentications.two_factor_index into idx;"
+        },
+        {
+          "line": 6483,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=idx and not t.verified and t.revoked_at is null and t.setup_request_id=p_expectedRequestId and t.setup_version=p_expectedVersion;"
+        },
+        {
+          "line": 6488,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=idx;"
+        },
+        {
+          "line": 6686,
+          "text": "row(old.two_factor_index,old.method,old.required,old.expiration,old.email_address,old.phone_number,old.phone_country_code,old.totp_provider_type,old.totp_algorithm,old.totp_digits,old.totp_period_seconds,old.totp_clock_skew_steps,old.totp_secret_ciphertext,old.totp_secret_nonce,old.totp_secret_tag,old.totp_secret_version) is not distinct from"
+        },
+        {
+          "line": 6687,
+          "text": "row(new.two_factor_index,new.method,new.required,new.expiration,new.email_address,new.phone_number,new.phone_country_code,new.totp_provider_type,new.totp_algorithm,new.totp_digits,new.totp_period_seconds,new.totp_clock_skew_steps,new.totp_secret_ciphertext,new.totp_secret_nonce,new.totp_secret_tag,new.totp_secret_version) then return new;end if;"
+        },
+        {
+          "line": 7211,
+          "text": "when 'factor_history' then table_name:='two_factor_authentications';key_sql:='t.two_factor_index::text';account_sql:='t.account_id';predicate_sql:='(t.revoked_at<clock_timestamp()-make_interval(days=>p_history) or (not t.verified and coalesce(t.setup_authorized_until,t.expiration,t.created_on+interval ''1 day'')<=clock_timestamp()))';"
+        }
+      ]
+    },
+    {
+      "path": "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+      "sha256": "1743da64491c5e7d715c4276fdb9f610d2310c8964b4e3f1655ab52bf5bb80a6",
+      "references": [
+        {
+          "line": 160,
+          "text": "two_factor_index bigint generated by default as identity (minvalue 0 start with 0 no cycle) not null,"
+        },
+        {
+          "line": 201,
+          "text": "primary key(account_id, two_factor_index)"
+        },
+        {
+          "line": 405,
+          "text": "perform 1 from two_factor_authentications t where t.account_id = p_id order by t.two_factor_index for update;"
+        },
+        {
+          "line": 560,
+          "text": "select encode(digest(coalesce(jsonb_agg(jsonb_build_array(t.two_factor_index,t.method,t.required,t.expiration,"
+        },
+        {
+          "line": 562,
+          "text": "t.totp_secret_version,t.phone_number,t.email_address) order by t.two_factor_index)::text,'[]'),'sha256'),'hex')"
+        },
+        {
+          "line": 740,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 768,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 777,
+          "text": "select t.two_factor_index into target_index from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 780,
+          "text": "values(p_accountId, p_setupTokenHash, nullif(trim(p_authId), ''), p_createdOn, p_expiration - p_createdOn, p_expiration, 3, false, 0, null, null, null, null, coalesce(p_required, true), p_totpSecretCiphertext, p_totpSecretNonce, p_totpSecretTag, p_totpSecretVersion, p_totpKeyId, p_totpEnrollmentId, p_totpAlgorithm, p_totpDigits, p_totpPeriodSeconds, p_totpClockSkewSteps, null, provider_type, null, null, 0, null, null) returning two_factor_authentications.two_factor_index into target_index;"
+        },
+        {
+          "line": 782,
+          "text": "update two_factor_authentications t set token = p_setupTokenHash, auth_id = nullif(trim(p_authId), ''), created_on = p_createdOn, lifespan = p_expiration - p_createdOn, expiration = p_expiration, method = 3, verified = false, priority = 0, country = null, email_address = null, phone_number = null, phone_country_code = null, required = coalesce(p_required, true), totp_secret_ciphertext = p_totpSecretCiphertext, totp_secret_nonce = p_totpSecretNonce, totp_secret_tag = p_totpSecretTag, totp_secret_version = p_totpSecretVersion, totp_key_id = p_totpKeyId, totp_enrollment_id = p_totpEnrollmentId, totp_algorithm = p_totpAlgorithm, totp_digits = p_totpDigits, totp_period_seconds = p_totpPeriodSeconds, totp_clock_skew_steps = p_totpClockSkewSteps, totp_last_used_step = null, totp_provider_type = provider_type, totp_provider_enrollment_id = null, totp_provider_account_binding_hash = null, setup_attempts = 0, revoked_at = null, revoked_reason = null where t.account_id = p_accountId and t.two_factor_index = target_index and t.verified = false and t.revoked_at is null;"
+        },
+        {
+          "line": 787,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=target_index;"
+        },
+        {
+          "line": 788,
+          "text": "delete from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null and t.two_factor_index <> target_index;"
+        },
+        {
+          "line": 2608,
+          "text": "order by t.required desc,t.priority desc,t.two_factor_index"
+        },
+        {
+          "line": 3550,
+          "text": "t.two_factor_index asc;"
+        },
+        {
+          "line": 3565,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 3643,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and t.setup_request_id=p_requestId and t.setup_version=p_requestVersion and not t.verified;"
+        },
+        {
+          "line": 3650,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and not t.verified and t.revoked_at is null and"
+        },
+        {
+          "line": 3703,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 3716,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone, setup_attempts smallint, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_provider_type smallint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3725,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_FOUND'::text, t.two_factor_index, t.expiration, t.setup_attempts, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_provider_type, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash and (t.expiration is null or t.expiration > coalesce(p_now, now())) and t.totp_provider_type = 1 and t.totp_secret_ciphertext is not null and t.totp_secret_nonce is not null and t.totp_secret_tag is not null order by t.created_on desc, t.two_factor_index desc limit 1;"
+        },
+        {
+          "line": 3748,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3752,
+          "text": "update two_factor_authentications set token = null, expiration = moment, lifespan = moment - created_on, setup_attempts = safe_max_attempts, totp_secret_ciphertext = null, totp_secret_nonce = null, totp_secret_tag = null where account_id = p_accountId and two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3764,
+          "text": "and t.two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3792,
+          "text": "returns table(result boolean, code text, account_security_stamp uuid, two_factor_index bigint)"
+        },
+        {
+          "line": 3818,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3821,
+          "text": "if setup_record.expiration is not null and setup_record.expiration <= moment then return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3822,
+          "text": "if setup_record.totp_provider_type <> 1 or setup_record.totp_secret_ciphertext is null or setup_record.totp_secret_nonce is null or setup_record.totp_secret_tag is null then return query select false, 'AUTHENTICATOR_SETUP_INVALID_SECRET'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3823,
+          "text": "if setup_record.totp_last_used_step is not null and p_timeStep <= setup_record.totp_last_used_step then return query select false, 'TOTP_REPLAY_DETECTED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3824,
+          "text": "if exists (select 1 from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = true and t.revoked_at is null and t.two_factor_index <> setup_record.two_factor_index) then return query select false, 'TWO_FACTOR_AUTHENTICATOR_APP_ALREADY_ATTACHED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3826,
+          "text": "if new_cutoff is not null and new_cutoff <= moment then return query select false, 'SESSION_CUT_OFF_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3827,
+          "text": "update two_factor_authentications tfa set verified = true, token = null, expiration = null, lifespan = null, setup_attempts = 0, priority = greatest(tfa.priority, 1), totp_last_used_step = p_timeStep, revoked_at = null, revoked_reason = null where tfa.account_id = p_accountId and tfa.two_factor_index = setup_record.two_factor_index and tfa.verified = false and tfa.revoked_at is null and tfa.setup_request_id=setup_record.setup_request_id and tfa.setup_version=setup_record.setup_version;"
+        },
+        {
+          "line": 3867,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_VERIFIED_SESSION_ROTATED'::text, new_account_stamp, setup_record.two_factor_index;"
+        },
+        {
+          "line": 3871,
+          "text": "return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index;"
+        },
+        {
+          "line": 3901,
+          "text": "returns table(account_id uuid, two_factor_index bigint, method smallint, totp_provider_type smallint, totp_provider_enrollment_id text, totp_provider_account_binding_hash text, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3905,
+          "text": "select t.account_id, t.two_factor_index, t.method, t.totp_provider_type, t.totp_provider_enrollment_id, t.totp_provider_account_binding_hash, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version"
+        },
+        {
+          "line": 3913,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 3919,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 3927,
+          "text": "select t.totp_last_used_step, t.totp_provider_type into existing_step, provider_type from two_factor_authentications t where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null for update;"
+        },
+        {
+          "line": 3931,
+          "text": "update two_factor_authentications t set totp_last_used_step = p_timeStep where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null and t.totp_provider_type = 1;"
+        },
+        {
+          "line": 4116,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc limit 1"
+        },
+        {
+          "line": 4438,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 4473,
+          "text": "two_factor_index bigint,"
+        },
+        {
+          "line": 4484,
+          "text": "e.two_factor_index,"
+        },
+        {
+          "line": 4497,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 4506,
+          "text": "from mark_totp_step_used(p_accountId, p_twoFactorIndex, p_timeStep, p_enrollmentId);"
+        },
+        {
+          "line": 4848,
+          "text": "order by t.two_factor_index) from two_factor_authentications t where t.account_id=p_account))::text,'sha256'),'hex')"
+        },
+        {
+          "line": 5253,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 5993,
+          "text": "else (select jsonb_agg(jsonb_build_array(t.two_factor_index,t.token,t.verified,t.revoked_at) order by t.two_factor_index) from two_factor_authentications t where t.account_id=a.account_id and t.method=right(p_purpose,1)::smallint)"
+        },
+        {
+          "line": 6419,
+          "text": "where t.account_id=p_account and t.two_factor_index=p_index and not t.verified and t.revoked_at is null and t.token is not null;"
+        },
+        {
+          "line": 6441,
+          "text": "returns table(result boolean,code text,two_factor_index bigint,expiration timestamptz)"
+        },
+        {
+          "line": 6461,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 6467,
+          "text": "idx:=prior.two_factor_index;version:=p_expectedVersion+1;"
+        },
+        {
+          "line": 6477,
+          "text": "case when p_method=2 then btrim(p_phoneNumber) end,case when p_method=2 then btrim(p_phoneCountryCode) end,p_required) returning two_factor_authentications.two_factor_index into idx;"
+        },
+        {
+          "line": 6483,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=idx and not t.verified and t.revoked_at is null and t.setup_request_id=p_expectedRequestId and t.setup_version=p_expectedVersion;"
+        },
+        {
+          "line": 6488,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=idx;"
+        },
+        {
+          "line": 6686,
+          "text": "row(old.two_factor_index,old.method,old.required,old.expiration,old.email_address,old.phone_number,old.phone_country_code,old.totp_provider_type,old.totp_algorithm,old.totp_digits,old.totp_period_seconds,old.totp_clock_skew_steps,old.totp_secret_ciphertext,old.totp_secret_nonce,old.totp_secret_tag,old.totp_secret_version) is not distinct from"
+        },
+        {
+          "line": 6687,
+          "text": "row(new.two_factor_index,new.method,new.required,new.expiration,new.email_address,new.phone_number,new.phone_country_code,new.totp_provider_type,new.totp_algorithm,new.totp_digits,new.totp_period_seconds,new.totp_clock_skew_steps,new.totp_secret_ciphertext,new.totp_secret_nonce,new.totp_secret_tag,new.totp_secret_version) then return new;end if;"
+        },
+        {
+          "line": 7211,
+          "text": "when 'factor_history' then table_name:='two_factor_authentications';key_sql:='t.two_factor_index::text';account_sql:='t.account_id';predicate_sql:='(t.revoked_at<clock_timestamp()-make_interval(days=>p_history) or (not t.verified and coalesce(t.setup_authorized_until,t.expiration,t.created_on+interval ''1 day'')<=clock_timestamp()))';"
+        }
+      ]
+    },
+    {
+      "path": "Rigging/Database/Migrations/001_legacy_baseline.sql",
+      "sha256": "e287c32d9f9753818b2bc1146f3dc21105b0c43f2b7b3446e96db67720d0ae36",
+      "references": [
+        {
+          "line": 166,
+          "text": "two_factor_index bigint generated by default as identity (minvalue 0 start with 0 no cycle) not null,"
+        },
+        {
+          "line": 207,
+          "text": "primary key(account_id, two_factor_index)"
+        },
+        {
+          "line": 1943,
+          "text": "order by t.required desc,t.priority desc,t.two_factor_index"
+        },
+        {
+          "line": 2886,
+          "text": "t.two_factor_index asc;"
+        },
+        {
+          "line": 2901,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 2978,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and t.setup_request_id=p_requestId and t.setup_version=p_requestVersion and not t.verified;"
+        },
+        {
+          "line": 2985,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and not t.verified and t.revoked_at is null and"
+        },
+        {
+          "line": 3213,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 3233,
+          "text": "select t.two_factor_index into target_index from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3235,
+          "text": "select (coalesce(max(t.two_factor_index), -1) + 1)::bigint into target_index from two_factor_authentications t where t.account_id = p_accountId;"
+        },
+        {
+          "line": 3236,
+          "text": "insert into two_factor_authentications(two_factor_index, account_id, token, auth_id, created_on, lifespan, expiration, method, verified, priority, country, email_address, phone_number, phone_country_code, required, totp_secret_ciphertext, totp_secret_nonce, totp_secret_tag, totp_secret_version, totp_key_id, totp_enrollment_id, totp_algorithm, totp_digits, totp_period_seconds, totp_clock_skew_steps, totp_last_used_step, totp_provider_type, totp_provider_enrollment_id, totp_provider_account_binding_hash, setup_attempts, revoked_at, revoked_reason)"
+        },
+        {
+          "line": 3239,
+          "text": "update two_factor_authentications set token = p_setupTokenHash, auth_id = nullif(trim(p_authId), ''), created_on = p_createdOn, lifespan = p_expiration - p_createdOn, expiration = p_expiration, method = 3, verified = false, priority = 0, country = null, email_address = null, phone_number = null, phone_country_code = null, required = coalesce(p_required, true), totp_secret_ciphertext = p_totpSecretCiphertext, totp_secret_nonce = p_totpSecretNonce, totp_secret_tag = p_totpSecretTag, totp_secret_version = p_totpSecretVersion, totp_key_id = p_totpKeyId, totp_enrollment_id = p_totpEnrollmentId, totp_algorithm = p_totpAlgorithm, totp_digits = p_totpDigits, totp_period_seconds = p_totpPeriodSeconds, totp_clock_skew_steps = p_totpClockSkewSteps, totp_last_used_step = null, totp_provider_type = provider_type, totp_provider_enrollment_id = null, totp_provider_account_binding_hash = null, setup_attempts = 0, revoked_at = null, revoked_reason = null where account_id = p_accountId and two_factor_index = target_index and verified = false and revoked_at is null;"
+        },
+        {
+          "line": 3241,
+          "text": "delete from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null and t.two_factor_index <> target_index;"
+        },
+        {
+          "line": 3255,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone, setup_attempts smallint, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_provider_type smallint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3264,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_FOUND'::text, t.two_factor_index, t.expiration, t.setup_attempts, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_provider_type, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash and (t.expiration is null or t.expiration > coalesce(p_now, now())) and t.totp_provider_type = 1 and t.totp_secret_ciphertext is not null and t.totp_secret_nonce is not null and t.totp_secret_tag is not null order by t.created_on desc, t.two_factor_index desc limit 1;"
+        },
+        {
+          "line": 3285,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3289,
+          "text": "update two_factor_authentications set token = null, expiration = moment, lifespan = moment - created_on, setup_attempts = safe_max_attempts, totp_secret_ciphertext = null, totp_secret_nonce = null, totp_secret_tag = null where account_id = p_accountId and two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3301,
+          "text": "and t.two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 3329,
+          "text": "returns table(result boolean, code text, account_security_stamp uuid, two_factor_index bigint)"
+        },
+        {
+          "line": 3353,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 3355,
+          "text": "if setup_record.expiration is not null and setup_record.expiration <= moment then return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3356,
+          "text": "if setup_record.totp_provider_type <> 1 or setup_record.totp_secret_ciphertext is null or setup_record.totp_secret_nonce is null or setup_record.totp_secret_tag is null then return query select false, 'AUTHENTICATOR_SETUP_INVALID_SECRET'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3357,
+          "text": "if setup_record.totp_last_used_step is not null and p_timeStep <= setup_record.totp_last_used_step then return query select false, 'TOTP_REPLAY_DETECTED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3358,
+          "text": "if exists (select 1 from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = true and t.revoked_at is null and t.two_factor_index <> setup_record.two_factor_index) then return query select false, 'TWO_FACTOR_AUTHENTICATOR_APP_ALREADY_ATTACHED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3360,
+          "text": "if new_cutoff is not null and new_cutoff <= moment then return query select false, 'SESSION_CUT_OFF_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 3361,
+          "text": "update two_factor_authentications tfa set verified = true, token = null, expiration = null, lifespan = null, setup_attempts = 0, priority = greatest(tfa.priority, 1), totp_last_used_step = p_timeStep, revoked_at = null, revoked_reason = null where tfa.account_id = p_accountId and tfa.two_factor_index = setup_record.two_factor_index and tfa.verified = false and tfa.revoked_at is null;"
+        },
+        {
+          "line": 3388,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_VERIFIED_SESSION_ROTATED'::text, new_account_stamp, setup_record.two_factor_index;"
+        },
+        {
+          "line": 3417,
+          "text": "returns table(account_id uuid, two_factor_index bigint, method smallint, totp_provider_type smallint, totp_provider_enrollment_id text, totp_provider_account_binding_hash text, totp_secret_ciphertext bytea, totp_secret_nonce bytea, totp_secret_tag bytea, totp_secret_version integer, totp_last_used_step bigint, totp_key_id text, totp_enrollment_id uuid, totp_algorithm text, totp_digits integer, totp_period_seconds integer, totp_clock_skew_steps integer, totp_row_version bigint)"
+        },
+        {
+          "line": 3421,
+          "text": "select t.account_id, t.two_factor_index, t.method, t.totp_provider_type, t.totp_provider_enrollment_id, t.totp_provider_account_binding_hash, t.totp_secret_ciphertext, t.totp_secret_nonce, t.totp_secret_tag, t.totp_secret_version, t.totp_last_used_step, t.totp_key_id, t.totp_enrollment_id, t.totp_algorithm, t.totp_digits, t.totp_period_seconds, t.totp_clock_skew_steps, t.totp_row_version"
+        },
+        {
+          "line": 3429,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 3435,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 3443,
+          "text": "select t.totp_last_used_step, t.totp_provider_type into existing_step, provider_type from two_factor_authentications t where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null for update;"
+        },
+        {
+          "line": 3447,
+          "text": "update two_factor_authentications t set totp_last_used_step = p_timeStep where t.account_id = p_accountId and t.two_factor_index = p_twoFactorIndex and t.totp_enrollment_id = p_enrollmentId and t.method = 3 and t.verified = true and t.revoked_at is null and t.totp_provider_type = 1;"
+        },
+        {
+          "line": 3632,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc limit 1"
+        },
+        {
+          "line": 3954,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 3989,
+          "text": "two_factor_index bigint,"
+        },
+        {
+          "line": 4000,
+          "text": "e.two_factor_index,"
+        },
+        {
+          "line": 4013,
+          "text": "p_twoFactorIndex bigint,"
+        },
+        {
+          "line": 4022,
+          "text": "from mark_totp_step_used(p_accountId, p_twoFactorIndex, p_timeStep, p_enrollmentId);"
+        },
+        {
+          "line": 4355,
+          "text": "order by t.two_factor_index) from two_factor_authentications t where t.account_id=p_account))::text,'sha256'),'hex')"
+        },
+        {
+          "line": 4757,
+          "text": "order by t.required desc, t.priority asc, t.two_factor_index asc"
+        },
+        {
+          "line": 5484,
+          "text": "else (select jsonb_agg(jsonb_build_array(t.two_factor_index,t.token,t.verified,t.revoked_at) order by t.two_factor_index) from two_factor_authentications t where t.account_id=a.account_id and t.method=right(p_purpose,1)::smallint)"
+        },
+        {
+          "line": 5910,
+          "text": "where t.account_id=p_account and t.two_factor_index=p_index and not t.verified and t.revoked_at is null and t.token is not null;"
+        },
+        {
+          "line": 5932,
+          "text": "returns table(result boolean,code text,two_factor_index bigint,expiration timestamptz)"
+        },
+        {
+          "line": 5952,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 5958,
+          "text": "idx:=prior.two_factor_index;version:=p_expectedVersion+1;"
+        },
+        {
+          "line": 5968,
+          "text": "case when p_method=2 then btrim(p_phoneNumber) end,case when p_method=2 then btrim(p_phoneCountryCode) end,p_required) returning two_factor_authentications.two_factor_index into idx;"
+        },
+        {
+          "line": 5974,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=idx and not t.verified and t.revoked_at is null and t.setup_request_id=p_expectedRequestId and t.setup_version=p_expectedVersion;"
+        },
+        {
+          "line": 5979,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=idx;"
+        },
+        {
+          "line": 6177,
+          "text": "row(old.two_factor_index,old.method,old.required,old.expiration,old.email_address,old.phone_number,old.phone_country_code,old.totp_provider_type,old.totp_algorithm,old.totp_digits,old.totp_period_seconds,old.totp_clock_skew_steps,old.totp_secret_ciphertext,old.totp_secret_nonce,old.totp_secret_tag,old.totp_secret_version) is not distinct from"
+        },
+        {
+          "line": 6178,
+          "text": "row(new.two_factor_index,new.method,new.required,new.expiration,new.email_address,new.phone_number,new.phone_country_code,new.totp_provider_type,new.totp_algorithm,new.totp_digits,new.totp_period_seconds,new.totp_clock_skew_steps,new.totp_secret_ciphertext,new.totp_secret_nonce,new.totp_secret_tag,new.totp_secret_version) then return new;end if;"
+        },
+        {
+          "line": 6702,
+          "text": "when 'factor_history' then table_name:='two_factor_authentications';key_sql:='t.two_factor_index::text';account_sql:='t.account_id';predicate_sql:='(t.revoked_at<clock_timestamp()-make_interval(days=>p_history) or (not t.verified and coalesce(t.setup_authorized_until,t.expiration,t.created_on+interval ''1 day'')<=clock_timestamp()))';"
+        }
+      ]
+    },
+    {
+      "path": "Rigging/Database/Migrations/002_transaction_authority.sql",
+      "sha256": "00f2de1ec0a8561d03f9e78d8981f318440752beb4e26699e7212c926ba57842",
+      "references": [
+        {
+          "line": 25,
+          "text": "perform 1 from two_factor_authentications t where t.account_id = p_id order by t.two_factor_index for update;"
+        },
+        {
+          "line": 300,
+          "text": "order by t.required desc,t.priority desc,t.two_factor_index"
+        },
+        {
+          "line": 417,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 495,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and t.setup_request_id=p_requestId and t.setup_version=p_requestVersion and not t.verified;"
+        },
+        {
+          "line": 502,
+          "text": "where t.account_id=p_accountId and t.two_factor_index=pending.two_factor_index and not t.verified and t.revoked_at is null and"
+        },
+        {
+          "line": 730,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 752,
+          "text": "select t.two_factor_index into target_index from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 754,
+          "text": "select (coalesce(max(t.two_factor_index), -1) + 1)::bigint into target_index from two_factor_authentications t where t.account_id = p_accountId;"
+        },
+        {
+          "line": 755,
+          "text": "insert into two_factor_authentications(two_factor_index, account_id, token, auth_id, created_on, lifespan, expiration, method, verified, priority, country, email_address, phone_number, phone_country_code, required, totp_secret_ciphertext, totp_secret_nonce, totp_secret_tag, totp_secret_version, totp_key_id, totp_enrollment_id, totp_algorithm, totp_digits, totp_period_seconds, totp_clock_skew_steps, totp_last_used_step, totp_provider_type, totp_provider_enrollment_id, totp_provider_account_binding_hash, setup_attempts, revoked_at, revoked_reason)"
+        },
+        {
+          "line": 758,
+          "text": "update two_factor_authentications set token = p_setupTokenHash, auth_id = nullif(trim(p_authId), ''), created_on = p_createdOn, lifespan = p_expiration - p_createdOn, expiration = p_expiration, method = 3, verified = false, priority = 0, country = null, email_address = null, phone_number = null, phone_country_code = null, required = coalesce(p_required, true), totp_secret_ciphertext = p_totpSecretCiphertext, totp_secret_nonce = p_totpSecretNonce, totp_secret_tag = p_totpSecretTag, totp_secret_version = p_totpSecretVersion, totp_key_id = p_totpKeyId, totp_enrollment_id = p_totpEnrollmentId, totp_algorithm = p_totpAlgorithm, totp_digits = p_totpDigits, totp_period_seconds = p_totpPeriodSeconds, totp_clock_skew_steps = p_totpClockSkewSteps, totp_last_used_step = null, totp_provider_type = provider_type, totp_provider_enrollment_id = null, totp_provider_account_binding_hash = null, setup_attempts = 0, revoked_at = null, revoked_reason = null where account_id = p_accountId and two_factor_index = target_index and verified = false and revoked_at is null;"
+        },
+        {
+          "line": 760,
+          "text": "delete from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null and t.two_factor_index <> target_index;"
+        },
+        {
+          "line": 791,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 795,
+          "text": "update two_factor_authentications set token = null, expiration = moment, lifespan = moment - created_on, setup_attempts = safe_max_attempts, totp_secret_ciphertext = null, totp_secret_nonce = null, totp_secret_tag = null where account_id = p_accountId and two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 807,
+          "text": "and t.two_factor_index = setup_record.two_factor_index;"
+        },
+        {
+          "line": 835,
+          "text": "returns table(result boolean, code text, account_security_stamp uuid, two_factor_index bigint)"
+        },
+        {
+          "line": 861,
+          "text": "select * into setup_record from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = false and t.revoked_at is null and t.token = p_setupTokenHash order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 864,
+          "text": "if setup_record.expiration is not null and setup_record.expiration <= moment then return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 865,
+          "text": "if setup_record.totp_provider_type <> 1 or setup_record.totp_secret_ciphertext is null or setup_record.totp_secret_nonce is null or setup_record.totp_secret_tag is null then return query select false, 'AUTHENTICATOR_SETUP_INVALID_SECRET'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 866,
+          "text": "if setup_record.totp_last_used_step is not null and p_timeStep <= setup_record.totp_last_used_step then return query select false, 'TOTP_REPLAY_DETECTED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 867,
+          "text": "if exists (select 1 from two_factor_authentications t where t.account_id = p_accountId and t.method = 3 and t.verified = true and t.revoked_at is null and t.two_factor_index <> setup_record.two_factor_index) then return query select false, 'TWO_FACTOR_AUTHENTICATOR_APP_ALREADY_ATTACHED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 869,
+          "text": "if new_cutoff is not null and new_cutoff <= moment then return query select false, 'SESSION_CUT_OFF_EXPIRED'::text, null::uuid, setup_record.two_factor_index; return; end if;"
+        },
+        {
+          "line": 870,
+          "text": "update two_factor_authentications tfa set verified = true, token = null, expiration = null, lifespan = null, setup_attempts = 0, priority = greatest(tfa.priority, 1), totp_last_used_step = p_timeStep, revoked_at = null, revoked_reason = null where tfa.account_id = p_accountId and tfa.two_factor_index = setup_record.two_factor_index and tfa.verified = false and tfa.revoked_at is null and tfa.setup_request_id=setup_record.setup_request_id and tfa.setup_version=setup_record.setup_version;"
+        },
+        {
+          "line": 910,
+          "text": "return query select true, 'AUTHENTICATOR_SETUP_VERIFIED_SESSION_ROTATED'::text, new_account_stamp, setup_record.two_factor_index;"
+        },
+        {
+          "line": 914,
+          "text": "return query select false, 'AUTHENTICATOR_SETUP_EXPIRED'::text, null::uuid, setup_record.two_factor_index;"
+        }
+      ]
+    },
+    {
+      "path": "Rigging/Database/Migrations/006_atomic_attempts_and_sensitive_grants.sql",
+      "sha256": "8a46a369ff1a43a6f3e122f1b436d36e14e026e56b993d94d18516bfb47aafaa",
+      "references": [
+        {
+          "line": 122,
+          "text": "select encode(digest(coalesce(jsonb_agg(jsonb_build_array(t.two_factor_index,t.method,t.required,t.expiration,"
+        },
+        {
+          "line": 124,
+          "text": "t.totp_secret_version,t.phone_number,t.email_address) order by t.two_factor_index)::text,'[]'),'sha256'),'hex')"
+        },
+        {
+          "line": 379,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 403,
+          "text": "returns table(result boolean, code text, two_factor_index bigint, expiration timestamp with time zone)"
+        },
+        {
+          "line": 431,
+          "text": "select * into prior from two_factor_authentications t where t.account_id=p_accountId and not t.verified and t.revoked_at is null order by t.two_factor_index limit 1 for update;"
+        },
+        {
+          "line": 440,
+          "text": "select t.two_factor_index into target_index from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null order by t.created_on desc, t.two_factor_index desc limit 1 for update;"
+        },
+        {
+          "line": 443,
+          "text": "values(p_accountId, p_setupTokenHash, nullif(trim(p_authId), ''), p_createdOn, p_expiration - p_createdOn, p_expiration, 3, false, 0, null, null, null, null, coalesce(p_required, true), p_totpSecretCiphertext, p_totpSecretNonce, p_totpSecretTag, p_totpSecretVersion, p_totpKeyId, p_totpEnrollmentId, p_totpAlgorithm, p_totpDigits, p_totpPeriodSeconds, p_totpClockSkewSteps, null, provider_type, null, null, 0, null, null) returning two_factor_authentications.two_factor_index into target_index;"
+        },
+        {
+          "line": 445,
+          "text": "update two_factor_authentications t set token = p_setupTokenHash, auth_id = nullif(trim(p_authId), ''), created_on = p_createdOn, lifespan = p_expiration - p_createdOn, expiration = p_expiration, method = 3, verified = false, priority = 0, country = null, email_address = null, phone_number = null, phone_country_code = null, required = coalesce(p_required, true), totp_secret_ciphertext = p_totpSecretCiphertext, totp_secret_nonce = p_totpSecretNonce, totp_secret_tag = p_totpSecretTag, totp_secret_version = p_totpSecretVersion, totp_key_id = p_totpKeyId, totp_enrollment_id = p_totpEnrollmentId, totp_algorithm = p_totpAlgorithm, totp_digits = p_totpDigits, totp_period_seconds = p_totpPeriodSeconds, totp_clock_skew_steps = p_totpClockSkewSteps, totp_last_used_step = null, totp_provider_type = provider_type, totp_provider_enrollment_id = null, totp_provider_account_binding_hash = null, setup_attempts = 0, revoked_at = null, revoked_reason = null where t.account_id = p_accountId and t.two_factor_index = target_index and t.verified = false and t.revoked_at is null;"
+        },
+        {
+          "line": 450,
+          "text": "perform cor16_require_setup(t,p_accountSecurityStamp,t.setup_family_id) from two_factor_authentications t where t.account_id=p_accountId and t.two_factor_index=target_index;"
+        },
+        {
+          "line": 451,
+          "text": "delete from two_factor_authentications t where t.account_id = p_accountId and t.verified = false and t.revoked_at is null and t.two_factor_index <> target_index;"
+        }
+      ]
+    },
+    {
+      "path": "Services/AuthenticatorAppLoginService.cs",
+      "sha256": "fc5bfb449f709006356577ba67b3babb53696fbd99c450603dd3aec554b5f3ca",
+      "references": [
+        {
+          "line": 138,
+          "text": "enrollment.TwoFactorIndex,"
+        },
+        {
+          "line": 148,
+          "text": "\"Login authenticator-app TOTP step marking failed for account {AccountId}, two-factor index {TwoFactorIndex}, result code {ResultCode}.\","
+        },
+        {
+          "line": 150,
+          "text": "enrollment.TwoFactorIndex,"
+        }
+      ]
+    },
+    {
+      "path": "Services/AuthenticatorAppProvisioningService.cs",
+      "sha256": "9108c4b548eac5a1fdc1c013e6ff7d1ff41cd7f62a0e6a233a09644883b293e1",
+      "references": [
+        {
+          "line": 285,
+          "text": "long? TwoFactorIndex = null, treehammock.DataLayer.Entitlements.EntitlementProjection? Entitlements = null);"
+        },
+        {
+          "line": 546,
+          "text": "completed.TwoFactorIndex, completed.Entitlements);"
+        }
+      ]
+    },
+    {
+      "path": "Services/PasswordResetTotpService.cs",
+      "sha256": "aa9f69ca64c500f8a4a976b3fd42430ba45b20f36e135e3b8879e1eb1d8dee78",
+      "references": [
+        {
+          "line": 137,
+          "text": "enrollment.TwoFactorIndex,"
+        },
+        {
+          "line": 147,
+          "text": "\"Password reset TOTP step marking failed for account {AccountId}, two-factor index {TwoFactorIndex}, result code {ResultCode}.\","
+        },
+        {
+          "line": 149,
+          "text": "enrollment.TwoFactorIndex,"
+        }
+      ]
+    },
+    {
+      "path": "eng/cor22-load-fixture.sql",
+      "sha256": "3f6d6572830fda61ba68642dae74a0ee26f665c4b50a56499ec1e81ce7f4e273",
+      "references": [
+        {
+          "line": 20,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,created_on,expiration,email_address)"
+        },
+        {
+          "line": 23,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,phone_number,phone_country_code)"
+        }
+      ]
+    },
+    {
+      "path": "eng/cor22-query-plans.sql",
+      "sha256": "7b964116ce8c59db98c7290575528a956c5275064101d3430d5d5366a6623286",
+      "references": [
+        {
+          "line": 29,
+          "text": "select two_factor_index from two_factor_authentications where account_id=:'account'::uuid"
+        },
+        {
+          "line": 32,
+          "text": "order by two_factor_index::text limit 100;"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/AuthenticatorAppLoginVerifierTests.cs",
+      "sha256": "599804947cc8eb6e9ab193946268c342d6545ff8a982f21cad81e3c9a8db35f7",
+      "references": [
+        {
+          "line": 23,
+          "text": "long twoFactorIndex = 4_294_967_296L;"
+        },
+        {
+          "line": 26,
+          "text": ".Returns(Task.FromResult<VerifiedTotpEnrollmentRecord?>(Enrollment(accountId, twoFactorIndex, protectedSecret, lastUsedStep: null)));"
+        },
+        {
+          "line": 27,
+          "text": "repo.MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>())"
+        },
+        {
+          "line": 36,
+          "text": "await repo.Received(1).MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());"
+        },
+        {
+          "line": 104,
+          "text": "long twoFactorIndex = 4;"
+        },
+        {
+          "line": 107,
+          "text": ".Returns(Task.FromResult<VerifiedTotpEnrollmentRecord?>(Enrollment(accountId, twoFactorIndex, protectedSecret, lastUsedStep: null)));"
+        },
+        {
+          "line": 108,
+          "text": "repo.MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>())"
+        },
+        {
+          "line": 117,
+          "text": "await repo.Received(1).MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());"
+        },
+        {
+          "line": 160,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 167,
+          "text": "twoFactorIndex,"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/AuthenticatorAppProvisioningServiceTests.cs",
+      "sha256": "55e0f4964b655c39e27690e259117509f2266bd268c369e0255155292714aa0b",
+      "references": [
+        {
+          "line": 430,
+          "text": "public Task<TotpStepReplayCommandResult?> MarkTotpStepUsedAsync(Guid accountId, long twoFactorIndex, long timeStep, Guid enrollmentId, CancellationToken cancellationToken = default)"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/PasswordResetSqlSchemaContractTests.cs",
+      "sha256": "de1bca233af1bb583ff8d2730abeeb7315cd37f22d668571d3f3d1943b81b21d",
+      "references": [
+        {
+          "line": 153,
+          "text": "sql.ShouldContain(\"p_twoFactorIndex bigint\");"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/PasswordResetTotpRepositoryContractTests.cs",
+      "sha256": "b2bc28572523533d02653049e4616b92ffb25647ddbb9352294eda8d8bb05d63",
+      "references": [
+        {
+          "line": 34,
+          "text": "mark.GetParameters().Any(parameter => parameter.Name == \"twoFactorIndex\" && parameter.ParameterType == typeof(long)).ShouldBeTrue();"
+        },
+        {
+          "line": 44,
+          "text": "properties.Any(property => property.Name == nameof(PasswordResetTotpEnrollmentRecord.TwoFactorIndex) && property.PropertyType == typeof(long)).ShouldBeTrue();"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/PasswordResetTotpVerifierTests.cs",
+      "sha256": "f3764e590ee780df088dd58938ede313e2343125d0d9be24b15d06956d4686ac",
+      "references": [
+        {
+          "line": 23,
+          "text": "long twoFactorIndex = 4_294_967_296L;"
+        },
+        {
+          "line": 26,
+          "text": ".Returns(Task.FromResult<VerifiedTotpEnrollmentRecord?>(Enrollment(accountId, twoFactorIndex, protectedSecret, lastUsedStep: null)));"
+        },
+        {
+          "line": 27,
+          "text": "repo.MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>())"
+        },
+        {
+          "line": 37,
+          "text": "await repo.Received(1).MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());"
+        },
+        {
+          "line": 127,
+          "text": "long twoFactorIndex = 4;"
+        },
+        {
+          "line": 130,
+          "text": ".Returns(Task.FromResult<VerifiedTotpEnrollmentRecord?>(Enrollment(accountId, twoFactorIndex, protectedSecret, lastUsedStep: null)));"
+        },
+        {
+          "line": 131,
+          "text": "repo.MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>())"
+        },
+        {
+          "line": 140,
+          "text": "await repo.Received(1).MarkTotpStepUsedAsync(accountId, twoFactorIndex, Arg.Any<long>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());"
+        },
+        {
+          "line": 183,
+          "text": "long twoFactorIndex,"
+        },
+        {
+          "line": 190,
+          "text": "twoFactorIndex,"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests/Unit/RepositoryContractTests.cs",
+      "sha256": "03a6fd537e4077492b8e20ead4b133f29517815c5f87c1e6a645008ff30f9ce3",
+      "references": [
+        {
+          "line": 587,
+          "text": "setup.ShouldContain(\"t.two_factor_index=pending.two_factor_index\");"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/BooleanProcedureContractTests.cs",
+      "sha256": "6cc817f83f10f860298324211d5ef3e25f2b0428cfb0bc224fbb2cf243dce620",
+      "references": [
+        {
+          "line": 73,
+          "text": "two_factor_index, account_id, method, verified, priority)"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor02MigrationTests.cs",
+      "sha256": "0394f0390a92e020ac212dfb4394b0aece571fa81725ae02bf173332412ae539",
+      "references": [
+        {
+          "line": 28,
+          "text": "insert into two_factor_authentications(two_factor_index,account_id,method,verified,email_address)"
+        },
+        {
+          "line": 185,
+          "text": "(select jsonb_agg(to_jsonb(t) order by account_id,two_factor_index) from two_factor_authentications t),"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor08AttemptAndGrantTests.cs",
+      "sha256": "51bf575591bf160072423b42c76fa122c14e9f0ddbbe503fb03d34e0281bdfbb",
+      "references": [
+        {
+          "line": 171,
+          "text": "await fixture.ExecuteAsync(connection, $\"insert into two_factor_authentications(two_factor_index,account_id,method,verified,required,totp_provider_type,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(1,{Id},3,true,true,1,decode(repeat('01',20),'hex'),decode(repeat('01',12),'hex'),decode(repeat('01',16),'hex'),2,'fixture',gen_random_uuid(),'SHA1',6,30,1)\", cancellation: cancellation);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor10LoginProofTests.cs",
+      "sha256": "ef490d5cc333d0a34ad1ec4c605f6c3e38cadce625d30025818bb5a612bf37b0",
+      "references": [
+        {
+          "line": 32,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,phone_number,"
+        },
+        {
+          "line": 145,
+          "text": "(await Query(c,null,$\"select * from mark_totp_step_used('{p.accountId}',3::smallint,12345::bigint,(select totp_enrollment_id from two_factor_authentications where account_id='{p.accountId}' and two_factor_index=3))\",t)).Result.ShouldBeTrue();"
+        },
+        {
+          "line": 146,
+          "text": "(await Query(c,null,$\"select * from mark_totp_step_used('{p.accountId}',3::smallint,12345::bigint,(select totp_enrollment_id from two_factor_authentications where account_id='{p.accountId}' and two_factor_index=3))\",t)).Code.ShouldBe(\"TOTP_REPLAY_DETECTED\");"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor12DeliveryOutboxTests.cs",
+      "sha256": "841ce48b95f75fec4e61a9870aa8678ed0921759bb29602ad53e998b1ad74ca6",
+      "references": [
+        {
+          "line": 74,
+          "text": "if(purpose==\"reset-factor\") await Exec(c,$\"insert into two_factor_authentications(two_factor_index,account_id,method,verified,phone_number,phone_country_code) values(1,'{Account}',2,true,'5555550101','1')\",token);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor13ResetAuthorizationTests.cs",
+      "sha256": "165b83193f0a6275ff7b155df4b9256572ec35ed49a4d73c4a8e9b3e5ec865e5",
+      "references": [
+        {
+          "line": 71,
+          "text": "if(factor is 1 or 4) await Exec(c,$\"insert into two_factor_authentications(two_factor_index,account_id,method,verified,phone_number,phone_country_code) values(1,'{Account}',2,true,'5555550101','1')\",token);"
+        },
+        {
+          "line": 72,
+          "text": "if(factor is 3 or 4) await Exec(c,$\"insert into two_factor_authentications(two_factor_index,account_id,method,verified,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_provider_type,totp_secret_version,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(2,'{Account}',3,true,decode(repeat('01',20),'hex'),decode(repeat('01',12),'hex'),decode(repeat('01',16),'hex'),1,2,'fixture',gen_random_uuid(),'SHA1',6,30,1)\",token);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor15TotpKeyRotationTests.cs",
+      "sha256": "67d5357e2e2eec86fc20217ed19652c1ba198fc22ea0c1a0decd9875b47fe739",
+      "references": [
+        {
+          "line": 25,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,required,token,expiration,"
+        },
+        {
+          "line": 130,
+          "text": "(await Scalar<bool>(c,$\"select {checks} from two_factor_authentications where account_id='{account}' and two_factor_index=1\",ct)).ShouldBeTrue();"
+        },
+        {
+          "line": 138,
+          "text": "await Scalar<int>(c,$\"with inserted as (insert into two_factor_authentications(account_id,two_factor_index,method,verified,phone_number,phone_country_code) values('{account}',2,2,true,'5555550101','1') returning 1) select count(*)::integer from inserted\",ct);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor16FactorEnrollmentTests.cs",
+      "sha256": "1873596d92d660d8720c1fab063894b3cd728146c1e1fe95a97702f9051de8d6",
+      "references": [
+        {
+          "line": 59,
+          "text": "if(fault==\"incomplete-factor\") await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Account}',1,1,true,'cor16@example.test')\",ct);"
+        },
+        {
+          "line": 78,
+          "text": "if(changed==\"policy\")await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Account}',2,1,true,'cor16@example.test')\",ct);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor17EmailChangeTests.cs",
+      "sha256": "cd1f035a50e845ee94e90b740c48fc52593fbc8ca019e23bab75ba15dbded87c",
+      "references": [
+        {
+          "line": 83,
+          "text": "if(fault==\"incomplete\")await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Id}',1,1,true,'{a.Email}')\",ct);"
+        },
+        {
+          "line": 101,
+          "text": "_=>$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Id}',1,1,true,'{a.Email}')\"};"
+        },
+        {
+          "line": 152,
+          "text": "await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address,phone_number,phone_country_code) values('{a.Id}',1,{method},true,'{a.Email}','5555550101','1')\",ct);"
+        },
+        {
+          "line": 166,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values(@account,1,1,true,@email);"
+        },
+        {
+          "line": 167,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,totp_provider_type,totp_secret_version,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps,totp_last_used_step)"
+        },
+        {
+          "line": 169,
+          "text": "insert into two_factor_authentications(account_id,two_factor_index,method,verified,token,expiration,phone_number,phone_country_code) values(@account,3,2,false,'pending',clock_timestamp()+interval '1 hour','5555550101','1');"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor18DeleteAuthorityTests.cs",
+      "sha256": "c95ac4d05a3b89abd09f64a51b93a5a681ccb34c9c129421fc4abb43e2f30093",
+      "references": [
+        {
+          "line": 120,
+          "text": "if(bad==\"factor\")await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Id}',1,1,true,'{a.Id:N}@example.test')\",ct);"
+        },
+        {
+          "line": 175,
+          "text": "string sql=change switch {\"stamp\"=>\"update accounts set security_stamp=gen_random_uuid()\",\"reset\"=>\"select true\",\"logout-all\"=>$\"select * from logout_all_sessions('{a.Id}','{a.Stamp}')\",\"email\"=>\"update accounts set email_address='rotated@example.test'\",\"factor\"=>$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address) values('{a.Id}',1,1,true,'{a.Id:N}@example.test')\",_=>\"update delete_standby set authorized_until=clock_timestamp()\"};await Exec(c,sql,ct);"
+        },
+        {
+          "line": 303,
+          "text": "await Exec(c,$\"insert into two_factor_authentications(account_id,two_factor_index,method,verified,email_address,phone_number,phone_country_code) values('{a.Id}',1,{method},true,'{a.Id:N}@example.test','5555550101','1')\",ct);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor22RetentionTests.cs",
+      "sha256": "0bed21667e846ef4be245f728fa6e5959e40085c7ac8d02f4ec2328db7de8597",
+      "references": [
+        {
+          "line": 145,
+          "text": "await Exec(c, $\"insert into pending_two_factor_sessions(pre_auth_access_token_hash,account_id,account_security_stamp,expiration) select x,'{id}',security_stamp,case when x='live' then clock_timestamp()+interval '1 hour' else clock_timestamp()-interval '10 days' end from accounts cross join (values('old'),('live')) q(x) where account_id='{id}';insert into account_verifications(account_id,verify_key_hash,account_security_stamp,verify_status,created_on,sent_when,expiration) select '{id}',x,security_stamp,case when x='live' then 0 else 3 end,clock_timestamp()-interval '20 days',case when x='live' then clock_timestamp() else clock_timestamp()-interval '20 days' end,interval '1 day' from accounts cross join (values('old'),('live')) q(x) where account_id='{id}';insert into two_factor_authentications(account_id,two_factor_index,method,verified,created_on,expiration,email_address) values('{id}',1,1,true,clock_timestamp()-interval '20 days',clock_timestamp()-interval '10 days','verified@example.test'),('{id}',2,1,false,clock_timestamp()-interval '20 days',clock_timestamp()-interval '10 days','expired@example.test'),('{id}',3,1,false,clock_timestamp(),clock_timestamp()+interval '1 hour','pending@example.test')\", ct);"
+        },
+        {
+          "line": 150,
+          "text": "(await Scalar<bool>(c, \"select verified from two_factor_authentications where two_factor_index=1\", ct)).ShouldBeTrue();"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor23AFAuthenticatorReplacementTests.cs",
+      "sha256": "9e0f5a6ced4496d8fff02c8a0eb0bdbd8005ac5be6865a94a142311df313a9bd",
+      "references": [
+        {
+          "line": 55,
+          "text": "await Scalar<string>(c, $\"select coalesce(jsonb_agg(to_jsonb(t) order by t.two_factor_index),'[]'::jsonb)::text from two_factor_authentications t where t.account_id='{a.Account}'\", ct);"
+        },
+        {
+          "line": 73,
+          "text": "await using var command = new NpgsqlCommand($\"select totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_key_id,totp_enrollment_id,setup_request_id,setup_version,token,two_factor_index,verified,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps from two_factor_authentications where account_id='{a.Account}' and revoked_at is null\", observer);"
+        },
+        {
+          "line": 116,
+          "text": "result.Result.ShouldBeTrue(); result.Code.ShouldBe(\"AUTHENTICATOR_SETUP_PENDING\"); result.TwoFactorIndex.ShouldBe(0L);"
+        },
+        {
+          "line": 133,
+          "text": "result.Result.ShouldBeTrue(); result.Code.ShouldBe(\"AUTHENTICATOR_SETUP_PENDING\"); result.TwoFactorIndex.ShouldBe(0L);"
+        },
+        {
+          "line": 181,
+          "text": "result.Result.ShouldBeFalse(); result.Code.ShouldBe(code); result.TwoFactorIndex.ShouldBeNull(); result.Expiration.ShouldBeNull();"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor23BSqlBindingTests.cs",
+      "sha256": "faa0c40b6d2cba165d867188eb2a278e3bc8e3a0a1a110c325b56edf4af02fd9",
+      "references": [
+        {
+          "line": 44,
+          "text": "=> Scalar<string>(c, $\"select coalesce(jsonb_agg(to_jsonb(t) order by t.two_factor_index),'[]'::jsonb)::text from two_factor_authentications t where t.account_id='{a.Account}'\", ct);"
+        },
+        {
+          "line": 52,
+          "text": "select result,code,two_factor_index,expiration from {function}("
+        },
+        {
+          "line": 113,
+          "text": "long index = await Scalar<long>(c,$\"select two_factor_index from two_factor_authentications where account_id='{a.Account}'\",ct);"
+        },
+        {
+          "line": 196,
+          "text": "definition.ShouldContain(\"t.two_factor_index = target_index\");"
+        },
+        {
+          "line": 197,
+          "text": "await Exec(c,definition.Replace(\"t.two_factor_index = target_index\",\"two_factor_index = target_index\",StringComparison.Ordinal),ct);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/Cor23CFactorIdentityTests.cs",
+      "sha256": "af60a062ba86e54be0c7dab9b9102613d8b672eefff6cfe86b26a9b5c4fb4b50",
+      "references": [
+        {
+          "line": 69,
+          "text": "sql=$\"select result,code,two_factor_index from cor08_authorized_begin_authenticator_app_setup('{a.Account}','{a.Stamp}','{request:N}',clock_timestamp(),clock_timestamp()+interval '20 minutes','identity',true,1::smallint,{Hex(p.Ciphertext)},{Hex(p.Nonce)},{Hex(p.Tag)},2,'{p.KeyId}','{p.Context.EnrollmentId}','SHA256',6,30,1,{Uuid(expected)},{(version is null ? \"null::bigint\" : version+\"::bigint\")},'{g.Session}','{g.Token}','{g.Target}')\";"
+        },
+        {
+          "line": 72,
+          "text": "if(method!=3) sql=sql.Replace(\"select result,code from\",\"select result,code,two_factor_index from\",StringComparison.Ordinal);"
+        },
+        {
+          "line": 97,
+          "text": "(await Scalar<long>(observer,$\"select max(two_factor_index) from two_factor_authentications where account_id='{a.Account}'\",ct)).ShouldBe(32767L);"
+        },
+        {
+          "line": 115,
+          "text": "await Exec(observer,$\"select setval(pg_get_serial_sequence('two_factor_authentications','two_factor_index'),{identity-1},true)\",ct);"
+        },
+        {
+          "line": 119,
+          "text": "begun.Result.ShouldBeTrue();begun.Code.ShouldBe(\"AUTHENTICATOR_SETUP_PENDING\");begun.TwoFactorIndex.ShouldBe(identity);"
+        },
+        {
+          "line": 121,
+          "text": "pending.Result.ShouldBeTrue();pending.TwoFactorIndex.ShouldBe(identity);pending.Context.ShouldBe(e.Secret.Context);"
+        },
+        {
+          "line": 125,
+          "text": "completed.Result.ShouldBeTrue();completed.TwoFactorIndex.ShouldBe(identity);"
+        },
+        {
+          "line": 126,
+          "text": "var verified=(await repo.GetVerifiedTotpEnrollmentForAccountAsync(a.Account,SystemClock.Instance.GetCurrentInstant(),ct)).ShouldNotBeNull();verified.TwoFactorIndex.ShouldBe(identity);"
+        },
+        {
+          "line": 128,
+          "text": "var resetEnrollment=(await reset.GetPasswordResetTotpEnrollmentAsync(a.Account,SystemClock.Instance.GetCurrentInstant(),ct)).ShouldNotBeNull();resetEnrollment.TwoFactorIndex.ShouldBe(identity);"
+        },
+        {
+          "line": 132,
+          "text": "(await Scalar<long>(observer,$\"select totp_last_used_step from two_factor_authentications where account_id='{a.Account}' and two_factor_index={identity}\",ct)).ShouldBe(102L);"
+        },
+        {
+          "line": 144,
+          "text": "await Exec(c,\"select setval(pg_get_serial_sequence('two_factor_authentications','two_factor_index'),32767,true)\",ct);"
+        },
+        {
+          "line": 201,
+          "text": "(await Scalar<long>(observer,\"select count(distinct two_factor_index) from two_factor_authentications\",ct)).ShouldBe(2L);"
+        },
+        {
+          "line": 215,
+          "text": "(await Scalar<bool>(observer,$\"select revoked_at is not null and totp_secret_ciphertext is null from two_factor_authentications where account_id='{a.Account}' and two_factor_index={oldIndex}\",ct)).ShouldBeTrue();"
+        },
+        {
+          "line": 218,
+          "text": "await Exec(c,$\"update two_factor_authentications set verified=true where account_id='{a.Account}' and two_factor_index={newIndex}\",ct);"
+        },
+        {
+          "line": 230,
+          "text": "var c=await f.OpenConnectionAsync();var a=await Seed(c,ct);await Exec(c,\"select setval(pg_get_serial_sequence('two_factor_authentications','two_factor_index'),4294967295,true)\",ct);"
+        },
+        {
+          "line": 232,
+          "text": "string sql=Cor16EnrollmentSql.Begin(a.Account,a.Stamp,1,\"proof\",request,g).Replace(\"select result,code from\",\"select result,code,two_factor_index,expiration from\",StringComparison.Ordinal);"
+        },
+        {
+          "line": 237,
+          "text": "var result=await AccountRepo.ReadTwoFactorSetupCommandResultAsync(reader,ct);result.Result.ShouldBeTrue();result.TwoFactorIndex.ShouldBe(4294967296L);"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs",
+      "sha256": "79c78ed6032c4a4e82d78166d78cba0413d698ca2387463e4c98bdb8dbb6e07a",
+      "references": [
+        {
+          "line": 137,
+          "text": "two_factor_index, account_id, method, verified, phone_number, phone_country_code, created_on, expiration)"
+        },
+        {
+          "line": 182,
+          "text": "insert into two_factor_authentications(two_factor_index,account_id,method,verified,required,created_on,expiration,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_provider_type,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(2,@accountId,3,true,true,now(),now() + interval '1 day',decode(repeat('01',20),'hex'),decode(repeat('01',12),'hex'),decode(repeat('01',16),'hex'),2,1,'fixture',gen_random_uuid(),'SHA1',6,30,1);"
+        },
+        {
+          "line": 316,
+          "text": "insert into two_factor_authentications(two_factor_index,account_id,method,verified,priority,required,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_provider_type,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(3,@accountId,3,true,0,true,decode(repeat('01',20),'hex'),decode(repeat('01',12),'hex'),decode(repeat('01',16),'hex'),2,1,'fixture',gen_random_uuid(),'SHA1',6,30,1);"
+        },
+        {
+          "line": 326,
+          "text": "found.TwoFactorIndex.ShouldBe(3L);"
+        },
+        {
+          "line": 367,
+          "text": "\"select totp_last_used_step from two_factor_authentications where account_id = @accountId and two_factor_index = 3;\","
+        },
+        {
+          "line": 686,
+          "text": "private sealed record PasswordResetTotpEnrollmentResult(bool Found, Guid? AccountId, long? TwoFactorIndex, short? Method, long? LastUsedStep, Guid? EnrollmentId)"
+        }
+      ]
+    },
+    {
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs",
+      "sha256": "339f7f4462dd87a3b883d771c4c85a851a0cbfe40cec798d07111df6d42a3110",
+      "references": [
+        {
+          "line": 218,
+          "text": "insert into two_factor_authentications(two_factor_index,account_id,method,verified,priority,required,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_provider_type,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(4,@accountId,3,true,0,true,@ciphertext,@nonceBytes,@tag,2,1,'fixture',gen_random_uuid(),'SHA1',6,30,1);"
+        },
+        {
+          "line": 239,
+          "text": "enrollment.TwoFactorIndex.ShouldBe(4L);"
+        },
+        {
+          "line": 451,
+          "text": "two_factor_index, account_id, method, verified, priority, required,"
+        },
+        {
+          "line": 943,
+          "text": "two_factor_index, account_id, method, verified, priority, required,"
+        },
+        {
+          "line": 949,
+          "text": "insert into two_factor_authentications(two_factor_index,account_id,method,verified,priority,required,totp_secret_ciphertext,totp_secret_nonce,totp_secret_tag,totp_secret_version,totp_provider_type,totp_key_id,totp_enrollment_id,totp_algorithm,totp_digits,totp_period_seconds,totp_clock_skew_steps) values(2,@accountId,3,true,1,true,@ciphertext,@totpNonce,@tag,2,1,'fixture',gen_random_uuid(),'SHA1',6,30,1);"
+        }
+      ]
+    }
+  ]
+}

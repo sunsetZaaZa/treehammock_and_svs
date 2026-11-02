@@ -1,0 +1,149 @@
+stages:
+  - dispatch
+
+workflow:
+  rules:
+    - if: '$RUN_SVS_PIPELINE == "true"'
+    - if: '$RUN_DOTNET_UNIT_PIPELINE == "true"'
+    - if: '$RUN_DOTNET_INTEGRATION_PIPELINE == "true"'
+    - if: '$RUN_DOTNET_SQL_PIPELINE == "true"'
+    - if: '$RUN_DOCKER_DIRECT_PIPELINE == "true"'
+    - if: '$RUN_DOCKER_PROXY_PIPELINE == "true"'
+    - if: '$RUN_DOCKER_SYSTEM_PIPELINE == "true"'
+    - if: '$RUN_RELEASE_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+trigger-dotnet-unit-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/dotnet-unit.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOTNET_UNIT_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-dotnet-integration-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/dotnet-integration.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOTNET_INTEGRATION_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-dotnet-sql-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/dotnet-sql.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOTNET_SQL_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-docker-direct-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/docker-direct.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOCKER_DIRECT_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-docker-proxy-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/docker-proxy.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOCKER_PROXY_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-docker-system-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/docker-system.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_DOCKER_SYSTEM_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+trigger-release-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/release.yml
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$RUN_RELEASE_PIPELINE == "true"'
+    - if: '$CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$/'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never
+
+# Additive SVS lane; existing COR/release child pipelines remain unchanged.
+trigger-session-validation-pipeline:
+  stage: dispatch
+  trigger:
+    include:
+      - local: .gitlab/ci/pipelines/session-validation.yml
+    strategy: depend
+    forward:
+      pipeline_variables: false
+      yaml_variables: false
+  rules:
+    - if: '$RUN_SVS_PIPELINE == "true"'
+    - if: '$RUN_ALL_TREEHAMMOCK_PIPELINES == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+    - when: never

@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "environment": "qualification",
+  "epoch": "77777777777747778777777777777777",
+  "policy": "auth.v1",
+  "nonce": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "revision": "9007199254740993",
+  "state": "Ready",
+  "accountId": "11111111111141118111111111111111",
+  "credentialHash": "3899D25A5D325F5D7988679D8EE7414F0F534ECC9555B2C8B4AC715B7F0896AC",
+  "producedAt": "2026-10-17T01:00:00Z",
+  "notAfter": "2026-10-17T01:00:20Z",
+  "identity": {
+    "accountId": "11111111111141118111111111111111",
+    "familyId": "22222222222242228222222222222222",
+    "generation": "5",
+    "protocol": 2,
+    "sessionStamp": "33333333333343338333333333333333",
+    "accountStamp": "44444444444444448444444444444444"
+  },
+  "lifetime": {
+    "accessExpiration": "2026-10-17T01:05:00Z",
+    "hardExpiration": "2026-10-17T02:00:00Z",
+    "cutoff": null
+  },
+  "account": {
+    "exists": true,
+    "verificationStatus": 1,
+    "unlockWhen": null,
+    "currentStamp": "44444444444444448444444444444444",
+    "sessionCurrent": true
+  },
+  "entitlements": {
+    "accountId": "11111111111141118111111111111111",
+    "version": "4",
+    "featureTier": 1,
+    "capabilities": [
+      "account.read",
+      "account.manage"
+    ],
+    "rightsEnabled": false,
+    "evaluatedAt": "2026-10-17T01:00:00Z",
+    "nextBoundary": null,
+    "eligibilityUntil": null,
+    "grantsPresent": true
+  },
+  "signingKey": "XV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXQ=="
+}

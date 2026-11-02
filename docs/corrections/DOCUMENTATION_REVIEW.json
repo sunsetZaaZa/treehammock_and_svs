@@ -1,0 +1,457 @@
+{
+  "schema_version": 1,
+  "previous_feature_matrix_sha256": "674e3581290a9240c3221c9a5e7ef3dc230102aa4758b286150277c60e4404be",
+  "removed_unresolved_historical_anchors": [
+    {
+      "feature": "Reproducible validation harness",
+      "anchor": "eng/validate.*",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Reproducible validation harness",
+      "anchor": "eng/sql-contracts.*",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Reproducible validation harness",
+      "anchor": "eng/docker-system-stack-tests.*",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Reproducible validation harness",
+      "anchor": "eng/release-proof.*",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Canonical PostgreSQL baseline",
+      "anchor": "SqlContractMatrixDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Password login",
+      "anchor": "JWTSettings:RefreshTokenAliveMinutes_2FA",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Password login",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_3_TWO_MINUTE_TTL.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Signed JWT access tokens",
+      "anchor": "docs/release/LOG_PRIV_1_AUTH_TOKEN_VALIDATION_LOGGING.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Sensitive-action reauthentication token",
+      "anchor": "account_sensitive_action_tokens",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Sensitive-action reauthentication token",
+      "anchor": "ApiEndpointMatrixContractTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Session-cache failure behavior",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "AbuseCounterBundleSettings",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "Rigging/Abuse",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "Rigging/Observability",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "docs/release/RISK_AND_ABUSE_CONTROLS_1_0_0.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "docs/deployment/CLOUDFLARE_HAPROXY_ABUSE_PROFILE_1_0_0.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Risk and abuse controls",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Email 2FA",
+      "anchor": "ux_two_factor_one_verified_email_per_account",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Email 2FA",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_1_SINGLE_ENROLLMENT_LIMITS.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Email 2FA",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_2_EMAIL_ACCOUNT_BINDING.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Email 2FA account-email binding",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_2_EMAIL_ACCOUNT_BINDING.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Login/password-reset 2FA TTL",
+      "anchor": "JWTSettings:RefreshTokenAliveMinutes_2FA",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Login/password-reset 2FA TTL",
+      "anchor": "PasswordResetSettings:ExpirationMinutes",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Login/password-reset 2FA TTL",
+      "anchor": "StoreMethodChallenge",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Login/password-reset 2FA TTL",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_3_TWO_MINUTE_TTL.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Login/password-reset 2FA TTL",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "SMS 2FA",
+      "anchor": "ux_two_factor_one_verified_sms_per_account",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "SMS 2FA",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_1_SINGLE_ENROLLMENT_LIMITS.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Authenticator-app login challenge and verification",
+      "anchor": "docs/release/TOTP_LOGIN_2_METHOD_ADVERTISEMENT_AND_CHALLENGE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Authenticator-app login challenge and verification",
+      "anchor": "docs/release/TOTP_LOGIN_3_VERIFICATION_AND_PROMOTION.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "two_factor_authentications",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "TOTP_ENROLL_4_SESSION_ROTATION.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "TOTP_ENROLL_6_SINGLE_AUTHENTICATOR_APP.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "TOTP_LOGIN_3_VERIFICATION_AND_PROMOTION.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "ApiEndpointMatrixContractTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Enrollment SQL, local provisioning services, setup API, and Option B session rotation",
+      "anchor": "SqlContractMatrixDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "TOTP hardening proof",
+      "anchor": "docs/release/TOTP_HARDEN_1_SECURITY_REGRESSION_PROOF.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "TOTP hardening proof",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/TWO_FACTOR_CONTRACT_3_TWO_MINUTE_TTL.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PWDRESET_CONTRACT_1_KEYCODE_PLUS_TOTP.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PWDRESET_CONTRACT_2_REMOVE_STANDALONE_AUTHENTICATOR_RESET.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_HARDENING_2_PASSWORD_RESET_REQUEST_MODEL.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_HARDENING_3_PASSWORD_RESET_ABUSE_COUNTERS.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_1_PASSWORD_RESET_LIFECYCLE_AUDIT.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_2_PASSWORD_RESET_2FA_OPTION_RESOLVER.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_3_PASSWORD_RESET_SESSION_STATE_MACHINE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_4_PASSWORD_RESET_TOKEN_VERIFICATION_RESPONSE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_5_PASSWORD_RESET_2FA_SELECT_ENDPOINT.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_6_PASSWORD_RESET_2FA_VERIFY_ENDPOINT.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_7_PASSWORD_RESET_FINALIZE_GATE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_8_PASSWORD_RESET_SQL_STATE_PERSISTENCE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_9_PASSWORD_RESET_METHOD_REMOVAL_INTERACTION.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_RESET_10_PASSWORD_RESET_REGRESSION_COVERAGE.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_HARDENING_2_PASSWORD_RESET_REQUEST_MODEL.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Request, verify, and finalize",
+      "anchor": "docs/release/PR_HARDENING_3_PASSWORD_RESET_ABUSE_COUNTERS.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Reset artifact lifecycle",
+      "anchor": "password_reset_requests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "MFA reset/replacement",
+      "anchor": "docs/release/TOTP_RESET_2_SHARED_PASSWORD_RESET_VERIFICATION.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "CAPTCHA challenge verification",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Logout and session management",
+      "anchor": "/account/logoff",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Logout and session management",
+      "anchor": "/account/logoff/all",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Logout and session management",
+      "anchor": "/account/sessions",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Logout and session management",
+      "anchor": "/account/sessions/revoke",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Email templates and subjects",
+      "anchor": "email_templates",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Account controller boundary split",
+      "anchor": "Controllers/Account*Controller*.cs",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Account controller boundary split",
+      "anchor": "docs/release/ARCH_CTRL_1_ACCOUNT_CONTROLLER_BOUNDARY_SPLIT.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Unit and integration test stack",
+      "anchor": "treehammock.Tests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Account flow regression coverage",
+      "anchor": "docs/release/ACCOUNT_FLOW_REGRESSION_TEST_PLAN_1_0_0.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Account flow regression coverage",
+      "anchor": "docs/release/TEST_STABILIZE_1_CONTROLLER_SPLIT_IDEMPOTENCY_TESTS.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Account flow regression coverage",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Exception/logging policy",
+      "anchor": "docs/release/LOG_PRIV_1_AUTH_TOKEN_VALIDATION_LOGGING.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Operational health monitoring stack",
+      "anchor": "docs/release/OPERATIONAL_HEALTH_MONITORING_1_0_0.md",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Operational health monitoring stack",
+      "anchor": "ReleaseDesignDocumentationTests",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Redis and in-memory cache behavior",
+      "anchor": "Rigging/Cache",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    },
+    {
+      "feature": "Redis and in-memory cache behavior",
+      "anchor": "DataLayer/Cache",
+      "disposition": "RemovedUnresolvedHistoricalAnchor; final contract remains qualification obligation",
+      "owner": "COR24"
+    }
+  ],
+  "disposition": "Current matrix refers to existing source/test artifacts; source mapping is not passing behavior evidence."
+}

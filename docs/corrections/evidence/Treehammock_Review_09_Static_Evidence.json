@@ -1,0 +1,198 @@
+{
+  "evidence_kind": "Structural source assertions, test catalogs and hashes; NOT executable application tests",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "production_source_pass": "complete",
+    "assigned_files": 30,
+    "complete_source_inspected_files": 30,
+    "assigned_csharp_test_support_files_inspected_not_executed": 10,
+    "assigned_bruno_examples_inspected_not_executed": 2,
+    "cross_chunk_inspection": {
+      "Controllers/AccountControllerBase.cs": "R09 complete idempotency begin/complete/block/replay helper slice; original qualification retained.",
+      "Controllers/AccountControllerBase.LoginHelpers.cs": "R09 login IP gate/public-token denial recording slices; original qualification retained.",
+      "Controllers/AccountTwoFactorController.cs": "R09 complete authenticator-setup action and original-versus-replay payload comparison; focused cross-check, not a new full-file audit.",
+      "Rigging/Database/StorageContext.cs": "R09 complete source cross-check of acquisition/cancellation; R06 findings retained.",
+      "Rigging/Cache/ActiveUserCacheService.cs": "R09 lazy acquisition and configured DefaultDatabase slice; existing qualification retained.",
+      "Rigging/Cache/TwoFactorSessionService.cs": "R09 configured DefaultDatabase/factory slice; existing qualification retained.",
+      "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs": "R09 health singleton/cache/test-support registration slices; R07 source qualification retained.",
+      "Rigging/Database/Baseline/000_treehammock_canonical_database.sql": "R09 focused durable budget/capture schema cross-check; not a new full baseline pass.",
+      "Services/ActivationService.cs": "R09 policy-denial/counter caller cross-check; existing qualification retained.",
+      "Services/AccountRecoveryService.cs": "R09 policy-denial/counter caller cross-check; existing qualification retained.",
+      "Services/AccountService.cs": "R09 policy-denial/counter caller cross-check; existing qualification retained.",
+      "eng/dotnet-unit-tests.sh": "R09 existing runner attempted; exited 127 before restore/build/test because SDK absent."
+    },
+    "runtime_qualified": false,
+    "deduplicated_closure_requirements": {
+      "AUTH-08": "Authenticator setup loses enrollment payload on completed replay; COR06 must define safe encrypted authority-bound recovery."
+    }
+  },
+  "static_checks": {
+    "default_counter_failure_mode_closed": true,
+    "alternate_failure_mode_accepted_enum": true,
+    "fallback_flag_not_per_policy": true,
+    "unavailable_counter_allow_and_cooldown_inactive_from_flag": true,
+    "fallback_implementation_has_no_pg_admission": true,
+    "delivery_uses_counter_decisions_without_pg_fallback": true,
+    "login_admission_has_ip_counter": true,
+    "health_owns_three_publication_only_factories": true,
+    "health_singleton_registered": true,
+    "health_has_no_client_disposal_owner": true,
+    "health_checks_awaited_sequentially": true,
+    "health_acquisition_omits_caller_token": true,
+    "two_second_sql_timeout_after_acquisition": true,
+    "redis_cancel_checked_after_unwrapped_ping": true,
+    "health_no_total_deadline_or_singleflight": true,
+    "health_ready_reports_unhealthy_as_503": true,
+    "cache_configuration_correct_default_database": true,
+    "denied_existing_cooldown_records_start": true,
+    "cooldown_creation_ignores_nx_result": true,
+    "counter_breach_records_start_without_creation_flag": true,
+    "store_and_public_policy_both_record_denial": true,
+    "telemetry_tests_do_not_observe_meter_values": true,
+    "replay_result_only_status_code": true,
+    "setup_replay_omits_payload": true,
+    "setup_first_result_carries_payload": true,
+    "capture_uses_main_storage_context": true
+  },
+  "assigned_file_sha256": {
+    "Controllers/HealthController.cs": "6ee17583d5c4a9646d2280a74d42ea818dc3c653545b41c8207550a34985dafb",
+    "Controllers/SystemTestAccountController.cs": "7efbbdf0a9f2c05586bebae59e2cc3c34ee6ff138c675c670f43a450d566c9f4",
+    "Controllers/SystemTestDeliveryController.cs": "12ff0bc219355c899c10b503798cce09d8aef0bcf490c5437ae0ae2b4857fc86",
+    "Models/Api/HealthStatusResponse.cs": "bb3f8efb4a046ce19fe8f3464dd7e50fe0b120ef4764c0b55cfb58fefcc05bb7",
+    "Models/SystemTesting/SystemTestSeedVerifiedAccountRequest.cs": "1378474251affc8092fb3488cf327a9815d6bf938bc0feb7b17dcac800698dac",
+    "Rigging/Abuse/AbuseContracts.cs": "d84cabac9a8635c43a43e1371085b482e747b57a08dfe1927be77592e42bec05",
+    "Rigging/Abuse/AbuseModels.cs": "9c5cc1277abbfd5ddb15eb04f0ef3c0db12b51794f871919e2d4bd2521527bfa",
+    "Rigging/Abuse/AbuseReasonCodes.cs": "423a7c878f227e2a21f9d95ecba60ae6d93c8ac192c4f307495748e03ef069af",
+    "Rigging/Abuse/DragonflyAbuseCounterStore.cs": "f206733bd2a8bd62bce9e201612c8ab6fcaf8586a5734504e1c5ebffb66a16be",
+    "Rigging/Config/AbuseControlSettings.cs": "caa37f75ed65b8027d9792337d82faae24992ecec1c01074b082cb46cdd1b4e5",
+    "Rigging/Config/AbuseCounterCacheSettings.cs": "4619a64420be3f14306b4ee6b2a48458182fb7accd07ab1de04e02e77123d99b",
+    "Rigging/Config/SystemTestSettings.cs": "4d653f4490025bf8edf35f69f077a85b1b513f6e76f9d36675898d9dc5c42cd1",
+    "Rigging/Health/HealthDependencyService.cs": "181a605223a2e8bf07baeb914b774ab21f05ef8f6378fb7a097b59a7db2e5a0c",
+    "Rigging/Observability/AbuseOperationalTelemetry.cs": "3f8b62be4b639d4365af095e13c09345c9f2f33e37c8f19d3f3cd7f811d78801",
+    "Rigging/Replay/AuthenticatedMutationIdempotency.cs": "c2aa38334742308641b5b00a005298844a0c90a2d8c7de4ecfad1d4262507ca5",
+    "Services/DeliveryAbuseThrottleService.cs": "35dd19c45425cffa768e6f66c88bab4d9e7ef5ff7bf3d65593341cfcf7dce69c",
+    "Services/LoginAbuseProtectionServices.cs": "d87d2617094f45f1becbfebaea6869ac826a31383e3b4548c72521db1bbe22ac",
+    "Services/SystemTesting/SystemTestDeliveryCapture.cs": "5c116e3e6f3873abb1b7bab2dcd5994c537b4bccada91433f40b4b6e87e0e560",
+    "tests/http/bruno/treehammock/health/live.bru": "19b57b2e76ee5fc28bcfaef3ca447a3879fb187cd228b96337b5a0fa6187d18d",
+    "tests/http/bruno/treehammock/health/ready.bru": "784967d3359263ce62a36461f692f3a43e0b4cf238e7d4b0ff77f8982a9e8782",
+    "treehammock.Tests/Infrastructure/AllowingAuthenticatedMutationIdempotencyService.cs": "2f881d5743b995e8ae658be13611439a0b4cd658e955e42c800599ff25efd5c0",
+    "treehammock.Tests/Unit/AbuseControlContractTests.cs": "8492f5404f4a82435093c954bc26239ae0cb8757a81be0ed46dec382f6eb648b",
+    "treehammock.Tests/Unit/AbuseOperationalTelemetryTests.cs": "124ce508e867365731147df05d04e58aa3e7aff905f037055079cbafcaee98b9",
+    "treehammock.Tests/Unit/AuthenticatedMutationIdempotencyTests.cs": "fbe274e95b6e0644c1e2d594d4fd4d3bcf8fb7d70dad8c26fa13643c280985e1",
+    "treehammock.Tests/Unit/DeliveryAbuseThrottleApplicationTests.cs": "878810e7272ecb4f249e0a30a926879a3cb8392d40a29ed254d9393879c26187",
+    "treehammock.Tests/Unit/DeliveryAbuseThrottlePolicyTests.cs": "9a9103ecd3bd04fbf770ad02ba0260dbed54b237daae7e4d5c7aa1903d20b611",
+    "treehammock.Tests/Unit/DragonflyAbuseCounterStoreTests.cs": "da6d369bc60ba79228147423bad4f8d2fe60c8dab803706eea802ec3d32441f5",
+    "treehammock.Tests/Unit/HealthControllerTests.cs": "43eb9b6eb0e44593961d38087f29d76cf73003b47f78673f57a69b3618c03c62",
+    "treehammock.Tests/Unit/LoginAbuseCounterKeyFactoryTests.cs": "4ac4227860449c5f40edd70430ee297ba542f03ff5ec9ac387d842a6d1ad3cc1",
+    "treehammock.Tests.System/SystemStackHealthTests.cs": "fdc7b1eb1034dfdbcd73e087756a5542c41749d1e0544b0c2593d0c37ac2ef97"
+  },
+  "assigned_test_method_catalogs_source_inspected_NOT_executed": {
+    "treehammock.Tests/Infrastructure/AllowingAuthenticatedMutationIdempotencyService.cs": [
+      "BeginAsync",
+      "CompleteAsync"
+    ],
+    "treehammock.Tests/Unit/AbuseControlContractTests.cs": [
+      "Abuse_control_settings_enable_required_policies_by_default",
+      "Abuse_control_settings_validate_nested_policy_ranges",
+      "Safe_abuse_identifier_stores_only_kind_length_and_fingerprint",
+      "Safe_abuse_identifier_rejects_unsafe_segments",
+      "Abuse_counter_key_uses_namespaced_safe_segments",
+      "Abuse_counter_limit_rejects_invalid_bounds",
+      "Abuse_contract_models_do_not_expose_raw_identifier_or_secret_fields",
+      "Abuse_reason_codes_are_stable_uppercase_constants"
+    ],
+    "treehammock.Tests/Unit/AbuseOperationalTelemetryTests.cs": [
+      "Abuse_operational_event_names_are_stable",
+      "Abuse_metric_names_are_stable_treehammock_counters",
+      "Abuse_metric_labels_are_low_cardinality_only",
+      "Abuse_metric_labels_forbid_raw_pii_and_secret_fields",
+      "Structured_log_fields_do_not_use_raw_abuse_proof_or_secret_names",
+      "Abuse_grafana_dashboard_uses_only_expected_metric_names"
+    ],
+    "treehammock.Tests/Unit/AuthenticatedMutationIdempotencyTests.cs": [
+      "Header_name_and_result_codes_are_stable",
+      "Cache_key_uses_account_route_method_and_fingerprinted_client_key",
+      "Client_key_normalization_accepts_safe_tokens",
+      "Client_key_normalization_rejects_missing_or_unsafe_values",
+      "Missing_required_key_result_uses_precondition_required_reason_code",
+      "Dragonfly_service_returns_required_key_result_before_touching_cache_when_key_is_missing",
+      "Noop_idempotency_service_never_blocks_requests",
+      "Required_authenticated_mutation_endpoints_pass_required_key_to_idempotency_service",
+      "Current_session_logout_keeps_idempotency_key_optional"
+    ],
+    "treehammock.Tests/Unit/DeliveryAbuseThrottleApplicationTests.cs": [
+      "Password_reset_delivery_throttle_denial_suppresses_provider_send",
+      "Activation_delivery_throttle_denial_suppresses_provider_send",
+      "Account_unlock_delivery_throttle_denial_preserves_generic_response_and_suppresses_provider_send",
+      "Two_factor_delivery_throttle_denial_suppresses_provider_send",
+      "Password_reset_email_provider_failure_records_delivery_provider_failure",
+      "ShouldAllowDeliveryAsync",
+      "RecordProviderFailureAsync"
+    ],
+    "treehammock.Tests/Unit/DeliveryAbuseThrottlePolicyTests.cs": [
+      "Email_delivery_policy_increments_account_destination_and_ip_counters_without_raw_pii",
+      "Sms_delivery_policy_uses_sms_account_and_ip_limits",
+      "Provider_failure_records_failure_cooldown_policy_for_delivery_method",
+      "Active_provider_failure_cooldown_denies_delivery_before_counters_increment",
+      "Failure_cooldown_disabled_skips_provider_failure_cooldown_gate",
+      "IncrementAsync",
+      "ResetAsync",
+      "GetCooldownAsync"
+    ],
+    "treehammock.Tests/Unit/DragonflyAbuseCounterStoreTests.cs": [
+      "Increment_creates_counter_window_on_first_attempt",
+      "Increment_denies_and_starts_cooldown_when_limit_is_exceeded",
+      "Increment_denies_active_cooldown_without_incrementing_counter",
+      "GetCooldown_returns_active_status_from_cooldown_ttl",
+      "Reset_removes_counter_and_cooldown_keys",
+      "Increment_fails_closed_when_counter_store_is_unavailable_by_default",
+      "Increment_can_allow_when_configured_for_postgresql_authoritative_fallback",
+      "Abuse_counter_cache_settings_builds_isolated_dragonfly_configuration"
+    ],
+    "treehammock.Tests/Unit/HealthControllerTests.cs": [
+      "Health_controller_is_public_controller_based_api_surface",
+      "Health_actions_advertise_expected_routes_and_status_codes",
+      "Live_returns_200_live_status_without_dependency_checks",
+      "Ready_returns_200_when_dependencies_are_healthy",
+      "Ready_returns_503_when_any_dependency_is_unhealthy",
+      "Dependencies_returns_same_dependency_report_shape_as_readiness",
+      "CheckAsync"
+    ],
+    "treehammock.Tests/Unit/LoginAbuseCounterKeyFactoryTests.cs": [
+      "Factory_builds_safe_account_identifier_and_ip_keys_without_raw_material",
+      "Factory_rejects_unsafe_or_empty_inputs"
+    ],
+    "treehammock.Tests.System/SystemStackHealthTests.cs": [
+      "HAProxy_liveness_endpoint_returns_live_status",
+      "HAProxy_readiness_endpoint_verifies_backend_postgresql_and_dragonfly"
+    ]
+  },
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "qualification": {
+    "build_tests": "runner exited 127 before restore/build/test; not executed",
+    "cache_pg_fallback": "source-derived; real outage/transaction scenarios pending",
+    "health_lifecycle_deadlines": "dependency contract/source-derived; factories/shutdown/elapsed time not exercised",
+    "metrics": "source call-site analysis; MeterListener and real transition checks pending",
+    "replay": "additional AUTH-08 setup payload evidence; response loss not reproduced",
+    "performance": "not measured"
+  },
+  "new_finding_pr_ownership": {
+    "R09-01": "COR23M",
+    "R09-02": "COR23N",
+    "R09-03": "COR23O",
+    "R09-04": "COR23P"
+  },
+  "reference_urls": [
+    "https://learn.microsoft.com/en-us/dotnet/api/system.threading.lazythreadsafetymode?view=net-8.0",
+    "https://stackexchange.github.io/StackExchange.Redis/Basics.html"
+  ]
+}

@@ -1,0 +1,9 @@
+# Operator rollback playbook
+
+On any escalation, identity mismatch, parity drift, cache-hit SQL, loss of a replica, stale qualification, budget overrun or failed isolation, stop increasing traffic immediately and revoke the proposed review plan. Preserve only the sanitized report, source hashes and signed qualification inputs under approved private retention; stop raw collection and destroy its job key.
+
+For an already applied routing change, use the previously reviewed known-good consumer/source artifact and routing configuration. Drain in-flight calls and retain raw-resource ownership until completion. Do not reactivate the removed CBK provisional JSON adapter, enable local JWT validation, trust identity headers, or treat shadow output as a principal. If no qualified enforcing path is available, return 503 with no-store rather than grant sessions. Native qualification status does not change normal private SDK enforcement.
+
+Quarantine incoherent cache participants using existing private operator/fleet procedures. Restore coherence only through the existing full peer inventory, signed membership, writer barriers and readmission workflow. Do not bypass writer reserve or grant writer access to validator callers. Follow the fleet reconciliation and readmission controls described in the current deployment and cache consistency documentation; this rollout utility executes no fleet commands.
+
+Roll back to a previously reviewed, immutable source artifact only after verifying its complete source identity and compatibility with the running issuer, storage schema and client. Do not restore a retired provisional validation adapter as an authorization fallback. Attach the sanitized rollback incident and rerun the relevant native gates before requesting a fresh signed next-tier plan.

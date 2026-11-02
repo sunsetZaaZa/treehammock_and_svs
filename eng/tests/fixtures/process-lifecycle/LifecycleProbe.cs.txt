@@ -1,0 +1,16 @@
+using System.Diagnostics;
+// Executed by the real SDK qualification, never by Python tooling tests.
+string receipt = args[0];
+if (args.Length > 1)
+{
+    File.WriteAllText(receipt + ".child", Environment.ProcessId.ToString());
+    await Task.Delay(Timeout.Infinite); return;
+}
+var childStart = new ProcessStartInfo(Environment.ProcessPath!);
+if (Path.GetFileNameWithoutExtension(Environment.ProcessPath!) == "dotnet")
+    childStart.ArgumentList.Add(typeof(Program).Assembly.Location);
+childStart.ArgumentList.Add(receipt); childStart.ArgumentList.Add("child");
+childStart.UseShellExecute = false;
+using var child = Process.Start(childStart)!;
+File.WriteAllText(receipt, Environment.ProcessId.ToString());
+await Task.Delay(Timeout.Infinite);

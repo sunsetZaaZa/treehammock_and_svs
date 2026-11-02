@@ -1,0 +1,154 @@
+{
+  "source_archive": "Treehammock_COR25_38_TO_COR25_Q06_DELIVERY.zip",
+  "source_archive_sha256": "4f824b11f91c3f3a7f7541cf15c11f9297c665b6fcc3c890451c9ca4e854d5ec",
+  "source_dir": "source/treehammock-main/",
+  "source_identity_from_handoff": "sha256:103df24066837d04b6efc6069963caac0a10d9ad6dbe591fde7487184f60c2b0",
+  "baseline_status": "all corrections implemented pending native qualification; Q01-Q06 blocked/not-run",
+  "files": {
+    "Program.cs": {
+      "sha256": "74631453a12eefd99ebce4c36d8ad4954a2688b187164ecbb21489d0c87bb753",
+      "size_bytes": 4882,
+      "location_in_archive": "source/treehammock-main/Program.cs"
+    },
+    "treehammock.csproj": {
+      "sha256": "f7ad2fa5c23094d048505f7dbcb6469bf3e89446d70e99075c5d841f6e99497e",
+      "size_bytes": 6377,
+      "location_in_archive": "source/treehammock-main/treehammock.csproj"
+    },
+    "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs": {
+      "sha256": "c9fb4b50f83a4087397d752a433ffa45d2f1dc29ebca5cea786cdac3e328da48",
+      "size_bytes": 17968,
+      "location_in_archive": "source/treehammock-main/Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs"
+    },
+    "Rigging/Authentication/JsonWebTokenMiddleware.cs": {
+      "sha256": "d74c8f93ede1f37fb49f67b131da8e36cd0ba29e5d8d0c8e3476c3b9844eae3d",
+      "size_bytes": 23634,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/JsonWebTokenMiddleware.cs"
+    },
+    "Rigging/Authentication/JsonWebTokenUtility.cs": {
+      "sha256": "64162fc6d2c6473215a95d8db3b9d3a45bdacd20fcadffef6ccb972fde08b33d",
+      "size_bytes": 7164,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/JsonWebTokenUtility.cs"
+    },
+    "Rigging/Authentication/AccessTokenTransport.cs": {
+      "sha256": "587a5f1570b23299c6686d4bdbb252c735e30cc62d9a367b62d1ba273d205118",
+      "size_bytes": 1287,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/AccessTokenTransport.cs"
+    },
+    "Rigging/Authentication/AccessTokenHashUtility.cs": {
+      "sha256": "c08708435b47144c6920591f8ec5d21fe8270b4bbf6f16e41f1e48e5b37c8d37",
+      "size_bytes": 523,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/AccessTokenHashUtility.cs"
+    },
+    "Rigging/Authentication/SessionProtocol.cs": {
+      "sha256": "83040ba2bbb0189d208716461d8d7d94f3ad4456778d270f36d44283f9e5ffed",
+      "size_bytes": 2660,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/SessionProtocol.cs"
+    },
+    "Rigging/Authentication/Attributes/Authenticate.cs": {
+      "sha256": "7bd4c1161669b2cca1d7f33f788d43b4072656fa345b879d5035084fee0291f1",
+      "size_bytes": 1935,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/Attributes/Authenticate.cs"
+    },
+    "Rigging/Authentication/AuthContextItems.cs": {
+      "sha256": "6a369d609f3b8e0f7b1ce07bef92b99ff50c122762c69da143aa90062d66b53c",
+      "size_bytes": 252,
+      "location_in_archive": "source/treehammock-main/Rigging/Authentication/AuthContextItems.cs"
+    },
+    "Repos/SessionRepo.cs": {
+      "sha256": "4a2f284dfbb665b54e7cd81b3001959783807f2eae5ce5419e0e1e2a0362831c",
+      "size_bytes": 42032,
+      "location_in_archive": "source/treehammock-main/Repos/SessionRepo.cs"
+    },
+    "Repos/SessionRefreshRepo.cs": {
+      "sha256": "42aa15b8f72da711ad2d1f5b84427f55687ce35dd37e607a09b664cec4709b81",
+      "size_bytes": 5829,
+      "location_in_archive": "source/treehammock-main/Repos/SessionRefreshRepo.cs"
+    },
+    "Repos/SessionCacheWarmupRepo.cs": {
+      "sha256": "250865b2c0779d50a27286f85902c7e3a00a6bb35ee66832aaf4b6f35652d2c0",
+      "size_bytes": 2178,
+      "location_in_archive": "source/treehammock-main/Repos/SessionCacheWarmupRepo.cs"
+    },
+    "Services/SessionRefreshService.cs": {
+      "sha256": "83e1b8a4ea8a5d3adc2b146aebaee9644744851422c28f1262468807373c8c38",
+      "size_bytes": 5257,
+      "location_in_archive": "source/treehammock-main/Services/SessionRefreshService.cs"
+    },
+    "Services/SessionCacheWarmupWorker.cs": {
+      "sha256": "248a9d966f7e0d30a545408f9107fa7c677902f2d031dbad8036f2929396a13a",
+      "size_bytes": 5129,
+      "location_in_archive": "source/treehammock-main/Services/SessionCacheWarmupWorker.cs"
+    },
+    "Rigging/Cache/ActiveUserCacheService.cs": {
+      "sha256": "721521f983c10b32a922b1a72e9413d4b6d716a35c4711bc50df8d914c51755d",
+      "size_bytes": 5584,
+      "location_in_archive": "source/treehammock-main/Rigging/Cache/ActiveUserCacheService.cs"
+    },
+    "Rigging/Database/StorageContext.cs": {
+      "sha256": "db960534e3fb0985206767dc0771f94a29d6a660d7e91ebc63327060ee64fa8c",
+      "size_bytes": 3066,
+      "location_in_archive": "source/treehammock-main/Rigging/Database/StorageContext.cs"
+    },
+    "Rigging/Database/Baseline/000_canonical_database.sql": {
+      "sha256": "1743da64491c5e7d715c4276fdb9f610d2310c8964b4e3f1655ab52bf5bb80a6",
+      "size_bytes": 428823,
+      "location_in_archive": "source/treehammock-main/Rigging/Database/Baseline/000_canonical_database.sql"
+    },
+    "Rigging/Config/SessionCacheFallbackSettings.cs": {
+      "sha256": "01564a03f8a812cdfcf5f2704ca8190cf974dd88821e54cc300a264917bf7982",
+      "size_bytes": 913,
+      "location_in_archive": "source/treehammock-main/Rigging/Config/SessionCacheFallbackSettings.cs"
+    },
+    "Rigging/Config/SessionCacheWarmupSettings.cs": {
+      "sha256": "d30d02ae2e96079f641842547eca5e894d6dfd417fd2727b3102f8c21f43ab4d",
+      "size_bytes": 613,
+      "location_in_archive": "source/treehammock-main/Rigging/Config/SessionCacheWarmupSettings.cs"
+    },
+    "Entities/Session.cs": {
+      "sha256": "21b6b6da0386f71d34ec0832cd2d1d64617db099f04c74ed0a18b3ff671e2dc9",
+      "size_bytes": 3171,
+      "location_in_archive": "source/treehammock-main/Entities/Session.cs"
+    },
+    "DataLayer/Cache/ActiveSession.cs": {
+      "sha256": "a5ae7f982de34d2fc37dab05bd0a634cbd60b5d67bd34897c9c9fc7842f32a13",
+      "size_bytes": 5062,
+      "location_in_archive": "source/treehammock-main/DataLayer/Cache/ActiveSession.cs"
+    },
+    "Controllers/AccountSessionController.cs": {
+      "sha256": "50f6b722a5ef589c046616200ca9cbdf326dcf9f73e381ddc2ac327792f878d5",
+      "size_bytes": 23199,
+      "location_in_archive": "source/treehammock-main/Controllers/AccountSessionController.cs"
+    },
+    "docs/corrections/COR25_DESIGN.md": {
+      "sha256": "3782ee99ae443c49c8a68aa5ffc1fe5b280c641a3b04b539343cc44c39164728",
+      "size_bytes": 55359,
+      "location_in_archive": "source/treehammock-main/docs/corrections/COR25_DESIGN.md"
+    },
+    "docs/corrections/COR25_PR_PLAN.md": {
+      "sha256": "81084fce54575b6bf4cc0120619a6fc57387111d19362e4814d1f7884a3d2492",
+      "size_bytes": 84392,
+      "location_in_archive": "source/treehammock-main/docs/corrections/COR25_PR_PLAN.md"
+    },
+    "treehammock.Tests.SqlContracts/Integration/Database/SessionConcurrencyProcedureContractTests.cs": {
+      "sha256": "967077790fa01df0570c13d577b67cc84448eb3a88cb0252c2289368679f549e",
+      "size_bytes": 10919,
+      "location_in_archive": "source/treehammock-main/treehammock.Tests.SqlContracts/Integration/Database/SessionConcurrencyProcedureContractTests.cs"
+    },
+    "treehammock.Tests.SqlContracts/Integration/Database/SessionCacheWarmupSqlTests.cs": {
+      "sha256": "d32046de13047494d56872bdac1b36c568ffd62dc45f6757001c31bd7b841c88",
+      "size_bytes": 6639,
+      "location_in_archive": "source/treehammock-main/treehammock.Tests.SqlContracts/Integration/Database/SessionCacheWarmupSqlTests.cs"
+    },
+    "treehammock.Tests/Unit/SessionCacheWarmupTests.cs": {
+      "sha256": "b524762556b0f8a641f725cd3b4817f84de7ba2cfcf966dd30eb3a7611d39055",
+      "size_bytes": 16926,
+      "location_in_archive": "source/treehammock-main/treehammock.Tests/Unit/SessionCacheWarmupTests.cs"
+    },
+    "treehammock.Tests/Unit/Cor09SessionTests.cs": {
+      "sha256": "0d3cd28cec11cac9eaf00c65e1f0d4826776ff90ccccbbaa10d750c1abdb21b6",
+      "size_bytes": 11559,
+      "location_in_archive": "source/treehammock-main/treehammock.Tests/Unit/Cor09SessionTests.cs"
+    }
+  }
+}

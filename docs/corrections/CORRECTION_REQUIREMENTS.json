@@ -1,0 +1,2038 @@
+{
+  "schema_version": 1,
+  "program": "COR25",
+  "basis": {
+    "review_delivery_sha256": "cfdba4d82412f772bbc447be195862037e892c82d9ed3695e69d3d8fe46785a5",
+    "source_archive_sha256": "329df000b886a99336128dbdfee5340025f4d6898d822e011530786c1e6639d7",
+    "source_inventory_sha256": "3ad2f53c46d647501f7b6b936e629fcd325793c06d5af9eac33b07f3184b14d8",
+    "files": 990,
+    "units": 1476,
+    "sql_functions": 176,
+    "endpoints": 45,
+    "lexical_methods": 1572,
+    "review_features": 45,
+    "advertised_features": 44
+  },
+  "scope": "Correct existing reviewed behavior and fixtures; no new product feature or development migration.",
+  "intake": "COR25.00",
+  "correction_prs": [
+    {
+      "id": "COR25.01",
+      "finding": "RV-0021",
+      "title": "PostgreSQL budget store passes a string into the availability enum constructor parameter",
+      "priority": "High",
+      "depends_on": [
+        "COR25.00"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Abuse/PostgreSqlAbuseBudgetStore.cs",
+        "Rigging/Abuse/AbuseModels.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23MAbuseBudgetTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_01_IMPLEMENTATION.md"
+      ],
+      "implementation": "Use a named CounterStoreAvailability.Available argument; keep provider labels in telemetry. Do not add a provider-string compatibility constructor.",
+      "acceptance": [
+        "Build production and test projects with .NET 8.",
+        "Execute owned SQL budget admission/denial/cooldown tests and telemetry provider-label assertions."
+      ],
+      "integration_groups": [
+        "R38.X12",
+        "R38.X16"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_01_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.02",
+      "finding": "RV-0015",
+      "title": "SQL dependency cancellation tests redeclare the enclosing lambda parameter",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.01"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor03DependencySqlTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_02_IMPLEMENTATION.md"
+      ],
+      "implementation": "Rename the nested sources commandCancellation/acquisitionCancellation, propagating the original fixture token and keeping bounded teardown.",
+      "acceptance": [
+        "Locked SQL-contract project build succeeds.",
+        "Both native cancellation cases terminate with the intended cancellation outcome and same-owner recovery.",
+        "Capture native exact cases and teardown/pool receipts."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_02_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.03",
+      "finding": "RV-0018",
+      "title": "Cache repair test passes CancellationToken into the CommandFlags parameter",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.02"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/Cor22CacheWriteTests.cs",
+        "Rigging/Cache/ActiveUserCacheService.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_03_IMPLEMENTATION.md"
+      ],
+      "implementation": "Use explicit flags and cancellationToken named arguments in all three setups/verifications; preserve grouped theory write-count/TTL oracles.",
+      "acceptance": [
+        "Locked native unit build and all grouped cache-write theory rows execute.",
+        "Assert unchanged/evaluation-only versus material/hydration repair and boundary TTL under current production middleware."
+      ],
+      "integration_groups": [
+        "R38.X14",
+        "R38.X16"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_03_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.04",
+      "finding": "RV-0026",
+      "title": "Reset TOTP tamper test uses accountId before its declaration",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.03"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/PasswordResetTotpVerifierTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_04_IMPLEMENTATION.md"
+      ],
+      "implementation": "Create accountId before envelope encryption and reuse exactly that UUID in the repository response and tamper control.",
+      "acceptance": [
+        "Compile the native unit project.",
+        "Run the tampered-envelope and reset TOTP verifier suite; verify no replay step is charged on authenticated-decryption failure."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_04_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.05",
+      "finding": "RV-0008",
+      "title": "Hosting protocol validation accepts unsupported numeric protocol bits",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.04"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Config/HostingSettings.cs",
+        "Rigging/Hosting/HostingConfigurator.cs",
+        "treehammock.Tests/Unit/HostingSettingsTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_05_IMPLEMENTATION.md"
+      ],
+      "implementation": "Accept nonzero subsets of the supported Http1/Http2/Http3 mask, including intentional named/numeric combinations; reject zero, negative and unsupported bits in both validation and GetProtocols. Invalid input must not silently fall back.",
+      "acceptance": [
+        "Native option-validation regression rejects 8, negative and out-of-mask values.",
+        "Supported named/numeric protocol combinations behave according to an explicit configuration policy.",
+        "Run Kestrel startup for supported listener profiles."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_05_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.06",
+      "finding": "RV-0011",
+      "title": "Delivery payload CHECK permits partially null encrypted tuples",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.05"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "Rigging/Database/Migrations/manifest.json",
+        "eng/generate-database-baseline.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_06_IMPLEMENTATION.md"
+      ],
+      "implementation": "Require explicit nonnull nonce/ciphertext/tag in the full encrypted branch and valid lengths; preserve the explicitly all-null erased branch. Patch the effective current input, not an overridden copy.",
+      "acceptance": [
+        "Execute all six mixed-null combinations plus malformed lengths on PostgreSQL and the chosen Yugabyte YSQL version.",
+        "Preserve valid full encrypted tuples and all-null terminal erasure.",
+        "Regenerate both baselines and validate current setup checksums without deployed-data migrations."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_06_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.07",
+      "finding": "RV-0012",
+      "title": "Password-reset channel null bypasses both conditional validation and row-shape CHECK",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.06"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "Rigging/Database/Migrations/manifest.json",
+        "eng/generate-database-baseline.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_07_IMPLEMENTATION.md"
+      ],
+      "implementation": "Reject null/blank normalized channel before any prior request is altered. Make the row CHECK false for missing channel, while retaining current proof, rate and account authority.",
+      "acceptance": [
+        "Null/blank/wrong channel deny without canceling prior valid requests or adding request/event state.",
+        "Matching email/SMS paths retain current proof/rate/authority behavior.",
+        "Execute on supported PostgreSQL and chosen Yugabyte YSQL versions; preserve frozen evidence and gates."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_07_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.08",
+      "finding": "RV-0020",
+      "title": "Future-dated session creation defeats immediate single-session supersession",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.07"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "Repos/SessionRepo.cs",
+        "Rigging/Database/Migrations/manifest.json",
+        "eng/generate-database-baseline.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_08_IMPLEMENTATION.md"
+      ],
+      "implementation": "Choose database-authoritative current issuance time; terminate prior live family/refresh authority immediately without relying on a future created_on clamp. Preserve table invariants and rollback if new issuance fails.",
+      "acceptance": [
+        "Future/backward skew and normal creation schedules leave only the new session authenticated.",
+        "Old refresh credential/family is invalid after superseding login.",
+        "Execute PostgreSQL/YSQL contention, cutoff and stamp/rollback controls."
+      ],
+      "integration_groups": [
+        "R38.X01"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_08_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.09",
+      "finding": "RV-0019",
+      "title": "Late entitlement reload publishes authentication without rechecking session expiry",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.08"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "DataLayer/Entitlements/EntitlementProjection.cs",
+        "treehammock.Tests/Unit/JsonWebTokenMiddlewareTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_09_IMPLEMENTATION.md"
+      ],
+      "implementation": "After the last awaited entitlement reload resample time and check fresh access/effective-hard/cutoff expiry plus account/stamp/family/generation and projection lineage before publishing any trust item. Projection freshness never extends session life.",
+      "acceptance": [
+        "Delayed final reload crossing access/hard/cutoff equality never publishes trusted context.",
+        "Live same-family entitlement reload succeeds; changed epoch/generation denies.",
+        "Actual .NET/PostgreSQL/YSQL routed protected-read and token/header behavior are measured."
+      ],
+      "integration_groups": [
+        "R38.X02",
+        "R38.X08"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_09_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.10",
+      "finding": "RV-0025",
+      "title": "Password login publishes expired session credentials after post-commit cache waits",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.09"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Controllers/AccountControllerBase.LoginHelpers.cs",
+        "Controllers/AccountLoginController.cs",
+        "Controllers/AccountControllerBase.RepositoryGuards.cs",
+        "treehammock.Tests/Integration/AccountFlowRegressionTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_10_IMPLEMENTATION.md"
+      ],
+      "implementation": "Share a final-output guard across initial/replacement login after the last SQL/cache await. Withhold expired headers/body credentials without pretending a committed transaction rolled back or destructively compensating an unknown commit.",
+      "acceptance": [
+        "Native initial/replacement login cache-wait cutoff/access/hard boundary cases with equality-expired controls.",
+        "Preserve ordinary live successful login and cache-miss success.",
+        "Retain uncertain commit reconciliation and compare already guarded refresh output behavior."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_10_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.11",
+      "finding": "RV-0022",
+      "title": "Clipped email-change companion deadlines differ and fail staging binding",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.10"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Delivery/DeliveryPayloadProtector.cs",
+        "Repos/DeliveryOutboxRepo.cs",
+        "Services/AccountService.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor17EmailChangeTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_11_IMPLEMENTATION.md"
+      ],
+      "implementation": "Sample and quantize one effective deadline per primary/notice group; separately identified envelopes retain that exact deadline and strict staging equality. Do not loosen equality or extend retention.",
+      "acceptance": [
+        "Native clipped/unclipped companion encryption and staging tests preserve exact expiry identity.",
+        "Owned SQL email change plus old-address notice stage atomically and retain tamper/stamp/proof controls."
+      ],
+      "integration_groups": [
+        "R38.X05",
+        "R38.X12"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_11_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.12",
+      "finding": "RV-0023",
+      "title": "SMTP durable renderer does not handle the produced email-change-notice kind",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.11"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Services/SMTPService.cs",
+        "Services/AccountService.cs",
+        "Services/DeliveryOutboxWorker.cs",
+        "treehammock.Tests/Integration/Cor23ISmtpOutcomeTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_12_IMPLEMENTATION.md"
+      ],
+      "implementation": "Explicitly render existing email-change-notice with safe HTML encoding, old trusted destination and independent notice identity. Classify unsupported/corrupt payloads conservatively.",
+      "acceptance": [
+        "Execute actual SMTP renderer coverage for every current producer payload kind, including notice.",
+        "Owned SQL/SMTP email-change schedule submits primary and old-address notice with required TLS and correct destinations.",
+        "Retain conservative classification for unsupported/corrupted kinds and receipt uncertainty."
+      ],
+      "integration_groups": [
+        "R38.X05",
+        "R38.X12"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_12_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.13",
+      "finding": "RV-0034",
+      "title": "Testing SMTP durable dispatch rejects current activation-code payloads",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.12"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Services/SystemTesting/SystemTestSmtpService.cs",
+        "Services/ActivationService.cs",
+        "treehammock.Tests.System/SystemStackAccountFlowTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_13_IMPLEMENTATION.md"
+      ],
+      "implementation": "Capture current activation-code through the durable Testing branch with exact activation purpose/code; reconcile existing producer kind coverage including notice, without enabling capture in disabled environments.",
+      "acceptance": [
+        "Native worker-to-test-capture activation case records exact code and publication before verify.",
+        "Full System activation lifecycle passes and disabled profiles retain real provider/no capture composition."
+      ],
+      "integration_groups": [
+        "R38.X09",
+        "R38.X12",
+        "R38.X19"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_13_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.14",
+      "finding": "RV-0028",
+      "title": "SMS reset destination duplicates an already international phone prefix",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.13"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Services/PasswordResetService.cs",
+        "Controllers/AccountControllerBase.TwoFactorHelpers.cs",
+        "Controllers/AccountControllerBase.Validation.cs",
+        "treehammock.Tests/Integration/PasswordResetEndToEndRegressionTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_14_IMPLEMENTATION.md",
+        "Rigging/Security/PhoneDestinationNormalizer.cs"
+      ],
+      "implementation": "Trim and preserve a full + prefixed phone number; otherwise prepend the normalized country prefix once. Use one existing-feature normalization contract across setup/login/reset and retain verified destination fingerprint/mask binding.",
+      "acceptance": [
+        "Native SMS bootstrap and additional-factor tests for local numbers, full international numbers and + prefixed country codes.",
+        "Assert the staged destination equals the verified setup destination and preserve destination fingerprint/mask behavior."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_14_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.15",
+      "finding": "RV-0035",
+      "title": "Published deletion mailbox link cannot admit verification without operation recovery keys",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.14"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Controllers/AccountDeleteController.cs",
+        "Services/AccountService.cs",
+        "Repos/AccountRepo.cs",
+        "Rigging/Operations/SecurityOperationMiddleware.cs",
+        "Services/SecurityOperationService.cs",
+        "tests/http/cor18-delete.http",
+        "tests/http/cor19-activation.http",
+        "Controllers/AccountProfileController.cs",
+        "Models/Account/AccountDelete.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor18DeleteAuthorityTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_15_IMPLEMENTATION.md"
+      ],
+      "implementation": "Use the established email-confirmation form pattern: GET /account/wipeout/verify renders read-only encoded HTML, POST on the same path verifies with retained operationKey/operationRecovery form fields through current admission. Verification is not deletion; authenticated finalize remains separate. Use no-store/no-referrer/nosniff/restrictive CSP; keys never enter URLs/logs. Add fresh retained operation headers to activation cancel/disable examples. Do not waive general missing-key enforcement.",
+      "acceptance": [
+        "Native actual middleware/service/repository browser confirmation succeeds for live published proof and returns controlled denial for stale/unpublished proof.",
+        "Response-loss recovery and repeated confirmation preserve exact request identity without deleting the account.",
+        "Native full System deletion flow and all HTTP examples pass without weakening general missing-key enforcement."
+      ],
+      "integration_groups": [
+        "R38.X04",
+        "R38.X19",
+        "R38.X20"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_15_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.16",
+      "finding": "RV-0013",
+      "title": "Catalog fingerprint leaves schema-local routine search_path settings unnormalized",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.15"
+      ],
+      "existing_files_to_review_or_modify": [
+        "Rigging/Database/Migrations/catalog_contract.sql",
+        "Rigging/Database/Migrations/DatabaseMigrationRunner.cs",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor02MigrationTests.cs",
+        "eng/tests/test_correction_migrations.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_16_IMPLEMENTATION.md"
+      ],
+      "implementation": "Compare structured pg_proc attributes and ordered search_path settings with only the selected owned-schema slot normalized. Preserve body, privilege/security attributes, trusted order and foreign paths; avoid broad string replacement that masks drift.",
+      "acceptance": [
+        "Current canonical and ordered fresh installation fingerprints compare equal across distinct schemas.",
+        "Changed search_path order/foreign schema or routine body remains unequal.",
+        "Execute PostgreSQL/YSQL catalog and existing installation/rollback cases on a capable host."
+      ],
+      "integration_groups": [
+        "R38.X10",
+        "R38.X16",
+        "R38.X17"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_16_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.17",
+      "finding": "RV-0016",
+      "title": "Idempotency key acceptance case is shorter than its explicit minimum",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.16"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/AuthenticatedMutationIdempotencyTests.cs",
+        "Rigging/Replay/AuthenticatedMutationIdempotency.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_17_IMPLEMENTATION.md"
+      ],
+      "implementation": "Use a >=16-character positive token with explicit normalized 15/16/128/129 boundaries; never weaken production limits for the stale fixture.",
+      "acceptance": [
+        "Native affected theory passes valid boundaries and rejects below-minimum values."
+      ],
+      "integration_groups": [
+        "R38.X11"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_17_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.18",
+      "finding": "RV-0017",
+      "title": "Cache payload tests expect raw failures despite the current typed dependency boundary",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.17"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/CacheJsonSettingsTests.cs",
+        "Rigging/Cache/CacheConnectionOwner.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_18_IMPLEMENTATION.md"
+      ],
+      "implementation": "Check typed DependencyUnavailableException, original InnerException and classification; preserve distinct malformed JSON and caller cancellation cases.",
+      "acceptance": [
+        "Both unit methods and caller-cancellation/malformed-payload cases execute successfully on .NET.",
+        "Typed outage reaches503 without charging incorrect proof or clearing credentials."
+      ],
+      "integration_groups": [
+        "R38.X14",
+        "R38.X16"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_18_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.19",
+      "finding": "RV-0024",
+      "title": "DI registration regression requires ImplementationType on factory-owned singleton descriptors",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.18"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/DependencyInjectionRegistrationTests.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_19_IMPLEMENTATION.md"
+      ],
+      "implementation": "Check lifetime and factory/type descriptor form, then resolve expected concrete type and same singleton instance through isolated owned dependencies; keep production lifecycle factories.",
+      "acceptance": [
+        "Native current descriptor/implementation/same-instance checks cover all five factory rows.",
+        "Retain cache/health shared owner and disposal/startup controls.",
+        "Run full DI theory under locked SDK/package graph."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_19_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.20",
+      "finding": "RV-0010",
+      "title": "Body-capacity regression leaves blocked middleware work unowned on assertion failure",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.19"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/Cor23FBodyBoundaryTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_20_IMPLEMENTATION.md"
+      ],
+      "implementation": "Release the barrier and observe the scheduled invocation in a bounded finally before policy disposal; preserve both primary and cleanup failure evidence.",
+      "acceptance": [
+        "Execute a controlled assertion-failure/timeout path and verify pending work terminates and original request restoration runs.",
+        "Preserve the successful overload/restoration/permit-recovery oracle."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_20_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.21",
+      "finding": "RV-0027",
+      "title": "Sensitive-grant family test changes an unbound session identity field",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.20"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor08AttemptAndGrantTests.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_21_IMPLEMENTATION.md"
+      ],
+      "implementation": "Change the bound session_id/family or invoke real replacement, not unrelated sessions.security_stamp; explicitly inspect the changed authority predicate.",
+      "acceptance": [
+        "Run every scope-change theory row against native PostgreSQL.",
+        "Retain unchanged-live control and actual refresh/replacement grant invalidation checks."
+      ],
+      "integration_groups": [
+        "R38.X07"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_21_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.22",
+      "finding": "RV-0029",
+      "title": "Reset SQL lifecycle fixtures omit current proof completion and replay identity",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.21"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs",
+        "treehammock.Tests.SqlContracts/Support/Cor13ResetSql.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_22_IMPLEMENTATION.md"
+      ],
+      "implementation": "Complete the real selected additional-factor path and carry returned versions before positive promotion. Read and pass the enrolled UUID on every replay call; retain incomplete/wrong-UUID controls.",
+      "acceptance": [
+        "Native lifecycle and replay facts pass against exact current canonical setup.",
+        "Incomplete authorization, stale versions and wrong enrollment identity remain denied."
+      ],
+      "integration_groups": [
+        "R38.X03",
+        "R38.X04",
+        "R38.X05",
+        "R38.X06",
+        "R38.X11"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_22_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.23",
+      "finding": "RV-0030",
+      "title": "Reset orchestration regressions retain stale authority and expiry fixture expectations",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.22"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Integration/PasswordResetEndToEndRegressionTests.cs",
+        "treehammock.Tests/Support/Cor13ResetSessionStore.cs",
+        "Services/PasswordResetService.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_23_IMPLEMENTATION.md"
+      ],
+      "implementation": "Assert current method-not-required preselection behavior. Drive expiry from stored authoritative deadlines and a controlled clock, not mutations to returned copies; preserve copy isolation.",
+      "acceptance": [
+        "Run all three native facts with correct current state and authority deadlines.",
+        "Retain unexpired valid controls and expired proof/finalization denial."
+      ],
+      "integration_groups": [
+        "R38.X03",
+        "R38.X04",
+        "R38.X05",
+        "R38.X06",
+        "R38.X11"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_23_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.24",
+      "finding": "RV-0037",
+      "title": "System sensitive-action helper retains obsolete target and password-only approval assumptions",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.23"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests.System/SystemStackAccountFlowTests.cs",
+        "Services/SensitiveActionTokenService.cs",
+        "Rigging/Security/SensitiveActionTargets.cs",
+        "Controllers/AccountTwoFactorController.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_24_IMPLEMENTATION.md"
+      ],
+      "implementation": "Compute exact canonical setup/removal targets. Handle the 202 proof session, complete an eligible authenticator proof with fresh replay step and arrange positive factor setup in policy-permitted order. Keep email/SMS-only refusal cases.",
+      "acceptance": [
+        "Native full System setup/removal/multi-factor flow passes through real target-bound grant authority.",
+        "Wrong/missing target and password-only configured-factor approval remain denied; no fixture disables production proof checks."
+      ],
+      "integration_groups": [
+        "R38.X04",
+        "R38.X07",
+        "R38.X19"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_24_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.25",
+      "finding": "RV-0036",
+      "title": "Disabled-host SQL fixture expects a relation absent after canonical setup creates it",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.24"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23DTestCapabilityHttpTests.cs",
+        "treehammock.Tests.SqlContracts/Support/SqlContractFixture.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_25_IMPLEMENTATION.md"
+      ],
+      "implementation": "Snapshot canonical relation identity and empty rows before host start and assert disabled host leaves them unchanged; retain real provider/absent route/seed denial controls. Do not remove a canonical retention table.",
+      "acceptance": [
+        "All three native disabled-host cases pass against complete canonical setup.",
+        "No capture provider/route/message/account is created by disabled host composition, and enabled fixture behavior remains covered."
+      ],
+      "integration_groups": [
+        "R38.X15"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_25_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.26",
+      "finding": "RV-0040",
+      "title": "Build-configuration collector passes image overrides rejected by owned unit wrappers",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.25"
+      ],
+      "existing_files_to_review_or_modify": [
+        "eng/test-build-configuration.py",
+        "eng/docker-unit-tests.sh",
+        "eng/docker-unit-tests.ps1",
+        "eng/tests/test_build_configuration.py",
+        "eng/test-ownership.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_26_IMPLEMENTATION.md"
+      ],
+      "implementation": "Pass only supported configuration/no-cache arguments to owned unit wrappers; consume assigned image/cleanup from owned receipts. Never pass --image/-Image or clean a guessed image; preserve failure outcomes.",
+      "acceptance": [
+        "All Debug/Release/Sandbox configuration cases complete on supported Bash and actual PowerShell hosts without prohibited image override.",
+        "Owned image identity and cleanup come from the run receipt; negative wrapper/build/cleanup outcomes remain failures."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_26_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.27",
+      "finding": "RV-0038",
+      "title": "Compose System result validator omits the linked build-identity Fact",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.26"
+      ],
+      "existing_files_to_review_or_modify": [
+        "eng/ComposeProofProbe/Program.cs",
+        "eng/compose-system-proof.sh",
+        "treehammock.Tests.System/treehammock.Tests.System.csproj",
+        "treehammock.Tests/Infrastructure/BuildIdentity.cs",
+        "eng/host-system-proof.py",
+        "eng/tests/test_compose_proof.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_27_IMPLEMENTATION.md"
+      ],
+      "implementation": "Include every compiled attributed System source, including linked BuildIdentity Fact. Retain missing/duplicate/failed/skipped/unrelated identity rejection. Future grouped theories need explicit expanded discovery, not relaxed totals.",
+      "acceptance": [
+        "Native full System TRX containing the linked Fact passes current expected-inventory validation.",
+        "Missing/duplicate/failed/skipped shared and System cases remain rejected."
+      ],
+      "integration_groups": [
+        "R38.X19",
+        "R38.X20"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_27_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.28",
+      "finding": "RV-0014",
+      "title": "Four repository contract unit tests require removed SQL source fragments",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.27"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/RepositoryContractTests.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_28_IMPLEMENTATION.md"
+      ],
+      "implementation": "Replace obsolete formatting/unsafe retired SQL witnesses with scoped current contracts and meaningful behavioral oracles; never restore old SQL to satisfy a string.",
+      "acceptance": [
+        "Run the four named Fact methods and the full affected unit lane on .NET.",
+        "Retain current pending-login/TOTP cooldown, stamp, authority and expiry native behavioral regressions.",
+        "Mutating the supported behavior must fail appropriate behavioral oracles, not merely a formatting witness."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_28_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.29",
+      "finding": "RV-0031",
+      "title": "Unlock API delivery source test still requires removed inline sender implementation",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.28"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/AccountRecoveryApiContractTests.cs",
+        "Services/AccountRecoveryService.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_29_IMPLEMENTATION.md"
+      ],
+      "implementation": "Assert current durable unlock intent/admission metadata and worker publication; do not resurrect inline sender code.",
+      "acceptance": [
+        "The corrected fact and service inline-data cases pass natively.",
+        "Native worker/template cases preserve email/SMS routing and never publish candidate authority before successful delivery."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_29_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.30",
+      "finding": "RV-0032",
+      "title": "Activation API source test requires removed broad term and cadence predicates",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.29"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/ActivationApiContractTests.cs",
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_30_IMPLEMENTATION.md"
+      ],
+      "implementation": "Scope current issuer witnesses to explicit term membership excluding 4/5 and cadence 0/1; retain real approved-descriptor denial controls.",
+      "acceptance": [
+        "Corrected native source fact passes.",
+        "Native issuance and placement deny4/5 terms and cadence2\u201310 and allow only reviewed supported approvals."
+      ],
+      "integration_groups": [
+        "R38.X09"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_30_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.31",
+      "finding": "RV-0033",
+      "title": "Docker proxy source test still requires host publication in the isolated base stack",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.30"
+      ],
+      "existing_files_to_review_or_modify": [
+        "treehammock.Tests/Unit/DockerProxyConfigurationTests.cs",
+        "docker-compose.integration.yml",
+        "docker-compose.proxy-access.yml"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_31_IMPLEMENTATION.md"
+      ],
+      "implementation": "Assert base Compose has no host publications and explicit access overlay is loopback-only; validate actual wrapper layering.",
+      "acceptance": [
+        "Corrected native fact passes.",
+        "Compose config for default container tests has no host publications; explicit developer access publishes loopback only."
+      ],
+      "integration_groups": [
+        "R38.X15"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_31_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.32",
+      "finding": "RV-0005",
+      "title": "Performance gate accepts test-count-only and malformed measurement receipts",
+      "priority": "Medium",
+      "depends_on": [
+        "COR25.31"
+      ],
+      "existing_files_to_review_or_modify": [
+        "eng/check-correction-evidence.py",
+        "docs/corrections/REVIEW_GATES.json",
+        "eng/cor22-resource-probe.py",
+        "docs/testing/INTEGRATED_QUALIFICATION.md",
+        "eng/tests/test_correction_evidence.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_32_IMPLEMENTATION.md",
+        "docs/testing/COR25_PERFORMANCE_RECEIPT.md"
+      ],
+      "implementation": "Use a strict structured comparison receipt tying source/workload/budget reference, independent baseline/candidate hashes, matched profile/runtime, finite measured metrics/maxima and comparator result. Reuse resource comparator semantics; test_count or unknown/malformed structures never qualify performance.",
+      "acceptance": [
+        "Both reproduced malformed receipts are rejected.",
+        "Genuine resource-comparison evidence can bind source/workload/capture hashes and all approved numeric limits.",
+        "Missing, nonfinite/negative, incomplete, mismatched or over-budget observations cannot pass.",
+        "Historical evidence/gate identities remain intact and no gate is promoted without real reviewed measurements."
+      ],
+      "integration_groups": [
+        "R38.X10",
+        "R38.X13",
+        "R38.X14",
+        "R38.X18",
+        "R38.X20"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_32_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.33",
+      "finding": "RV-0003",
+      "title": "Generated test catalog silently omits grouped-attribute theory methods",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.32"
+      ],
+      "existing_files_to_review_or_modify": [
+        "eng/cor23-reconciliation.py",
+        "docs/corrections/APPLICATION_SURFACE_INDEX.json",
+        "docs/testing/treehammock-test-suite-inventory.html",
+        "treehammock.Tests/Unit/Cor15EnrollmentProtectionTests.cs",
+        "treehammock.Tests/Unit/Cor22CacheWriteTests.cs",
+        "eng/tests/test_correction_reconciliation.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_33_IMPLEMENTATION.md"
+      ],
+      "implementation": "Recognize separate/grouped Fact/Theory declarations exactly once, mask comments/strings and fail on unsupported syntax. Keep lexical declarations separate from expanded native discovery. Regenerate JSON/HTML and reconcile source credits by stable path/method identity while preserving historical units.",
+      "acceptance": [
+        "Both separate and grouped Theory declarations are indexed exactly once, including MemberData and InlineData forms.",
+        "The declared-method guard detects unsupported test syntax rather than silently ignoring it.",
+        "Current catalog, HTML inventory and review method tracker agree with source; existing review progress is preserved.",
+        "Actual native discovery and theory-row results remain independently required before closure."
+      ],
+      "integration_groups": [
+        "R38.X06",
+        "R38.X08",
+        "R38.X09",
+        "R38.X15",
+        "R38.X20"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_33_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.34",
+      "finding": "RV-0002",
+      "title": "Current finding ledger retains an obsolete outbox regression method pointer",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.33"
+      ],
+      "existing_files_to_review_or_modify": [
+        "docs/corrections/FINDING_CLOSURE.json",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor12DeliveryOutboxTests.cs",
+        "eng/check-correction-evidence.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_34_IMPLEMENTATION.md"
+      ],
+      "implementation": "Review renamed outbox theory semantics, reconcile concrete current selectors and classify file/class placeholders separately. Native expanded rows and actual adequacy precede closure.",
+      "acceptance": [
+        "Every concrete pointer for affected findings resolves to the intended current regression.",
+        "Actual supported native execution discovers all intended theory rows, with exact result names recorded for closure.",
+        "Class/file selectors and empty case lists are resolved before closure without weakening the guard.",
+        "Frozen provenance, history and qualification gates remain unchanged."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_34_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.35",
+      "finding": "RV-0004",
+      "title": "Three email-change findings have cross-assigned regression groups",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.34"
+      ],
+      "existing_files_to_review_or_modify": [
+        "docs/corrections/FINDING_CLOSURE.json",
+        "docs/corrections/COR17_IMPLEMENTATION.md",
+        "treehammock.Tests/Unit/Cor17EmailChangeTests.cs",
+        "treehammock.Tests/Integration/Cor17EmailConfirmationTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor17EmailChangeTests.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_35_IMPLEMENTATION.md"
+      ],
+      "implementation": "Map R04-07 to expired reservation/admission, R04-08 to named completion duplicate/unrelated constraints, R04-09 to read-only GET/manual POST. Preserve justified complementary cases; no blind text swap.",
+      "acceptance": [
+        "R04-07 names actual expired-reservation release/admission regressions.",
+        "R04-08 names completion-side named duplicate handling and unrelated-constraint behavior.",
+        "R04-09 names read-only GET/manual POST regressions, with substituted service versus native SQL boundaries disclosed.",
+        "Native result names, expanded rows and durable outcomes are independently verified before closure."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_35_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.36",
+      "finding": "RV-0001",
+      "title": "README-linked current feature matrix has stale counts and no explicit existing warmup entry",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.35"
+      ],
+      "existing_files_to_review_or_modify": [
+        "README.md",
+        "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+        "docs/corrections/APPLICATION_SURFACE_INDEX.json",
+        "docs/corrections/FINDING_CLOSURE.json",
+        "eng/cor24-qualification.py",
+        "eng/check-cor24-qualification.py",
+        "eng/tests/test_cor24_qualification.py"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_36_IMPLEMENTATION.md"
+      ],
+      "implementation": "Reconcile current counts and explicitly advertise existing opt-in warmup with rate/duration/batch/TTL/cursor/native YSQL limits. Update catalog consumers expecting 44 when the verified feature row becomes 45; recalculate endpoint/test counts after route/parser changes.",
+      "acceptance": [
+        "Current matrix agrees with current source/ledger counts.",
+        "Already-existing warmup is discoverable with its exact opt-in/expiry/rate and unqualified-Yugabyte boundaries.",
+        "Historical counts/owners/hashes remain unchanged; no release gate is promoted."
+      ],
+      "integration_groups": [
+        "R38.X15",
+        "R38.X20"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_36_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.37",
+      "finding": "RV-0007",
+      "title": "Current baseline workflow states obsolete finding counts and states",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.36"
+      ],
+      "existing_files_to_review_or_modify": [
+        "docs/corrections/BASELINE.md",
+        "docs/corrections/FINDING_CLOSURE.json"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_37_IMPLEMENTATION.md"
+      ],
+      "implementation": "Update current 84 FixedPendingQualification summary; retain original 83/451 import as dated frozen history and guard current summaries against authoritative ledgers.",
+      "acceptance": [
+        "Current counts/states agree with the ledger.",
+        "Frozen inventory/report identities and qualification remain unchanged."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_37_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.38",
+      "finding": "RV-0009",
+      "title": "Current follow-up notes retain superseded coverage and repository behavior",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.37"
+      ],
+      "existing_files_to_review_or_modify": [
+        "docs/corrections/SOURCE_FINDING_FOLLOWUPS.json",
+        "docs/corrections/COR23_FOLLOWUP_PLAN.md",
+        "docs/corrections/COR23R_IMPLEMENTATION.md",
+        "Repos/AuthenticatorAppEnrollmentRepo.cs"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_38_IMPLEMENTATION.md"
+      ],
+      "implementation": "Correct only current COR23R locked Microsoft coverage acceptance and COR23AF five-argument predecessor recheck; regenerate plan while preserving frozen specifications/owners/runtime boundaries.",
+      "acceptance": [
+        "Current coverage acceptance names the implemented locked collector and its native oracle.",
+        "Replacement recheck describes the five-argument source repair while retaining unexecuted repository mutation/state qualification.",
+        "Deterministic plan regeneration passes and original evidence identities/gates remain unchanged."
+      ],
+      "integration_groups": [],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_38_IMPLEMENTATION.md"
+    },
+    {
+      "id": "COR25.39",
+      "finding": "RV-0006",
+      "title": "Current recovery gate still describes superseded development-schema upgrades",
+      "priority": "Low",
+      "depends_on": [
+        "COR25.38"
+      ],
+      "existing_files_to_review_or_modify": [
+        "docs/corrections/REVIEW_GATES.json",
+        "docs/corrections/PRE_1_0_SCHEMA_POLICY.md",
+        "docs/corrections/COR24_IMPLEMENTATION.md",
+        "docs/testing/INTEGRATED_QUALIFICATION.md"
+      ],
+      "new_files": [
+        "docs/corrections/COR25_39_IMPLEMENTATION.md"
+      ],
+      "implementation": "Preserve historical recovery gate identity, but update current reason/links for fresh setup, backup restore, unknown-commit and retained-current-key recovery; add no development upgrade lane.",
+      "acceptance": [
+        "Current recovery instructions consistently apply the pre-1.0 policy.",
+        "Fresh current-schema setup, backup restore, authority/unknown-commit and key-retention recovery remain explicit obligations.",
+        "Historical migration strategy remains recorded as history, without gate deletion or qualification waiver."
+      ],
+      "integration_groups": [
+        "R38.X17"
+      ],
+      "state": "ImplementedPendingQualification",
+      "native_status": "NotRun",
+      "implementation_note": "docs/corrections/COR25_39_IMPLEMENTATION.md"
+    }
+  ],
+  "qualification_prs": [
+    {
+      "id": "COR25.Q01",
+      "title": "Clean native builds, coverage and supported host ownership",
+      "groups": [
+        "R38.X14",
+        "R38.X15"
+      ],
+      "stages": [
+        "native-fast-coverage",
+        "configuration-bash",
+        "coverage-publish-bash",
+        "owned-lifecycle",
+        "fixture-isolation"
+      ],
+      "files": [
+        "eng/cor24-qualification.py",
+        "eng/cor24-requirements.json",
+        "eng/test-build-configuration.py",
+        "eng/test-test-lifecycle.py",
+        "eng/test-powershell-runners.py"
+      ],
+      "oracle": "Execute fresh locked native builds and expanded unit/in-process rows, real collector coverage, Debug/Release/Sandbox and actual supported Windows PowerShell 7/5.1/Desktop/Linux boundaries. Bind loaded MVID/build UUID/application hash and full process/client cleanup. Missing platform stays NotRun; adapters never qualify that platform.",
+      "depends_on": [
+        "COR25.39"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q01_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q01/ATTEMPT.json",
+      "blockers": [
+        ".NET SDK and Docker are absent; no clean native build, coverage, loaded MVID/build UUID or SDK child-tree outcome is available.",
+        "Actual supported Windows PowerShell 7/5.1/Desktop and Linux PowerShell boundaries are unavailable; no adapter qualifies them.",
+        "Host PID/proc identity mismatch remains unresolved; do not weaken process ownership guards."
+      ]
+    },
+    {
+      "id": "COR25.Q02",
+      "title": "Owned PostgreSQL/cache and authority schedules",
+      "groups": [
+        "R38.X01",
+        "R38.X02",
+        "R38.X03",
+        "R38.X04",
+        "R38.X05",
+        "R38.X06",
+        "R38.X07",
+        "R38.X08",
+        "R38.X09",
+        "R38.X10",
+        "R38.X11"
+      ],
+      "stages": [
+        "sql-redis",
+        "sql-dragonfly",
+        "replacement-mutation-redis",
+        "replacement-mutation-dragonfly"
+      ],
+      "files": [
+        "eng/correction-sql-fixture.py",
+        "eng/cor24-cross-feature-cases.json",
+        "treehammock.Tests.SqlContracts/Support/SqlInterleavingBarrier.cs",
+        "treehammock.Tests.SqlContracts/Support/SqlContractFixture.cs"
+      ],
+      "oracle": "Run complete unfiltered SQL suites on separate owned Redis/Dragonfly fixtures. Expand and execute each lock order/proof/policy/stamp/version/expiry/commit-loss branch with separate observers and actual cache hits. Constituent/sequential tests do not qualify a concurrent pair.",
+      "depends_on": [
+        "COR25.Q01"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q02_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q02/ATTEMPT.json",
+      "blockers": [
+        "Q01 native acceptance remains blocked, not a passed dependency.",
+        ".NET SDK and Docker are absent; separate owned Redis/Dragonfly SQL and predecessor-mutation fixtures cannot run.",
+        "All observed concurrent orders, independent durable observers and complete expanded SQL rows remain NotRun."
+      ]
+    },
+    {
+      "id": "COR25.Q03",
+      "title": "Actual Yugabyte and Dragonfly deployment contracts",
+      "groups": [
+        "R38.X16"
+      ],
+      "stages": [],
+      "files": [
+        "Rigging/Database/StorageContext.cs",
+        "Rigging/Database/Migrations/catalog_contract.sql",
+        "treehammock.Tests.SqlContracts/Support/SqlContractFixture.cs"
+      ],
+      "oracle": "Use designated disposable actual YSQL/Dragonfly hosts. Pin server/driver/image/TLS identities and exercise all current functions/direct readers, types/constraints/search_path/runtime/issuer roles, transactions/waits/cancellation and real Lua/TTL/reconnect. PostgreSQL is comparison evidence, not actual YSQL evidence. No unsupported CLI flag/server version is invented.",
+      "depends_on": [
+        "COR25.Q02"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q03_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q03/ATTEMPT.json",
+      "blockers": [
+        "Q02 native acceptance remains blocked.",
+        "No designated disposable actual YSQL/Dragonfly deployment or pinned server/driver/image/TLS/operator receipts were supplied.",
+        "No complete existing collector stage qualifies actual YSQL; no guessed version, CLI flag, connection or PostgreSQL substitute is credited."
+      ]
+    },
+    {
+      "id": "COR25.Q04",
+      "title": "Provider, current-key rotation and recovery drills",
+      "groups": [
+        "R38.X12",
+        "R38.X13",
+        "R38.X17"
+      ],
+      "stages": [],
+      "files": [
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor12DeliveryOutboxTests.cs",
+        "treehammock.Tests/Integration/Cor23ISmtpOutcomeTests.cs",
+        "Services/TotpReencryptionCommand.cs",
+        "docs/testing/INTEGRATED_QUALIFICATION.md"
+      ],
+      "oracle": "Observe controlled TLS SMTP/designated SMS acceptance loss, late receipt, recipient/outage circuit and actual worker crash/restart. Rotate current TOTP/outbox/operation keys across current hosts and restore matching owned backups. Preserve consumed/replay/family/grant authority and required key versions; no customer messages or development upgrade/old-binary lane.",
+      "depends_on": [
+        "COR25.Q03"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q04_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q04/ATTEMPT.json",
+      "blockers": [
+        "Q03 actual deployment acceptance remains blocked.",
+        ".NET/Docker and controlled SMTP/designated SMS fixtures, current-key rollout hosts and matching owned backup/key inventories are unavailable.",
+        "Provider acceptance loss/late receipt/crash-restart, current-format key rotation, restore/unknown-commit and missing-key negative drills remain NotRun."
+      ]
+    },
+    {
+      "id": "COR25.Q05",
+      "title": "Approved budgets and deep-history measurements",
+      "groups": [
+        "R38.X18"
+      ],
+      "stages": [],
+      "files": [
+        "eng/cor22-workload.json",
+        "eng/cor22-resource-probe.py",
+        "eng/cor22-query-plans.sql",
+        "Repos/SessionCacheWarmupRepo.cs"
+      ],
+      "oracle": "Obtain independently reviewed numeric budgets/reference first; currently Proposed. Capture separate matched baseline/candidate controls for every declared scenario/concurrency/instance plus warmup/outage/recovery. Record plans/buffers/CPU/allocations/pool/queue/locks/cache/WAL/storage and deep inactive history. Never fill absent metrics with zero. This is separate from PQ-0001.",
+      "depends_on": [
+        "COR25.Q04"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q05_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q05/ATTEMPT.json",
+      "blockers": [
+        "Q04 native recovery/provider acceptance remains blocked.",
+        "COR22 budgets remain Proposed with null budgets and no independent approval/reference.",
+        "Independent actual baseline/candidate controls/captures, deep history and warmup/outage/recovery measurements were not supplied; no measurements or maxima are filled with zeros."
+      ]
+    },
+    {
+      "id": "COR25.Q06",
+      "title": "Exact final artifact, full flows and finding adjudication",
+      "groups": [
+        "R38.X19",
+        "R38.X20"
+      ],
+      "stages": [
+        "http-direct",
+        "http-proxy",
+        "system-container",
+        "system-host",
+        "host-artifact-proof",
+        "compose-proof",
+        "native-release-candidate"
+      ],
+      "files": [
+        "eng/release_artifacts.py",
+        "eng/ReleaseArtifactProbe/Program.cs",
+        "eng/ComposeProofProbe/Program.cs",
+        "docs/corrections/FINDING_CLOSURE.json",
+        "docs/corrections/REVIEW_GATES.json",
+        "docs/testing/INTEGRATED_QUALIFICATION.md"
+      ],
+      "oracle": "Run every supported existing product flow on the same final OCI candidate directly/proxy/host/container with production inspection disabled. Reconcile actual compiled linked/theory discovery, feature obligations and original finding/gate owners. Required actual dependency audits/hosted transport/permissions/peer/tunnel observations stay mandatory in designated disposable environments. Close only individually reviewed source-bound evidence; missing acceptance keeps release_ready false. No deployment/real publication is authorized.",
+      "depends_on": [
+        "COR25.Q05"
+      ],
+      "state": "Blocked",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "qualification_note": "docs/corrections/COR25_Q06_QUALIFICATION.md",
+      "attempt_evidence": "qualification/COR25_Q06/ATTEMPT.json",
+      "blockers": [
+        "Q01\u2013Q05 remain unqualified; every original finding/review gate still requires evidence adjudication.",
+        "No exact final OCI candidate and native direct/proxy/host/container/product discovery/outcomes are available; .NET/Docker/skopeo and designated hosted/peer/operator fixtures are unavailable.",
+        "Full Python/client checks are supplemental, retain all actual failures/skips and cannot qualify native flows or approve release."
+      ]
+    }
+  ],
+  "planned_pr_count": 46,
+  "open_findings": [
+    "RV-0001",
+    "RV-0002",
+    "RV-0003",
+    "RV-0004",
+    "RV-0005",
+    "RV-0006",
+    "RV-0007",
+    "RV-0008",
+    "RV-0009",
+    "RV-0010",
+    "RV-0011",
+    "RV-0012",
+    "RV-0013",
+    "RV-0014",
+    "RV-0015",
+    "RV-0016",
+    "RV-0017",
+    "RV-0018",
+    "RV-0019",
+    "RV-0020",
+    "RV-0021",
+    "RV-0022",
+    "RV-0023",
+    "RV-0024",
+    "RV-0025",
+    "RV-0026",
+    "RV-0027",
+    "RV-0028",
+    "RV-0029",
+    "RV-0030",
+    "RV-0031",
+    "RV-0032",
+    "RV-0033",
+    "RV-0034",
+    "RV-0035",
+    "RV-0036",
+    "RV-0037",
+    "RV-0038",
+    "RV-0040"
+  ],
+  "excluded_withdrawn": [
+    "RV-0039"
+  ],
+  "policy_question": {
+    "id": "PQ-0001",
+    "subject": "Original source path retirement/rename",
+    "needed_for_current_plan": false
+  },
+  "runtime": {
+    "remaining_histories": 62,
+    "native_cases_executed": 0,
+    "status": "Blocked/NotRun"
+  },
+  "execution_state": {
+    "completed_prs": [
+      "COR25.00",
+      "COR25.01",
+      "COR25.02",
+      "COR25.03",
+      "COR25.04",
+      "COR25.05",
+      "COR25.06",
+      "COR25.07",
+      "COR25.08",
+      "COR25.09",
+      "COR25.10",
+      "COR25.11",
+      "COR25.12",
+      "COR25.13",
+      "COR25.14",
+      "COR25.15",
+      "COR25.16",
+      "COR25.17",
+      "COR25.18",
+      "COR25.19",
+      "COR25.20",
+      "COR25.21",
+      "COR25.22",
+      "COR25.23",
+      "COR25.24",
+      "COR25.25",
+      "COR25.26",
+      "COR25.27",
+      "COR25.28",
+      "COR25.29",
+      "COR25.30",
+      "COR25.31",
+      "COR25.32",
+      "COR25.33",
+      "COR25.34",
+      "COR25.35",
+      "COR25.36",
+      "COR25.37",
+      "COR25.38",
+      "COR25.39"
+    ],
+    "next_pr": "COR25.Q01",
+    "remaining_pr_count": 6,
+    "intake": {
+      "state": "Completed",
+      "completion_scope": "Documentation and current-state provenance only",
+      "implementation_note": "docs/corrections/COR25_00_IMPLEMENTATION.md",
+      "predecessor_delivery": {
+        "filename": "Treehammock_COR25_DESIGN_AND_PR_PLAN_DELIVERY.zip",
+        "sha256": "c54a9aeb3f5b4efd5364e92779b56fbed8527f056be806c10f6ca3475a0ef39e",
+        "bytes": 185925733
+      },
+      "pre_intake_source_files": 990,
+      "candidate_source_files": 994,
+      "added_files": [
+        "docs/corrections/COR25_DESIGN.md",
+        "docs/corrections/COR25_PR_PLAN.md",
+        "docs/corrections/CORRECTION_REQUIREMENTS.json",
+        "docs/corrections/COR25_00_IMPLEMENTATION.md"
+      ],
+      "refreshed_indexes": [
+        "docs/corrections/ADDED_FILES.json",
+        "docs/corrections/SOURCE_RECONCILIATION.json"
+      ],
+      "runtime_source_changed": false,
+      "native_cases_executed": 0,
+      "qualification": "Blocked/NotRun",
+      "product_findings_promoted": 0,
+      "gates_promoted": 0,
+      "external_evidence": [
+        "validation/INTAKE_VALIDATION.json",
+        "validation/CURRENT_SOURCE_SHA256.json",
+        "validation/PRE_INTAKE_SOURCE_SHA256.json",
+        "validation/CHANGED_FILES.json"
+      ]
+    },
+    "latest_implementation": {
+      "pr": "COR25.39",
+      "finding": "RV-0006",
+      "state": "ImplementedPendingQualification",
+      "summary": "Align the retained recovery gate with fresh current-schema setup, backup/unknown-commit/retained-current-key recovery and the pre-1.0 policy, without waiving native drills.",
+      "predecessor": "COR25.38",
+      "implementation_note": "docs/corrections/COR25_39_IMPLEMENTATION.md",
+      "native_status": "NotRun",
+      "native_cases_executed": 0,
+      "evidence": "prs/COR25_39/PR_VALIDATION.json"
+    },
+    "implementation_history": [
+      {
+        "pr": "COR25.01",
+        "finding": "RV-0021",
+        "state": "ImplementedPendingQualification",
+        "completion_scope": "Scoped source correction; native build and behavior remain unqualified",
+        "predecessor_delivery": {
+          "filename": "Treehammock_COR25_00_DELIVERY.zip",
+          "sha256": "f6189993874fb84b41efb5d66826452b54a92e85fbb3e00e7b6f02ebfccb9d23",
+          "bytes": 6810694,
+          "library_file_id": "libfile_4c161954aa8881919dcb03767d674776",
+          "version": 0
+        },
+        "predecessor_source_files": 994,
+        "candidate_source_files": 995,
+        "implementation_note": "docs/corrections/COR25_01_IMPLEMENTATION.md",
+        "affected_groups": [
+          "R38.X12",
+          "R38.X16"
+        ],
+        "source_recheck": "Budget-result type, post-commit publication and unchanged metric ownership reviewed",
+        "native_status": "NotRun",
+        "runtime_qualification": "Blocked",
+        "native_cases_executed": 0,
+        "external_evidence": [
+          "validation/PR_VALIDATION.json",
+          "validation/COMMAND_RESULTS.json",
+          "validation/CURRENT_SOURCE_SHA256.json",
+          "validation/CHANGED_FILES.json",
+          "validation/NATIVE_ATTEMPTS.json"
+        ]
+      },
+      {
+        "pr": "COR25.02",
+        "finding": "RV-0015",
+        "state": "ImplementedPendingQualification",
+        "completion_scope": "Cancellation-test local renames; native compilation and SQL behavior remain unqualified",
+        "predecessor_delivery": {
+          "filename": "Treehammock_COR25_01_DELIVERY.zip",
+          "sha256": "1b15ddfea733f367ce39e8d1395f80877afaef095addef2232b6feea56d2bf93",
+          "bytes": 6968333,
+          "library_file_id": "libfile_293880214f3881919a33a99733b936fc",
+          "version": 0
+        },
+        "predecessor_source_files": 995,
+        "candidate_source_files": 996,
+        "implementation_note": "docs/corrections/COR25_02_IMPLEMENTATION.md",
+        "affected_groups": [
+          "R38.X20"
+        ],
+        "source_recheck": "Original linked fixture token, cancellation deadline, resource disposal and same-owner recovery retained",
+        "native_status": "NotRun",
+        "runtime_qualification": "Blocked",
+        "native_cases_executed": 0,
+        "external_evidence": [
+          "validation/PR_VALIDATION.json",
+          "validation/COMMAND_RESULTS.json",
+          "validation/SCOPED_SOURCE_BINDINGS.json",
+          "validation/CURRENT_SOURCE_SHA256.json",
+          "validation/CHANGED_FILES.json",
+          "validation/NATIVE_ATTEMPTS.json"
+        ]
+      },
+      {
+        "pr": "COR25.03",
+        "finding": "RV-0018",
+        "state": "ImplementedPendingQualification",
+        "summary": "Correct all three cache-write setup/verification calls with named flags and cancellationToken arguments.",
+        "predecessor": "COR25.02",
+        "implementation_note": "docs/corrections/COR25_03_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_03/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.04",
+        "finding": "RV-0026",
+        "state": "ImplementedPendingQualification",
+        "summary": "Declare the tamper-test account UUID before envelope protection.",
+        "predecessor": "COR25.03",
+        "implementation_note": "docs/corrections/COR25_04_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_04/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.05",
+        "finding": "RV-0008",
+        "state": "ImplementedPendingQualification",
+        "summary": "Reject unsupported HTTP protocol bits through shared validation and fail-closed listener parsing.",
+        "predecessor": "COR25.04",
+        "implementation_note": "docs/corrections/COR25_05_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_05/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.06",
+        "finding": "RV-0011",
+        "state": "ImplementedPendingQualification",
+        "summary": "Reject partial-null encrypted payloads while preserving full envelopes and terminal erasure.",
+        "predecessor": "COR25.05",
+        "implementation_note": "docs/corrections/COR25_06_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_06/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.07",
+        "finding": "RV-0012",
+        "state": "ImplementedPendingQualification",
+        "summary": "Reject null/blank reset channels before supersession and make row-shape constraints false for missing channels.",
+        "predecessor": "COR25.06",
+        "implementation_note": "docs/corrections/COR25_07_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_07/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.08",
+        "finding": "RV-0020",
+        "state": "ImplementedPendingQualification",
+        "summary": "Use database issuance time and retire superseded session cutoff/refresh authority even with future creation timestamps.",
+        "predecessor": "COR25.07",
+        "implementation_note": "docs/corrections/COR25_08_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_08/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.09",
+        "finding": "RV-0019",
+        "state": "ImplementedPendingQualification",
+        "summary": "Recheck session deadlines and projection lineage after the final entitlement await before publishing trust or headers.",
+        "predecessor": "COR25.08",
+        "implementation_note": "docs/corrections/COR25_09_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_09/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.10",
+        "finding": "RV-0025",
+        "state": "ImplementedPendingQualification",
+        "summary": "Withhold expired login headers/body credentials at the shared final serialization boundary after all awaits.",
+        "predecessor": "COR25.09",
+        "implementation_note": "docs/corrections/COR25_10_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_10/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.11",
+        "finding": "RV-0022",
+        "state": "ImplementedPendingQualification",
+        "summary": "Compute one quantized retention-bounded deadline for a primary/notice envelope group.",
+        "predecessor": "COR25.10",
+        "implementation_note": "docs/corrections/COR25_11_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_11/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.12",
+        "finding": "RV-0023",
+        "state": "ImplementedPendingQualification",
+        "summary": "Render the existing email-change notice safely through SMTP while retaining old-recipient and independent receipt identity.",
+        "predecessor": "COR25.11",
+        "implementation_note": "docs/corrections/COR25_12_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_12/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.13",
+        "finding": "RV-0034",
+        "state": "ImplementedPendingQualification",
+        "summary": "Capture current durable activation codes and email-change notices in the explicitly enabled Testing SMTP provider.",
+        "predecessor": "COR25.12",
+        "implementation_note": "docs/corrections/COR25_13_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_13/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.14",
+        "finding": "RV-0028",
+        "state": "ImplementedPendingQualification",
+        "summary": "Use one verified-phone normalization contract for SMS setup, login and password-reset delivery.",
+        "predecessor": "COR25.13",
+        "implementation_note": "docs/corrections/COR25_14_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_14/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.15",
+        "finding": "RV-0035",
+        "state": "ImplementedPendingQualification",
+        "summary": "Make the deletion mailbox link a read-only confirmation page and admit explicit form verification using retained recovery keys.",
+        "predecessor": "COR25.14",
+        "implementation_note": "docs/corrections/COR25_15_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_15/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.16",
+        "finding": "RV-0013",
+        "state": "ImplementedPendingQualification",
+        "summary": "Fingerprint routine attributes and ordered search paths structurally, normalizing only the selected schema identifier.",
+        "predecessor": "COR25.15",
+        "implementation_note": "docs/corrections/COR25_16_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_16/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.17",
+        "finding": "RV-0016",
+        "state": "ImplementedPendingQualification",
+        "summary": "Correct the valid idempotency fixture and assert trimmed 15/16/128/129 length boundaries.",
+        "predecessor": "COR25.16",
+        "implementation_note": "docs/corrections/COR25_17_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_17/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.18",
+        "finding": "RV-0017",
+        "state": "ImplementedPendingQualification",
+        "summary": "Assert typed Dragonfly dependency outages, preserved causes and classification while keeping cancellation and malformed payloads distinct.",
+        "predecessor": "COR25.17",
+        "implementation_note": "docs/corrections/COR25_18_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_18/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.19",
+        "finding": "RV-0024",
+        "state": "ImplementedPendingQualification",
+        "summary": "Check factory-owned singleton registrations by descriptor form and actual isolated resolution.",
+        "predecessor": "COR25.18",
+        "implementation_note": "docs/corrections/COR25_19_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_19/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.20",
+        "finding": "RV-0010",
+        "state": "ImplementedPendingQualification",
+        "summary": "Own blocked body-middleware work through failure and bounded cleanup while retaining primary and teardown failures.",
+        "predecessor": "COR25.19",
+        "implementation_note": "docs/corrections/COR25_20_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_20/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.21",
+        "finding": "RV-0027",
+        "state": "ImplementedPendingQualification",
+        "summary": "Exercise the grant-bound session family rather than the unrelated per-session security-stamp field.",
+        "predecessor": "COR25.20",
+        "implementation_note": "docs/corrections/COR25_21_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_21/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.22",
+        "finding": "RV-0029",
+        "state": "ImplementedPendingQualification",
+        "summary": "Complete current reset proof transitions with returned versions and bind every TOTP replay call to the enrolled UUID.",
+        "predecessor": "COR25.21",
+        "implementation_note": "docs/corrections/COR25_22_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_22/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.23",
+        "finding": "RV-0030",
+        "state": "ImplementedPendingQualification",
+        "summary": "Correct preselection denial and advance a controlled clock to authoritative session/challenge deadlines with live controls and copy isolation.",
+        "predecessor": "COR25.22",
+        "implementation_note": "docs/corrections/COR25_23_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_23/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.24",
+        "finding": "RV-0037",
+        "state": "ImplementedPendingQualification",
+        "summary": "Repair System canonical sensitive-action targets and 202 existing-factor completion, order positive enrollment by policy and share fresh TOTP steps across proof uses.",
+        "predecessor": "COR25.23",
+        "implementation_note": "docs/corrections/COR25_24_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_24/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.25",
+        "finding": "RV-0036",
+        "state": "ImplementedPendingQualification",
+        "summary": "Snapshot canonical capture relation identity and empty rows before disabled host startup, then assert no relation replacement, capture rows or seeded accounts.",
+        "predecessor": "COR25.24",
+        "implementation_note": "docs/corrections/COR25_25_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_25/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.26",
+        "finding": "RV-0040",
+        "state": "ImplementedPendingQualification",
+        "summary": "Use supported owned unit-wrapper arguments and validate/retain the fresh assigned-image and cleanup receipts without collector-issued image deletion.",
+        "predecessor": "COR25.25",
+        "implementation_note": "docs/corrections/COR25_26_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_26/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.27",
+        "finding": "RV-0038",
+        "state": "ImplementedPendingQualification",
+        "summary": "Include the compiled linked BuildIdentity Fact in exact Compose System discovery and reject missing execution identities without relaxing result counts.",
+        "predecessor": "COR25.26",
+        "implementation_note": "docs/corrections/COR25_27_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_27/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.28",
+        "finding": "RV-0014",
+        "state": "ImplementedPendingQualification",
+        "summary": "Replace four stale repository SQL source contracts with function-scoped current authority, publication, cooldown and expiry witnesses.",
+        "predecessor": "COR25.27",
+        "implementation_note": "docs/corrections/COR25_28_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_28/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.29",
+        "finding": "RV-0031",
+        "state": "ImplementedPendingQualification",
+        "summary": "Replace inline unlock sender witnesses with scoped durable admission, bound intent metadata, routing and accepted-only worker publication contracts.",
+        "predecessor": "COR25.28",
+        "implementation_note": "docs/corrections/COR25_29_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_29/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.30",
+        "finding": "RV-0032",
+        "state": "ImplementedPendingQualification",
+        "summary": "Scope activation issuer/placement source contracts to current term and cadence policy and add focused native boundary regressions.",
+        "predecessor": "COR25.29",
+        "implementation_note": "docs/corrections/COR25_30_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_30/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.31",
+        "finding": "RV-0033",
+        "state": "ImplementedPendingQualification",
+        "summary": "Assert isolated base Compose has no host ports and explicit developer proxy access remains loopback-only, with correct container/developer wrapper layers.",
+        "predecessor": "COR25.30",
+        "implementation_note": "docs/corrections/COR25_31_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_31/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.32",
+        "finding": "RV-0005",
+        "state": "ImplementedPendingQualification",
+        "summary": "Require source/workload/approval-bound independent resource captures and recompute the full profile comparator before performance receipt acceptance.",
+        "predecessor": "COR25.31",
+        "implementation_note": "docs/corrections/COR25_32_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_32/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.33",
+        "finding": "RV-0003",
+        "state": "ImplementedPendingQualification",
+        "summary": "Index grouped/separate Fact and Theory declarations exactly once with literal masking and fail-closed syntax guards; reconcile stable method review identities.",
+        "predecessor": "COR25.32",
+        "implementation_note": "docs/corrections/COR25_33_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_33/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.34",
+        "finding": "RV-0002",
+        "state": "ImplementedPendingQualification",
+        "summary": "Repair both obsolete outbox theory pointers and classify method/class/file scopes without weakening exact native closure names.",
+        "predecessor": "COR25.33",
+        "implementation_note": "docs/corrections/COR25_34_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_34/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.35",
+        "finding": "RV-0004",
+        "state": "ImplementedPendingQualification",
+        "summary": "Reassign email-change findings to reviewed admission, completion-constraint and read-only-GET/manual-POST regressions with explicit substitution boundaries.",
+        "predecessor": "COR25.34",
+        "implementation_note": "docs/corrections/COR25_35_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_35/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.36",
+        "finding": "RV-0001",
+        "state": "ImplementedPendingQualification",
+        "summary": "Reconcile current feature/source counts, expose the existing bounded opt-in warmup and guard the 45-row qualification catalog.",
+        "predecessor": "COR25.35",
+        "implementation_note": "docs/corrections/COR25_36_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_36/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.37",
+        "finding": "RV-0007",
+        "state": "ImplementedPendingQualification",
+        "summary": "Replace obsolete current baseline counts/states with authoritative 84-finding pending-qualification totals while retaining dated 83/451 frozen import history.",
+        "predecessor": "COR25.36",
+        "implementation_note": "docs/corrections/COR25_37_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_37/PR_VALIDATION.json"
+      },
+      {
+        "pr": "COR25.38",
+        "finding": "RV-0009",
+        "state": "ImplementedPendingQualification",
+        "summary": "Refresh current coverage and authenticator predecessor follow-up notes to the implemented locked collector/five-argument source contracts, retaining frozen specification and native blockers.",
+        "predecessor": "COR25.37",
+        "implementation_note": "docs/corrections/COR25_38_IMPLEMENTATION.md",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "evidence": "prs/COR25_38/PR_VALIDATION.json"
+      }
+    ],
+    "next_attempt_pr": null,
+    "qualification_attempts": [
+      {
+        "pr": "COR25.Q01",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q01_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q01/ATTEMPT.json"
+      },
+      {
+        "pr": "COR25.Q02",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q02_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q02/ATTEMPT.json"
+      },
+      {
+        "pr": "COR25.Q03",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q03_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q03/ATTEMPT.json"
+      },
+      {
+        "pr": "COR25.Q04",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q04_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q04/ATTEMPT.json"
+      },
+      {
+        "pr": "COR25.Q05",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q05_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q05/ATTEMPT.json"
+      },
+      {
+        "pr": "COR25.Q06",
+        "state": "Blocked",
+        "native_status": "NotRun",
+        "native_cases_executed": 0,
+        "qualification_note": "docs/corrections/COR25_Q06_QUALIFICATION.md",
+        "evidence": "qualification/COR25_Q06/ATTEMPT.json"
+      }
+    ],
+    "blocked_qualification_prs": [
+      "COR25.Q01",
+      "COR25.Q02",
+      "COR25.Q03",
+      "COR25.Q04",
+      "COR25.Q05",
+      "COR25.Q06"
+    ],
+    "remaining_correction_prs": 0,
+    "qualified_prs": []
+  },
+  "svs23_handoff": {
+    "pr": "SVS-23",
+    "status": "BlockedPendingNativeAdjudication",
+    "acceptance_record": "docs/session-validation/FINAL_ACCEPTANCE.md",
+    "handoff": "docs/session-validation/FINAL_HANDOFF.md",
+    "native_cases_executed": 0,
+    "grant_rights": false,
+    "release_ready": false
+  }
+}

@@ -1,0 +1,3 @@
+# CPython 3.11, Linux x86_64 wheel-only CI image. No dependency resolution.
+pglast==8.6 --hash=sha256:02ddc5676955b9f832365b65720f91cad5d44b144264b1293d0df2604f4b7b21
+PyYAML==6.0.3 --hash=sha256:b8bb0864c5a28024fac8a632c443c87c5aa6f215c0b126c449ae1a150412f31d

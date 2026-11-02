@@ -1,0 +1,73 @@
+{
+  "scope": "Synthetic independent protobuf wire vectors; no authentic user credentials",
+  "fixtures": [
+    {
+      "name": "request-all-fields",
+      "kind": "request",
+      "binary_hex": "0801120e666978747572652d6163636573731a0b6261636b75702e7265616422203131313131313131313131313431313138313131313131313131313131313131",
+      "json": {
+        "contractVersion": 1,
+        "accessCredential": "Zml4dHVyZS1hY2Nlc3M=",
+        "requestedAction": "backup.read",
+        "requestId": "11111111111141118111111111111111"
+      }
+    },
+    {
+      "name": "reply-active",
+      "kind": "reply",
+      "binary_hex": "08011210112233445566778899aabbccddeeff001a10ffeeddccbbaa998877665544332211002007280230e4f0cc86a63738e8f7cc86a63742157376732e706f6c6963792e76312e666978747572654a20323232323232323232323232343232323832323232323232323232323232323250015a203131313131313131313131313431313138313131313131313131313131313131",
+      "json": {
+        "decision": "ACTIVE",
+        "accountIdUuid": "ESIzRFVmd4iZqrvM3e7/AA==",
+        "sessionFamilyUuid": "/+7dzLuqmYh3ZlVEMyIRAA==",
+        "generation": "7",
+        "sessionProtocolVersion": 2,
+        "checkedAtUnixMs": "1900000000100",
+        "validUntilUnixMs": "1900000001000",
+        "policyVersion": "svs.policy.v1.fixture",
+        "decisionId": "22222222222242228222222222222222",
+        "contractVersion": 1,
+        "requestId": "11111111111141118111111111111111"
+      }
+    },
+    {
+      "name": "reply-unauthenticated",
+      "kind": "reply",
+      "binary_hex": "080230e4f0cc86a63742157376732e706f6c6963792e76312e666978747572654a20323232323232323232323232343232323832323232323232323232323232323250015a203131313131313131313131313431313138313131313131313131313131313131",
+      "json": {
+        "decision": "UNAUTHENTICATED",
+        "checkedAtUnixMs": "1900000000100",
+        "policyVersion": "svs.policy.v1.fixture",
+        "decisionId": "22222222222242228222222222222222",
+        "contractVersion": 1,
+        "requestId": "11111111111141118111111111111111"
+      }
+    },
+    {
+      "name": "reply-forbidden",
+      "kind": "reply",
+      "binary_hex": "080330e4f0cc86a63742157376732e706f6c6963792e76312e666978747572654a20323232323232323232323232343232323832323232323232323232323232323250015a203131313131313131313131313431313138313131313131313131313131313131",
+      "json": {
+        "decision": "FORBIDDEN",
+        "checkedAtUnixMs": "1900000000100",
+        "policyVersion": "svs.policy.v1.fixture",
+        "decisionId": "22222222222242228222222222222222",
+        "contractVersion": 1,
+        "requestId": "11111111111141118111111111111111"
+      }
+    },
+    {
+      "name": "reply-unavailable",
+      "kind": "reply",
+      "binary_hex": "080430e4f0cc86a63742157376732e706f6c6963792e76312e666978747572654a20323232323232323232323232343232323832323232323232323232323232323250015a203131313131313131313131313431313138313131313131313131313131313131",
+      "json": {
+        "decision": "UNAVAILABLE",
+        "checkedAtUnixMs": "1900000000100",
+        "policyVersion": "svs.policy.v1.fixture",
+        "decisionId": "22222222222242228222222222222222",
+        "contractVersion": 1,
+        "requestId": "11111111111141118111111111111111"
+      }
+    }
+  ]
+}

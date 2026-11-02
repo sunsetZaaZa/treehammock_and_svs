@@ -1,0 +1,36 @@
+# Standalone disposable dependency fixture; never layer this over a shared system stack.
+name: ${TREEHAMMOCK_CORRECTION_PROJECT:?A unique correction project is required}
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: treehammock_correction
+      POSTGRES_USER: treehammock_correction
+      POSTGRES_PASSWORD: ${TREEHAMMOCK_CORRECTION_DB_PASSWORD:?Inject a generated fixture password}
+    ports:
+      - "127.0.0.1::5432"
+    tmpfs:
+      - /var/lib/postgresql/data:size=536870912
+    cpus: 2
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U treehammock_correction -d treehammock_correction"]
+      interval: 2s
+      timeout: 3s
+      retries: 25
+  cache:
+    image: redis:7.4-alpine
+    environment:
+      CORRECTION_CACHE_PASSWORD: ${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD:?Inject a generated fixture password}
+    command: ["redis-server", "--requirepass", "${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD}", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1::6379"
+    tmpfs:
+      - /data:size=67108864
+    cpus: 1
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$CORRECTION_CACHE_PASSWORD redis-cli ping | grep -q PONG"]
+      interval: 2s
+      timeout: 3s
+      retries: 25

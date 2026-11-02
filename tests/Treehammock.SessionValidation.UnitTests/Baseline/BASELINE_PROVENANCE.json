@@ -1,0 +1,7 @@
+{
+  "source": "design-v1.1 checkpoint",
+  "original_utility_sha256": "64162fc6d2c6473215a95d8db3b9d3a45bdacd20fcadffef6ccb972fde08b33d",
+  "adapted_utility_sha256": "bef784848e51bc6adebce4dad69587bf980cd819a1d1c74e4ea044e6419a7b16",
+  "changes": "Only namespace and three application/framework using directives replaced. Validation/generation/logging method bodies unchanged; compile-only support types are separate.",
+  "source_checkpoint_sha256": "7c87f0ab4ac9fa78dffbc98dd5860e81c45c243c7e5fc50a19dfb5f38089bbce"
+}

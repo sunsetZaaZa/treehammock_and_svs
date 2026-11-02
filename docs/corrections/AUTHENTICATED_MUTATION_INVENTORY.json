@@ -1,0 +1,641 @@
+[
+  {
+    "repository": "ActivationRepo.cs",
+    "method": "PlaceActivation",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "ActivationRepo.cs",
+    "method": "CancelActivationRequest",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "ActivationRepo.cs",
+    "method": "DisableActivation",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "ActivationRepo.cs",
+    "method": "VerifyActivation",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "BeginAuthenticatorAppSetupAsync",
+    "classification": "mutation",
+    "scope": "commandModel.AccountId",
+    "expected_stamp": "commandModel.AccountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "GetPendingAuthenticatorAppSetupAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "RecordAuthenticatorAppSetupFailureAsync",
+    "classification": "mutation",
+    "scope": "commandModel.AccountId",
+    "expected_stamp": "commandModel.AccountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "CompleteAuthenticatorAppSetupAndRotateSessionAsync",
+    "classification": "mutation",
+    "scope": "commandModel.AccountId",
+    "expected_stamp": "commandModel.AccountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "CancelAuthenticatorAppSetupAsync",
+    "classification": "mutation",
+    "scope": "commandModel.AccountId",
+    "expected_stamp": "commandModel.AccountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "GetVerifiedTotpEnrollmentForAccountAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AuthenticatorAppEnrollmentRepo.cs",
+    "method": "MarkTotpStepUsedAsync",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRecoveryRepo.cs",
+    "method": "LookupLockedAccount",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AccountRecoveryRepo.cs",
+    "method": "BeginUnlock",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRecoveryRepo.cs",
+    "method": "CancelUnlock",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRecoveryRepo.cs",
+    "method": "VerifyUnlock",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetTotpRepo.cs",
+    "method": "GetPasswordResetTotpEnrollmentAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "PasswordResetTotpRepo.cs",
+    "method": "MarkPasswordResetTotpStepUsedAsync",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "GetSession",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "SetSession",
+    "classification": "mutation",
+    "scope": "workingSession.accountId",
+    "expected_stamp": "workingSession.accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "RotateActiveSession",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "newSession.accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "ValidateCachedSessionTrust",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "ExpireSession",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "LogoutCurrentSession",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "LogoutAllSessions",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "ListActiveSessions",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "SessionRepo.cs",
+    "method": "RevokeSessionForAccount",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SensitiveActionTokenRepo.cs",
+    "method": "GetReauthenticationCredentials",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "SensitiveActionTokenRepo.cs",
+    "method": "IssueToken",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SensitiveActionTokenRepo.cs",
+    "method": "ValidateToken",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "SetupAccount",
+    "classification": "mutation",
+    "scope": "single.accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "StartAccountVerification",
+    "classification": "mutation",
+    "scope": "accountGuid",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "ResendAccountVerification",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "VerifyAccountForUse",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "AccountPassedVerification",
+    "classification": "mutation",
+    "scope": "record.accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "AccountVerificationExpired",
+    "classification": "mutation",
+    "scope": "record.accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "GetCredentials",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "GetTwoFactorDetails",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "SetLockOut",
+    "classification": "mutation",
+    "scope": "accountGuid",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "RemoveLockOut",
+    "classification": "mutation",
+    "scope": "accountGuid",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "SetLoginFailures",
+    "classification": "mutation",
+    "scope": "accountGuid",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "ModifyUsername",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "RequestEmailChange",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "CancelEmailChangeRequest",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "CompleteEmailChange",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "RequestAccountDelete",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "CancelAccountDeleteRequest",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "VerifyDeleteAccountToken",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "FinalizeAccountDelete",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "PurgeExpiredDeleteStandby",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "PurgeExpiredAccountEmailChangeRequests",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "ViewAccount",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "BeginTwoFactorSetup",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "CancelTwoFactorSetup",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "VerifyTwoFactorSetup",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "RemoveTwoFactorMethod",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "SuccessfulLogin",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "accountSecurityStamp",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "AccountRepo.cs",
+    "method": "RotateAccountSecurityStamp",
+    "classification": "mutation",
+    "scope": "accountId",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "LookupPasswordResetAccountAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "CreatePasswordResetRequestAsync",
+    "classification": "mutation",
+    "scope": "resetCommand.AccountId",
+    "expected_stamp": "resetCommand.AccountSecurityStampAtRequest",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "GetPasswordResetRequestForFinalizeAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "RegisterFailedAttemptAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "PromotePasswordResetAsync",
+    "classification": "mutation",
+    "scope": "promotion.AccountId",
+    "expected_stamp": "null",
+    "expected_version": "promotion.PasswordResetRequestId.ToString(\"N\")",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "CancelPasswordResetRequestAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "GetPendingPasswordResetSessionAsync",
+    "classification": "read",
+    "protocol": "COR03 cancellation/dependency boundary; no mutation receipt"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "TransitionPendingPasswordResetSessionAsync",
+    "classification": "mutation",
+    "scope": "session.accountId",
+    "expected_stamp": "null",
+    "expected_version": "session.sessionVersion + session.challengeVersion",
+    "protocol": "COR13 explicit transition, policy/stamp and parent authority; COR04 safe atomic receipt"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "RevokePendingPasswordResetSessionAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "RegisterRequestRateLimitAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "CleanupExpiredPasswordResetRequestsAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "PasswordResetRepo.cs",
+    "method": "CleanupPasswordResetRateLimitsAsync",
+    "classification": "mutation",
+    "scope": "null",
+    "expected_stamp": "null",
+    "expected_version": "null",
+    "protocol": "atomic step receipt; duplicate request returns authorized status only; terminal operation cannot execute again"
+  },
+  {
+    "repository": "SessionRefreshRepo.cs",
+    "method": "RotateAsync",
+    "classification": "mutation",
+    "scope": "snapshot.Session.accountId",
+    "expected_stamp": "snapshot.Session.accountSecurityStamp",
+    "expected_version": "familyId:generation",
+    "protocol": "atomic safe step receipt; COR09 explicit refresh; status-only recovery and new login after lost committed credentials"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "BeginAsync",
+    "classification": "mutation",
+    "scope": "snapshot.accountId",
+    "expected_stamp": "snapshot.accountSecurityStamp",
+    "expected_version": "snapshot.progressVersion",
+    "protocol": "version comparison under account/pending locks; atomic safe COR04 step receipt"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "IssueAsync",
+    "classification": "mutation",
+    "scope": "snapshot.accountId",
+    "expected_stamp": "snapshot.accountSecurityStamp",
+    "expected_version": "snapshot.progressVersion",
+    "protocol": "version comparison under account/pending locks; atomic safe COR04 step receipt"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "CompleteAsync",
+    "classification": "mutation",
+    "scope": "snapshot.accountId",
+    "expected_stamp": "snapshot.accountSecurityStamp",
+    "expected_version": "snapshot.progressVersion",
+    "protocol": "version comparison under account/pending locks; atomic safe COR04 step receipt"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "CancelAsync",
+    "classification": "mutation",
+    "scope": "snapshot.accountId",
+    "expected_stamp": "snapshot.accountSecurityStamp",
+    "expected_version": "snapshot.progressVersion",
+    "protocol": "version comparison under account/pending locks; atomic safe COR04 step receipt"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "PromoteAsync",
+    "classification": "mutation",
+    "scope": "snapshot.accountId",
+    "expected_stamp": "snapshot.accountSecurityStamp",
+    "expected_version": "snapshot.progressVersion",
+    "protocol": "version comparison under account/pending locks; atomic safe COR04 step receipt"
+  },
+  {
+    "repository": "LoginProofRepo.cs",
+    "method": "LoadAsync",
+    "classification": "read",
+    "scope": "hash",
+    "expected_stamp": "current SQL account stamp",
+    "expected_version": "current SQL proof version",
+    "protocol": "current-authority snapshot; no cache proof authority"
+  }
+]

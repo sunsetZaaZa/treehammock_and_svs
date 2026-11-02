@@ -1,0 +1,185 @@
+{
+  "sessionUser": "treehammock_svs",
+  "currentUser": "treehammock_svs",
+  "roles": [
+    {
+      "name": "treehammock_svs",
+      "login": true,
+      "superuser": false,
+      "createDb": false,
+      "createRole": false,
+      "inherit": true,
+      "replication": false,
+      "bypassRls": false,
+      "connectionLimit": 16
+    },
+    {
+      "name": "treehammock_svs_read",
+      "login": false,
+      "superuser": false,
+      "createDb": false,
+      "createRole": false,
+      "inherit": false,
+      "replication": false,
+      "bypassRls": false,
+      "connectionLimit": -1
+    }
+  ],
+  "memberships": [
+    {
+      "member": "treehammock_svs",
+      "role": "treehammock_svs_read",
+      "admin": false
+    }
+  ],
+  "columns": [
+    "public.accounts.account_id",
+    "public.accounts.cut_off",
+    "public.accounts.entitlement_version",
+    "public.accounts.security_stamp",
+    "public.accounts.unlock_when",
+    "public.accounts.verify_status",
+    "public.entitlement_grant_audit.account_id",
+    "public.entitlement_grant_audit.action",
+    "public.entitlement_grant_audit.actor",
+    "public.entitlement_grant_audit.approval",
+    "public.entitlement_grant_audit.credential_stamp",
+    "public.entitlement_grant_audit.grant_id",
+    "public.entitlement_grant_audit.grant_version",
+    "public.entitlement_grants.account_id",
+    "public.entitlement_grants.approved_start",
+    "public.entitlement_grants.authorized_end",
+    "public.entitlement_grants.cadence",
+    "public.entitlement_grants.catalog",
+    "public.entitlement_grants.denied_capabilities",
+    "public.entitlement_grants.eligibility_until",
+    "public.entitlement_grants.grant_id",
+    "public.entitlement_grants.issuer",
+    "public.entitlement_grants.issuer_reference",
+    "public.entitlement_grants.materialized_cycle",
+    "public.entitlement_grants.max_cycles",
+    "public.entitlement_grants.origin_stamp",
+    "public.entitlement_grants.redeem_before",
+    "public.entitlement_grants.start_anchor",
+    "public.entitlement_grants.starts_at",
+    "public.entitlement_grants.state",
+    "public.entitlement_grants.term",
+    "public.entitlement_grants.tier",
+    "public.entitlement_grants.version",
+    "public.sessions.access_expiration",
+    "public.sessions.access_token_hash",
+    "public.sessions.account_id",
+    "public.sessions.account_security_stamp",
+    "public.sessions.cut_off",
+    "public.sessions.generation",
+    "public.sessions.protocol_version",
+    "public.sessions.refresh_token",
+    "public.sessions.security_stamp",
+    "public.sessions.session_expiration",
+    "public.sessions.session_id"
+  ],
+  "functions": [
+    {
+      "signature": "public.svs_read_approval_audited(uuid)",
+      "source": "\nbegin\n    return exists(select 1 from entitlement_grants g join entitlement_grant_audit z using(grant_id)\n        where g.grant_id=p_grant and z.action='issued' and z.grant_version=1 and z.account_id=g.account_id\n        and z.credential_stamp=g.origin_stamp and z.actor=g.issuer::text and z.approval->>'catalog'=g.catalog\n        and (z.approval->>'tier')::smallint=g.tier and (z.approval->>'term')::smallint=g.term\n        and (z.approval->>'cadence')::smallint=g.cadence and z.approval->>'anchor'=g.start_anchor\n        and (z.approval->>'start')::timestamptz is not distinct from g.approved_start\n        and (z.approval->>'end')::timestamptz is not distinct from g.authorized_end\n        and (z.approval->>'maxCycles')::integer=g.max_cycles and (z.approval->>'redeemBefore')::timestamptz=g.redeem_before\n        and z.approval->>'reference'=g.issuer_reference\n        and coalesce(array(select jsonb_array_elements_text(z.approval->'deniedCapabilities')),array[]::text[])=g.denied_capabilities);\nend;\n",
+      "language": "plpgsql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.svs_read_activation_audited(uuid)",
+      "source": "\nbegin\n    return exists(select 1 from entitlement_grants g join entitlement_grant_audit z using(grant_id)\n        where g.grant_id=p_grant and z.action='redeemed' and z.account_id=g.account_id\n        and (z.approval->>'startsAt')::timestamptz=g.starts_at\n        and (z.approval->>'eligibilityUntil')::timestamptz is not distinct from g.eligibility_until\n        and g.eligibility_until is not distinct from least(cor20_term_boundary(g.starts_at,g.term,g.max_cycles),g.authorized_end));\nend;\n",
+      "language": "plpgsql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.svs_read_entitlements(uuid,timestamp with time zone)",
+      "source": "\ndeclare a record; g record; moment timestamptz; boundary timestamptz;\n    next_boundary timestamptz; eligible_until timestamptz; unbounded boolean; paid boolean; enabled boolean;\n    features_value smallint; capabilities text[]; denied text[]; current_cycle integer; grants jsonb;\n    projection jsonb; account_live boolean;\nbegin\n    select t.account_id,t.verify_status,t.cut_off,t.unlock_when,t.entitlement_version into a from accounts t where t.account_id=p_account;\n    if not found then return null;end if;\n        moment:=p_moment;enabled:=cor20_grant_rights_enabled();\n        account_live:=a.verify_status=1 and (a.cut_off is null or a.cut_off>moment) and (a.unlock_when is null or a.unlock_when<=moment);\n        next_boundary:=null;eligible_until:=null;unbounded:=false;paid:=false;denied:=array[]::text[];grants:='[]'::jsonb;\n        for g in select t.grant_id,t.version,t.state,t.tier,t.term,t.cadence,t.start_anchor,t.starts_at,t.eligibility_until,t.max_cycles,t.materialized_cycle,t.issuer,t.denied_capabilities from entitlement_grants t where t.account_id=p_account order by t.grant_id loop\n            current_cycle:=0;\n            if g.state='active' and cor19_is_issuer(g.issuer) and svs_read_approval_audited(g.grant_id) and svs_read_activation_audited(g.grant_id) then\n                current_cycle:=cor20_cycle_at(g.starts_at,g.term,g.max_cycles,g.eligibility_until,moment);\n                if account_live then\n                    if g.starts_at>moment then next_boundary:=least(next_boundary,g.starts_at);end if;\n                    if current_cycle>0 then\n                        boundary:=least(cor20_term_boundary(g.starts_at,g.term,current_cycle),g.eligibility_until);\n                        next_boundary:=least(next_boundary,boundary);\n                        eligible_until:=greatest(eligible_until,g.eligibility_until);\n                        if g.eligibility_until is null then unbounded:=true;end if;\n                        if enabled then\n                            if g.tier=2 then paid:=true;end if;\n                            denied:=denied||g.denied_capabilities;\n                        end if;\n                    end if;\n                else current_cycle:=0;end if;\n            end if;\n            grants:=grants||jsonb_build_array(jsonb_build_object('grantId',g.grant_id,'grantVersion',g.version,'state',g.state,'tier',g.tier,'term',g.term,'cadence',g.cadence,'anchor',g.start_anchor,'startsAt',g.starts_at,'eligibilityUntil',g.eligibility_until,'cycle',current_cycle,'maxCycles',g.max_cycles,'materializedCycle',g.materialized_cycle,'issuerTrusted',cor19_is_issuer(g.issuer)));\n        end loop;\n        if unbounded then eligible_until:=null;end if;\n        features_value:=case when paid then 2::smallint else 1::smallint end;\n        -- Baseline capabilities are explicit; any currently eligible approved denial wins over all allows.\n        capabilities:=array(select c from unnest(cor20_capabilities(features_value)) c where not(c=any(denied)) order by c);\n        if not account_live then capabilities:=array[]::text[];end if;\n        if a.cut_off>moment then\n            next_boundary:=least(next_boundary,a.cut_off);\n            if eligible_until is not null or unbounded then eligible_until:=least(eligible_until,a.cut_off);end if;\n        end if;\n        if a.unlock_when>moment then next_boundary:=least(next_boundary,a.unlock_when);end if;\n        projection:=jsonb_build_object('accountId',p_account,'features',features_value,'capabilities',to_jsonb(capabilities),'rightsEnabled',enabled,\n            'eligibilityUntil',eligible_until,'nextBoundary',next_boundary,'evaluatedAt',moment,'grants',grants);\n        return projection||jsonb_build_object('version',a.entitlement_version);\nend;\n",
+      "language": "plpgsql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.svs_read_current_session(text)",
+      "source": "\n    select s.access_token_hash,s.account_id,s.session_id,s.generation,s.protocol_version,\n        s.security_stamp,s.account_security_stamp,a.security_stamp,s.refresh_token,\n        s.access_expiration,s.session_expiration,s.cut_off,a.cut_off,a.verify_status,a.unlock_when,\n        statement_timestamp(),svs_read_entitlements(a.account_id,statement_timestamp())::text\n    from sessions s join accounts a on a.account_id=s.account_id\n    where s.access_token_hash=p_hash;\n",
+      "language": "sql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.cor19_is_issuer(name)",
+      "source": "\ndeclare role_oid oid; actor_oid oid;\nbegin\n    select oid into role_oid from pg_roles where rolname='treehammock_entitlement_issuer';\n    select oid into actor_oid from pg_roles where rolname=p_actor;\n    if role_oid is null or actor_oid is null then return false;end if;\n    return pg_has_role(actor_oid,role_oid,'member');\nend;\n",
+      "language": "plpgsql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.cor20_grant_rights_enabled()",
+      "source": "\nbegin return false;end; -- COR21 qualification must precede reviewed release enablement.\n",
+      "language": "plpgsql",
+      "volatility": "s",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.cor20_capabilities(smallint)",
+      "source": "\nbegin\n    case p_tier when 1,2 then return array['account.manage','account.read']::text[];\n        else return array[]::text[];end case;\nend;\n",
+      "language": "plpgsql",
+      "volatility": "i",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.cor20_term_boundary(timestamp with time zone,smallint,integer)",
+      "source": "\ndeclare local_start timestamp; boundary timestamp; units integer;\nbegin\n    if p_start is null or p_cycle is null or p_cycle not between 0 and 1000 or p_term is null or p_term not in (1,2,3,6,7,8,9,10,11) then raise exception 'Invalid calendar contract' using errcode='22023';end if;\n    if not isfinite(p_start) or extract(year from p_start at time zone 'UTC') not between 1 and 9999 then raise exception 'Unsupported calendar range' using errcode='22023';end if;\n    if p_cycle=0 then return p_start;end if;\n    if p_term=11 then return null;end if;\n    local_start:=p_start at time zone 'UTC';\n    if p_term in (1,2,3) then\n        units:=case p_term when 1 then 1 when 2 then 7 else 14 end;\n        boundary:=local_start+make_interval(days=>units*p_cycle);\n    else\n        units:=case p_term when 6 then 1 when 7 then 3 when 8 then 6 when 9 then 9 when 10 then 12 end;\n        -- Add to the original UTC anchor; never accumulate February clamping drift.\n        boundary:=local_start+make_interval(months=>units*p_cycle);\n    end if;\n    if extract(year from boundary) not between 1 and 9999 then raise exception 'Unsupported calendar range' using errcode='22023';end if;\n    return boundary at time zone 'UTC';\nend;\n",
+      "language": "plpgsql",
+      "volatility": "i",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    },
+    {
+      "signature": "public.cor20_cycle_at(timestamp with time zone,smallint,integer,timestamp with time zone,timestamp with time zone)",
+      "source": "\ndeclare low integer:=1; high integer:=p_max; middle integer; boundary timestamptz;\nbegin\n    if p_start is null or p_now is null or p_max is null or p_max not between 1 and 1000 or p_term is null or p_term not in (1,2,3,6,7,8,9,10,11) or (p_term=11 and p_max<>1) then raise exception 'Invalid cycle contract' using errcode='22023';end if;\n    if p_now<p_start or (p_until is not null and p_now>=p_until) then return 0;end if;\n    if p_term=11 then return 1;end if;\n    boundary:=cor20_term_boundary(p_start,p_term,p_max);\n    if p_now>=boundary then return 0;end if;\n    while low<high loop\n        middle:=(low+high)/2;\n        if p_now>=cor20_term_boundary(p_start,p_term,middle) then low:=middle+1;else high:=middle;end if;\n    end loop;\n    return low;\nend;\n",
+      "language": "plpgsql",
+      "volatility": "i",
+      "definer": false,
+      "kind": "f",
+      "config": [
+        "search_path=pg_catalog, public, pg_temp"
+      ]
+    }
+  ],
+  "requiredConnect": true,
+  "requiredUsage": true,
+  "unsafe": []
+}

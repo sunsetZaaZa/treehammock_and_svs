@@ -1,0 +1,12 @@
+R10B real API image runner attempt
+Command: bash eng/docker-api-image.sh
+Exit: 1
+STDOUT:
+
+STDERR:
+Docker CLI with Compose is required, but no reachable Docker CLI was found.
+Install/start Docker Desktop or Docker Engine, then retry this script.
+On Windows, the host-backed lane can also be run with: .\eng\docker-host-system-stack-tests.cmd
+
+Runtime tools: {"dotnet": null, "pwsh": null, "docker": null, "psql": null, "postgres": null, "redis-server": null}
+No image built, tests executed, registry contacted or state service started. Isolated flow checks are recorded separately.

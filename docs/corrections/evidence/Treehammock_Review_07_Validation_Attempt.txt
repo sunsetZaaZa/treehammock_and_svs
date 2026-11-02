@@ -1,0 +1,7 @@
+R07 validation attempt — 2026-10-03
+Command: bash eng/dotnet-unit-tests.sh
+Exit code: 127
+The .NET SDK is required to run the unit-test lane.
+
+Tool availability: {'dotnet': None, 'docker': None, 'psql': None, 'postgres': None, 'redis-server': None}
+No restore, build, tests, HTTP requests, PostgreSQL or cache operations executed.

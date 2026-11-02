@@ -1,0 +1,770 @@
+<PARSED TEXT FOR PAGE: 1 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 1
+Treehammock Detailed Correction PR Plan
+Ordered implementation specifications and finding closure requirements
+Version 1 • October 3 2026 • Companion to Treehammock Correction Design
+1 Scope and execution rules
+Implement the correction design through 24 ordered PR specifications. Every one of the 52 findings recorded 
+through R05 has exactly one primary owner in this plan. Shared prerequisites and cross-feature tests may span
+multiple PRs, but each finding closes only when its observable acceptance criteria pass. The trusted-grant 
+activation model is user selected. Other policy defaults are recommendations to be recorded in COR01 before 
+dependent work.
+This plan does not assert that the project is currently feature complete or that these are the last findings. R06 
+through R10 still require their full review passes. COR01 establishes those review tasks, and COR23 reconciles 
+their results. Any newly discovered defect must become a concrete correction PR before COR24 can qualify 
+release. Unknown future defects are not labeled repaired by an umbrella work item.
+All existing paths below are relative to the supplied repository root. Paths explicitly marked New are proposed 
+additions. SQL changes must update versioned migrations and the canonical baseline, with executable 
+equivalence checked for both current baseline files. Do not edit only a greenfield baseline and call an upgrade 
+complete.
+Every code PR includes its domain contract/documentation updates and relevant tests. No PR merges with 
+deliberately failing default CI tests. A reproduction may use an isolated diagnostic lane before its owner fix, but
+the closure test must be enabled in mandatory CI when the fix merges. Test fixtures must reproduce the real 
+invariant; string-presence checks cannot replace SQL or cache execution.
+2 Program order
+COR01 establishes evidence, policy, review gates, and workload budgets. COR02 through COR06 provide 
+database and coordination foundations. COR07 through COR10 repair authentication and proof authority. 
+COR11 through COR18 repair recovery, delivery, factors, identity, and deletion. COR19 through COR21 
+complete trusted activation. COR22 bounds maintenance and measured resource use. COR23 closes the 
+remaining review scope through named corrective PRs as needed. COR24 qualifies the complete integrated 
+release.
+Dependencies are hard prerequisites unless a PR explicitly allows an earlier isolated correction. A listed finding 
+may depend on a later integration PR for final closure; its ledger entry stays Open until that integration test 
+passes. Parallel development can use these boundaries, but this document does not authorize deployment or 
+introduce an agent delegation requirement.
+3 Common validation lanes
+Run from the repository root, using disposable databases and test-only provider accounts. These are existing 
+script interfaces inspected in source; they have not been executed successfully in this review environment.
+ Fast lane: bash eng/validate.sh --configuration Release --locked-restore. Includes locked restore, build, unit
+and in-process integration suites.
+<PARSED TEXT FOR PAGE: 2 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 2
+ SQL lane: set TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS=true and inject 
+TREEHAMMOCK_DB_CONTRACT_CONNECTION securely, then run bash eng/sql-contracts.sh --
+configuration Release --locked-restore.
+ Complete container lanes: bash eng/docker-all-tests.sh. Includes unit, SQL, direct HTTP, proxy HTTP, and 
+system stack lanes. Never run its disposable-volume cleanup against production data.
+ Multiple-instance lane: extend the existing proxy scale/system harness with deterministic cross-instance 
+requests and independent connections. Pin compatible service images and retain exact versions in 
+evidence.
+ New proposed qualification lane: eng/correction-qualification.sh with matching PowerShell support, 
+orchestrating migrations, concurrency/fault tests, load profiles, and artifact collection.
+Record the commit/archive identity, environment, test command, TRX or equivalent result, database/cache 
+versions, schedule and resulting rows, and any measured workload. Missing SDK/services are Blocked 
+evidence, not a passing skip. Preserve the existing historical review artifacts; write new closure evidence 
+separately.
+4 Detailed PR specifications
+COR01 Establish the correction baseline and remaining review gates
+Findings owned: None. Dependencies: None.
+Problem and result: The current evidence is static and only half of the project chunks have a complete source 
+pass. Establish a runnable, reproducible baseline and a machine-readable closure ledger without claiming that 
+unreviewed files are correct.
+Files: eng/validate.sh and .ps1; eng/sql-contracts.sh and .ps1; docker-compose.integration.yml; 
+treehammock.Tests.SqlContracts/Integration/Database/SessionConcurrencyProcedureContractTests.cs; 
+existing system harness. New: docs/corrections/DECISIONS.md, FINDING_CLOSURE.json, LOCK_MANIFEST.md, 
+WORKLOADS.md; reusable SQL barrier/fault fixture classes in the SQL test project. Exact existing compose and 
+test paths must be checked before editing.
+Implementation: Preserve all 52 IDs and source archive hashes. Record chosen trusted grants and proposed 
+session/refresh/factor/time contracts. Establish test environment secret injection and collect the baseline 
+tool/build failures. Add independent-connection barriers that do not depend on sleeps and do not enter 
+production code. Assign R06 through R10 review work with explicit inventory boundaries; perform these 
+source passes before declaring the backlog final. Define workload sizes, deployment memory/CPU, 
+concurrency, queue, latency and retention budgets. Record deployed versus greenfield status. Do not upgrade 
+packages merely to make a test pass without a scoped change.
+Tests: Test harness teardown, barrier timeout, transaction cleanup, isolated schema setup, and reproducibility 
+on a clean workspace. Run the existing fast/SQL/system lanes when tools are available and classify preexisting 
+failures accurately.
+Acceptance: A developer can reproduce the baseline and each forced interleaving; all IDs and 451 inventory 
+rows persist; five remaining review gates have named outputs and cannot be silently skipped. Policy changes 
+have written acceptance criteria. No application finding is closed by this PR.
+Migration and rollback: No business schema change. Preserve existing evidence and source snapshots. Revert 
+harness/tooling independently if necessary.
+<PARSED TEXT FOR PAGE: 3 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 3
+COR02 Introduce migrations and consistent transaction authority
+Findings owned: R02-07, R02-08, R03-06, R04-04. Dependencies: COR01.
+Problem and result: Lock inversion and pre-wait expiry checks undermine otherwise transactional mutations. 
+Introduce upgrade support and enforce common account-first authority across the affected SQL functions.
+Files: Both Rigging/Database/Baseline SQL files; Repos/AccountRepo.cs, AccountRecoveryRepo.cs, 
+PasswordResetRepo.cs, ActivationRepo.cs and AuthenticatorAppEnrollmentRepo.cs. New: 
+Rigging/Database/Migrations and deployment migration command; tests for fresh and upgraded databases 
+and cross-operation locking.
+Implementation: Add a checksummed schema history and exclusive deployment migration lease. Canonicalize 
+executable SQL and verify the duplicate baseline. Update reset create/promote, email completion, factor 
+setup/verify/remove, unlock, verification completion, deletion and activation lock acquisition to the design 
+order. Use a nonlocking account locator then locked revalidation for public tokens. Recheck wall-clock expiry 
+after relevant locks and immediately before the mutation, with equality expired. Add named status/version 
+result contracts where needed. Separate audit times from authorization times and keep hash/provider work 
+outside locks. Targeted deadlock/serialization retries require the operation identity introduced in COR04; avoid
+a blanket retry wrapper here.
+Tests: Force reset create versus promote, factor verify versus remove/authenticator start, and email 
+completion versus delete. Block completions across expiry and exact equality, including clock skew fixtures. 
+Verify rollback leaves no partial write or success audit. Apply migration to a representative baseline snapshot 
+and compare fresh/upgrade behavior.
+Acceptance: No known inversion in the lock manifest; authorization cannot age through a lock wait; existing 
+real SQL contracts pass with updated semantics. Finding closure covers all cited functions and downstream 
+tests, not only one representative function.
+Migration and rollback: Expand schema and function signatures first; preserve compatible readers or use a 
+documented maintenance cutover. Do not restore old unsafe functions as an emergency rollback; revert 
+application callers only when the migration remains compatible.
+COR03 Make dependency failures and resource ownership explicit
+Findings owned: AUTH-10, AUTH-11, AUTH-12, R02-11, R03-09. Dependencies: COR01, COR02.
+Problem and result: Null results conflate invalid credentials/proofs with infrastructure outages; lazy 
+synchronous cache connections bypass deadlines. Make failure typing, cancellation and owned infrastructure 
+coherent.
+Files: Rigging/Database/StorageContext.cs; Rigging/Cache/ActiveUserCacheService.cs, 
+TwoFactorSessionService.cs, PasswordResetSessionService.cs; Rigging/Abuse/DragonflyAbuseCounterStore.cs; 
+Rigging/Replay/AuthenticatedMutationIdempotency.cs; session/reset/TOTP repositories and services; 
+controller RepositoryGuards and JsonWebTokenMiddleware.cs; DI and health configuration. New: typed 
+repository/dependency outcome records and async cache connection owner.
+Implementation: Use NpgsqlConnectionStringBuilder with explicit profile TLS, pool and timeout options. 
+Register disposable shared data sources/multiplexers. Replace synchronous Lazy Connect with asynchronous 
+initialization/retry/readiness outside hot requests. Thread CancellationToken through interfaces and Npgsql 
+acquisition/reader/command/transaction calls; distinguish cancellation from an invalid proof. Recognize TOTP 
+enrollment, unprotect, replay-marker and pending-state outages as dependencies. Return fail-closed 503 for 
+<PARSED TEXT FOR PAGE: 4 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 4
+unavailable authoritative trust without clearing valid client tokens or charging incorrect-proof counts. Best￾effort cache resets/hydration retain the durable result.
+Tests: Special-character connection values round trip; missing cache startup recovers without restart; repeated
+test-host disposal leaves no owned resources. Fault only TOTP lookup while permitting failure persistence and 
+assert no debit. Test reset decryption/marker/session faults independently. PostgreSQL outage on warm and 
+cold authentication returns 503 without clear-token instructions.
+Acceptance: No selected dependency fault becomes permanent credential deletion or invalid proof; 
+cancellation reaches bounded provider/DB boundaries where supported; infrastructure recovery/disposal 
+tests pass. Mutation commit ambiguity remains explicitly handled by COR04 rather than hidden here.
+Migration and rollback: API outcome typing may require coordinated callers; version DTO changes. No 
+credential/schema reinterpretation. Old connection wrappers may not be mixed with new ownership 
+registration if that creates double disposal.
+COR04 Add durable operation outcomes and commit reconciliation
+Findings owned: AUTH-02. Dependencies: COR02, COR03.
+Problem and result: A request deadline currently stops waiting while a mutation can commit later. Make 
+retries reconcile a durable operation before executing again.
+Files: Repos/SessionRepo.cs and other security mutation repositories; middleware and controller guards; 
+account/reset/factor service mutation methods. New: DataLayer/Operations/SecurityOperation.cs, 
+Repos/SecurityOperationRepo.cs, Services/SecurityOperationService.cs and migration for operation receipts.
+Implementation: Allocate operation identity before a mutation and bind it to scope, purpose-separated 
+request HMAC, expected authority and version. In the same transaction, perform the mutation and store its 
+safe outcome. On canceled/failed commit acknowledgment, use a separately bounded reconciliation read; 
+distinguish pending, known committed, known rolled back, and unknown outcome. Return a retryable 
+operation status without fabricating failure or automatically issuing another mutation. Observe eventual task 
+failures. Reconciliation must remain authorized after ordinary token generation changes but must not deliver 
+secret output after account/family revocation. Generic receipts contain no raw access token or setup seed.
+Tests: Hold account lock beyond the request deadline then release; inspect rows and operation result. Drop 
+the connection after commit but before acknowledgment. Retry the same operation through another instance.
+Stop the process at each mutation/receipt boundary and verify no duplicate effect. Validate bounded pool/lock
+occupancy and operation expiry.
+Acceptance: Every affected mutation has a determinate replay/restart protocol; late commit cannot silently 
+strand a client or be repeated as fresh work. A query timeout is never represented as proof of rollback. Secret￾specific refresh recovery is completed in COR09.
+Migration and rollback: Add receipt table/indexes with bounded retention; deploy writer and reconciliation 
+reader together. Receipt retention must outlive legitimate retries. Rolling back application code preserves 
+receipts and fencing semantics.
+COR05 Make cache counter windows atomic and repairable
+Findings owned: AUTH-06. Dependencies: COR03.
+<PARSED TEXT FOR PAGE: 5 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 5
+Problem and result: Increment followed by separate initial expiry can create permanent denial. Perform 
+admission and TTL repair atomically on the compatible cache server.
+Files: Rigging/Abuse/DragonflyAbuseCounterStore.cs; abuse models/configuration; 
+DragonflyAbuseCounterStoreTests.cs. New: bounded Lua scripts and real Redis/Dragonfly contract tests.
+Implementation: Increment, establish/repair TTL, determine the limit and apply/read cooldown in one 
+bounded operation. Define TTL repair for legacy immortal keys and preserve a fixed window rather than 
+extending it on every increment. Use millisecond precision consistently and clamp invalid settings. Keep one 
+bounded key group per atomic call and verify clustered key-slot compatibility if the deployment uses 
+clustering. Counter outage returns the configured explicit policy result, not fabricated success. Record 
+bounded telemetry labels.
+Tests: Seed a TTL-less count above one; run increment and confirm a finite TTL. Interrupt clients around calls, 
+restart cache/process, exercise concurrent first increments and window rollover, and verify actual scripts on 
+pinned Dragonfly plus supported Redis. Test zero cooldown and exact boundary behavior.
+Acceptance: No admitted script result leaves an immortal counter; outages have defined behavior; eventual 
+expiry restores admission. Existing mocked tests supplement real server assertions rather than replacing them.
+Migration and rollback: Version the counter namespace or retain a compatible repair policy; do not flush 
+unrelated cache data. Retain the atomic script during rollback until old keys are gone.
+COR06 Bind idempotency to content and durable mutation ownership
+Findings owned: AUTH-07, AUTH-08. Dependencies: COR04, COR05.
+Problem and result: Late completion can overwrite a new reservation and different request bodies can replay 
+false success. Add atomic ownership fencing and accurate request-bound responses.
+Files: Rigging/Replay/AuthenticatedMutationIdempotency.cs; authenticated controller helpers and mutations; 
+AuthenticatedMutationIdempotencyTests.cs. New: canonical request serializers, real cache lease-race tests 
+and durable receipt integration.
+Implementation: Reserve/complete/renew by owner token, generation and request HMAC in atomic scripts. 
+Reject same key with different canonical body/target as conflict. Canonicalize normalized fields and distinguish 
+omitted versus explicit values according to each DTO contract. Use purpose-separated HMAC for secret￾containing content; retain its key for the replay window. Store the original safe response fields/status/code, 
+not fields from the retry. Required writes use durable receipts so expired Redis leases do not permit duplicate 
+execution. Define auth-before-replay and security-epoch rules. Keep provisioning seeds and access tokens out 
+of generic replay data.
+Tests: Pause owner A completion, expire lease, reserve B, resume A; B remains owner. Reuse key for different 
+session IDs, factor-removal methods, destinations, tiers and secret input. Cache eviction/restart cannot 
+duplicate a durable write. Replayed response matches original target and result exactly.
+Acceptance: Content mismatch never reports applied success; stale owners cannot overwrite current 
+coordination state; repeat request is either a truthful replay or explicit recovery result. Test required and 
+optional key routes.
+Migration and rollback: Use a versioned idempotency namespace/schema; expire legacy entries before relying
+on content binding. Preserve durable receipts and do not strip version guards to regain compatibility.
+<PARSED TEXT FOR PAGE: 6 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 6
+COR07 Bound password work and correct Argon2 cost migration
+Findings owned: R02-01, R02-15. Dependencies: COR03, COR05.
+Problem and result: Signup hashes before admission and the configured memory units imply a weak cost. 
+Correct the units while preventing an aggregate resource outage.
+Files: Rigging/Security/Argon2idPasswordHashCodec.cs, UserSecretHasher.cs; LoginSettings and validation; 
+AccountService.cs; PasswordResetPasswordMaterialService.cs; signup/controller abuse settings; 
+appsettings.json and Example. New: PasswordWorkLimiter and signup admission policy/tests.
+Implementation: Establish hash memory/CPU/queue limits before increasing cost. Rename configuration to 
+explicit bytes, require the approved minimum, reject ambiguous legacy config unless migrated with a 
+documented conversion. Proposed baseline 64 MiB and three iterations must match Geralt 4.1.0 PHC output. 
+Gate duplicate and new signup before hashing/mutation. Apply the shared limiter to all hash/verify callers. 
+Add conditional rehash after successful password verification using old hash/credential epoch; do not 
+overwrite a concurrent reset. Bound accepted encoded hash costs and malformed-hash handling. Preserve 
+password encoding semantics.
+Tests: Generate signup/reset hashes and decode m=65536 KiB for the 64 MiB target. Verify existing low-cost 
+hashes and upgrade only after success. Race rehash against reset. Flood duplicate/distinct signup while 
+delivery is denied and measure active hashes, queued work, memory, thread pool and created account rows.
+Acceptance: Explicit verified units, no uncontrolled hash concurrency, no hash invocation after admission 
+rejection, and weak stored hashes have an executable gradual upgrade policy. Budget values and actual 
+measurements are recorded.
+Migration and rollback: Configuration migration precedes host deployment. Keep old hash verification; do not 
+weaken upgraded hashes on rollback. Unverified account retention is completed in COR22.
+COR08 Make attempts and sensitive authorization atomic
+Findings owned: AUTH-04, AUTH-05. Dependencies: COR02, COR04, COR05, COR07.
+Problem and result: Durable counters lose concurrent increments and reauthentication permits unbudgeted 
+guessing. Provide authoritative attempt transitions and a reusable fresh-proof grant contract.
+Files: AccountControllerBase.LoginHelpers.cs; AccountSessionController.cs; SensitiveActionTokenService.cs; 
+SensitiveActionTokenRepo.cs; SensitiveActionPurpose.cs; authentication DTOs; account lockout SQL; related 
+tests. New: reauthentication policy/attempt records and factor-proof-bound grant commands.
+Implementation: Replace absolute read-increment-write failure updates with one durable 
+increment/threshold transition under credential epoch. Guard successful reset and expired-lockout cleanup 
+against the epoch/lockout actually observed. Reauthentication checks account/session/IP admission and live 
+lockout before hashing and records its own durable failed attempts. Grant issuance binds purpose, target, 
+family, stamp and factor policy. For existing-factor requirements use an explicit proof session; a successful 
+password alone does not falsely mark factor proof complete. Consumption occurs in the eventual mutation 
+transaction. Add enrollment/email/deletion purposes without removing existing purpose boundaries.
+Tests: Concurrent wrong passwords record all chargeable attempts; a delayed failure cannot reduce the count 
+or clear a newer lockout. Race success/expired cleanup against new failures. Reauthenticate at/after limit 
+without additional hasher calls; cover account lockout, cache outage and overload. Wrong-purpose/target 
+grants fail.
+<PARSED TEXT FOR PAGE: 7 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 7
+Acceptance: Counts never move backward through stale writes; no unthrottled password proof endpoint 
+remains; grants are single use and version/target bound. Enrollment/email/delete callers enforce the contract 
+in their owner PRs.
+Migration and rollback: Add credential/lockout epochs and reauth budget state with deliberate default 
+backfill. Expire legacy sensitive grants at cutover if bindings cannot be reconstructed.
+COR09 Stabilize session identity and refresh responses
+Findings owned: AUTH-01, AUTH-09. Dependencies: COR02, COR04, COR06, COR08.
+Problem and result: Refresh changes the session management ID and concurrent responses can erase the 
+winning token. Introduce stable families and the explicit refresh contract from the design.
+Files: Entities/Session.cs; DataLayer/Cache/ActiveSession.cs; session summaries; Repos/SessionRepo.cs; 
+JsonWebTokenMiddleware.cs; AccountSessionController.cs; JWTSettings; session SQL; middleware/session 
+tests and HTTP examples. New: refresh request/response models and narrowly protected outcome envelope.
+Implementation: Add stable family ID and separate token-generation identity. Preserve one active family and 
+revoke it by the listed ID after rotation. Move token rotation from generic authentication into POST refresh; 
+adapt client-facing status/headers to carry family/generation and never clear a newer generation. Serialize on 
+account/family and integrate durable operation results. If approved, return the identical token only for same￾operation recovery within the bounded encrypted envelope window and current family authority; otherwise 
+document re-login after lost output. Logout/reset/replacement login fence recovery.
+Tests: Two real HTTP requests barrier after validation, both response orders, old request arriving just after 
+rotation, lost response/late commit, cross-instance retry, and logout during recovery. List S, refresh, revoke S, 
+reject the new token. Verify access/refresh/hard-lifetime boundaries and renewal rate.
+Acceptance: One rotation effect, no stale response token erasure, stable revoke identity, no generic old-token 
+authentication, and a documented client migration/recovery protocol. A client fixture is required even though 
+no product client was supplied.
+Migration and rollback: Backfill families or invalidate old sessions in a declared cutover. Mixed-mode 
+implicit/explicit refresh must be prevented by protocol version. Retain decrypting recovery keys for the 
+bounded window only.
+COR10 Make pending login proof durable and versioned
+Findings owned: AUTH-03. Dependencies: COR02, COR04, COR05, COR09.
+Problem and result: Cached challenge snapshots can prove superseded codes and stale progress. Make 
+durable proof completion a prerequisite to login promotion.
+Files: AccountControllerBase.TwoFactorHelpers.cs; AccountTwoFactorController.cs; 
+TwoFactorSessionService.cs; pending 2FA DTOs; AccountRepo and promotion/challenge SQL; login proof tests. 
+New: explicit challenge/progress transition commands and version-aware cache projection.
+Implementation: Persist challenge ID/version, configuration snapshot, expected method order, attempt state 
+and completed proofs. Compare/consume delivered codes in SQL under current authority and expiry rather 
+than the cached hash alone. Reselect/resend revokes the prior challenge version and enforces durable 
+cooldown. Success/failure transitions supply expected versions. Final promotion atomically consumes durable 
+completion and creates the active family. Keep global TOTP step replay enforcement and operation-bound 
+<PARSED TEXT FOR PAGE: 8 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 8
+receipts. Rehydrate safe pending metadata from PostgreSQL after cache loss; do not reconstruct raw challenge
+secrets.
+Tests: Old proof versus replacement, two selections, stale failure versus completion, lost cache write, cache 
+restart, and simultaneous final proof/promotion. Superseded codes never succeed even when stale Redis 
+content is restored. Independent same-step TOTP use remains rejected.
+Acceptance: PostgreSQL establishes exact proof completion, cache is a versioned projection, and no whole￾object stale write can authorize login. Outage behavior and counters follow COR03.
+Migration and rollback: Introduce durable versions and dual-readable payloads; invalidate old pending login 
+sessions if challenge lineage is absent. Never backfill them as complete.
+COR11 Repair verification signup conflicts and unlock consumption
+Findings owned: R02-03, R02-09, R02-10. Dependencies: COR02, COR04, COR07.
+Problem and result: Unlock can clear a newer lockout, duplicate signup races return 500, and resends can 
+create multiple current links. Make those database contracts atomic and explicit.
+Files: AccountRegistrationController.cs; AccountRecoveryController.cs; AccountService.cs and 
+AccountRecoveryService.cs; AccountRepo.cs and AccountRecoveryRepo.cs; account verification/unlock 
+schema/functions and SQL contracts.
+Implementation: Map named email/username/account-ID/web-key constraint conflicts to the correct 
+outcomes and bounded collision retry where intended. Serialize one-current verification identity by 
+account/purpose with explicit terminal status and uniqueness. Unlock start/cancel/verify obtains account-first 
+locks and binds stamp plus lockout epoch. Consumption requires current status, expected version, binding and 
+post-wait expiry and clears only the observed lockout. Completion reports one affected request. Delivery 
+replacement staging integrates in COR12; do not prematurely close the resend finding while denied sends 
+remain destructive.
+Tests: Two signup inserts with the same normalized email or username have one winner and deterministic 
+duplicate contract. Concurrent resend leaves one current proof. Verify versus resend, unlock 
+consume/consume, cancel/consume and newer lockout/stamp rotation versus consumption preserve valid 
+final states.
+Acceptance: No newer lockout is cleared by an old token; no duplicate race becomes generic 500; only the 
+authorized current verification proof can complete. Tests use real SQL and assert account and token rows.
+Migration and rollback: Resolve duplicate historical current proofs deterministically before adding constraints,
+retain audit, and invalidate ambiguous rows. Keep named-constraint mapping stable across migrations.
+COR12 Add durable delivery and nondestructive replacement admission
+Findings owned: R02-02, R03-08. Dependencies: COR02, COR04, COR05, COR11.
+Problem and result: Replacement occurs before delivery admission and setup drops the account delivery 
+budget. Stage proofs and deliver durably without erasing a working predecessor on denial/failure.
+Files: AccountService.cs; AccountRecoveryService.cs; PasswordResetService.cs and delivery service; 
+AccountControllerBase.TwoFactorHelpers.cs; TwoFactorAuthenticateService.cs; SMTP/SMS interfaces. New: 
+DeliveryOutboxRepo, worker, encrypted payload envelope, delivery outcome model, outbox migration and 
+tests.
+<PARSED TEXT FOR PAGE: 9 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 9
+Implementation: Perform request/delivery admission before candidate creation. Persist candidate and job 
+transactionally; keep current delivered proof until a current accepted candidate is promoted. Claims and 
+provider calls follow separate bounded transactions. Retries reuse job identity/code, with provider 
+idempotency when supported. An ambiguous provider acceptance remains a reconciled send state rather than
+generating another code. Version-check completion/cancellation so an old job cannot cancel a newer request. 
+Account ID flows through both email and SMS setup delivery. Erase terminal raw proof payload on schedule. 
+Use fake providers for forced outcomes and provider adapters audited under R08.
+Tests: Delivered old token plus denied resend remains usable; provider false/exception/crash after 
+acceptance, concurrent candidates, expired jobs, cache outage and lost HTTP response. Repeat for verify, 
+unlock, reset, email change, deletion and factor setup. Vary SMS destination/IP but exhaust the account 
+budget. An early received candidate returns a controlled pending outcome until authoritative promotion.
+Acceptance: Denied admission makes no destructive replacement, failed delivery leaves a recovery route, 
+sends and payload retention are bounded, and exact candidate fencing prevents stale cleanup. No exactly￾once email guarantee is claimed.
+Migration and rollback: Add outbox and candidate-state readers before switching producers. Drain/version 
+jobs at rollout; old and new workers cannot both deliver incompatible payloads. Preserve decrypting keys until 
+jobs are drained.
+COR13 Enforce monotonic reset authorization and atomic promotion
+Findings owned: R02-04, R02-05, R02-06. Dependencies: COR02, COR04, COR07, COR10, COR12.
+Problem and result: Generic reset-session upsert accepts stale progress and revocation can be bypassed when 
+the last factor disappears. Replace upserts with proof transitions consumed at promotion.
+Files: PasswordResetService.cs; PasswordResetSessionService.cs; PasswordResetRepo.cs; 
+PasswordResetTwoFactorConfigurationResolver.cs; pending reset models; reset SQL and factor-removal SQL; 
+reset end-to-end/SQL tests.
+Implementation: Introduce explicit create/select/resend/invalid-proof/valid-proof/revoke transitions with 
+expected session/challenge versions. Revocation is terminal and cooldown/attempt state survives selection. 
+Persist bootstrap plus required-factor snapshot and factor policy version. Factor mutation invalidates the 
+parent authorization or policy snapshot; the no-factor case still has a durable authorization session and never 
+skips a revoked lookup. Promotion locks account, reset and proof session and consumes the exact completed, 
+current, unexpired version with the password/stamp update. Hash outside locks, then revalidate all authority 
+at commit. Honor or remove the advertised destination selection with an explicit tested contract.
+Tests: Stale success/failure against new challenge; revoked-row resurrection; selected session revoked/expired
+after the service gate but before promotion; email bootstrap plus only authenticator/SMS removed before 
+finalize; rebootstrap with old code remains rejected. Cover legitimate no-additional-factor reset and two 
+finalizers.
+Acceptance: No stale upsert, no empty-menu revocation bypass, and no password mutation without the exact 
+durable authorization consumed in the same transaction. New password/session state and audit are atomic.
+Migration and rollback: Convert active state only when proof provenance is unambiguous; otherwise revoke 
+and restart. Generic legacy upsert is removed from writers and cannot remain an alternate path.
+<PARSED TEXT FOR PAGE: 10 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 10
+COR14 Complete public recovery privacy and CAPTCHA behavior
+Findings owned: R02-12, R02-13. Dependencies: COR05, COR12, COR13.
+Problem and result: Exhaustion distinguishes real reset IDs and CAPTCHA settings are disconnected from a 
+verifier. Preserve public privacy and provide an actual continuation contract.
+Files: PasswordResetController.cs; PasswordResetService.cs; PasswordResetAbuseProtectionServices.cs; 
+PasswordResetSettings.cs; request DTOs and tests. New: ICaptchaVerifier, selected production adapter, nonce￾bound continuation state, decoy request-budget support and provider contract tests.
+Implementation: Apply the same outward invalid-proof/exhaustion response for eligible, unknown, canceled 
+and expired requests while retaining internal cancellation. Bound decoy state by opaque request/IP and 
+aggregate admission; do not create unlimited keys from arbitrary IDs. Use actual request counts for CAPTCHA 
+threshold. Verify action/nonce-bound proof once, with timeout and single-use continuation; wrong 
+action/replay cannot resume. Enabled-without-adapter configuration fails startup. Choose the real provider 
+and privacy policy in this PR, not a permissive production stub. Queue delivery and measure timing 
+distributions without making account existence a status signal.
+Tests: Eligible and unknown account attempts one through six at supplied defaults, expired/canceled IDs, 
+random-ID floods, provider latency variance. CAPTCHA thresholds one/three, valid continuation, 
+invalid/replayed/expired/wrong-action proof, provider outage and missing configuration. Fake adapter must 
+be impossible in production registration.
+Acceptance: No unauthorized status/code exhaustion oracle; CAPTCHA enablement has a working verified 
+path or cannot start. A selected, qualified production adapter is required if the release advertises CAPTCHA.
+Migration and rollback: Version public DTOs if needed and preserve client retry contract. Rolling back cannot 
+leave CAPTCHA enabled against the previous incomplete orchestration.
+COR15 Migrate TOTP envelopes parameters and abandoned secrets
+Findings owned: R03-03, R03-04, R03-05, R03-10. Dependencies: COR02, COR03, COR04.
+Problem and result: A public key is a runnable default, rotation strands seeds, mutable global parameters 
+break enrollments, and method replacement retains abandoned seeds. Introduce an enrollment-bound v2 
+contract.
+Files: TotpSettings.cs; TotpSecretProtectionService.cs; TotpCodeVerifier.cs; provisioning/login/reset TOTP 
+services and repositories; twofactor schema/functions; appsettings defaults; TOTP tests. New: key ring 
+configuration and resumable reencryption/migration command.
+Implementation: Require deployment-specific key injection and reject known sample keys outside isolated 
+tests. Persist key ID, envelope version, algorithm, digits, period and immutable enrollment ID. AAD binds 
+account/enrollment identity. Read legacy v1 with its known original key/parameters; write v2. Migrate with 
+authenticated decrypt, reencrypt, conditional row version, verification and checkpoint; retire keys only after all
+rows and backups/recovery needs are reconciled. Clear all prior-method secret fields on replacement/removal 
+and add compatible method-column constraints. Defaults affect new provisioning only. Assess legacy sample￾key exposure without asserting a live compromise.
+Tests: Independent RFC vectors for SHA1/256/512; defaults changed after provisioning; period changes both 
+directions; old/new key rolling instances, partial migration, rollback, missing key, tampering and wrong-row 
+<PARSED TEXT FOR PAGE: 11 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 11
+AAD. Authenticator to SMS/email replacement leaves all TOTP columns null; unrelated removal preserves valid
+authenticator data.
+Acceptance: No runnable production sample key, no silent parameter drift, supported key rotation, intact 
+replay protection, and no abandoned seed on delivery-factor rows. Missing legacy keys require explicit 
+recovery rather than bypass.
+Migration and rollback: Expand/read-both/write-new before backfill; older binaries cannot run after v2-only 
+writes unless explicitly compatible. Never retire the old key merely because new configuration deployed.
+COR16 Require fresh proof and guarded factor enrollment
+Findings owned: R03-01, R03-02, R03-07. Dependencies: COR08, COR10, COR12, COR13, COR15.
+Problem and result: A stolen session can enroll SMS, stale stamps can persist factors, and zero-row 
+replacement can send an unstored code. Align all enrollment methods with one authorized transaction 
+contract.
+Files: AccountTwoFactorController.cs; AccountControllerBase.TwoFactorHelpers.cs; AccountRepo.cs; 
+AuthenticatorAppEnrollmentRepo.cs; enrollment DTOs and setup SQL/functions; endpoint/SQL tests.
+Implementation: Require a purpose/target-bound fresh grant before beginning or replacing email/SMS setup. 
+Existing-factor policy excludes the new destination; first factor uses fresh password. Persist origin stamp, live 
+family/policy and request version. Verification locks account before enrollment and validates current 
+authority, exact hash/version and expiry. Require row effects for both factor and account summary; roll back 
+mismatch. Replacement rechecks eligible pending state under lock and returns already-configured/conflict 
+without delivery on zero affected rows. Factor changes update policy and revoke incompatible reset/proof 
+state. Preserve documented alternative login menus but prohibit implicit sensitive-action downgrade.
+Tests: Valid session alone cannot enroll attacker SMS; wrong-purpose/target grant, first factor, existing 
+authenticator then SMS, stale origin after reset/email rotation. Barrier replacement versus verification and 
+verification versus reset/removal; no false pending response, no unstored delivery, no summary inconsistency. 
+Factor removal still rejects old reset authorization from COR13.
+Acceptance: Every method addition requires approved fresh identity proof plus destination proof; stale 
+account generation and zero-row mutation never commit success. Lock-order and delivery tests pass across 
+real SQL and HTTP.
+Migration and rollback: Invalidate legacy pending enrollments lacking origin bindings. Add DTO grant fields 
+with versioned clients. Do not fall back to session-only enrollment for old clients.
+COR17 Secure registered email change and reservation lifecycle
+Findings owned: R04-01, R04-07, R04-08, R04-09. Dependencies: COR02, COR06, COR08, COR12, COR16.
+Problem and result: Session-only email change plus a mutating GET enables unauthorized or accidental 
+identity changes; stale reservations and unique races break the contract. Require fresh approval and deliberate
+confirmation.
+Files: AccountProfileController.cs; AccountEdit.cs; AccountService.cs; AccountRepo.cs; email-change SQL; 
+AccountEmailChangeVerify.html; endpoint/service/SQL/system tests; HTTP examples. New: read-only 
+confirmation landing response/page and explicit POST confirmation DTO.
+<PARSED TEXT FOR PAGE: 12 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 12
+Implementation: Consume a target-bound grant when requesting the address change. Bind request to origin 
+generation/policy and notify old trusted address. GET never consumes a token or changes 
+account/factors/sessions; POST performs atomic completion with account-first locking. Retire expired/stale 
+reservations during admission under a real lifecycle and preserve live uniqueness. Map the specific email 
+unique constraint to the documented duplicate outcome. Success invalidates incompatible factors/pending 
+proofs and all old sessions, with outbox notification/job state and operation outcome recorded safely. Apply 
+no-store/no-referrer and scrub token URLs from logs.
+Tests: Stolen session without grant, wrong target/purpose, no factor/email-only/retained authenticator 
+accounts. Scanner-like repeated GETs leave all state unchanged; explicit POST has one result. Competing 
+expired reservation and live claims, purge/admission race, signup claiming address after precheck, response 
+loss and correct old-session revocation.
+Acceptance: New mailbox proof cannot substitute for owner authorization; expired reservations do not block 
+indefinitely; uniqueness races return the intended contract; GET is read-only.
+Migration and rollback: Revoke legacy pending identity proofs lacking grant lineage. Update templates and 
+clients together; remove unsafe legacy GET mutation rather than keeping it as a compatibility alias.
+COR18 Make deletion authority lineage and budgets durable
+Findings owned: R04-02, R04-03, R04-05, R04-06. Dependencies: COR02, COR04, COR06, COR07, COR08, 
+COR12, COR17.
+Problem and result: Final delete can cross stamp rotation and pending proof cancellation removes request 
+budgets. Bind destructive authority and separate durable admission state.
+Files: AccountDeleteController.cs; AccountService.cs; AccountRepo.cs; deletion models/entity; 
+request/cancel/verify/prepare/commit SQL and audit; tests. New: independent deletion rate-limit row and 
+lineage fields.
+Implementation: Require deletion-purpose fresh grant and bind request stamp, identity/family/policy. Admit 
+first/replacement requests atomically under account authority; store fixed-window start/count/cooldown 
+outside cancellable proof. Failed send preserves admission continuity. Verify optional newly chosen passphrase
+outside held locks, then revalidate exact hash/version and all authority at final transaction. Account-first locks 
+protect stamp and cascade ordering. Conditional account delete requires an affected row; successful 
+audit/receipt is transactionally consistent. Reset/logout-all/email/factor security events revoke pending 
+destructive proofs. Provide minimal authorized outcome/restart behavior after lost delete response without 
+retaining credentials.
+Tests: New stamp between read and delete, fresh session using old verified token after each security event, 
+two first requests, replacement/cleanup, denied/failed provider delivery and new keys, wrong 
+passphrase/lockout, cascade consistency and response loss. Inspect account and audit rows, not just response 
+status.
+Acceptance: No deletion under invalidated authority, no old-lineage reuse, no budget reset by cleanup, and 
+one admitted initial request. Clear-token result applies only to the completed generation.
+Migration and rollback: Revoke old standby rows without reconstructable lineage; preserve/backfill budgets 
+conservatively and explain restart. Keep minimal approved audit/tombstone retention; never restore deleted 
+data as a code rollback.
+<PARSED TEXT FOR PAGE: 13 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 13
+COR19 Add trusted grants and atomic activation lifecycle
+Findings owned: R05-01, R05-02, R05-03. Dependencies: COR02, COR04, COR06, COR09, COR12.
+Problem and result: Activation is a code workflow with non-atomic consumption, no active disable, and 
+detached stamp checks. Implement the user-selected trusted authority and a single durable lifecycle.
+Files: ActivationsController.cs; ActivationService.cs; ActivationRepo.cs; activation models/entity/status; 
+activation SQL/tests. New: EntitlementGrantRepo/issuer service, restricted operator grant CLI, grant 
+audit/schema, versioned activation DTOs and entitlement resolver skeleton.
+Implementation: An issuer role authorizes account/catalog/tier/term/start/cycle allowance; ordinary user 
+credentials cannot issue grants. Place references a grant and validates account/current authority; legacy 
+request descriptors must match server approval. Store hashed code verifier plus encrypted outbox payload. 
+Redemption atomically checks account/family/stamp/grant/version/time and consumes one pending code. 
+Disable revokes pending or active grant and records a receipt; verified is explicitly active rather than an 
+ambiguous consumed row. Resolve rights from an explicit capability catalog, not enum numeric rank. Existing 
+client-selected activation rows grant no rights without audited reissue. COR20 completes time and projection 
+contracts before release enablement.
+Tests: Parallel verify/verify and verify/disable/cancel have valid one-winner states; stamp rotation cannot cross
+mutation; wrong account/issuer/term/target grant denied; ordinary user cannot issue premium. Sequential 
+place/verify/disable revokes active state. Verify historical untrusted activations remain nonauthoritative.
+Acceptance: Trusted authorization is mandatory, no consumed code resurrection, no active grant survives 
+successful revoke, and every grant change has audited current authority.
+Migration and rollback: Expand trusted grant schema and dual-readable receipts. Quarantine or audited 
+reissue of legacy rows; do not mass-upgrade client-selected tiers. New grant access is feature-gated until 
+COR20 and COR21 pass.
+COR20 Unify calendar grants renewal and session entitlement state
+Findings owned: R05-04. Dependencies: COR09, COR19.
+Problem and result: Stored calendar terms disagree with effective expiration, and successful activation does 
+not update effective features. Complete one authoritative grant-time and rights projection contract.
+Files: ActivationService.cs; FeatureSet.cs/ApplicationLayer.cs; grant/activation DTOs; account/session DTOs 
+and repositories; JsonWebTokenMiddleware.cs; profile functions/cache payloads. New: calendar term 
+calculator, capability catalog, entitlement resolver/version service, bounded renewal worker and schema.
+Implementation: Use explicit term/anchor/cadence/max-cycle fields from trusted grants, UTC calendar math, 
+month-end clamping and null indefinite expiry. Publish a reviewed legacy conversion/deprecation table; 
+ambiguous rows are not guessed. Starts are redemption or issuer-approved future boundary. Renew once per 
+approved cycle and never beyond the authorized end/allowance. Resolve effective rights at request time even 
+if worker is late. Increment account entitlement version and derive account/session compatibility fields from 
+the resolver; refresh/invalidate caches without requiring a user to re-login for authoritative downgrade. Define
+explicit overlap/precedence per capability; offsite and solo enums are not assumed numeric supersets.
+Tests: February/leap/month end/quarter/indefinite/start anchors and exact expiry. Worker 
+retry/revocation/late execution/cycle exhaustion cannot extend rights illegally. Profile/new login/existing 
+<PARSED TEXT FOR PAGE: 14 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 14
+session/refresh/warm and cold cache agree after upgrade, revoke, downgrade and expiry across instances. 
+Explicitly denied capabilities remain denied.
+Acceptance: One returned/persisted eligibility time, no silent 31-day month, bounded authorized renewal, and
+coherent effective rights on every path. Supported tier catalog contains no unimplemented capability 
+advertised as an API feature.
+Migration and rollback: Migrate projections/version fields before activation enablement; invalidate stale 
+cache namespace. Preserve trusted resolver and downgrade behavior during rollback; numeric tier copying is 
+never a fallback.
+COR21 Bound activation creation and retain delivery reasons
+Findings owned: R05-05, R05-06. Dependencies: COR05, COR12, COR19, COR20.
+Problem and result: Denied delivery still inserts retained rows and becomes 500. Enforce durable creation 
+admission and typed delivery outcomes before state changes.
+Files: ActivationsController.cs; ActivationService.cs; ActivationAbuseProtectionServices.cs; ActivationRepo.cs; 
+AbuseControlSettings.cs; activation admission SQL and tests.
+Implementation: Add explicit account/identifier/IP creation budgets before inserts and transactionally enforce
+account pending limits/cooldown across instances. Coordinate with trusted-grant redemption so fresh 
+idempotency keys cannot manufacture grants or unbounded activation rows. Delivery denied/unavailable 
+carries reason and retry data through service/controller; preserve 429/503 semantics distinct from provider 
+failure and compensation failure. Retain bounded terminal state/audit according to COR22. Evaluate 
+account/status/time index from real disable/cascade queries, not a guessed universal index.
+Tests: After budget exhaustion, vary keys/IP/destination as applicable and assert bounded inserted rows and 
+no provider send. Concurrent first creation, grant reuse, cache outage/recovery, provider 
+cooldown/failure/timeout, compensation conflict, and response loss. Inspect final row count, grant state, 
+status/code/retry metadata and command counts.
+Acceptance: Delivery denial does not cause unbounded durable creation and is not mislabeled generic server 
+failure; grant and request limits remain authoritative with multiple instances. Both current medium-priority 
+findings close with real SQL plus HTTP evidence.
+Migration and rollback: Add durable admission independently of cancellable activation rows. Do not erase 
+budgets when backfilling terminal rows or flushing cache. Keep compatible typed outcomes across rollout.
+COR22 Schedule retention and qualify storage and request costs
+Findings owned: R02-14. Dependencies: COR03 through COR21 where their state is affected.
+Problem and result: Cleanup functions have no production caller and history grows without bounds; 
+authentication has redundant cache writes and infrastructure resources need measurement. Run bounded 
+maintenance and optimize measured costs while preserving authority.
+Files: cleanup repositories/functions; Program.cs and DI; health/telemetry; middleware/cache services; 
+retention settings. New: lifecycle-owned retention coordinator, claims/checkpoints, retention matrix, query￾plan/load fixtures and operational runbook.
+Implementation: Schedule reset/request/rate-limit cleanup and independent event retention, plus expired 
+sessions/signing material, pending secret/proof state, unverified accounts, email reservations, terminal 
+<PARSED TEXT FOR PAGE: 15 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 15
+grants/activations, operation receipts and outbox payloads. Batch by stable keys under common lock order, 
+avoid active authority, and preserve durable budgets until their own expiry. Multiple workers claim safely and 
+retry with bounded delay. Remove unchanged cache rewrites on verified hits; evaluate read-only transaction 
+round trips and consolidate only with preserved semantics. Analyze reset lookup/normalized phone indexes, 
+factor history and every account-delete foreign key index using realistic plans. No index or hash setting is 
+justified solely by a latency guess.
+Tests: Aged/live mixed data, repeated/concurrent workers, restart/checkpoint, claim expiry, failure telemetry, 
+active session/proof survival, audit-retention boundaries and deletion at deep history. Compare request 
+latency, command counts, pool waits, WAL, lock time and storage growth with the approved baseline 
+workload.
+Acceptance: Actual production scheduling executes and is observable; each data class has an explicit retention 
+rule; recorded resource budgets pass. Source search for a cleanup method is insufficient closure evidence.
+Migration and rollback: Seed conservative retention settings; dry-run counts before destructive cleanup 
+deployment. Index changes are separately staged when required. Disabling a worker preserves data; it cannot 
+restore already expired/deleted secret material.
+COR23 Reconcile the remaining review and release surfaces
+Findings owned: None of the existing 52. Dependencies: COR01 and applicable domain PRs.
+Problem and result: Correcting known findings cannot certify files that have not received their complete pass. 
+Finish R06 through R10 and translate every additional issue into an implementation-ready PR before release.
+Files: All remaining rows in Treehammock_File_Review_Inventory_Through_05.csv; repositories/schema; 
+HTTP/hosting/models; SMTP/SMS/AWS/Twilio/templates; abuse/health/telemetry/system-test surfaces; 
+Program/DI; SDK/package locks; Docker/CI/scripts; endpoint/feature/design documentation. New: R06–R10 
+reports and scoped follow-up PR specs using the same ID/evidence contract.
+Implementation: R06 verifies every function/parameter/transaction/reader, constraint, lock graph, upgrade 
+and measured query plan. R07 tests transport/auth/CSRF/CORS, proxies, request bounds and safe/cache￾aware HTTP responses. R08 audits destinations, escaping, provider TLS/secrets, 
+cancellation/retries/idempotency and real contract adapters. R09 checks aggregate abuse budgets, metrics 
+cardinality, dependency readiness, retention observability and production denial of seed/capture routes. R10 
+reconciles SDK/package support and vulnerability evidence, pinned container digests, reproducible locks, test 
+lanes, privileges, secrets, recovery and truthful feature claims. Do not infer a provider vulnerability or fix 
+before that review establishes it.
+Tests: Run all applicable lanes, plus focused regressions for each new finding. Production configuration must 
+not register fake CAPTCHA/grant/provider implementations or system-test seed/capture surfaces. Verify 
+complete advertised endpoint/function/feature mapping.
+Acceptance: All remaining inventory rows have explicit review disposition; new findings have specific owners, 
+code changes and passing closure evidence. Split additional code changes into scoped COR23A onward PRs 
+with dependencies. This PR is a reconciliation gate, not a blanket claim that unknown defects were fixed.
+Migration and rollback: Determined by each concrete added PR. Any proposed compatibility or security 
+exception remains a visible release blocker until resolved.
+<PARSED TEXT FOR PAGE: 16 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 16
+COR24 Qualify the integrated feature complete release
+Findings owned: Final verification of all closed IDs; no substitute primary owner. Dependencies: COR01 
+through COR23 and all newly added correction PRs.
+Problem and result: Individual fixes do not demonstrate their interactions or production recoverability. 
+Produce a reproducible release evidence package and reconciled feature inventory.
+Files: eng qualification and release scripts; CI; direct/proxy/system HTTP tests; concurrency/fault/load suites; 
+migration snapshots; final finding ledger, feature matrix, deployment and recovery runbooks.
+Implementation: Build/restore from a clean locked checkout, run unit/in-process/real SQL/real 
+cache/direct/proxy/multiple-instance/system lanes, fresh and upgrade schema paths, and forced 
+response/commit/provider losses. Test cross-feature schedules: reset versus enrollment/delete/email; last￾factor removal versus reset; refresh versus logout/grant use; activation revoke/expiry versus cache-hit 
+authorization; maintenance versus every live proof. Rotate TOTP/outbox/operation-envelope keys in a rolling 
+environment and practice rollback with preserved versions. Record resource measurements against COR01 
+budgets and sustained history/retention workload. Validate all public examples and supported feature catalog.
+Tests and acceptance: Every one of 52 known IDs and every later ID has passing executable closure evidence 
+linked to the implementation commit; zero unresolved advertised stubs; 451 source inventory rows plus newly
+created files reconciled; no unexpected skipped mandatory lane; no secret leakage in logs/results; supported 
+dependency/image evidence; tested operator grant lifecycle; successful fresh/upgrade/recovery drills; 
+measured performance within declared budgets. Document exact limitations rather than calling them 
+complete.
+Migration and rollback: Release only after tested staged migration/rollout procedures; deployment approval is
+a later explicit task. The final packet retains manifests, versions and safe evidence, not raw production 
+credentials or customer data. Reopen findings if integration invalidates their earlier closure evidence.
+5 Finding ownership and closure matrix
+The following matrix is generated from the cumulative review ledger and the explicit owner lists above. All 
+entries remain Open in the source baseline. Completion means the named owner PR and its required 
+integration tests pass, not merely that its code was written.
+Finding Priority Owner PR Recorded behavior to correct
+AUTH-01 P1 COR09 Concurrent refresh can return a new token on one request and tell another 
+request to erase it.
+AUTH-02 P1 COR04 Middleware timeout stops waiting but does not cancel database rotation or 
+determine its eventual outcome.
+AUTH-03 P1 COR10 Delivered 2FA proof can use a stale cached challenge after a newer challenge
+is committed.
+AUTH-04 P1 COR08 Password-failure counters and lockout transitions are not atomic.
+AUTH-05 P1 COR08 Reauthentication has no password-attempt throttle or durable failure 
+budget.
+<PARSED TEXT FOR PAGE: 17 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 17
+Finding Priority Owner PR Recorded behavior to correct
+AUTH-06 P2 COR05 Abuse-counter increment and initial expiration are separate cache 
+commands.
+AUTH-07 P2 COR06 Idempotency completion checks ownership and overwrites the reservation in
+separate commands.
+AUTH-08 P2 COR06 Idempotency keys do not bind to request content.
+AUTH-09 P2 COR09 Token refresh changes the session-management ID, invalidating a previously 
+listed revoke target.
+AUTH-10 P2 COR03 Temporary PostgreSQL failure is handled as permanent credential 
+invalidation.
+AUTH-11 P2 COR03 Synchronous lazy cache connection establishment falls outside the 
+advertised async timeout.
+AUTH-12 P2 COR03 PostgreSQL connection strings interpolate unescaped configuration values.
+R02-01 P1 COR07 Public signup performs expensive password hashing before any signup abuse
+gate.
+R02-15 P1 COR07 Default password-hash memory is passed in bytes, implying only 64 KiB.
+R02-02 P1 COR12 Token replacement invalidates delivered tokens before delivery admission.
+R02-03 P1 COR11 Unlock can clear a newer lockout using an earlier account/token snapshot.
+R02-04 P1 COR13 Stale reset proof writes can replace a newer challenge or undo session 
+revocation.
+R02-05 P1 COR13 Removing the last additional factor allows a revoked reset session to be 
+bypassed.
+R02-06 P2 COR13 Password promotion does not atomically validate the completed reset proof 
+session.
+R02-07 P2 COR02 Reset creation and promotion acquire account/reset locks in opposite 
+orders.
+R02-08 P2 COR02 Expiration is not consistently enforced at the authoritative mutation point.
+R02-09 P2 COR11 Concurrent duplicate signup returns a generic failure instead of the duplicate
+contract.
+R02-10 P2 COR11 Concurrent verification resends can leave multiple usable verification tokens.
+R02-11 P2 COR03 Infrastructure failure is reported and charged as missing/incorrect reset 
+proof.
+R02-12 P2 COR14 The fifth invalid bootstrap proof can reveal whether a reset request was real.
+<PARSED TEXT FOR PAGE: 18 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 18
+Finding Priority Owner PR Recorded behavior to correct
+R02-13 P2 COR14 CAPTCHA configuration is disconnected from the actual request count and 
+proof flow.
+R02-14 P2 COR22 Reset cleanup exists but is not scheduled; reset events have no bounded 
+retention.
+R03-01 P1 COR16 Email/SMS factor enrollment trusts the active session without fresh 
+sensitive-action proof.
+R03-02 P1 COR16 Email/SMS verification can persist a factor after the account security stamp 
+changes.
+R03-03 P1 COR15 Default configuration ships a published TOTP encryption key that passes 
+startup validation.
+R03-04 P2 COR15 TOTP encryption has no key identifier or supported rotation path for existing 
+enrollments.
+R03-05 P2 COR15 Existing TOTP enrollments depend on mutable global algorithm, digits, and 
+period settings.
+R03-06 P2 COR02 Email/SMS verification and account-first factor mutations acquire locks in 
+opposite orders.
+R03-07 P2 COR16 Concurrent setup replacement can return success and deliver a code that 
+was never persisted.
+R03-08 P2 COR12 Setup delivery omits the account ID and bypasses the per-account delivery 
+budget.
+R03-09 P2 COR03 A TOTP enrollment lookup outage is charged as an invalid login proof.
+R03-10 P2 COR15 Replacing pending authenticator setup with email/SMS retains abandoned 
+TOTP secret material.
+R04-01 P1 COR17 Recovery-email changes require no fresh password or existing-factor proof.
+R04-02 P1 COR18 Final deletion can remove an account after its checked security stamp 
+changes.
+R04-03 P2 COR18 Pending deletion proofs survive account security-stamp and email changes.
+R04-04 P2 COR02 Email completion and account deletion can deadlock through opposite lock 
+order.
+R04-05 P2 COR18 Failed-delivery cleanup erases the durable deletion-request cooldown and 
+count.
+R04-06 P2 COR18 Concurrent first deletion requests bypass the cooldown and overwrite the 
+initial count.
+<PARSED TEXT FOR PAGE: 19 / 19>
+TREEHAMMOCK | DETAILED CORRECTION PR PLAN
+Version 1 • 3 October 2026 | Page 19
+Finding Priority Owner PR Recorded behavior to correct
+R04-07 P2 COR17 Expired email-change reservations still block other accounts from requesting 
+the address.
+R04-08 P2 COR17 A concurrent address claim turns email completion into a generic server 
+error.
+R04-09 P2 COR17 Email verification GET performs the account change and session revocation 
+immediately.
+R05-01 P2 COR19 Activation verification can succeed twice or overwrite a concurrent 
+cancellation/disable.
+R05-02 P2 COR19 Disable never revokes an already verified activation.
+R05-03 P2 COR19 Activation mutations can commit after the checked account security stamp 
+changes.
+R05-04 P2 COR20 Service expiration calculations disagree with the stored calendar term.
+R05-05 P2 COR21 Delivery-denied creation still inserts retained activation rows without a 
+request admission budget.
+R05-06 P2 COR21 Activation delivery admission failures lose their reason and return generic 
+HTTP 500.
+6 Additional work beyond the numbered findings
+The plan also covers R01 performance observations: eliminating unchanged cache rewrites after authority 
+checks, bounded session/signing-material retention, disposal of infrastructure owners, and measured 
+aggregate Argon2 capacity. It defines the refresh/client contract, cache-loss pending-proof recovery, factor￾choice and sensitive-action policy, operation-specific lost-response recovery, row-bound TOTP envelopes, 
+explicit reset destinations, start/renewal/capability semantics, provider adapters, and truthful documentation.
+These items are design/completeness work, not retroactively invented review findings. Trusted activation 
+requires an operator issuer contract, resolver, session/cache entitlement version and revocation; a raw 
+premium response does not count as implementation. Billing-provider integration and future product services 
+require their own explicit scope if later requested.
+7 Definition of ready for COR01
+The current source archive, five reports, cumulative ledger/inventory, this design and plan are available. 
+Implementation can start with the baseline/harness/review work without further product data. Before 
+modifying dependent business contracts, record proposed defaults and identify any actual deployed 
+database/client compatibility needs. No production access or provider credentials are needed to write 
+deterministic tests with disposable services and test adapters.
+Start COR01 with the supplied unchanged source. This deliverable is planning only. No finding is marked Fixed, 
+no application code changed, and no deployment occurred while creating these documents.

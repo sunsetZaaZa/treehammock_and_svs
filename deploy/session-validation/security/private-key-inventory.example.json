@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "items": [
+    {"service":"svs-1","purpose":"server","path":"/run/credentials/svs-1/server.pfx","owner_uid":1654},
+    {"service":"svs-2","purpose":"server","path":"/run/credentials/svs-2/server.pfx","owner_uid":1655},
+    {"service":"caller-1","purpose":"caller","path":"/run/credentials/caller-1/client.pfx","owner_uid":1656},
+    {"service":"caller-2","purpose":"caller","path":"/run/credentials/caller-2/client.pfx","owner_uid":1657},
+    {"service":"offline-controller","purpose":"controller","path":"/private/fleet/controller.pfx","owner_uid":0},
+    {"service":"offline-pki","purpose":"offline-ca","path":"/private/pki/root.key","owner_uid":0},
+    {"service":"protected-ci","purpose":"signing","path":"/private/ci/ed25519.key","owner_uid":0}
+  ]
+}

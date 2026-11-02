@@ -1,0 +1,41 @@
+stages:
+  - sql
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+
+variables:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  BUILD_CONFIGURATION: "Release"
+  TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS: "true"
+  TREEHAMMOCK_DB_CONTRACT_CONNECTION: "Host=postgres;Port=5432;Database=treehammock_contract;Username=postgres;Password=postgres"
+
+# Dedicated SQL suite: treehammock.Tests.SqlContracts
+dotnet-sql-contract-tests:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: sql
+  timeout: 25 minutes
+  services:
+    - name: postgres:16
+      alias: postgres
+      variables:
+        POSTGRES_DB: treehammock_contract
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+  before_script:
+    - chmod +x eng/*.sh
+    - dotnet --info
+    - apt-get update
+    - apt-get install -y --no-install-recommends postgresql-client
+    - until pg_isready -h postgres -p 5432 -U postgres -d treehammock_contract; do sleep 2; done
+  script:
+    - ./eng/check-locks.sh
+    - ./eng/sql-contracts.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+  artifacts:
+    when: always
+    paths:
+      - "**/*.trx"
+    expire_in: 14 days

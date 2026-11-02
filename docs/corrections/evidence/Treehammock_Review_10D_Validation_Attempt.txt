@@ -1,0 +1,10 @@
+R10D original unit runner attempt
+Command: bash eng/dotnet-unit-tests.sh --configuration Release --locked-restore
+Exit: 127
+STDOUT:
+
+STDERR:
+The .NET SDK is required to run the unit-test lane.
+
+Runtime tools: {"dotnet": null, "pwsh": null, "powershell.exe": null, "docker": null, "psql": null, "postgres": null, "redis-server": null}
+Blocked before restore/build/discovery/test. No C# tests, HTTP pipeline, PostgreSQL/cache contracts or performance benchmarks executed.

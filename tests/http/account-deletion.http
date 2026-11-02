@@ -1,0 +1,63 @@
+# Generate fresh COR04 keys per mutation; retain finalize keys with the current credential generation.
+# operationKey = current Unix seconds + "." + UUID without hyphens.
+# operationRecovery = base64 of 32 random bytes. New keys cannot reset durable deletion budgets.
+@baseUrl = https://localhost:5001
+@accessToken = replace-with-live-token
+@operationKey = replace-with-fresh-key
+@operationRecovery = replace-with-fresh-recovery-key
+@idempotencyKey = replace-with-fresh-idempotency-key
+@deleteApproval = replace-with-purpose-6-approval
+@deleteToken = replace-with-published-email-token
+
+### Fresh owner proof (eligible existing factor remains mandatory when configured)
+POST {{baseUrl}}/account/reauthenticate
+Authorization: Bearer {{accessToken}}
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/json
+
+{"password":"replace-with-owner-password","purpose":6,"target":"delete:one-time"}
+
+### Request with NEW operation keys and fresh approval; empty body selects one-time workflow
+POST {{baseUrl}}/account/wipeout
+Authorization: Bearer {{accessToken}}
+Sensitive-Action-Token: {{deleteApproval}}
+Idempotency-Key: {{idempotencyKey}}
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/json
+
+{}
+
+### Open the published mailbox link. GET is read-only and renders an encoded confirmation form.
+GET {{baseUrl}}/account/wipeout/verify?payload={{deleteToken}}
+
+### Explicit confirmation. Retain this form and its NEW keys for response-loss recovery/repeat submission.
+# A browser submits the generated hidden fields. For this example supply fresh verification keys below.
+POST {{baseUrl}}/account/wipeout/verify
+Content-Type: application/x-www-form-urlencoded
+
+deleteToken={{deleteToken}}&operationKey={{operationKey}}&operationRecovery={{operationRecovery}}
+
+# Form values must be URL encoded (especially +, / and = in operationRecovery).
+# Verification marks only this exact approved request; it never deletes the account.
+
+### Deliberate authenticated completion with NEW operation keys; keep THESE keys for recovery
+POST {{baseUrl}}/account/wipeout/finalize
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: {{idempotencyKey}}
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/json
+
+{"deleteToken":"{{deleteToken}}"}
+
+### Recovery does not require the deleted account's credentials
+GET {{baseUrl}}/account/security-operations/status
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+
+# For a newly chosen passphrase: approve target delete:passphrase and send the same
+# passPhrase in request/finalize bodies. It never replaces fresh owner proof.
+# Clear only the locally recorded credential generation when a committed step
+# reports ACCOUNT_DELETE_SUCCEEDED. Admission-only/partial/pending outcomes do not mean deletion.

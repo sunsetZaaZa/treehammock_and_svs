@@ -1,0 +1,6 @@
+# COR23N: owned SQL/cache qualification on the same pinned product as the existing cache matrix.
+services:
+  cache:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.36.0
+    command: ["dragonfly", "--bind", "0.0.0.0", "--requirepass", "${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD:?Generated fixture password required}", "--proactor_threads=2", "--maxmemory=128mb"]
+    cpus: 2

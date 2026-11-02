@@ -1,0 +1,622 @@
+name: Treehammock Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag to create. Use vMAJOR.MINOR.PATCH, for example v1.0.0.
+        required: true
+        default: v1.0.0
+        type: string
+      target_ref:
+        description: Branch, tag, or SHA to release when manually dispatched.
+        required: true
+        default: main
+        type: string
+      create_release:
+        description: Create or update the GitHub Release after all gates pass.
+        required: true
+        default: true
+        type: boolean
+      publish_ghcr:
+        description: Publish the Docker api image to GitHub Container Registry.
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: treehammock-release-${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  RELEASE_POLICY: bootstrap
+  BUILD_CONFIGURATION: Release
+  RELEASE_PACKAGE_NAME: treehammock-api
+  PUSH_LATEST_FOR_STABLE: "true"
+
+jobs:
+  release-preflight:
+    name: Release preflight
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      release_tag: ${{ steps.release-meta.outputs.release_tag }}
+      release_version: ${{ steps.release-meta.outputs.release_version }}
+      release_base_version: ${{ steps.release-meta.outputs.release_base_version }}
+      release_assembly_version: ${{ steps.release-meta.outputs.release_assembly_version }}
+      release_archive: ${{ steps.release-meta.outputs.release_archive }}
+      release_checksum: ${{ steps.release-meta.outputs.release_checksum }}
+      release_source_sha: ${{ steps.release-meta.outputs.release_source_sha }}
+      release_informational_version: ${{ steps.release-meta.outputs.release_informational_version }}
+      checkout_ref: ${{ steps.release-meta.outputs.checkout_ref }}
+      is_prerelease: ${{ steps.release-meta.outputs.is_prerelease }}
+      release_mode: ${{ steps.release-meta.outputs.release_mode }}
+      should_release: ${{ steps.release-meta.outputs.should_release }}
+      skip_reason: ${{ steps.release-meta.outputs.skip_reason }}
+      create_release: ${{ steps.release-meta.outputs.create_release }}
+      publish_ghcr: ${{ steps.release-meta.outputs.publish_ghcr }}
+    steps:
+      - name: Check out main release history
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Resolve release metadata
+        id: release-meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_RELEASE_TAG: ${{ inputs.release_tag }}
+          INPUT_TARGET_REF: ${{ inputs.target_ref }}
+          INPUT_CREATE_RELEASE: ${{ inputs.create_release }}
+          INPUT_PUBLISH_GHCR: ${{ inputs.publish_ghcr }}
+          PUBLISH_GHCR: ${{ vars.PUBLISH_GHCR }}
+        run: python3 eng/release-metadata.py
+
+  release-dotnet-unit-gate:
+    name: Release .NET unit gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run release unit gate
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/dotnet-unit-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload unit gate results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-unit-tests
+          path: "**/treehammock-unit-tests.trx"
+          if-no-files-found: warn
+
+  release-dotnet-integration-gate:
+    name: Release .NET integration gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run release integration gate
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/dotnet-integration-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload integration gate results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-integration-tests
+          path: "**/treehammock-integration-tests.trx"
+          if-no-files-found: warn
+
+  release-dotnet-sql-gate:
+    name: Release PostgreSQL SQL gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: treehammock_contract
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d treehammock_contract"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS: "true"
+      TREEHAMMOCK_DB_CONTRACT_CONNECTION: "Host=localhost;Port=5432;Database=treehammock_contract;Username=postgres;Password=postgres"
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run release SQL gate
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/sql-contracts.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload SQL gate results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-sql-contracts
+          path: "**/treehammock-sql-contracts.trx"
+          if-no-files-found: warn
+
+  release-docker-direct-gate:
+    name: Release Docker direct gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Run release Docker direct gate
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-http-contracts-direct.sh
+
+      - name: Tear down release Docker direct gate
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker direct gate reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-docker-direct-reports
+          path: |
+            artifacts/test-runs/**/compose-proof/**/run.json
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/*.trx
+            artifacts/test-runs/**/compose-proof/**/proof.json
+            artifacts/test-runs/**/compose-proof/**/results.json
+            artifacts/test-runs/**/compose-proof/**/results/*.trx
+          if-no-files-found: warn
+
+  release-docker-proxy-gate:
+    name: Release Docker HAProxy gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Run release Docker proxy gate
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-http-contracts-proxy.sh
+
+      - name: Tear down release Docker proxy gate
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker proxy gate reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-docker-proxy-reports
+          path: |
+            artifacts/test-runs/**/compose-proof/**/run.json
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/*.trx
+            artifacts/test-runs/**/compose-proof/**/proof.json
+            artifacts/test-runs/**/compose-proof/**/results.json
+            artifacts/test-runs/**/compose-proof/**/results/*.trx
+          if-no-files-found: warn
+
+  release-docker-system-gate:
+    name: Release Docker system gate
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run release Docker host-backed system gate
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-host-system-stack-tests.sh
+
+
+      - name: Tear down release Docker system gate
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker system gate reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-treehammock-docker-system-reports
+          path: |
+            artifacts/test-runs/**/host/*.trx
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/docker-logs/*.log
+          if-no-files-found: warn
+
+  release-package-api:
+    name: Release package API
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs:
+      - release-preflight
+      - release-dotnet-unit-gate
+      - release-dotnet-integration-gate
+      - release-dotnet-sql-gate
+      - release-docker-direct-gate
+      - release-docker-proxy-gate
+      - release-docker-system-gate
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Install release candidate tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y skopeo python3-yaml
+          docker version
+          docker buildx version
+
+      - name: Build and test immutable release candidate
+        env:
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+        run: python3 eng/release_artifacts.py build --output artifacts/release
+
+      - name: Upload release package artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-api-release-package
+          path: |
+            artifacts/release/**
+          if-no-files-found: error
+          retention-days: 90
+
+  release-package-svs:
+    name: Test and package SessionValidation (.NET 8/10)
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: release-preflight
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' }}
+    steps:
+      - name: Check out exact release commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Test SVS release package verifier
+        run: python3 -m unittest discover -s eng/tests -p 'test_session_validation_artifacts.py'
+      - name: Verify release checkout identity
+        env:
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+        run: test "$(git rev-parse HEAD)" = "$RELEASE_SOURCE_SHA"
+      - name: Run managed SVS release tests
+        run: bash eng/session-validation-release.sh test artifacts/session-validation/tests
+      - name: Publish SessionValidation host and compile client
+        env:
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+        run: bash eng/session-validation-release.sh publish artifacts/session-validation/published
+      - name: Build and verify SVS release archive
+        env:
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+        run: |
+          python3 eng/session_validation_artifacts.py package \
+            --source artifacts/session-validation/published \
+            --output artifacts/session-validation/release \
+            --tag "$RELEASE_TAG" --sha "$RELEASE_SOURCE_SHA"
+          python3 eng/session_validation_artifacts.py verify \
+            --manifest artifacts/session-validation/release/session-validation-release-manifest.json \
+            --tag "$RELEASE_TAG" --sha "$RELEASE_SOURCE_SHA"
+      - name: Upload SVS release bundle
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-session-validation-release-package
+          path: artifacts/session-validation/release/**
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload SVS test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-session-validation-test-results
+          path: artifacts/session-validation/tests/**/*.xml
+          if-no-files-found: warn
+          retention-days: 14
+
+  release-ghcr-image:
+    name: Optional GitHub Container Registry image
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - release-preflight
+      - release-package-api
+    if: ${{ needs.release-preflight.outputs.should_release == 'true' && needs.release-preflight.outputs.publish_ghcr == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Download tested candidate
+        uses: actions/download-artifact@v7
+        with:
+          name: treehammock-api-release-package
+          path: artifacts/release
+
+      - name: Install promotion tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y skopeo python3-yaml
+
+      - name: Promote tested GHCR digest
+        env:
+          REGISTRY_KIND: github
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+          RELEASE_MANIFEST: artifacts/release/release-manifest.json
+          PUBLICATION_REPORT: artifacts/release/github-publication.json
+          PUSH_LATEST_FOR_STABLE: ${{ env.PUSH_LATEST_FOR_STABLE }}
+          IMAGE_ENV_FILE: image-github.env
+        run: |
+          set -euo pipefail
+          chmod +x eng/*.sh
+          repository_lower="$(printf '%s' "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')"
+          export GITHUB_CONTAINER_REGISTRY="ghcr.io"
+          export GITHUB_CONTAINER_IMAGE="ghcr.io/${repository_lower}"
+          ./eng/release-container-publish.sh
+
+      - name: Upload GHCR image metadata
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-ghcr-image
+          path: |
+            image-github.env
+            artifacts/release/github-publication.json
+          if-no-files-found: error
+          retention-days: 90
+
+  create-github-release:
+    name: Create GitHub Release
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - release-preflight
+      - release-package-api
+      - release-package-svs
+      - release-ghcr-image
+    if: ${{ always() && needs.release-preflight.result == 'success' && needs.release-preflight.outputs.should_release == 'true' && needs.release-package-api.result == 'success' && needs.release-package-svs.result == 'success' && needs.release-preflight.outputs.create_release == 'true' }}
+    steps:
+      - name: Check out release ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release-preflight.outputs.checkout_ref }}
+          persist-credentials: false
+
+      - name: Download release package artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: treehammock-api-release-package
+          path: artifacts/release
+
+      - name: Download tested SessionValidation release bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: treehammock-session-validation-release-package
+          path: artifacts/session-validation/release
+
+      - name: Download optional GHCR outcome
+        if: ${{ needs.release-preflight.outputs.publish_ghcr == 'true' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          name: treehammock-ghcr-image
+          path: image-outcome
+
+      - name: Inspect candidate and record release outcomes
+        env:
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          RELEASE_SOURCE_SHA: ${{ needs.release-preflight.outputs.checkout_ref }}
+          PUBLISH_GHCR: ${{ needs.release-preflight.outputs.publish_ghcr }}
+          GHCR_RESULT: ${{ needs.release-ghcr-image.result }}
+        run: |
+          set -euo pipefail
+          python3 eng/release_artifacts.py verify --manifest artifacts/release/release-manifest.json
+          python3 eng/session_validation_artifacts.py verify \
+            --manifest artifacts/session-validation/release/session-validation-release-manifest.json \
+            --tag "$RELEASE_TAG" --sha "$RELEASE_SOURCE_SHA"
+          python3 eng/release_artifacts.py github-summary
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.release-preflight.outputs.release_tag }}
+          CHECKOUT_REF: ${{ needs.release-preflight.outputs.checkout_ref }}
+          IS_PRERELEASE: ${{ needs.release-preflight.outputs.is_prerelease }}
+          RELEASE_MODE: ${{ needs.release-preflight.outputs.release_mode }}
+        run: |
+          set -euo pipefail
+
+          # Publish both independently checked components under the same tag.
+          # No GitHub Release is created unless both package jobs succeeded.
+          release_assets=(
+            artifacts/release/*.tar.gz
+            artifacts/release/*.sha256
+            artifacts/release/release-manifest.json
+            artifacts/release/release-summary.json
+            artifacts/session-validation/release/*.tar.gz
+            artifacts/session-validation/release/*.sha256
+            artifacts/session-validation/release/session-validation-release-manifest.json
+          )
+          for asset in "${release_assets[@]}"; do test -f "$asset"; done
+
+          if gh release view "$RELEASE_TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${release_assets[@]}" --clobber --repo "$GH_REPO"
+            exit 0
+          fi
+
+          release_args=(release create "$RELEASE_TAG" "${release_assets[@]}" --title "TreeHammock + SessionValidation ${RELEASE_TAG}" --generate-notes --repo "$GH_REPO")
+          if [ "$RELEASE_MODE" != "tag" ]; then
+            release_args+=(--target "$CHECKOUT_REF")
+          fi
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            release_args+=(--prerelease --latest=false)
+          else
+            release_args+=(--latest)
+          fi
+
+          gh "${release_args[@]}"

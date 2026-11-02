@@ -1,0 +1,16 @@
+# Example only; configure this monitor's own protected client key.
+scrape_configs:
+  - job_name: svs-private
+    scheme: https
+    metrics_path: /metrics
+    scrape_interval: 15s
+    scrape_timeout: 3s
+    enable_http2: true
+    static_configs:
+      - targets: ['10.77.0.10:9443']
+    tls_config:
+      server_name: svs.dc1.example.internal
+      ca_file: /run/credentials/svs-monitor/services-ca.pem
+      cert_file: /run/credentials/svs-monitor/client.pem
+      key_file: /run/credentials/svs-monitor/client.key
+      insecure_skip_verify: false

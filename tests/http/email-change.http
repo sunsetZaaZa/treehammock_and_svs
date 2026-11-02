@@ -1,0 +1,46 @@
+# Current COR17 contract. Populate fresh COR04 keys for each mutation;
+# operationKey = current Unix seconds + "." + a 32-character UUID without hyphens.
+# operationRecovery = base64 of 32 random bytes. Reuse both only for response-loss recovery.
+@baseUrl = https://localhost:5001
+@accessToken = replace-with-live-access-token
+@operationKey = replace-with-fresh-operation-key
+@operationRecovery = replace-with-fresh-recovery-key
+@idempotencyKey = replace-with-fresh-idempotency-key
+@sensitiveActionToken = replace-with-approved-purpose-5-token
+@mailboxToken = replace-with-token-from-new-mailbox
+
+### Fresh owner approval; factor-configured accounts must complete eligible authenticator proof
+POST {{baseUrl}}/account/reauthenticate
+Authorization: Bearer {{accessToken}}
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/json
+
+{"password":"replace-with-owner-password","purpose":5,"target":"email:new@example.test"}
+
+### Request identity change with NEW operation keys and the returned fresh approval
+POST {{baseUrl}}/account/adjust
+Authorization: Bearer {{accessToken}}
+Sensitive-Action-Token: {{sensitiveActionToken}}
+Idempotency-Key: {{idempotencyKey}}
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/json
+
+{"emailAddress":"new@example.test"}
+
+### Read-only confirmation landing; repeated GETs never complete the change
+GET {{baseUrl}}/account/adjust/email/verify?payload={{mailboxToken}}
+
+### Deliberate confirmation with NEW operation keys; the browser form supplies these itself
+POST {{baseUrl}}/account/adjust/email/verify
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}
+Content-Type: application/x-www-form-urlencoded
+
+verifyToken={{mailboxToken}}
+
+### Resolve a lost confirmation response using THAT confirmation's keys
+GET {{baseUrl}}/account/security-operations/status
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{operationRecovery}}

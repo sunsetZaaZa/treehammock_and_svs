@@ -1,0 +1,27 @@
+{
+  "format": "SVSRefillCachePolicyV2",
+  "foreground": "GET-only",
+  "namespace": "svs:authority:v1:{environment}:{epoch}:account:{uuidN} | credential:{sha256Upper}",
+  "publisher_commands": [
+    "GET",
+    "TYPE",
+    "SET",
+    "EVAL",
+    "EVALSHA"
+  ],
+  "publisher_denied": [
+    "DEL",
+    "EXPIRE",
+    "PEXPIRE",
+    "FLUSHALL",
+    "CONFIG SET",
+    "ACL SETUSER",
+    "REPLICAOF",
+    "cross-namespace GET/SET/EVAL"
+  ],
+  "script_sha256": "5f27adee6652c110017dd377da54e7713aa8770d45a56d71195ef60d4525cab8",
+  "limitations": [
+    "ACL permits namespace SET/EVAL; trusted exact-pinned adapter is required.",
+    "No per-script SHA ACL guarantee; native target qualification pending."
+  ]
+}

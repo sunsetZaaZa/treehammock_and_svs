@@ -1,0 +1,35 @@
+{
+  "container": {
+    "services": {
+      "postgres": {},
+      "dragonfly": {},
+      "api": {},
+      "haproxy": {},
+      "sql-contract-tests": {},
+      "http-contract-tests-direct": {},
+      "http-contract-tests-proxy": {},
+      "system-tests": {}
+    },
+    "volumes": {
+      "treehammock-postgres-data": {},
+      "treehammock-dragonfly-data": {}
+    },
+    "networks": {
+      "default": {}
+    }
+  },
+  "host": {
+    "services": {
+      "postgres": {},
+      "dragonfly": {},
+      "haproxy-host": {}
+    },
+    "volumes": {
+      "treehammock-local-postgres-data": {},
+      "treehammock-local-dragonfly-data": {}
+    },
+    "networks": {
+      "default": {}
+    }
+  }
+}

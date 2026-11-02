@@ -1,0 +1,459 @@
+{
+  "evidence_kind": "source structural facts and test-surface metadata; not runtime tests",
+  "source_unchanged_vs_uploaded_archive": true,
+  "source_file_count": 451,
+  "source_files_with_R02_notes": 73,
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "sql_functions": {
+    "setup_account_email": {
+      "start_line": 499,
+      "sha256": "31d2a39c08f9a2fb1a4a43c5218b75bad5e3ccd0492cb80d25df0e65b9e6570d"
+    },
+    "setup_account_both": {
+      "start_line": 549,
+      "sha256": "40806c63afdf586ef16b46afbfd59df44ed2775b2a4c31d5228fb2dc54cf9301"
+    },
+    "resend_verify_account": {
+      "start_line": 642,
+      "sha256": "254c8371dd2b10017879aaee25ffd0276a153cda4fa47dbe07c9a2201a051e89"
+    },
+    "complete_verify_account": {
+      "start_line": 710,
+      "sha256": "949a16de7a3509b186c848c7b9d7701884ab02d7a11bd92ab3070d1498de9d1b"
+    },
+    "start_unlock_account": {
+      "start_line": 4536,
+      "sha256": "8da63bf74a1f3c24851c92a02bf5be3933df1e320f51ec374d7170a09414f379"
+    },
+    "cancel_unlock_account": {
+      "start_line": 4611,
+      "sha256": "9c5a91ca11a1d58e022067ebe3c1918d420a02542975a805f3f9091682ca0be5"
+    },
+    "verify_unlock_account": {
+      "start_line": 4646,
+      "sha256": "3240b0721937359bed8092c11a9ac158e2e536e49a5bb2fabe3dbe0498b73e6f"
+    },
+    "create_password_reset_request": {
+      "start_line": 4992,
+      "sha256": "328a0d85f1e4428c6638a982ade6268ddc32ec7e63f645150f73bc051394934d"
+    },
+    "upsert_pending_password_reset_session": {
+      "start_line": 5248,
+      "sha256": "55e1748b8a7d1c8f77b6a68091c4c63dcea2a60c127ef5c80534b5eadc301453"
+    },
+    "remove_twofactor_method": {
+      "start_line": 3842,
+      "sha256": "c996187efa7ead80d2140c19b73c6b8c845f92af6580cfb39b41b874c0493bb9"
+    },
+    "revoke_pending_password_reset_sessions_for_account": {
+      "start_line": 5436,
+      "sha256": "f84a11262e40b4598203da5d282603f73fdc471f0ab919882573e9c7e2b0d6c5"
+    },
+    "get_password_reset_request_for_finalize": {
+      "start_line": 5483,
+      "sha256": "5c8c1dfbaf3cfdccb57f73ba679c64d5563c75e616b4706125e9281a8edc6089"
+    },
+    "register_password_reset_failed_attempt": {
+      "start_line": 5588,
+      "sha256": "4c5da6478429b64f592ba02fd7b1ad8d2683af6ef0115a72e5c05f340c2ef95b"
+    },
+    "promote_password_reset": {
+      "start_line": 5679,
+      "sha256": "60c546d8bc598760e0c89b96e68d8c4449e540b1ce081e5812dd51d33eee10f6"
+    },
+    "cleanup_password_reset_rate_limits": {
+      "start_line": 4968,
+      "sha256": "58a7f42cfd1ca1b188a43ed3cfd558dc1b08bb159323575e3be916305a6aaccd"
+    },
+    "cleanup_expired_password_reset_requests": {
+      "start_line": 5825,
+      "sha256": "869de6888c197b06516c4ff43ea9d460c4eb1057ccb4632653ea36900fe811c3"
+    }
+  },
+  "static_checks": {
+    "unlock_function_has_no_for_update": true,
+    "verification_completion_has_no_expiry_predicate": true,
+    "upsert_clears_revocation_on_conflict": true,
+    "upsert_has_no_expected_version_parameter": true,
+    "promotion_has_no_completed_proof_check": true,
+    "creation_locks_account_before_reset_update": true,
+    "promotion_locks_reset_before_account": true,
+    "zero_configuration_gate_precedes_session_lookup": true,
+    "removal_revokes_pending_reset_sessions": true,
+    "removal_does_not_rotate_stamp_or_cancel_parent_reset": true,
+    "captcha_call_uses_literal_one": true,
+    "signup_hash_precedes_repository": true,
+    "reset_session_wrapper_uses_no_cancellation": true
+  },
+  "test_method_surface_catalog": {
+    "treehammock.Tests/Integration/PasswordResetEndToEndRegressionTests.cs": [
+      "Password_reset_happy_path_completes_for_all_supported_delivery_channels",
+      "Email_bootstrap_verify_response_advertises_expected_reset_twofactor_matrix",
+      "Sms_bootstrap_verify_response_advertises_expected_reset_twofactor_matrix",
+      "Bootstrap_delivery_factor_cannot_be_selected_as_the_only_reset_second_factor",
+      "Password_reset_with_authenticator_requires_select_verify_finalize_sequence",
+      "Password_reset_email_bootstrap_select_sms_sends_challenge_and_promotes_after_sms_proof",
+      "Password_reset_sms_and_authenticator_rejects_finalize_after_only_sms_proof",
+      "Password_reset_combo_rejects_out_of_order_authenticator_proof",
+      "Password_reset_verify_twofactor_before_selection_is_rejected_without_promoting_password",
+      "Password_reset_rejects_configuration_not_in_verified_reset_options",
+      "Request_returns_generic_accepted_for_unknown_account_without_creating_or_delivering_reset",
+      "Request_creates_delivery_reset_without_requiring_client_to_choose_totp_strategy",
+      "Password_reset_verify_does_not_send_second_factor_challenge",
+      "Password_reset_select_sms_sends_exactly_one_sms_challenge",
+      "Password_reset_select_authenticator_sends_no_delivery_challenge",
+      "Password_reset_unavailable_selection_sends_no_delivery_challenge",
+      "Delivery_failure_cancels_created_reset_artifact_without_changing_public_response",
+      "Wrong_key_code_records_attempts_and_attempt_exhaustion_cancels_reset",
+      "Wrong_reset_twofactor_totp_records_failed_attempt_without_promoting_password",
+      "Direct_finalize_for_authenticator_account_requires_reset_twofactor_flow_and_does_not_count_as_bad_proof",
+      "Expired_reset_cannot_be_promoted",
+      "Password_reset_token_expires_after_configured_two_minute_ttl",
+      "Password_reset_twofactor_session_expires_before_finalize",
+      "Password_reset_sms_challenge_code_expires_before_reset_session",
+      "Consumed_reset_code_cannot_be_reused",
+      "New_reset_request_cancels_prior_active_reset_id_for_same_account",
+      "Concurrent_password_reset_finalize_promotes_password_once",
+      "Concurrent_password_reset_requests_leave_one_active_reset",
+      "Method_removal_racing_reset_twofactor_verify_does_not_promote_password",
+      "Password_mismatch_fails_before_reset_lookup_or_promotion",
+      "Removing_authenticator_revokes_pending_reset_session_and_future_reset_keeps_sms_only",
+      "Removing_sms_revokes_pending_reset_session_and_future_reset_keeps_authenticator_available",
+      "Removing_email_revokes_pending_reset_session_and_future_sms_bootstrap_keeps_authenticator_available",
+      "Password_reset_combo_flow_does_not_exhaust_shared_attempt_quota",
+      "Password_reset_select_does_not_increment_reset_scoped_abuse_counters",
+      "Wrong_reset_key_code_throttles_token_verification_only",
+      "Wrong_reset_totp_throttles_twofactor_proof_only",
+      "Wrong_finalize_throttles_finalize_only_after_twofactor_completion",
+      "VerifyReset",
+      "SelectResetTwoFactor",
+      "VerifyResetTwoFactor",
+      "FinalizeWithAccessToken",
+      "CompleteVerifiedReset",
+      "RequestReset",
+      "RequestAndVerifyFutureReset",
+      "SimulateTwoFactorMethodRemoval",
+      "Advance",
+      "GetSession",
+      "SetSession",
+      "RevokeSession",
+      "IncrementAsync",
+      "ResetAsync",
+      "GetCooldownAsync",
+      "ReleaseConcurrentPromotionsAfterEntrants",
+      "ReleaseConcurrentRequestCreationAfterEntrants",
+      "LookupPasswordResetAccountAsync",
+      "CreatePasswordResetRequestAsync",
+      "GetPasswordResetRequestForFinalizeAsync",
+      "RegisterFailedAttemptAsync",
+      "PromotePasswordResetAsync",
+      "CancelPasswordResetRequestAsync",
+      "GetPendingPasswordResetSessionAsync",
+      "UpsertPendingPasswordResetSessionAsync",
+      "RevokePendingPasswordResetSessionAsync",
+      "RegisterRequestRateLimitAsync",
+      "CleanupExpiredPasswordResetRequestsAsync",
+      "CleanupPasswordResetRateLimitsAsync",
+      "SendPasswordResetCode",
+      "VerifyTotpForPasswordReset"
+    ],
+    "treehammock.Tests/Unit/AccountControllerSetupVerificationTests.cs": [
+      "AccountSetup_rejects_invalid_password_without_calling_service",
+      "AccountSetup_rejects_invalid_email_without_calling_service",
+      "AccountSetup_rejects_supplied_short_username_without_falling_back_to_email_only",
+      "AccountSetup_rejects_country_none_without_calling_service",
+      "AccountSetup_rejects_unknown_country_without_calling_service",
+      "AccountSetup_allows_email_only_when_username_is_missing_or_blank",
+      "AccountSetup_returns_duplicate_email_from_service",
+      "AccountSetup_returns_duplicate_username_from_service",
+      "AccountSetup_service_failure_returns_500_envelope",
+      "AccountSetup_verification_failure_returns_500_envelope",
+      "AccountSetup_pending_verification_returns_accepted_with_createdOn",
+      "AccountSetup_returns_success_createdOn_when_service_succeeds",
+      "ResendAccountVerification_valid_email_returns_accepted_resend_status",
+      "ResendAccountVerification_rejects_invalid_email_without_calling_service",
+      "VerifyAccountCreation_valid_token_before_expiration_marks_account_verified",
+      "VerifyAccountCreation_expired_token_marks_verification_expired",
+      "VerifyAccountCreation_already_verified_token_returns_deterministic_status_without_rewriting_record",
+      "ResendAccountVerification_email_delivery_pending_uses_pending_code",
+      "VerifyAccountCreation_rejects_blank_payload_without_repo_lookup",
+      "VerifyAccountCreation_unknown_token_returns_failure_page",
+      "VerifyAccountCreation_record_already_expired_returns_expired_page_without_rewriting_record",
+      "VerifyAccountCreation_mismatched_token_hash_returns_failure_page_without_completing",
+      "VerifyAccountCreation_completion_failure_returns_failure_page",
+      "VerifyAccountCreation_expired_token_returns_failure_page_when_expiration_persistence_fails",
+      "VerifyAccountCreation_uses_configured_success_html_template_when_available",
+      "VerifyAccountCreation_falls_back_to_constant_when_configured_template_is_missing",
+      "VerifyAccountCreation_abuse_denial_returns_failure_page_without_repo_lookup"
+    ],
+    "treehammock.Tests/Unit/AccountRecoveryApiContractTests.cs": [
+      "Account_unlock_controller_exposes_start_and_verify_token_endpoints",
+      "Account_unlock_verify_endpoint_advertises_abuse_replay_failure_status_codes",
+      "Account_unlock_sql_only_starts_for_currently_locked_accounts_and_clears_lockout_on_verify",
+      "Account_unlock_start_request_accepts_identifier_and_delivery_method_and_stale_recovery_enums_are_removed",
+      "Account_unlock_delivery_uses_templated_email_and_sms_sender_contracts"
+    ],
+    "treehammock.Tests/Unit/AccountRecoveryServiceTests.cs": [
+      "StartRecovery_generates_backend_unlock_token_persists_it_with_lockout_snapshot_and_sends_it_to_locked_account_email",
+      "StartRecovery_returns_generic_pending_for_unknown_or_unlocked_identifier_without_sending_email",
+      "StartRecovery_returns_generic_pending_when_lockout_snapshot_is_missing",
+      "StartRecovery_returns_generic_pending_when_begin_detects_stale_lockout_snapshot",
+      "StartRecovery_cancels_pending_unlock_token_and_returns_generic_pending_when_email_delivery_fails",
+      "StartRecovery_returns_generic_pending_when_delivery_fails_even_if_cleanup_fails",
+      "StartRecovery_can_deliver_unlock_token_by_sms_when_verified_sms_destination_exists",
+      "StartRecovery_returns_generic_pending_without_persisting_when_sms_destination_is_missing",
+      "VerifyRecovery_throttles_by_token_before_sql_when_unlock_verify_counter_is_exhausted",
+      "VerifyRecovery_throttles_by_ip_before_sql_when_ip_counter_is_exhausted",
+      "VerifyRecovery_counter_store_unavailable_fails_closed_before_sql",
+      "VerifyRecovery_resets_token_and_ip_counters_after_successful_unlock",
+      "VerifyRecovery_maps_complete_status_to_unlock_verified_result",
+      "VerifyRecovery_maps_stale_lockout_snapshot_to_token_mismatch"
+    ],
+    "treehammock.Tests/Unit/AccountRepoVerificationTests.cs": [
+      "SetupAccount_uses_registration_function_names",
+      "VerifyAccountForUse_uses_read_specific_function_name",
+      "AccountPassedVerification_uses_complete_specific_function_name",
+      "AccountVerificationExpired_uses_expire_specific_function_name",
+      "TwoFactorSetup_uses_setup_function_names",
+      "AccountEmailChange_uses_email_change_function_names",
+      "AccountDelete_uses_delete_function_names",
+      "TwoFactorChallenge_uses_challenge_function_names"
+    ],
+    "treehammock.Tests/Unit/AccountTokenVerificationAbuseProtectionTests.cs": [
+      "Account_token_verification_key_factory_uses_safe_fingerprints_for_public_tokens",
+      "Account_token_verification_key_factory_uses_safe_fingerprints_for_delete_finalize_tokens",
+      "CompleteEmailChange_denies_before_repository_lookup_when_public_token_policy_is_exhausted",
+      "VerifyAccountDeleteToken_denies_before_repository_lookup_when_public_token_policy_is_exhausted",
+      "FinalizeAccountDelete_denies_before_repository_lookup_when_delete_finalize_policy_is_exhausted",
+      "FinalizeAccountDelete_resets_account_and_token_counters_after_success"
+    ],
+    "treehammock.Tests/Unit/AccountUnlockAbuseProtectionTests.cs": [
+      "Account_unlock_abuse_counter_key_factory_uses_safe_fingerprints_for_token_and_ip",
+      "Account_unlock_abuse_counter_key_factory_rejects_blank_tokens"
+    ],
+    "treehammock.Tests/Unit/AccountVerificationTokenUtilityTests.cs": [
+      "GenerateToken_returns_url_safe_random_token",
+      "EncodeBase64Url_preserves_binary_material_without_utf8_coercion",
+      "HashToken_returns_stable_sha256_hex_hash"
+    ],
+    "treehammock.Tests/Unit/DependencyInjectionRegistrationTests.cs": [
+      "AddTreehammockServices_registers_interfaces_as_singletons",
+      "AddTreehammockServices_does_not_register_unsupported_provider_surfaces",
+      "Unsupported_provider_source_files_are_not_part_of_the_active_project",
+      "Unsupported_oauth_packages_are_not_referenced_by_the_app_project",
+      "Program_registers_jwt_middleware_before_controller_mapping_without_framework_authorization_middleware"
+    ],
+    "treehammock.Tests/Unit/PasswordResetAbuseProtectionTests.cs": [
+      "Rate_limit_key_factory_uses_account_destination_and_hashed_ip_keys",
+      "Abuse_counter_key_factory_uses_safe_fingerprints_for_identifier_ip_and_reset_id",
+      "Abuse_counter_key_factory_uses_account_scope_without_raw_identifier_material",
+      "Abuse_counter_key_factory_rejects_empty_abuse_inputs",
+      "Abuse_policy_uses_backend_password_reset_configuration",
+      "Rate_limit_key_factory_rejects_empty_rate_limit_inputs"
+    ],
+    "treehammock.Tests/Unit/PasswordResetApiContractTests.cs": [
+      "Password_reset_controller_is_public_controller_based_api_surface",
+      "Password_reset_actions_advertise_expected_routes",
+      "Password_reset_request_contract_allows_delivery_channels_only",
+      "Password_reset_delivery_channel_normalization_is_centralized",
+      "Finalize_contract_accepts_proof_and_password_fields_but_not_account_id",
+      "Request_response_contract_returns_reset_id_for_non_enumerating_finalize_flow",
+      "Verify_response_contract_advertises_reset_session_selection_shape",
+      "Select_twofactor_contract_advertises_reset_session_state_shape",
+      "Verify_reset_twofactor_contract_advertises_ordered_proof_state_shape",
+      "Password_reset_settings_are_backend_configuration_controls",
+      "Totp_settings_and_secret_protector_are_backend_configuration_controls",
+      "Password_reset_contract_has_database_surface_for_future_repository_work",
+      "Password_reset_delivery_contract_uses_email_and_sms_templates_without_plaintext_storage",
+      "Password_reset_request_orchestration_is_wired_to_repository_delivery_and_non_plaintext_code_services",
+      "Password_reset_finalize_requires_reset_access_token_or_reset_id_proof_field"
+    ],
+    "treehammock.Tests/Unit/PasswordResetCodeServicesTests.cs": [
+      "Generator_uses_configured_digit_length",
+      "Generator_rejects_invalid_runtime_code_length",
+      "Hasher_returns_stable_hmac_hex_hash_without_storing_plaintext_code",
+      "Hasher_binds_hash_to_reset_id",
+      "Hasher_binds_hash_to_configured_pepper",
+      "VerifyCode_accepts_correct_code_and_rejects_wrong_code",
+      "VerifyCode_rejects_missing_stored_hash",
+      "HashCode_rejects_empty_reset_id",
+      "HashCode_rejects_missing_code"
+    ],
+    "treehammock.Tests/Unit/PasswordResetControllerTests.cs": [
+      "Request_reset_returns_generic_accepted_for_valid_shape",
+      "Request_reset_rejects_blank_identifier",
+      "Request_reset_rejects_unsupported_delivery_channel",
+      "Verify_valid_shape_returns_reset_token_response",
+      "Verify_rejects_blank_key_code_before_service_call",
+      "Select_reset_twofactor_configuration_returns_current_required_method",
+      "Select_reset_twofactor_configuration_rejects_blank_token_before_service_call",
+      "Finalize_rejects_mismatched_password_fields_before_service_call",
+      "Finalize_valid_shape_returns_completed_when_service_promotes_password",
+      "Finalize_accepts_reset_access_token_without_reset_id_proof_fields",
+      "RequestReset",
+      "VerifyResetToken",
+      "SelectTwoFactorConfiguration",
+      "VerifyTwoFactorProof",
+      "FinalizeReset"
+    ],
+    "treehammock.Tests/Unit/PasswordResetDeliveryServiceTests.cs": [
+      "SendPasswordResetCode_sends_email_with_password_reset_template_subject_and_expiration",
+      "SendPasswordResetCode_sends_sms_with_rendered_password_reset_template",
+      "SendPasswordResetCode_returns_failed_without_throwing_when_email_delivery_fails",
+      "SendPasswordResetCode_rejects_unsupported_delivery_channel"
+    ],
+    "treehammock.Tests/Unit/PasswordResetPasswordMaterialFactoryTests.cs": [
+      "CreatePasswordMaterial_returns_account_password_material_with_canonical_lengths",
+      "CreatePasswordMaterial_rejects_blank_password"
+    ],
+    "treehammock.Tests/Unit/PasswordResetRepositoryContractTests.cs": [
+      "PasswordResetRepo_declares_all_password_reset_sql_function_constants",
+      "PasswordResetRepo_uses_expected_database_types",
+      "PasswordResetRepo_converts_nullable_values_to_DBNull",
+      "PasswordResetRepo_finalize_loads_account_binding_from_reset_id_only",
+      "PasswordResetRepo_lookup_result_carries_request_eligibility_metadata",
+      "PasswordResetRepo_cancel_requires_reset_id_timestamp_and_reason",
+      "PasswordResetRepo_promotion_requires_reset_id_and_loaded_account_id_together",
+      "PasswordResetRepo_create_command_carries_backend_generated_code_and_expiration_metadata",
+      "PasswordResetRepo_result_models_map_sql_lifecycle_codes_without_plaintext_user_proofs",
+      "PasswordResetRepo_methods_call_expected_sql_routines_with_named_parameters",
+      "PasswordResetRepo_is_registered_as_the_password_reset_repository",
+      "PasswordResetRepo_lookup_failure_logging_does_not_include_raw_identifier",
+      "PasswordReset_identifier_log_scope_carries_metadata_without_identifier_value"
+    ],
+    "treehammock.Tests/Unit/PasswordResetRequestOrchestrationTests.cs": [
+      "RequestReset_returns_generic_accepted_for_unknown_account_without_creating_or_delivering_reset",
+      "RequestReset_creates_reset_row_and_sends_email_when_email_channel_is_eligible",
+      "RequestReset_cancels_reset_row_when_delivery_fails",
+      "RequestReset_does_not_create_reset_for_unsupported_totp_request_strategy",
+      "RequestReset_creates_sms_delivery_reset_when_phone_and_authenticator_are_eligible",
+      "RequestReset_rejects_unsupported_plain_email_method_string",
+      "RequestReset_rejects_unsupported_plain_sms_method_string",
+      "RequestReset_creates_email_delivery_reset_when_email_and_authenticator_are_eligible",
+      "RequestReset_does_not_create_reset_for_unsupported_authenticator_app_only_channel",
+      "RequestReset_throttles_identifier_before_account_lookup_and_returns_generic_accepted",
+      "RequestReset_applies_account_abuse_throttle_after_non_enumerating_lookup",
+      "RequestReset_uses_ip_and_identifier_fingerprint_abuse_counters_without_raw_identifier_keys",
+      "AllowRateLimits"
+    ],
+    "treehammock.Tests/Unit/PasswordResetResetSeriesRegressionCoverageTests.cs": [
+      "Password_reset_reset_series_public_endpoint_set_is_locked",
+      "Password_reset_result_code_vocabulary_covers_token_selection_proof_gate_and_completion_paths",
+      "Email_bootstrapped_password_reset_policy_never_double_counts_email",
+      "Password_reset_ordered_combo_session_cannot_complete_before_all_required_proofs",
+      "Password_reset_session_json_contract_matches_sql_persistence_columns",
+      "Password_reset_service_does_not_promote_password_during_token_or_twofactor_verification",
+      "Password_reset_sql_revokes_pending_sessions_on_terminal_reset_transitions",
+      "Twofactor_method_removal_fails_closed_if_reset_session_revocation_fails"
+    ],
+    "treehammock.Tests/Unit/PasswordResetSessionModelTests.cs": [
+      "Constructor_starts_in_selection_required_when_reset_eligible_options_exist",
+      "Constructor_allows_password_change_after_token_verification_when_no_reset_eligible_options_exist",
+      "SelectConfiguration_records_ordered_required_methods_and_first_expected_proof",
+      "SelectConfiguration_rejects_configuration_not_in_reset_snapshot",
+      "StartChallenge_sets_challenge_state_for_current_expected_method",
+      "Proof_progression_tracks_completed_and_remaining_methods_until_two_factor_complete",
+      "MarkPasswordChanged_requires_verified_token_or_completed_two_factor",
+      "MarkPasswordChanged_allows_no_eligible_2fa_reset_after_token_verification",
+      "RequiredMethodsForConfiguration_uses_strict_reset_proof_order",
+      "Password_reset_session_state_enum_values_are_stable_for_sql_and_api_contracts"
+    ],
+    "treehammock.Tests/Unit/PasswordResetSqlSchemaContractTests.cs": [
+      "Password_reset_schema_is_account_bound_and_single_active_per_account",
+      "Password_reset_sql_persists_pending_reset_two_factor_sessions",
+      "Two_factor_schema_contains_protected_authenticator_app_secret_columns",
+      "Password_reset_schema_allows_delivery_channels_only",
+      "Password_reset_expiration_and_attempts_are_backend_supplied",
+      "Password_reset_sql_surface_contains_required_lifecycle_functions",
+      "Password_reset_lookup_contract_returns_eligibility_without_client_account_id",
+      "Password_reset_totp_sql_contract_loads_verified_authenticator_app_and_marks_steps_used",
+      "Password_reset_promotion_uses_account_password_material_and_security_stamp_without_account_cutoff",
+      "Password_reset_promotion_invalidates_existing_sessions_without_account_cutoff",
+      "Password_reset_sql_does_not_store_raw_user_proofs",
+      "Password_reset_sql_contains_request_rate_limit_contracts",
+      "Password_reset_cancel_contract_records_delivery_failures",
+      "Password_reset_failed_attempt_contract_cancels_exhausted_finalization_attempts"
+    ],
+    "treehammock.Tests/Unit/PasswordResetTotpFinalizeTests.cs": [
+      "VerifyResetToken_returns_selection_required_when_email_reset_requires_totp",
+      "VerifyResetToken_returns_verified_when_no_reset_eligible_2fa_exists",
+      "SelectTwoFactorConfiguration_persists_authenticator_session_when_reset_access_token_is_valid",
+      "SelectTwoFactorConfiguration_rejects_configuration_not_in_verified_snapshot",
+      "SelectTwoFactorConfiguration_rejects_tampered_reset_access_token",
+      "VerifyResetToken_registers_failed_attempt_when_key_code_is_wrong",
+      "FinalizeReset_requires_reset_twofactor_flow_when_mock_totp_reset_has_verified_key_code",
+      "FinalizeReset_rejects_mock_totp_proof_even_when_totp_code_is_supplied",
+      "FinalizeReset_promotes_password_when_reset_access_token_session_is_complete",
+      "FinalizeReset_rejects_reset_access_token_until_reset_twofactor_session_is_complete",
+      "FinalizeReset_does_not_require_totp_for_non_totp_reset",
+      "FinalizeReset_registers_failed_attempt_when_key_code_is_wrong",
+      "FinalizeReset_rejects_mock_totp_only_reset_without_key_code_requirement",
+      "FinalizeReset_requires_key_code_when_reset_row_requires_key_code",
+      "FinalizeReset_rejects_password_that_fails_configured_length_policy_before_promotion",
+      "FinalizeReset_throttles_per_reset_id_before_lookup",
+      "FinalizeReset_fails_closed_before_lookup_when_abuse_counter_store_is_unavailable",
+      "FinalizeReset_resets_finalize_abuse_counter_after_successful_promotion",
+      "FinalizeReset_abuse_limit_uses_configured_attempt_window_and_cooldown",
+      "AllowPromotion",
+      "ReadyReset"
+    ],
+    "treehammock.Tests/Unit/PasswordResetTotpRepositoryContractTests.cs": [
+      "PasswordResetTotpRepo_declares_sql_function_constants",
+      "PasswordResetTotpRepo_uses_expected_database_types",
+      "PasswordResetTotpRepo_interface_exposes_lookup_and_replay_marking_only",
+      "Enrollment_record_carries_protected_secret_fields_without_plaintext_secret_or_totp_code",
+      "PasswordResetTotpRepo_does_not_log_protected_secret_bytes"
+    ],
+    "treehammock.Tests/Unit/PasswordResetTotpVerifierTests.cs": [
+      "VerifyTotpForPasswordReset_succeeds_for_valid_shared_enrollment_code_and_step_mark",
+      "VerifyTotpForPasswordReset_fails_closed_when_enrollment_is_missing",
+      "VerifyTotpForPasswordReset_fails_for_managed_provider_until_provider_contract_exists",
+      "VerifyTotpForPasswordReset_fails_closed_when_secret_cannot_be_unprotected",
+      "VerifyTotpForPasswordReset_fails_for_wrong_code_without_marking_step_used",
+      "VerifyTotpForPasswordReset_fails_when_shared_step_marking_rejects_replay"
+    ],
+    "treehammock.Tests/Unit/PasswordResetTwoFactorConfigurationResolverTests.cs": [
+      "Email_reset_bootstrap_excludes_email_based_reset_two_factor_options",
+      "Email_reset_bootstrap_never_advertises_email_only_or_email_authenticator_combo",
+      "Email_reset_bootstrap_preserves_sms_after_authenticator_removal",
+      "Email_reset_bootstrap_preserves_authenticator_after_sms_removal",
+      "Email_reset_bootstrap_ignores_none_and_duplicates",
+      "Account_snapshot_overload_maps_verified_flags_to_email_bootstrap_options",
+      "Admin_bootstrap_keeps_login_style_options_because_no_user_factor_was_bootstrapped",
+      "Sms_reset_bootstrap_excludes_sms_based_options_for_future_sms_bootstrap_support",
+      "Password_reset_bootstrap_proof_enum_values_are_stable_for_api_and_sql_contracts"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs": [
+      "Password_reset_sql_lifecycle_is_account_bound_single_active_and_atomic_on_promotion",
+      "Password_reset_totp_lookup_requires_verified_authenticator_app_secret_and_rejects_replay",
+      "Password_reset_request_rate_limit_enforces_cooldown_window_and_block"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs": [
+      "PasswordResetRepo_promotes_password_and_invalidates_existing_sessions_against_real_sql",
+      "PasswordResetTotpRepo_loads_verified_authenticator_secret_and_rejects_replay_against_real_sql",
+      "PasswordResetRepo_creating_second_active_reset_cancels_first_against_real_sql",
+      "PasswordResetRepo_cancel_request_marks_artifact_cancelled_against_real_sql",
+      "PasswordResetService_persists_selected_pending_session_against_real_sql",
+      "PasswordResetService_rehydrates_pending_session_with_fresh_sql_backed_service_instances",
+      "PasswordResetRepo_revokes_pending_sessions_on_terminal_reset_events_against_real_sql",
+      "SendPasswordResetCode",
+      "VerifyTotpForPasswordReset",
+      "IncrementAsync",
+      "ResetAsync",
+      "GetCooldownAsync"
+    ]
+  },
+  "reference_urls": [
+    "https://www.postgresql.org/docs/16/explicit-locking.html",
+    "https://www.postgresql.org/docs/16/functions-datetime.html",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html",
+    "https://www.geralt.xyz/password-hashing"
+  ],
+  "hash_parameter_units": "Official Geralt ComputeHash documentation specifies bytes; source passes 65536 directly, implying 64 KiB. Confirm encoded PHC output against pinned 4.1.0; not executed."
+}

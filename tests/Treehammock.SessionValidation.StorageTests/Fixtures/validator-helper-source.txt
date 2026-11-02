@@ -1,0 +1,92 @@
+
+declare cfg ths_database_role_configuration%rowtype; role_oid oid; owner_oid oid; role_name text; rule jsonb;
+ obj record; col record; fn record; expected jsonb; privilege text; actual boolean; allowed boolean; seq_rule jsonb;
+ namespace text:=current_schema(); allowed_members text[];
+begin
+ select * into cfg from ths_database_role_configuration where singleton;
+ if not found or cfg.policy is distinct from p_expected or not cfg.policy->'roles'?p_kind then return false;end if;
+ role_name:=cfg.roles->>p_kind;rule:=cfg.policy->'roles'->p_kind;
+ select oid into role_oid from pg_roles where rolname=role_name;
+ select oid into owner_oid from pg_roles where rolname=cfg.roles->>'Owner';
+ if role_oid is null or owner_oid is null or current_user<>role_name or session_user<>role_name then return false;end if;
+ if exists(select 1 from pg_roles r where r.oid=role_oid and (r.rolsuper or r.rolcreaterole or r.rolcreatedb or r.rolreplication or r.rolbypassrls or not r.rolcanlogin))
+   or exists(select 1 from pg_roles r where r.oid=owner_oid and (r.rolcanlogin or r.rolsuper or r.rolcreaterole or r.rolcreatedb or r.rolreplication or r.rolbypassrls)) then return false;end if;
+ select coalesce(array_agg(value),array[]::text[]) into allowed_members from jsonb_array_elements_text(rule->'memberships');
+ if exists(select 1 from pg_roles r where r.oid<>role_oid and pg_has_role(role_oid,r.oid,'MEMBER') and not r.rolname=any(allowed_members)) then return false;end if;
+ if exists(select 1 from pg_roles r where r.oid<>role_oid and pg_has_role(role_oid,r.oid,'MEMBER') and (r.rolcanlogin or r.rolsuper or r.rolcreaterole or r.rolcreatedb or r.rolreplication or r.rolbypassrls)) then return false;end if;
+ if exists(select 1 from pg_auth_members m where m.member=role_oid and m.admin_option) then return false;end if;
+ if exists(select 1 from pg_shdepend d where d.refclassid='pg_authid'::regclass and d.refobjid=role_oid and d.deptype in ('o','i')) then return false;end if;
+ if has_database_privilege(role_oid,current_database(),'CREATE') or has_database_privilege(role_oid,current_database(),'TEMP') then return false;end if;
+ if exists(select 1 from pg_database d where d.datallowconn and d.datname<>current_database() and has_database_privilege(role_oid,d.oid,'CONNECT')) then return false;end if;
+ if exists(select 1 from pg_namespace n where n.nspname not like 'pg_temp%' and has_schema_privilege(role_oid,n.oid,'CREATE')) then return false;end if;
+ if not exists(select 1 from pg_namespace n where n.nspname=namespace and n.nspowner=owner_oid) then return false;end if;
+ if exists(select 1 from pg_namespace n cross join lateral aclexplode(n.nspacl) a
+   where n.nspname=namespace and a.privilege_type='CREATE' and a.grantee not in (owner_oid,(select oid from pg_roles where rolname=cfg.roles->>'Maintenance'))) then return false;end if;
+ -- Future source objects must not auto-grant PUBLIC/runtime access. Global function
+ -- defaults must be revoked as well as schema defaults for both authorized creators.
+ for obj in select r.oid from pg_roles r where r.rolname in (cfg.roles->>'Owner',cfg.roles->>'Maintenance') loop
+  if not exists(select 1 from pg_default_acl d where d.defaclrole=obj.oid and d.defaclnamespace=0 and d.defaclobjtype='f') then return false;end if;
+  if exists(select 1 from pg_default_acl d cross join lateral aclexplode(d.defaclacl) a where d.defaclrole=obj.oid and (a.grantee=0 or a.grantee=role_oid or (a.grantee<>0 and pg_has_role(role_oid,a.grantee,'MEMBER')))) then return false;end if;
+ end loop;
+ for obj in select c.*,n.nspname from pg_class c join pg_namespace n on n.oid=c.relnamespace
+     where n.nspname not in ('pg_catalog','information_schema') and n.nspname not like 'pg_%' and c.relkind in ('r','p','v','m','f','S') loop
+  expected:=case when obj.nspname=namespace then rule->'tables'->obj.relname else null end;
+  if obj.nspname=namespace and exists(select 1 from aclexplode(coalesce(obj.relacl,acldefault(case when obj.relkind='S' then 'S'::"char" else 'r'::"char" end,obj.relowner))) a where a.grantee=0) then return false;end if;
+  if obj.relkind='S' then
+   seq_rule:=case when obj.nspname=namespace then rule->'sequences'->obj.relname else null end;
+   if seq_rule is not null and obj.relowner<>owner_oid then return false;end if;
+   foreach privilege in array array['USAGE','SELECT','UPDATE'] loop
+    if has_sequence_privilege(role_oid,obj.oid,privilege||' WITH GRANT OPTION') or has_sequence_privilege(role_oid,obj.oid,privilege) is distinct from coalesce(seq_rule?privilege,false) then return false;end if;
+   end loop;
+   continue;
+  end if;
+  foreach privilege in array array['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER'] loop
+   allowed:=coalesce(expected->privilege?'*',false);
+   if has_table_privilege(role_oid,obj.oid,privilege) is distinct from allowed or has_table_privilege(role_oid,obj.oid,privilege||' WITH GRANT OPTION') then return false;end if;
+   if privilege in ('SELECT','INSERT','UPDATE','REFERENCES') then
+    for col in select attnum,attname from pg_attribute where attrelid=obj.oid and attnum>0 and not attisdropped loop
+     if has_column_privilege(role_oid,obj.oid,col.attnum,privilege) is distinct from (allowed or coalesce(expected->privilege?col.attname,false)) then return false;end if;
+    end loop;
+   end if;
+  end loop;
+  if exists(select 1 from pg_attribute a cross join lateral aclexplode(a.attacl) x where a.attrelid=obj.oid and a.attnum>0 and (x.grantee=0 or (x.grantee=role_oid and x.is_grantable))) then return false;end if;
+  if expected is not null and (obj.relowner<>owner_oid or obj.relrowsecurity or obj.relforcerowsecurity or obj.relkind not in ('r','p')) then return false;end if;
+ end loop;
+ -- Missing expected objects fail as well as extra effective rights.
+ for obj in select key from jsonb_each(rule->'tables') loop
+  if to_regclass(format('%I.%I',namespace,obj.key)) is null then return false;end if;
+ end loop;
+ for obj in select key from jsonb_each(rule->'sequences') loop
+  if to_regclass(format('%I.%I',namespace,obj.key)) is null then return false;end if;
+ end loop;
+ for fn in select p.*,n.nspname from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+     where n.nspname=namespace and not exists(select 1 from pg_depend d where d.classid='pg_proc'::regclass and d.objid=p.oid and d.deptype='e') loop
+  expected:=cfg.policy->'functions'->fn.proname;
+  if expected is null or fn.proowner<>owner_oid or fn.prosecdef is distinct from (expected->>'definer')::boolean
+    or fn.provolatile::text<>expected->>'volatility' or fn.prokind<>'f'
+    or encode(public.digest(fn.prosrc,'sha256'),'hex')<>expected->>'body_sha256'
+    or fn.proconfig is distinct from array['search_path='||namespace||', pg_catalog, pg_temp'] then return false;end if;
+  if has_function_privilege(role_oid,fn.oid,'EXECUTE') is distinct from (rule->'functions'?fn.proname) then return false;end if;
+  if exists(select 1 from aclexplode(coalesce(fn.proacl,acldefault('f',fn.proowner))) a where a.grantee=0 or (a.grantee=role_oid and a.is_grantable)) then return false;end if;
+ end loop;
+ for fn in select key from jsonb_each(cfg.policy->'functions') loop
+  if (select count(*) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname=namespace and p.proname=fn.key)<>1 then return false;end if;
+ end loop;
+ for obj in select value as item from jsonb_array_elements(cfg.policy->'triggers') loop
+  if not exists(select 1 from pg_trigger t join pg_class c on c.oid=t.tgrelid join pg_namespace n on n.oid=c.relnamespace join pg_proc p on p.oid=t.tgfoid
+    where n.nspname=namespace and c.relname=obj.item->>'table' and t.tgname=obj.item->>'name' and t.tgenabled='O'
+      and t.tgtype=(obj.item->>'type')::integer and p.proname=obj.item->>'function' and p.pronamespace=n.oid
+      and t.tgnargs=0 and not t.tgdeferrable and t.tgoldtable is null and t.tgnewtable is null
+      and coalesce((select jsonb_agg(a.attname order by k.ord) from unnest(t.tgattr::smallint[]) with ordinality k(num,ord) join pg_attribute a on a.attrelid=c.oid and a.attnum=k.num),'[]'::jsonb)=obj.item->'columns'
+      and case when t.tgqual is null then obj.item->>'when' is null else
+       regexp_replace(regexp_replace(split_part(split_part(pg_get_triggerdef(t.oid),' WHEN ',2),' EXECUTE ',1),'[[:space:]()]','','g'),'::text','','g')=obj.item->>'when' end) then return false;end if;
+ end loop;
+ if exists(select 1 from pg_trigger t join pg_class c on c.oid=t.tgrelid join pg_namespace n on n.oid=c.relnamespace
+   where n.nspname=namespace and not t.tgisinternal and not exists(select 1 from jsonb_array_elements(cfg.policy->'triggers') x
+    where x->>'table'=c.relname and x->>'name'=t.tgname)) then return false;end if;
+ if p_kind in ('Validator','Refiller') and exists(select 1 from pg_proc p join pg_depend d on d.classid='pg_proc'::regclass and d.objid=p.oid and d.deptype='e' join pg_extension e on e.oid=d.refobjid
+   where e.extname='pgcrypto' and p.oid<>'public.digest(text,text)'::regprocedure and has_function_privilege(role_oid,p.oid,'EXECUTE')) then return false;end if;
+ if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname not in (namespace,'pg_catalog','information_schema') and n.nspname not like 'pg_%' and has_function_privilege(role_oid,p.oid,'EXECUTE') and not exists(select 1 from pg_depend d join pg_extension e on e.oid=d.refobjid where d.classid='pg_proc'::regclass and d.objid=p.oid and d.deptype='e' and e.extname='pgcrypto')) then return false;end if;
+ if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='pg_catalog' and (p.proname like 'lo_%' or p.proname in ('loopen','loclose','loread','lowrite','pg_read_file','pg_read_binary_file','pg_stat_file','pg_ls_dir')) and has_function_privilege(role_oid,p.oid,'EXECUTE')) then return false;end if;
+ return true;
+end;

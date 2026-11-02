@@ -1,0 +1,32 @@
+[
+  {
+    "version": 1,
+    "name": "001_legacy_baseline.sql",
+    "sha256": "e287c32d9f9753818b2bc1146f3dc21105b0c43f2b7b3446e96db67720d0ae36"
+  },
+  {
+    "version": 2,
+    "name": "002_transaction_authority.sql",
+    "sha256": "00f2de1ec0a8561d03f9e78d8981f318440752beb4e26699e7212c926ba57842"
+  },
+  {
+    "version": 3,
+    "name": "003_security_operations.sql",
+    "sha256": "6fbfe7d3f8b65f030bb466c65c1e6fe1580acb8ade1e6123531848e4146fbdc6"
+  },
+  {
+    "version": 4,
+    "name": "004_authenticated_mutation_replays.sql",
+    "sha256": "f63a9e9b9e4094b1e9cb50944b47d0e97dadbeee48e23fa5b0fa87a2be686b37"
+  },
+  {
+    "version": 5,
+    "name": "005_password_cost_upgrade.sql",
+    "sha256": "243fd9ac70f89117d3130d660c8d95e88c99aa6c7d322a474ee97e34c2a31115"
+  },
+  {
+    "version": 6,
+    "name": "006_atomic_attempts_and_sensitive_grants.sql",
+    "sha256": "8a46a369ff1a43a6f3e122f1b436d36e14e026e56b993d94d18516bfb47aafaa"
+  }
+]

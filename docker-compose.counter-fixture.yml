@@ -1,0 +1,31 @@
+# Disposable standalone server contract matrix. Pinned versions; resolved image IDs recorded.
+name: ${TREEHAMMOCK_CORRECTION_PROJECT:?Unique owned project required}
+services:
+  redis:
+    image: redis:7.4.2-alpine
+    command: ["redis-server", "--requirepass", "${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD:?Generated fixture password required}", "--save", "", "--appendonly", "no"]
+    ports: ["127.0.0.1::6379"]
+    tmpfs: ["/data:size=67108864"]
+    cpus: 1
+    mem_limit: 256m
+    environment:
+      CORRECTION_CACHE_PASSWORD: ${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$CORRECTION_CACHE_PASSWORD redis-cli ping | grep -q PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 30
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.36.0
+    command: ["dragonfly", "--bind", "0.0.0.0", "--requirepass", "${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD}", "--proactor_threads=2", "--maxmemory=128mb"]
+    ports: ["127.0.0.1::6379"]
+    tmpfs: ["/data:size=67108864"]
+    cpus: 2
+    mem_limit: 256m
+    environment:
+      CORRECTION_CACHE_PASSWORD: ${TREEHAMMOCK_CORRECTION_CACHE_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$CORRECTION_CACHE_PASSWORD redis-cli ping | grep -q PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 30

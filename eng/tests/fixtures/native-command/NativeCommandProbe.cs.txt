@@ -1,0 +1,63 @@
+using System.Text.Json;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Diagnostics;
+string tool = Path.GetFileNameWithoutExtension(Environment.ProcessPath!)!;
+string trace = Environment.GetEnvironmentVariable("COR23Q_TRACE")!;
+var entry = new { tool, args };
+if (!(tool == "dotnet" && args.Length > 0 && args[0] == "run")) File.AppendAllText(trace, JsonSerializer.Serialize(entry) + Environment.NewLine);
+int index = File.ReadLines(trace).Count();
+int failAt = int.Parse(Environment.GetEnvironmentVariable("COR23Q_FAIL_AT") ?? "0");
+int failCode = int.Parse(Environment.GetEnvironmentVariable("COR23Q_FAIL_CODE") ?? "47");
+// A second independently selected failure witnesses teardown preserving the primary result.
+int secondAt = int.Parse(Environment.GetEnvironmentVariable("COR23Q_SECOND_FAIL_AT") ?? "0");
+if (index == failAt) return failCode;
+if (index == secondAt) return 63;
+if ((tool == "python3" || tool == "python") && args.Length > 1 && args[0].EndsWith("test-ownership.py") && args[1].StartsWith("api-"))
+{
+    string pidFile = Environment.GetEnvironmentVariable("COR23Q_API_PID")!;
+    if (args[1] == "api-start")
+    {
+        var start = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!, OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
+        start.ArgumentList.Add("run"); start.UseShellExecute = false;
+        // Avoid inherited capture pipes: this test API has no diagnostics to publish.
+        start.RedirectStandardOutput = true; start.RedirectStandardError = true;
+        var child = Process.Start(start)!;
+        File.WriteAllText(pidFile, child.Id.ToString());
+        var deadline = DateTime.UtcNow.AddSeconds(5);
+        while (DateTime.UtcNow < deadline)
+        {
+            try { using var probe = new TcpClient(); await probe.ConnectAsync(IPAddress.Loopback, 8080); break; }
+            catch (SocketException) { await Task.Delay(20); }
+        }
+        Console.WriteLine(child.Id); return 0;
+    }
+    if (!File.Exists(pidFile)) return args[1] == "api-stop" ? 0 : 1;
+    if (args[1] == "api-proof") return 0;
+    try
+    {
+        using var child = Process.GetProcessById(int.Parse(File.ReadAllText(pidFile)));
+        if (args[1] == "api-stop") { child.Kill(entireProcessTree: true); child.WaitForExit(5000); File.Delete(pidFile); return 0; }
+        return child.HasExited ? 1 : 0;
+    }
+    catch (ArgumentException) { return args[1] == "api-stop" ? 0 : 1; }
+}
+if (tool == "dotnet" && args.Length > 0 && args[0] == "run")
+{
+    var server = new TcpListener(IPAddress.Loopback, 8080); server.Start();
+    while (true)
+    {
+        using var client = await server.AcceptTcpClientAsync(); using var stream = client.GetStream();
+        var buffer = new byte[8192]; _ = await stream.ReadAsync(buffer);
+        try { await stream.WriteAsync(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")); } catch (IOException) { }
+    }
+}
+if (tool == "docker" && args.Contains("--format"))
+{
+    string format = args[Array.IndexOf(args, "--format") + 1];
+    Console.WriteLine(format.Contains("Server.Version") ? "28.0.0" : format.Contains("Endpoints.docker.Host") ? "unix:///owned-fixture.sock" : "{\"OSType\":\"linux\",\"OperatingSystem\":\"controlled fixture\"}");
+}
+else Console.WriteLine("fixture native output");
+Console.Error.WriteLine("fixture native stderr with successful exit");
+return 0;

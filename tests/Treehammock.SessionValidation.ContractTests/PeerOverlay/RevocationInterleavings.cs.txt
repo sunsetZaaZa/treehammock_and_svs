@@ -1,0 +1,112 @@
+using NodaTime;
+using Svs13.Harness;
+using Treehammock.SessionValidation.Core;
+using Treehammock.SessionValidation.Storage;
+using treehammock.Rigging.Authority;
+using treehammock.Rigging.Cache.Authority;
+using Xunit;
+namespace treehammock.Tests.Unit;
+
+// Test-only overlay onto exact THS-12C. Two mutation-owner objects and two SVS
+// coordinators, production guard/fence/publisher, simulated SQL and cache transport.
+// Never counted as separate-process/native qualification.
+public sealed class Svs13RevocationInterleavings
+{
+    private static readonly string[] Mutations=["second-login","refresh","family","session-stamp","account-stamp","logout-current","logout-all","revocation","lock","verification","deletion","capability","calendar"];
+    public static IEnumerable<object[]> Schedules()=>Enumerable.Range(0,1000).Select(n=>new object[]{n,Mutations[n%Mutations.Length],(n/Mutations.Length)%6});
+    [Theory][MemberData(nameof(Schedules))]
+    public async Task Paired_readers_follow_actual_guard_fence_commit_ownership(int seed,string mutation,int mode)
+    {
+        using var w=new RaceWorld();var ct=TestContext.Current.CancellationToken;
+        var writerA=new Transaction(w,mutation);var writerB=new Transaction(w,mutation);
+        var writer=seed%2==0?writerA:writerB;
+        if(mode is 1 or 5)
+        {
+            var barrier=new Rendezvous();CacheTransition? submitted=null;
+            w.Cache.Raw=async c=>{if(c.Header.State!=CachedAuthorityState.Ready)return w.Cache.Apply(c);submitted=c;await barrier.Arrive();return w.Cache.Apply(c);};
+            using var cancel=CancellationTokenSource.CreateLinkedTokenSource(ct);
+            var refill=w.Publisher().ReconcileAsync(w.Version.AccountId,w.Golden.Hash,w.Golden.Now+Duration.FromSeconds(2),cancel.Token);
+            await barrier.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5),ct);
+            var mutate=Mutate(w,writer);await writer.Attempted.Task.WaitAsync(TimeSpan.FromSeconds(5),ct);
+            Assert.False(mutate.IsCompleted);Assert.DoesNotContain("commit",w.Events.Snapshot());
+            if(mode==5){cancel.Cancel();Assert.False(refill.IsCompleted);}
+            w.Cache.Raw=null;barrier.Release.SetResult();
+            if(mode==5)await Assert.ThrowsAnyAsync<OperationCanceledException>(()=>refill);else Assert.Equal(ProjectionPublication.Published,await refill);
+            await mutate;Assert.NotNull(submitted);Assert.All(submitted.Next,b=>Assert.Equal(0,b));
+        }
+        else if(mode==2)
+        {
+            await using(var guard=await SessionMutationGuard.EnterAsync(writer,Fence(w),ct)){}
+            Assert.DoesNotContain("commit",w.Events.Snapshot());Assert.Equal(CachedAuthorityState.Blocked,w.State());
+            Assert.All(await w.ReadBoth(),x=>Assert.Equal(SessionDecision.Active,x.Decision));
+            await w.Publisher().ReconcileAsync(w.Version.AccountId,w.Golden.Hash,w.Golden.Now+Duration.FromSeconds(2),ct);
+            w.Db.Down=true;var calls=w.Db.Calls;Assert.All(await w.ReadBoth(),x=>Assert.Equal(SessionDecision.Active,x.Decision));Assert.Equal(calls,w.Db.Calls);
+            Report(seed,mutation,mode,w);return;
+        }
+        else if(mode==3)
+        {
+            writer.UnknownCommit=true;writer.AppliedBeforeLostAck=seed%2==0;
+            await using(var guard=await SessionMutationGuard.EnterAsync(writer,Fence(w),ct))
+            {await Assert.ThrowsAsync<TimeoutException>(()=>guard.CommitAsync(true,new Publication(w),w.Golden.Hash));Assert.Throws<InvalidOperationException>(()=>guard.KnownCommit);}
+            Assert.Equal(CachedAuthorityState.Blocked,w.State());
+            var replies=await w.ReadBoth();
+            if(writer.AppliedBeforeLostAck)Assert.All(replies,x=>Assert.NotEqual(SessionDecision.Active,x.Decision));
+            else Assert.All(replies,x=>Assert.Equal(SessionDecision.Active,x.Decision));
+            Assert.DoesNotContain("publication",w.Events.Snapshot());Report(seed,mutation,mode,w);return;
+        }
+        else if(mode==4)
+        {
+            w.Cache.Available=false;
+            try{await Assert.ThrowsAsync<InvalidOperationException>(()=>SessionMutationGuard.EnterAsync(writer,Fence(w),ct));}
+            finally{await writer.DisposeAsync();}
+            w.Db.Down=true;Assert.All(await w.ReadBoth(),x=>Assert.Equal(SessionDecision.Active,x.Decision));
+            Assert.Equal(0,w.Db.Calls);Assert.DoesNotContain("commit",w.Events.Snapshot());Report(seed,mutation,mode,w);return;
+        }
+        else
+        {
+            // Both validators begin BEFORE the mutation. The named barrier holds
+            // their actual account GET or fallback snapshot until AFTER commit.
+            var observed=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            var release=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);int waiting=0;
+            async Task BeforeObservation(){if(Interlocked.Increment(ref waiting)==2)observed.TrySetResult();await release.Task.WaitAsync(TimeSpan.FromSeconds(5));}
+            if(seed%2==0)w.Cache.BeforeAccountRead=BeforeObservation;
+            else {w.Cache.Remove(w.Golden.Space.CredentialKey(w.Golden.Hash));w.Db.BeforeSnapshot=BeforeObservation;}
+            var readers=w.ReadBoth();await observed.Task.WaitAsync(TimeSpan.FromSeconds(5),ct);
+            try{await Mutate(w,writer);}finally{release.TrySetResult();}
+            Assert.All(await readers,x=>Assert.NotEqual(SessionDecision.Active,x.Decision));
+            w.Cache.BeforeAccountRead=null;w.Db.BeforeSnapshot=null;
+        }
+        var trace=w.Events.Snapshot();Assert.True(Array.IndexOf(trace,"fence-cas")<Array.IndexOf(trace,"commit"));
+        Assert.True(Array.IndexOf(trace,"writer-release")<Array.IndexOf(trace,"publication"));
+        var decisions=await w.ReadBoth();Assert.All(decisions,x=>Assert.NotEqual(SessionDecision.Active,x.Decision));
+        if(mutation=="capability")Assert.All(decisions,x=>Assert.Equal(SessionDecision.Forbidden,x.Decision));
+        Assert.All(w.Cache.Returned.SelectMany(x=>x),b=>Assert.Equal(0,b));
+        Report(seed,mutation,mode,w);
+    }
+    private static CacheAuthorityFence Fence(RaceWorld w)=>new(w.Cache,w.Golden.Space,TimeSpan.FromSeconds(2),new Svs12.Harness.ParityClock(w.Golden.Now));
+    private static async Task Mutate(RaceWorld w,Transaction tx)
+    {await using var guard=await SessionMutationGuard.EnterAsync(tx,Fence(w),TestContext.Current.CancellationToken);await guard.CommitAsync(true,new Publication(w),w.Golden.Hash);}
+    private static void Report(int seed,string mutation,int mode,RaceWorld w)
+    {
+        string? path=Environment.GetEnvironmentVariable("SVS13_EVIDENCE_DIRECTORY");if(path is null)return;
+        Directory.CreateDirectory(path);File.WriteAllText(Path.Combine(path,$"peer-race-{seed:D4}.json"),System.Text.Json.JsonSerializer.Serialize(new{seed,mutation,mode,scope="LocalProductionOwnersWithStorageDoubles",events=w.Events.Snapshot(),writerLockWaitMilliseconds=w.WriterLockWaitMilliseconds,readerMilliseconds=w.ReaderMilliseconds.ToArray(),native=false}));
+    }
+    private sealed class Transaction(RaceWorld w,string mutation):IAuthoritySessionTransaction
+    {
+        internal readonly TaskCompletionSource Attempted=new(TaskCreationOptions.RunContinuationsAsynchronously);
+        internal bool UnknownCommit,AppliedBeforeLostAck;private bool _owned;
+        public CancellationToken CancellationToken=>TestContext.Current.CancellationToken;
+        public async Task<AuthorityFenceChallenge> AcquireAsync()
+        {Attempted.TrySetResult();long start=System.Diagnostics.Stopwatch.GetTimestamp();await w.Guard.WaitAsync(CancellationToken);w.WriterLockWaitMilliseconds=System.Diagnostics.Stopwatch.GetElapsedTime(start).TotalMilliseconds;_owned=true;w.Events.Add("writer-lock");return new(Guid.NewGuid(),"svs13:0",Guid.NewGuid(),1,1,[new(w.Version.AccountId,new(w.Version.Revision.Value),w.Version.Lifecycle)]);}
+        public Task<IReadOnlyList<Treehammock.SessionValidation.Storage.AuthorityVersion>> AdvanceAsync(AuthorityFenceChallenge c,AuthorityFenceAcknowledgment ack)
+        {Assert.True(ack.IsFor(c));return Task.FromResult<IReadOnlyList<Treehammock.SessionValidation.Storage.AuthorityVersion>>([c.Versions[0] with{Revision=c.Versions[0].Revision.Next(),Lifecycle=mutation=="deletion"?"Deleted":"Live"}]);}
+        public Task CommitAsync(object outcome)
+        {if(!UnknownCommit||AppliedBeforeLostAck)w.Mutate(mutation);if(UnknownCommit)throw new TimeoutException("Synthetic lost commit acknowledgment");return Task.CompletedTask;}
+        public ValueTask DisposeAsync(){if(_owned){_owned=false;w.Events.Add("writer-release");w.Guard.Release();}return ValueTask.CompletedTask;}
+    }
+    private sealed class Publication(RaceWorld w):ICommittedSessionPublication
+    {
+        public async Task PublishAsync(AuthorityCommitReceipt receipt,Guid account,string hash,CancellationToken caller)
+        {Assert.Equal(w.Version.Revision.Value,receipt.ForAccount(account).Value);w.Events.Add("publication");await w.Publisher().PublishAsync(account,hash,w.Golden.Now+Duration.FromSeconds(2),receipt.ForAccount(account).Value,caller);}
+    }
+}

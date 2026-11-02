@@ -1,0 +1,41 @@
+stages:
+  - system
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+
+variables:
+  DOCKER_BUILDKIT: "1"
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  BUILD_CONFIGURATION: "Release"
+
+docker-system-stack-tests:
+  image: docker:27-cli
+  stage: system
+  timeout: 60 minutes
+  services:
+    - name: docker:27-dind
+      alias: docker
+  before_script:
+    - apk add --no-cache bash python3
+    - chmod +x eng/*.sh
+    - docker version
+    - docker compose version
+  script:
+    - ./eng/docker-system-stack-tests.sh
+  after_script:
+    - python3 eng/test-ownership.py cleanup-ci
+  artifacts:
+    when: always
+    paths:
+      - artifacts/test-runs/**/compose-proof/**/run.json
+      - artifacts/test-runs/**/run.json
+      - artifacts/test-runs/**/cleanup.json
+      - artifacts/test-runs/**/rendered-ownership.json
+      - artifacts/test-runs/**/*.trx
+      - artifacts/test-runs/**/compose-proof/**/proof.json
+      - artifacts/test-runs/**/compose-proof/**/results.json
+      - artifacts/test-runs/**/compose-proof/**/results/*.trx
+    expire_in: 14 days

@@ -1,0 +1,1135 @@
+{
+  "schema_version": 1,
+  "baseline_pr": "COR22",
+  "status": "ScopedPendingImplementationAndQualification",
+  "followups": [
+    {
+      "pr": "COR23A",
+      "finding": "R06-01",
+      "priority": "P1",
+      "title": "All four activation repository methods commit with their reader still open.",
+      "dependencies": [
+        "COR01",
+        "COR03",
+        "COR19",
+        "COR23"
+      ],
+      "target_paths": [
+        "Repos/ActivationRepo.cs"
+      ],
+      "planned_regressions": [
+        "reader_disposed_before_commit_for_each_actual_repository_operation",
+        "independent_connection_observes_commit_and_denial_without_mutation"
+      ],
+      "current_recheck": "COR04 already explicitly disposes the four legacy readers before commit. Review actual current AdmitCreationAsync/TransitionAsync paths as well. COR19 denies legacy caller-selected activation writes; do not re-enable them to reproduce historical success. Source repair is not native closure. Retain R10G reader-lifetime refinement.",
+      "implementation_specification": "### COR23A \u2014 Close activation readers before completing transactions\n\n- **Owns:** R06-01 only. **Depends on:** COR01; coordinate repository lifetime/result contracts with COR03. **Gates:** real activation qualification in COR19\u201321 and COR24.\n- **Files:** `Repos/ActivationRepo.cs`; dedicated actual-repository tests in the SQL contract project. Avoid unrelated SQL state-machine edits in this PR.\n- **Implementation:** nested reader scopes for all four methods; materialize the full result; commit afterward; preserve rollback on read/SQL errors and typed dependency failures if COR03 has introduced them.\n- **Acceptance:** real pinned-Npgsql tests verify the returned result and committed state from another connection for all four operations, including false/no-row/failure cases. Source-string tests alone cannot close it.\n- **Migration/rollback:** no schema migration. Rollback restores the defect; do not roll back into a release that relies on functional activation writes. Re-run existing activation tests after rebasing into the trusted-grant workflow.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_06_Database_Repositories.md",
+      "review_sha256": "3ad0c6c80857d0dfcf532010078de5e036c1c45d18030873fdca6c1b3ccf286a",
+      "specification_sha256": "f79a74c4af4d297afedf5863c8b03859c9a98580d312f2b4e03a30f14fa6ea80",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23A_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "Cor23AActivationReaderTests.Legacy_denial_materializes_then_commits_receipt_without_restoring_paid_authority",
+        "Cor23AActivationReaderTests.Actual_admission_commits_budget_and_ticket_then_throttle_materializes_false",
+        "Cor23AActivationReaderTests.Actual_lifecycle_decodes_full_result_and_independent_observer_sees_committed_state",
+        "Cor23AActivationReaderTests.Missing_row_decode_and_sql_errors_roll_back_writes_and_release_the_single_pool_slot",
+        "Cor23AActivationReaderTests.Pinned_provider_rejects_receipt_command_inside_live_reader_then_commits_after_disposal"
+      ]
+    },
+    {
+      "pr": "COR23B",
+      "finding": "R06-02",
+      "priority": "P2",
+      "title": "Authenticator replacement and activation-disable fallback contain identifiers ambiguous with output variables.",
+      "dependencies": [
+        "COR01",
+        "COR02",
+        "COR16",
+        "COR19",
+        "COR23"
+      ],
+      "target_paths": [
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "Rigging/Database/Migrations/006_atomic_attempts_and_sensitive_grants.sql",
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23BSqlBindingTests.cs",
+        "eng/check-sql-output-bindings.py"
+      ],
+      "planned_regressions": [
+        "default_plpgsql_conflict_setting_executes_replacement_branches",
+        "disabled_legacy_activation_and_current_grant_branches_have_exact_results"
+      ],
+      "current_recheck": "Current pre-1.0 canonical setup and trusted-grant functions are authoritative. Legacy activation functions deny under COR19; test their denial and the current branch contracts. Do not restore old authority or introduce upgrade scripts. The surviving authorized replacement predicate is qualified. R23B-01/COR23AF separately blocks repository target agreement; SQL tests do not qualify that layer.",
+      "implementation_specification": "### COR23B \u2014 Remove output-variable ambiguity and execute SQL branches\n\n- **Owns:** R06-02 only. **Depends on:** COR01 and COR02's authoritative SQL delivery path. **Gates:** COR16's authenticator replacement and COR19's activation lifecycle qualification.\n- **Files:** both baselines or the schema generation/migration source; `begin_authenticator_app_setup`, `disable_activation`; executable SQL branch regressions.\n- **Implementation:** alias table column references in ambiguous branches; check other table-returning functions for the same pattern; preserve status result types and intended predicates. Keep the default PostgreSQL conflict setting.\n- **Acceptance:** all listed branch scenarios run under the supported PostgreSQL version/default setting. Assert exact status and durable state, including retained original setup on failed input and replacement of pending secret material on success.\n- **Migration/rollback:** function replacements with unchanged signatures can be staged atomically. Schema parity check remains required. A rollback that reinstates ambiguous branches reopens this finding.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_06_Database_Repositories.md",
+      "review_sha256": "3ad0c6c80857d0dfcf532010078de5e036c1c45d18030873fdca6c1b3ccf286a",
+      "specification_sha256": "2c09844e273a6cbb9c19f42c6c06b34b39b84191980db2d2e43986ad960b4129",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23B_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23C",
+      "finding": "R06-03",
+      "priority": "P2",
+      "title": "Retained revoked factors consume a smallint identity range and can permanently prevent new enrollment.",
+      "dependencies": [
+        "COR01",
+        "COR02",
+        "COR15",
+        "COR16",
+        "COR23"
+      ],
+      "target_paths": [
+        "Rigging/Database/Baseline/000_treehammock_canonical_database.sql",
+        "Repos/AccountRepo.cs",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "Rigging/Database/Migrations/002_transaction_authority.sql",
+        "Rigging/Database/Migrations/006_atomic_attempts_and_sensitive_grants.sql",
+        "Repos/AuthenticatorAppEnrollmentRepo.cs",
+        "Repos/PasswordResetTotpRepo.cs",
+        "Services/AuthenticatorAppProvisioningService.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23CFactorIdentityTests.cs",
+        "eng/check-factor-identities.py"
+      ],
+      "planned_regressions": [
+        "retained_revoked_history_exceeds_smallint_without_exhausting_enrollment_identity",
+        "reenrollment_identity_cannot_reuse_secret_binding_or_totp_replay"
+      ],
+      "current_recheck": "COR15 binds secret material to immutable enrollment identity. Inventory every short/TwoFactorIndex consumer and replay key before widening identity. Change initial setup directly; no deployed-data backfill or dual readers. Current factor row keys are noncycling bigint identities; enrollment UUID cryptographic/replay bindings remain unchanged. Native boundary and reader qualification remains pending.",
+      "implementation_specification": "### COR23C \u2014 Separate enrollment identity from the small display index\n\n- **Owns:** R06-03 only. **Depends on:** COR01/COR02 and coordination with COR15's identity-bound TOTP envelope migration. **Gates:** final enrollment/replay contract in COR16 and COR24.\n- **Files:** factor schema/allocator functions; enrollment and reset-TOTP repositories/records/readers; TOTP replay APIs and secret-binding logic; fixtures and migration tests. Inventory all `short TwoFactorIndex` consumers before choosing UUID/bigint.\n- **Implementation:** durable new identity, widened/updated function parameters and result types, backfilled stable mapping for existing rows, explicit history policy, fresh identity per enrollment. Reject cross-enrollment replay and preserve secret decryptability. Keep API display ordering separate.\n- **Acceptance:** boundary seed succeeds after migration; normal enrollment, replacement, removal and re-enrollment work; concurrent creation stays unique; old secrets and replay markers survive the migration; retired enrollments cannot regain authority.\n- **Migration/rollback:** prefer additive identity and a validated dual-read/backfill stage if any existing data must survive. Reverting to smallint allocation is unsafe after new identities exist. For a confirmed disposable greenfield environment, rebuild may be simpler, but deployment/data disposition must be established before selecting that path.\n\nCOR22 additionally owns the unmeasured query/index/pool observations above. COR23 must reconcile this report and the three partial test-source dispositions. COR24 requires all findings closed or explicitly dispositioned with runtime evidence and measured budgets; reaching 55 items in a ledger is not feature completion.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_06_Database_Repositories.md",
+      "review_sha256": "3ad0c6c80857d0dfcf532010078de5e036c1c45d18030873fdca6c1b3ccf286a",
+      "specification_sha256": "366a064a143f3b28be491c94c12a5b71ab203a3515d5f7243083557968544a28",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23C_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23D",
+      "finding": "R07-01",
+      "priority": "P2",
+      "title": "Test delivery and privileged inspection/seed capabilities can be enabled in any environment.",
+      "dependencies": [
+        "COR01",
+        "COR23"
+      ],
+      "target_paths": [
+        "Program.cs",
+        "Controllers/SystemTestAccountController.cs",
+        "Controllers/SystemTestDeliveryController.cs",
+        "Rigging/Hosting/SystemTestCapability.cs",
+        "Rigging/Hosting/SystemTestControllerFeatureProvider.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Rigging/Config/SystemTestSettings.cs",
+        "Services/SystemTesting/SystemTestDeliveryCapture.cs",
+        "treehammock.Tests/Integration/Cor23DTestIsolationTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23DTestCapabilityHttpTests.cs",
+        "docker-compose.integration.yml",
+        "eng/check-system-test-isolation.py",
+        "docker-compose.testing.yml",
+        "eng/docker-host-system-stack-tests.sh",
+        "eng/docker-host-system-stack-tests.ps1"
+      ],
+      "planned_regressions": [
+        "production_denies_enabled_test_seed_and_capture_configuration",
+        "owned_testing_profile_keeps_explicit_fixture_access"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding. Current composition grants fake delivery/capture only to explicit Testing. The same immutable capability gates MVC discovery and request keys. Invalid combinations fail startup; native host/provider/persistence qualification remains NotRun.",
+      "implementation_specification": "### COR23D \u2014 Isolate test-only delivery and privileged endpoints\n\n- **Owns:** R07-01. **Depends on:** COR01 test foundations; coordinate provider composition with the delivery program and startup configuration gate. **Gates:** COR24 production qualification.\n- **Files:** `Program.cs`, DI extensions, `SystemTestSettings`, both test controllers, test host/provider registrations and integration compose/test harness configuration.\n- **Implementation:** choose dedicated test composition or an isolated test-host capability; disallow production activation of fake delivery, capture and seeding; reject invalid flag/key combinations at startup. Keep intentional test-container lanes usable without equating generic Container with a safe test boundary.\n- **Acceptance:** host-start tests cover disabled/enabled flags in Production and every deployable profile, missing/wrong inspection keys, and the dedicated allowed test lane. Verify resolved production provider types, inability to reach privileged routes and lack of captured production proof material. Also verify intentional test delivery/seed flows still work.\n- **Migration/rollback:** configuration/composition change, no schema migration. Roll out explicit test-lane configuration with the harness; fail startup with actionable diagnostics. A rollback that allows production test mode reopens the finding.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_07_HTTP_Hosting_Configuration.md",
+      "review_sha256": "ab50a6d6690b0e7188ac96518cbc489249fc52feed20af580725d86f2b186ef4",
+      "specification_sha256": "fff1d5dc817cda3364f1dd821b2e00d4c20b06690aa10f3e8d166b5bb1da4e61",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23D_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23E",
+      "finding": "R07-02",
+      "priority": "P2",
+      "title": "Sensitive account/session responses and refreshed credentials lack an explicit no-store policy.",
+      "dependencies": [
+        "COR01",
+        "COR05",
+        "COR23",
+        "COR23F"
+      ],
+      "target_paths": [
+        "Program.cs",
+        "Controllers/AccountSessionController.cs",
+        "Rigging/Hosting/SecurityResponseCacheMiddleware.cs",
+        "Rigging/Hosting/HttpExceptionFallbackMiddleware.cs",
+        "Rigging/Authentication/SessionProtocol.cs",
+        "treehammock.Tests/Integration/Cor23ENoStoreHttpTests.cs",
+        "treehammock.Tests/Integration/Cor23EKestrelCacheTests.cs",
+        "treehammock.Tests/Infrastructure/Cor23EAuthorityFixture.cs",
+        "treehammock.Tests/Unit/Cor23EResponsePolicyTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor09RefreshHttpTests.cs",
+        "eng/check-security-response-cache.py"
+      ],
+      "planned_regressions": [
+        "success_validation_denial_outage_and_exception_responses_are_no_store",
+        "direct_and_forwarded_security_responses_do_not_enter_shared_cache"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding. Current host establishes no-store before transport, decoding, operation errors and authentication, then reasserts headers before transmission. Shared sanitized fallback is a privacy foundation; COR23F retains exact encoded-body errors and budgets. Native HTTP/cache/refresh qualification remains NotRun.",
+      "implementation_specification": "### COR23E \u2014 Enforce no-store across security responses\n\n- **Owns:** R07-02. **Depends on:** COR01; coordinate middleware order and response contracts with COR23F and session corrections COR05\u201307. **Gates:** COR24 HTTP/privacy qualification.\n- **Files:** pipeline/response policy, authentication short-circuits, security controllers and real HTTP/proxy-cache regressions.\n- **Implementation:** set no-store before token refresh and error handling; cover data, proofs, HTML and credential-control headers; make any future public caching an explicit opt-in. Avoid caching by credential-specific keys as a substitute.\n- **Acceptance:** real HTTP requests with both bearer and legacy headers receive no-store for profile/session success, authentication/validation failures, refreshed credentials and anonymous endpoints supplied with a token. Through a configured standards-compliant caching intermediary, requests from two accounts and an unauthenticated caller cannot receive one another's data/headers. Verify intended public opt-ins independently.\n- **Migration/rollback:** no data migration. Removing the policy reopens the privacy contract; compare cache traffic and latency without accepting cross-user reuse as a performance optimization.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_07_HTTP_Hosting_Configuration.md",
+      "review_sha256": "ab50a6d6690b0e7188ac96518cbc489249fc52feed20af580725d86f2b186ef4",
+      "specification_sha256": "f0c12cb2e4c917db116243a2d206e30729696bdc1d46c54d39e49a71de9f0be8",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23F"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23E_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23F",
+      "finding": "R07-03",
+      "priority": "P2",
+      "title": "Compressed-body failures have no application error boundary or stable API error contract.",
+      "dependencies": [
+        "COR01",
+        "COR23"
+      ],
+      "target_paths": [
+        "Program.cs",
+        "Rigging/Config/RequestBodySettings.cs",
+        "Rigging/Hosting/RequestBodyPolicy.cs",
+        "Rigging/Hosting/RequestBodyMiddleware.cs",
+        "Rigging/Hosting/StrictRequestBodyDecoder.cs",
+        "Rigging/Operations/SecurityOperationMiddleware.cs"
+      ],
+      "planned_regressions": [
+        "decoded_size_invalid_encoding_and_truncated_compression_have_exact_errors",
+        "cancellation_and_security_operation_reservation_remain_bounded"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding. Current source eagerly validates bounded complete compressed bodies before operation admission, with exact body errors and shared COR23E privacy/fallback. Explicit wire/decoded/deadline/capacity policy and native HTTP/TCP/resource/SQL regressions are implemented pending native qualification.",
+      "implementation_specification": "### COR23F \u2014 Bound encoded bodies and normalize HTTP errors\n\n- **Owns:** R07-03. **Depends on:** COR01 and shared error/result policy; coordinate ordering with COR23E. **Gates:** COR24 protocol qualification.\n- **Files:** pipeline, request-limit configuration, error envelope mapping, endpoint metadata and real Kestrel HTTP tests.\n- **Implementation:** explicit account-payload budgets, narrow encoded-body failure classification and sanitized unexpected-error handling; define unsupported/multiple encoding policy; preserve cancellation, no-store and correct logging without body/credential disclosure.\n- **Acceptance:** supported compressed valid JSON works; malformed/truncated gzip, deflate and Brotli get the declared envelope/status; below/at/over compressed and expanded limits behave correctly, including chunked requests without Content-Length. Unsupported/multiple encodings follow the policy. Ordinary malformed JSON retains its contract; unrelated application exceptions remain 500, cancellation does not become a fabricated success, and rejected bodies cannot trigger durable account writes. Run over Kestrel as well as in-process tests.\n- **Performance:** measure concurrent expansion/buffering CPU, memory, disk spill and p95/p99 latency within the configured limits. Record budgets and overload behavior under COR22.\n- **Migration/rollback:** document the new request contract and client limits. Tightened limits need compatibility checks; do not roll back by disabling all body limits.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_07_HTTP_Hosting_Configuration.md",
+      "review_sha256": "ab50a6d6690b0e7188ac96518cbc489249fc52feed20af580725d86f2b186ef4",
+      "specification_sha256": "ed8f8ed9518fffae61b0f80b6d305b3db5e6af09c6acf61a08838f070f75eab6",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23E"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23F_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23G",
+      "finding": "R07-04",
+      "priority": "P2",
+      "title": "Shipped verification-link origins disagree with shipped/documented hosting profiles.",
+      "dependencies": [
+        "COR01",
+        "COR23"
+      ],
+      "target_paths": [
+        "Rigging/Config/RegistrationSettings.cs",
+        "Rigging/Hosting/VerificationLinkBuilder.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Services/AccountService.cs",
+        "appsettings.LocalHttps.json",
+        "appsettings.ReverseProxy.json",
+        "appsettings.Container.json",
+        "appsettings.ContainerReverseProxy.json",
+        "Properties/launchSettings.json",
+        "docker-compose.integration.yml",
+        "docker-compose.api-proxy.yml",
+        "README.md"
+      ],
+      "planned_regressions": [
+        "each_public_profile_generates_reachable_same_origin_verification_links",
+        "untrusted_forwarded_host_cannot_change_link_origin"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding. Current source uses one validated configuration-owned PublicOrigin and fixed URI/escaped-payload routes. Local, edge and launch origins agree; generic ReverseProxy and Production require explicit HTTPS deployment input. Native capture/click/TLS/proxy and PostgreSQL proof acceptance are authored and remain NotRun.",
+      "implementation_specification": "### COR23G \u2014 Make verification origins match public hosting profiles\n\n- **Owns:** R07-04. **Depends on:** COR01 and the registration/email/deletion corrections, including R04-09's proof-consumption contract. **Gates:** COR24 end-to-end workflow completion.\n- **Files:** registration/public-origin settings and validation, hosting overlays, `AccountService` URL builders, compose environment, README and capture/click-follow tests.\n- **Implementation:** canonical validated origins per profile or required explicit startup input; production HTTPS; route-safe joining and encoded payloads; consolidate defaults without trusting Host/forwarded-Host input.\n- **Acceptance:** capture each generated registration, resend, email-change and deletion URL under LocalHttps, Container and proxy lanes; assert exact public scheme/authority/path and payload round-trip. Follow it through the appropriate listener and validate the intended confirmation/proof flow. Spoofed Host/proxy headers do not change emailed origins. Invalid/absent required production origin fails startup before delivery.\n- **Migration/rollback:** configuration change. Pending already-emailed URLs may require a bounded compatibility redirect or resend policy if such data exists; this project is described as undeployed, so establish deployment/data disposition before selecting a migration. A rollback must not silently restore unusable origins.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_07_HTTP_Hosting_Configuration.md",
+      "review_sha256": "ab50a6d6690b0e7188ac96518cbc489249fc52feed20af580725d86f2b186ef4",
+      "specification_sha256": "f10a228d5542f8ef2bc6ba3040dcdc59f51f4f12a5a21ff67c6f433dd22e8bf5",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23G_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23H",
+      "finding": "R08-01",
+      "priority": "P1",
+      "title": "SMTP explicitly disables TLS before authentication and security-mail submission.",
+      "dependencies": [
+        "COR01",
+        "COR23",
+        "COR23D"
+      ],
+      "target_paths": [
+        "Rigging/Config/SMTPSettings.cs",
+        "Rigging/Delivery/SmtpTransportPolicy.cs",
+        "Rigging/Delivery/SmtpClientFactory.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Services/SMTPService.cs",
+        "appsettings.json",
+        "appsettings.Example.json",
+        "appsettings.Testing.json",
+        "README.md",
+        "treehammock.Tests/Unit/Cor23HSmtpPolicyTests.cs",
+        "treehammock.Tests/Integration/Cor23HSmtpTransportTests.cs",
+        "treehammock.Tests/Infrastructure/Cor23HSmtpServer.cs"
+      ],
+      "planned_regressions": [
+        "valid_tls_certificate_and_expected_smtp_host_succeed",
+        "plaintext_untrusted_expired_wrong_host_and_tls_downgrade_are_denied"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding. Current COR23G outbox/capture contracts are preserved. Required STARTTLS or implicit TLS is explicit, certificates retain default production verification, plaintext needs exact Testing plus explicit permission and a literal loopback relay, and all mail paths share one immutable transport. Authored native relay/startup/certificate cases remain NotRun.",
+      "implementation_specification": "### COR23H \u2014 Require authenticated TLS for SMTP\n\n- **Owns:** R08-01. **Depends on:** COR01 and configuration composition; coordinate the isolated test relay with COR23D. Can be delivered before outbox migration.\n- **Files:** SMTP settings/validation/service, SMTP transport seam/controlled-server tests, deployment examples and exact-property-name tests.\n- **Implementation:** supported TLS enum/policy, required STARTTLS or implicit TLS production path, certificate validation and explicit isolated plaintext exception. Reject incompatible settings; sanitize auth/protocol diagnostics.\n- **Acceptance:** the transport matrix above runs against pinned MailKit; no AUTH/DATA before encryption; invalid certificates or unavailable required TLS fail closed; real local test lane remains usable. Exercise startup and published configuration.\n- **Migration/rollback:** configure relay mode/cert trust and credentials before rollout. Rotate exposed SMTP credentials if an actual insecure deployment is established. Do not roll back into plaintext production transport.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_08_Providers_Delivery_Templates.md",
+      "review_sha256": "a783fabb97066733ecd26d641e1f73eae02e9ab3d9e76ced8a6ef7e84c3c6430",
+      "specification_sha256": "a00b5febceadc443b624a08ca4901d333cdbd40654101187980a3727ecc546e1",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23H_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23I",
+      "finding": "R08-02",
+      "priority": "P2",
+      "title": "Unknown delivery outcomes become non-delivery, enabling blind fallback and destructive proof cleanup.",
+      "dependencies": [
+        "COR03",
+        "COR04",
+        "COR12",
+        "COR21",
+        "COR23",
+        "COR23H"
+      ],
+      "target_paths": [
+        "Rigging/Delivery/DeliveryModels.cs",
+        "Rigging/Sidewalk/ProviderDeliveryResult.cs",
+        "Services/SMTPService.cs",
+        "Services/SmsSender.cs",
+        "Rigging/Sidewalk/AWSService.cs",
+        "Services/DeliveryProviderAdapter.cs",
+        "Services/DeliveryOutboxWorker.cs",
+        "Repos/DeliveryOutboxRepo.cs",
+        "Services/TwoFactorAuthenticateService.cs",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "treehammock.Tests/Integration/Cor23ISmtpOutcomeTests.cs",
+        "treehammock.Tests/Unit/Cor23IProviderOutcomeTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor12DeliveryOutboxTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor21ActivationCreationTests.cs"
+      ],
+      "planned_regressions": [
+        "unknown_acceptance_preserves_durable_proof_and_prevents_unsafe_fallback",
+        "definite_rejection_and_accepted_outcomes_have_distinct_cleanup"
+      ],
+      "current_recheck": "COR12/COR21 now use durable encrypted outbox delivery. Reconcile acceptance-unknown semantics with current job states and proof validity; no unconditional compensation or second-provider retry on uncertainty. Current COR23H TLS is preserved. Unknown provider outcomes stop fallback and retry; SQL attempt UUIDs/receipts fence late results and replay, encrypted quarantine is TTL bounded, and explicit cancellation remains authoritative. Durable reset/email/delete/activation producers already retain COR12 proof ownership and require no new compensation. Native regression execution remains NotRun.",
+      "implementation_specification": "### COR23I \u2014 Preserve unknown acceptance and constrain retries/cleanup\n\n- **Owns:** R08-02. **Depends on:** COR03 typed failures, COR04 operation identity and COR12 outbox/proof lineage; coordinate activation producers with COR21.\n- **Files:** provider result/SMTP/SMS contracts and adapters; outbox attempt/receipt schema/worker; reset, email, deletion and activation caller cleanup; acknowledgement-loss tests.\n- **Implementation:** immutable attempt identity and explicit Accepted/NotSubmitted/Rejected/Unknown state, safe retry table per provider/error, bounded reconciliation/retention, ciphertext payload ownership and idempotent caller outcomes. Preserve explicit security revocation even when delivery is unknown. Specify tolerated duplicate behavior where providers cannot deduplicate.\n- **Acceptance:** accepted-then-lost responses and malformed success receipts cannot trigger blind cross-provider sends or immediate non-delivery cleanup. Definite failures still permit the intended cleanup/retry. Verify job receipt/proof state after crash/restart and response replay, with current version/expiry. No outbox-only exactly-once claim is accepted.\n- **Migration/rollback:** version delivery results and producer/worker payloads; backfill pending state only when authority can be established. Do not allow old workers/callers to consume Unknown as false. Drain compatible jobs before removing keys or reverting consumers.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_08_Providers_Delivery_Templates.md",
+      "review_sha256": "a783fabb97066733ecd26d641e1f73eae02e9ab3d9e76ced8a6ef7e84c3c6430",
+      "specification_sha256": "03e4a588eda98ffa385bec5cce6babea09a2330bc9075fae1cf71935d3fff506",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23J",
+        "COR23K"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23I_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23J",
+      "finding": "R08-03",
+      "priority": "P2",
+      "title": "Delivery cancellation stops at callers and adapters lack an aggregate application deadline.",
+      "dependencies": [
+        "COR03",
+        "COR12",
+        "COR23",
+        "COR23I"
+      ],
+      "target_paths": [
+        "Rigging/Delivery/DeliveryExecutionPolicy.cs",
+        "Rigging/Config/DeliveryOutboxSettings.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Services/DeliveryOutboxWorker.cs",
+        "Repos/DeliveryOutboxRepo.cs",
+        "Services/SMTPService.cs",
+        "Services/SmsSender.cs",
+        "Rigging/Sidewalk/AWSService.cs",
+        "Services/TwoFactorAuthenticateService.cs",
+        "Services/SystemTesting/SystemTestDeliveryCapture.cs",
+        "Services/SystemTesting/SystemTestSmtpService.cs",
+        "Services/SystemTesting/SystemTestSmsSender.cs",
+        "Controllers/AccountControllerBase.TwoFactorHelpers.cs",
+        "Controllers/AccountTwoFactorController.cs",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "treehammock.Tests/Unit/Cor23JDeliveryBudgetTests.cs",
+        "treehammock.Tests/Unit/Cor23JLoginCancellationTests.cs",
+        "treehammock.Tests/Integration/Cor23JTransportDeadlineTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor12DeliveryOutboxTests.cs"
+      ],
+      "planned_regressions": [
+        "overall_deadline_bounds_all_transport_attempts",
+        "request_cancellation_reaches_transport_without_unbounded_retry"
+      ],
+      "current_recheck": "Rebased onto completed COR23I. One immutable total/per-attempt policy spans throttle/provider chains, bounds unfinished work and observes cancelled task completion without releasing capacity early. Request abortion reaches legacy/capture/SDK/HTTP/SMTP operations; committed jobs use independent worker budgets. Live lease/domain/expiry authority is checked before attempts, including fallback. Accepted/Unknown shutdown/late receipts preserve current proof lineage; login uncertainty cannot trigger generic cleanup. Native blocked-phase/socket/SQL/capacity-profile regression execution remains NotRun.",
+      "implementation_specification": "### COR23J \u2014 Propagate cancellation and bound delivery work\n\n- **Owns:** R08-03. **Depends on:** COR03 and coordination with COR12/COR23I state semantics.\n- **Files:** all delivery/provider interfaces and adapters, caller/throttle paths, worker policy and settings; controllable cancellation/latency tests.\n- **Implementation:** total/per-attempt deadlines and bounded worker concurrency, cancellation-aware SDK/HTTP/SMTP calls, expiry/authority check before attempts, no fallback after budget exhaustion, phase-aware cancellation outcome. Request and durable-job lifetimes remain distinct.\n- **Acceptance:** blocked phase tests observe propagated cancellation and released local capacity; no new provider work starts after expiry/deadline; possible remote acceptance remains unknown. Accepted durable jobs survive client disconnect under their own bounded lifecycle. Profile under hung primary plus secondary/retry workloads.\n- **Migration/rollback:** introduce validated budgets and document compatibility. Preserve accepted job ownership at shutdown and across worker versions; rollback may adjust budgets but cannot erase uncertain attempts or remove all limits.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_08_Providers_Delivery_Templates.md",
+      "review_sha256": "a783fabb97066733ecd26d641e1f73eae02e9ab3d9e76ced8a6ef7e84c3c6430",
+      "specification_sha256": "40427f86e2ccc7a78d7072f0efb28169b2d58603b17dc094e143f4e28c77ae6b",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23J_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23K",
+      "finding": "R08-04",
+      "priority": "P2",
+      "title": "Recipient/configuration failures can trip a channel-wide cooldown for unrelated users.",
+      "dependencies": [
+        "COR05",
+        "COR12",
+        "COR23",
+        "COR23I"
+      ],
+      "target_paths": [
+        "Services/DeliveryAbuseThrottleService.cs",
+        "Rigging/Delivery/ProviderHealth.cs",
+        "Rigging/Config/ProviderHealthSettings.cs",
+        "Rigging/Abuse/Scripts/provider-health-acquire-v1.lua",
+        "Rigging/Abuse/Scripts/provider-health-complete-v1.lua",
+        "Rigging/Abuse/AbuseCounterScripts.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Rigging/Delivery/DeliveryModels.cs",
+        "Rigging/Sidewalk/ProviderDeliveryResult.cs",
+        "Services/SMTPService.cs",
+        "Services/SmsSender.cs",
+        "Rigging/Sidewalk/AWSService.cs",
+        "treehammock.Tests/Unit/Cor23KProviderHealthTests.cs",
+        "treehammock.Tests/Integration/Cor23KSmtpHealthTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23KProviderHealthCacheTests.cs"
+      ],
+      "planned_regressions": [
+        "recipient_rejection_does_not_disable_provider_for_other_recipients",
+        "provider_outage_opens_and_recovers_bounded_health_circuit"
+      ],
+      "current_recheck": "Rebased onto completed COR23J. Recipient/configuration/cancellation failures no longer mutate channel-wide cooldowns. Separate provider-route outage evidence owns atomic versioned expiring health state with bounded permits, exact generation/ID replay fences and one half-open probe. Healthy selection respects existing Unknown and aggregate/current-authority fences; emergency stops and user admission budgets remain independent. Actual multi-instance cache and HTTP/SMTP/SDK regressions remain NotRun.",
+      "implementation_specification": "### COR23K \u2014 Separate recipient failures from provider health circuits\n\n- **Owns:** R08-04. **Depends on:** COR05 atomic cache windows and COR23I typed provider outcomes; coordinate COR12 delivery admission and R09 abuse-policy audit.\n- **Files:** DeliveryAbuseThrottleService/request/result policy, delivery callers, circuit keys and telemetry, real-cache/multiple-instance tests.\n- **Implementation:** classify circuit-eligible failures, bounded provider/account/region key space, recipient-specific failure policy, explicit emergency channel breaker and safe healthy-provider selection. Preserve account/destination/IP budgets.\n- **Acceptance:** bad recipients cannot block unrelated valid users; healthy providers remain usable under the safe retry policy; actual provider outage opens only intended circuits; recovery/half-open probes are bounded. Verify real-cache threshold and existing atomicity rules under concurrency, not just a mock key assertion.\n- **Migration/rollback:** version circuit keys and let old ephemeral channel keys expire or deliberately disregard them after policy rollout. Never clear durable user budgets as circuit migration. Reverting global recipient-driven gating reopens the finding.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_08_Providers_Delivery_Templates.md",
+      "review_sha256": "a783fabb97066733ecd26d641e1f73eae02e9ab3d9e76ced8a6ef7e84c3c6430",
+      "specification_sha256": "68510e6843b26b1626a1cd9e5081c65100cc5305294d9b80c59149a07d2eaa0c",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23K_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23L",
+      "finding": "R08-05",
+      "priority": "P2",
+      "title": "Enabled Twilio routing passes startup validation with missing required transport settings.",
+      "dependencies": [
+        "COR01",
+        "COR23",
+        "COR23D"
+      ],
+      "target_paths": [
+        "Program.cs",
+        "Rigging/Config/SidewalkSettings.cs",
+        "Rigging/Config/ConfigurationValidation.cs",
+        "Rigging/Config/TwilioTransportConfiguration.cs",
+        "Rigging/Config/SmsConfigurationCommand.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Services/SmsSender.cs",
+        "appsettings.Example.json",
+        "deploy/sms-twilio.env.example",
+        "eng/validate-sms-config.sh",
+        ".github/workflows/treehammock-ci.yml",
+        "treehammock.Tests/Integration/Cor23LTwilioStartupTests.cs",
+        "treehammock.Tests/Unit/Cor23LTwilioConfigurationTests.cs"
+      ],
+      "planned_regressions": [
+        "selected_twilio_transport_rejects_missing_required_settings_at_startup",
+        "valid_selected_transport_succeeds_without_unselected_provider_secrets"
+      ],
+      "current_recheck": "Rebased onto completed COR23K. Enabled normalized primary/secondary physical Twilio selection now requires local AC account SID, bounded opaque auth token and supported E.164 phone sender shape through ValidateOnStart; diagnostics contain setting names only. Disabled/unselected transport credentials remain optional. Immutable COR23D exact Testing capture retains its physical-adapter isolation; deployment preflight refuses capture and never starts dependencies or checks remote readiness. Runtime non-submission guard retained and strengthened. Actual host/preflight/native adapter regression execution remains NotRun.",
+      "implementation_specification": "### COR23L \u2014 Validate selected SMS transport prerequisites at startup\n\n- **Owns:** R08-05. **Depends on:** COR01/configuration tests; coordinate COR23D test-host composition and deployment/readiness policy.\n- **Files:** SidewalkSettings/ConfigurationValidation, startup tests, deployment examples/readiness diagnostics; retain adapter runtime guards.\n- **Implementation:** conditional local prerequisite validation for selected enabled Twilio routes and supported sender format; unused/disabled routes remain optional. Emit setting names only. Keep remote credential validity/readiness separate from static validation.\n- **Acceptance:** real host startup matrix rejects each missing prerequisite in primary/secondary positions; valid and disabled-provider matrices pass; diagnostics/logs contain no credential values. Verify missing secondary cannot masquerade as available failover.\n- **Migration/rollback:** update secret/config provisioning before enabling routes; validate configuration in deployment CI. No database migration; remove/disable unusable routes explicitly rather than continuing silently.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_08_Providers_Delivery_Templates.md",
+      "review_sha256": "a783fabb97066733ecd26d641e1f73eae02e9ab3d9e76ced8a6ef7e84c3c6430",
+      "specification_sha256": "0a50e90f5ac6c6a43b8037f39086fd030eda25c9ecb56bbfa02ce2e9461c0081",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23L_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23M",
+      "finding": "R09-01",
+      "priority": "P2",
+      "title": "Conditional PostgreSQL counter fallback unconditionally allows Redis-only policies on cache failure.",
+      "dependencies": [
+        "COR03",
+        "COR05",
+        "COR08",
+        "COR12",
+        "COR23"
+      ],
+      "target_paths": [
+        "Rigging/Abuse/AbuseCounterPolicyCatalog.cs",
+        "Rigging/Abuse/AbuseModels.cs",
+        "Rigging/Abuse/DragonflyAbuseCounterStore.cs",
+        "Rigging/Abuse/PostgreSqlAbuseBudgetStore.cs",
+        "Rigging/Config/AbuseControlSettings.cs",
+        "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs",
+        "Services/PostgreSqlAbuseBudgetCleanupWorker.cs",
+        "Services/DeliveryAbuseThrottleService.cs",
+        "Controllers/AccountControllerBase.LoginHelpers.cs",
+        "Controllers/AccountControllerBase.TwoFactorHelpers.cs",
+        "Services/PasswordResetService.cs",
+        "Services/PasswordResetPublicGate.cs",
+        "Services/AccountService.cs",
+        "Services/AccountRecoveryService.cs",
+        "Services/ActivationService.cs",
+        "Rigging/Abuse/SignupAdmissionPolicy.cs",
+        "Rigging/Abuse/SensitiveActionAdmissionPolicy.cs",
+        "Rigging/Database/Migrations/001_legacy_baseline.sql",
+        "treehammock.Tests/Integration/Cor23MBudgetStartupTests.cs",
+        "treehammock.Tests/Unit/Cor23MAuthoritativeBudgetTests.cs",
+        "treehammock.Tests.SqlContracts/Integration/Database/Cor23MAbuseBudgetTests.cs"
+      ],
+      "planned_regressions": [
+        "cache_failure_denies_redis_only_policy_without_sql_write",
+        "sql_supported_policy_falls_back_atomically_without_lost_limits"
+      ],
+      "current_recheck": "Rebased onto completed COR23L. RequirePostgreSqlBudgetV1 explicitly selects only supported Login/Delivery policies and their Account/IdentifierFingerprint/IpFingerprint dimensions. The same durable fixed-window/cooldown budget is enforced on healthy-cache and outage requests before work; cache denial remains conservative. Other policies/dimensions fail closed on cache failure with no SQL writes. PostgreSQL failure/uncertainty is explicit unavailable and cannot authorize cache/hash/provider work. Runtime selections are snapshotted; startup rejects unsupported, duplicate, empty and obsolete mode configuration. Real multi-owner cache/PostgreSQL threshold/recovery/lock/expiry regressions are authored NotRun.",
+      "implementation_specification": "### COR23M \u2014 Enforce per-policy authoritative fallback\n\n- **Owns:** R09-01. **Depends on:** COR03 typed dependency outcomes and COR05 atomic budgets; coordinate delivery admission with COR12 and login with COR08.\n- **Files:** abuse contracts/settings/store, every admission policy caller, durable budget schema/repositories where fallback is supported, startup validation and real outage/concurrency tests.\n- **Implementation:** policy/dimension capability catalog, explicit unavailable outcome, equivalent durable admission before allow, startup rejection for unsupported fallback configuration. Specify FailClosed and safe degraded behavior per policy. Preserve durable proof/account limits and count infrastructure failure separately.\n- **Acceptance:** Redis failure cannot permit a policy lacking its equivalent enforced durable limit; PostgreSQL failure cannot turn a fallback into allow. Real multi-instance threshold/window matrix passes and denied delivery/hash work is not invoked.\n- **Migration/rollback:** deploy durable schema and owner paths before enabling fallback. Existing alternative-mode deployments should use FailClosed until their policy matrix is supported. Version fallback semantics; rollback must retain enforced budgets or disable unsupported modes, never silently reopen admission.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_09_Health_Abuse_Observability_Replay.md",
+      "review_sha256": "2d3f0bea3355eaa7e3a331944e4dda93da64cd4a0495df1e5c6ff59abe6d585c",
+      "specification_sha256": "99aca901b0d3e6c84718a4d9c20519c77aebbcf69f2c7060db74b64171773c00",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23M_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23N",
+      "finding": "R09-02",
+      "priority": "P2",
+      "title": "Health cache initialization races disposable clients without an exclusive lifecycle/disposal owner.",
+      "dependencies": [
+        "COR03",
+        "COR23"
+      ],
+      "target_paths": [
+        "Rigging/Health/HealthDependencyService.cs"
+      ],
+      "planned_regressions": [
+        "concurrent_probe_initialization_creates_one_owned_client",
+        "disposal_cannot_destroy_shared_client_or_leak_losing_initialization"
+      ],
+      "current_recheck": "COR03 introduced CacheConnectionOwner and changed ownership. Establish whether the recorded race survives current source; test actual owner and health lifetimes before changing code. Keep the finding open pending native qualification.",
+      "implementation_specification": "### COR23N \u2014 Give cache health clients a single owner\n\n- **Owns:** R09-02. **Depends on:** COR03 lifecycle/client abstraction; coordinate COR23O probe isolation.\n- **Files:** HealthDependencyService, cache client ownership/factories and DI, host lifecycle tests and cache connection diagnostics.\n- **Implementation:** one asynchronous shared initializer per logical owned client, explicit bounded retry/backoff after failure, exact ownership/disposal contract for borrowed versus dedicated clients. Remove PublicationOnly creation of disposable resources.\n- **Acceptance:** simultaneous first probes create only the intended clients; initialization failure recovers; host shutdown disposes all owned clients exactly once. Repeated starts and startup bursts show bounded connected-client/handle counts.\n- **Migration/rollback:** no data migration; roll client composition coherently and distinguish old/new client names during qualification. Avoid shared-client double disposal. Rollback to racing unowned initialization reopens the finding.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_09_Health_Abuse_Observability_Replay.md",
+      "review_sha256": "2d3f0bea3355eaa7e3a331944e4dda93da64cd4a0495df1e5c6ff59abe6d585c",
+      "specification_sha256": "64f808551cb9d3c7ae330e3587ccb8dafa61614b806e17bb4d103a4b323f3752",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23O"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23N_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23O",
+      "finding": "R09-03",
+      "priority": "P2",
+      "title": "Readiness lacks an aggregate deadline and acquisition/connect/PING are outside caller cancellation.",
+      "dependencies": [
+        "COR03",
+        "COR22",
+        "COR23",
+        "COR23N"
+      ],
+      "target_paths": [
+        "Rigging/Health/HealthDependencyService.cs"
+      ],
+      "planned_regressions": [
+        "aggregate_readiness_deadline_bounds_acquisition_and_ping",
+        "cancelled_probe_releases_owned_resources_without_poisoning_next_probe"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23O \u2014 Bound readiness work and isolate probe lifetimes\n\n- **Owns:** R09-03. **Depends on:** COR03 cancellation-aware acquisition, COR23N owner initialization; coordinate deployment probe thresholds with R10/COR23 and measurements with COR22.\n- **Files:** health settings/validation/service/controllers, StorageContext acquisition interface, cache probe adapters, host/system fault tests and deployment probe documentation.\n- **Implementation:** validated total/per-dependency budgets, early cancellation, database acquisition/command propagation, bounded waiting on Redis work, late-completion observation and concurrency controls. Use single-flight/sampling with explicit report age. Document connectivity/capability and required/degradable dependency policy; retain cheap liveness.\n- **Acceptance:** controlled hangs and pre-canceled requests pass the phase matrix above. Outage probes finish within the declared budget/tolerance without unbounded residual work; recovery and freshness bounds hold under concurrent probes and pool pressure.\n- **Migration/rollback:** tune application budgets below deployment readiness deadlines using measurements. Publish staleness/cancellation semantics. No schema change for basic probes; capability probes require safe namespacing/cleanup if introduced. Rollback cannot discard all bounds or hide unhealthy state in stale success.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_09_Health_Abuse_Observability_Replay.md",
+      "review_sha256": "2d3f0bea3355eaa7e3a331944e4dda93da64cd4a0495df1e5c6ff59abe6d585c",
+      "specification_sha256": "1d79af764bdef7b7007e71c13721c63f768c3598d1be311791761aa95006e469",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23O_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23P",
+      "finding": "R09-04",
+      "priority": "P2",
+      "title": "Cooldown metrics count repeated observations as starts and policy denial may be recorded twice.",
+      "dependencies": [
+        "COR05",
+        "COR22",
+        "COR23",
+        "COR23K",
+        "COR23M"
+      ],
+      "target_paths": [
+        "Rigging/Observability/AbuseOperationalTelemetry.cs"
+      ],
+      "planned_regressions": [
+        "one_real_cooldown_transition_counts_once",
+        "one_denied_request_counts_once_and_metric_labels_are_bounded"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23P \u2014 Make operational counts represent real transitions\n\n- **Owns:** R09-04. **Depends on:** COR05 atomic cooldown transition result; coordinate COR23K circuit classification and COR22 telemetry/dashboard definitions.\n- **Files:** abuse counter decision/transition models/store, AbuseOperationalTelemetry and policy callers, dashboard/query documentation, MeterListener and real-cache concurrency tests.\n- **Implementation:** cooldown-created flag emitted by the actual atomic state transition, separate blocked-attempt metric, explicit counting owner/layer, bounded tag catalog and tests observing values. Remove implicit start recording from generic denied observations.\n- **Acceptance:** one start per real transition, no start on repeat denial or losing SET-NX contender, one outcome per documented layer and no sensitive tag material. Dashboard queries use the new counting contract and pass synthetic series scenarios.\n- **Migration/rollback:** version/rename metrics when changing semantics; update dashboards/alerts with rollout to avoid mixing definitions. Do not rename persisted cache keys solely for telemetry. Preserve old dashboards temporarily only with a clear compatibility period; reverting inflated metrics reopens correctness concerns.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_09_Health_Abuse_Observability_Replay.md",
+      "review_sha256": "2d3f0bea3355eaa7e3a331944e4dda93da64cd4a0495df1e5c6ff59abe6d585c",
+      "specification_sha256": "127441c0bc29ff963ce15f6570afead95f51717d34b4c04cb7e3a6a07896b4f3",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23P_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23Q",
+      "finding": "R10A-01",
+      "priority": "P2",
+      "title": "PowerShell validation/proof runners do not stop reliably on native command failures.",
+      "dependencies": [
+        "COR23"
+      ],
+      "target_paths": [
+        "eng/validate.ps1"
+      ],
+      "planned_regressions": [
+        "native_failure_stops_every_powershell_wrapper_and_propagates_exit",
+        "restore_build_and_test_failure_cannot_be_followed_by_success_evidence"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23Q \u2014 Make validation failures stop every proof runner\n\n- **Owns:** R10A-01. **Depends on:** tooling host/version policy; coordinate qualification orchestration with COR24. This can ship before application fixes.\n- **Files:** all PowerShell validation/restore/build/test/proof scripts, a shared native invocation helper, executable runner tests and supported-host documentation. Extend the audit to remaining Docker/release PowerShell wrappers in R10B.\n- **Implementation:** immediate native exit capture, sanitized stage/code errors, explicit nonzero top-level propagation and first-failure stop across nested scripts. Avoid shell-profile-dependent behavior and completion output after failure.\n- **Acceptance:** the injected stage matrix and real failing fixtures pass under each supported host and entry mode; later successful stages cannot mask a failure. Existing passing lanes remain usable; Bash and PowerShell share the same proof semantics.\n- **Migration/rollback:** publish minimum supported PowerShell version or preserve compatible explicit exit checks. No database migration. A wrapper rollback must retain failure propagation; never accept a green result from an unchecked failing stage.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10A_Build_Dependencies_Validation.md",
+      "review_sha256": "5a39eca1d1d3961262151af630cd13f31feec12a95011ec2367008784ed37f71",
+      "specification_sha256": "4713c7766ac9b589f37f7a48dcb5785e9cb46401bd5f87c77ad8c545bc99451e",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23Q_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23R",
+      "finding": "R10A-02",
+      "priority": "P2",
+      "title": "Coverage switches request XPlat Code Coverage while its collector is explicitly excluded.",
+      "dependencies": [
+        "COR23",
+        "COR23Q"
+      ],
+      "target_paths": [
+        "treehammock.Tests/treehammock.Tests.csproj"
+      ],
+      "planned_regressions": [
+        "locked_Microsoft_CodeCoverage_Code_Coverage_emits_nonempty_application_Cobertura_on_actual_supported_hosts",
+        "absent_collector_missing_stale_empty_output_or_zero_discovery_fails_and_test_failure_exit_is_retained",
+        "eng/test-coverage-contract.py: unit-known-positive-branch, integration-known-negative-branch, collector-absent, zero-discovery, test-failure-retained, stale-sibling-cannot-satisfy-new-run, real-project-clean-fast-lanes, application-publish-has-no-test-collector"
+      ],
+      "current_recheck": "The current implementation selects the locked private Microsoft.CodeCoverage 17.14.1 collector through Microsoft.NET.Test.Sdk, with friendly name Code Coverage, explicit application-only Cobertura and unchanged Coverlet exclusion/locks. eng/check-coverage-contract.py and synthetic mutation/result checks are supplemental. Execute eng/test-coverage-contract.py on each actual supported host for known positive/negative branch measurements, clean unit/integration lanes, absent/stale/empty/zero-discovery failures, original test-failure exit and collector-free application publish. Native collector/coverage/host qualification remains NotRun; do not reinstate the obsolete XPlat collector acceptance.",
+      "implementation_specification": "### COR23R \u2014 Deliver a real coverage collection contract\n\n- **Owns:** R10A-02. **Depends on:** collector/test-platform selection; coordinate COR23Q and COR24 artifact policy.\n- **Files:** central package versions and test project/lock files if adding a collector; coverage flags in runners, dependency-boundary tests, result/artifact checks and test-command documentation. CI collection/upload integration follows in its pipeline owner work.\n- **Implementation:** compatible private test-only collector or correct existing collector name, explicit format/output location, clean per-run artifact identity and mandatory parse/content validation whenever collection is requested. Update the test that currently forbids Coverlet if that route is selected.\n- **Acceptance:** clean unit/integration lanes produce a parseable nonempty coverage artifact on supported systems. Missing collector and stale/empty output fail the coverage contract; test failures still fail. A known-branch fixture verifies actual measurement and application publish has no test collector dependency.\n- **Migration/rollback:** commit regenerated locks with the package/tool choice and update consumers to the declared format. No schema change. If collector compatibility breaks, fail or explicitly disable the optional feature with an honest diagnostic; do not claim coverage was collected.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10A_Build_Dependencies_Validation.md",
+      "review_sha256": "5a39eca1d1d3961262151af630cd13f31feec12a95011ec2367008784ed37f71",
+      "specification_sha256": "ab687e43ef6338e90d2dc2aa4b7463caac18a9ed0ebd20be3b5de308baff9144",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23R_IMPLEMENTATION.md",
+      "current_note_history": [
+        {
+          "pr": "COR25.38",
+          "previous_current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+          "previous_planned_regressions": [
+            "real_xplat_collector_is_discovered_and_emits_nonempty_coverage",
+            "absent_collector_missing_output_or_zero_discovery_fails"
+          ],
+          "reason": "Reconcile current implemented collector/predecessor contract without rewriting frozen specification or crediting native qualification."
+        }
+      ]
+    },
+    {
+      "pr": "COR23S",
+      "finding": "R10A-03",
+      "priority": "P2",
+      "title": "Sandbox solution mappings build Debug test output but runners request Sandbox with no build.",
+      "dependencies": [
+        "COR23",
+        "COR23Q"
+      ],
+      "target_paths": [
+        "treehammock.sln"
+      ],
+      "planned_regressions": [
+        "sandbox_build_and_no_build_tests_use_same_output_configuration",
+        "clean_build_discovery_and_result_identity_agree"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23S \u2014 Align build and test configuration identity\n\n- **Owns:** R10A-03. **Depends on:** COR23Q runner reliability; coordinate Docker configuration handling and COR24 proof artifacts.\n- **Files:** both solution configuration maps, test project/configuration policy as needed, local and Docker test runners, loaded-assembly/path tests and configuration documentation.\n- **Implementation:** one explicit build/test configuration contract, corresponding no-build output checks, and deliberate application-reference configuration. Remove unsupported choices or give them fully aligned mappings; prevent stale binaries from satisfying a fresh proof.\n- **Acceptance:** clean Debug/Release/Sandbox lanes run the newly built intended application/test assemblies in Bash and PowerShell. SQL runs use an isolated disposable database. Stale output cannot substitute for a missing current build.\n- **Migration/rollback:** invalidate incompatible cached build output and update runner/solution maps together. No data migration. Rollback may remove Sandbox support explicitly, but cannot retain a mismatched advertised lane.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10A_Build_Dependencies_Validation.md",
+      "review_sha256": "5a39eca1d1d3961262151af630cd13f31feec12a95011ec2367008784ed37f71",
+      "specification_sha256": "8a113f4338111e49c933e5ff70ba07b07f3b00b6719a192c8c22c3590dec40f6",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23S_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23T",
+      "finding": "R10B-01",
+      "priority": "P2",
+      "title": "Manual release inputs are substituted directly into a privileged shell before validation.",
+      "dependencies": [
+        "COR23"
+      ],
+      "target_paths": [
+        ".github/workflows/treehammock-release.yml"
+      ],
+      "planned_regressions": [
+        "untrusted_manual_version_is_validated_as_data_before_privileged_shell",
+        "invalid_version_and_command_substitution_cannot_execute_or_publish"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23T \u2014 Separate release inputs from shell code and scope credentials\n\n- **Owns:** R10B-01. **Dependencies:** repository permission/protected-ref policy; coordinate COR23U canonical source identity. Can ship before application corrections.\n- **Files:** GitHub release workflow, metadata resolution helper if extracted, behavioral Actions/helper fixtures and release policy documentation.\n- **Implementation:** environment-backed inputs, pre-resolution validation, option-safe ref resolution to immutable SHA; read-only preflight/validation tokens and write privileges only for necessary publish jobs. Carry explicit outputs instead of reparsing unsafe inputs in later jobs.\n- **Acceptance:** harmless injection fixtures never execute; malformed/option-like/multiline inputs fail before side effects. Valid bootstrap/manual recovery preserves intended policy. Verify actual dispatch authority and job token permissions in a disposable repository.\n- **Migration/rollback:** adjust workflow permission declarations and any required environment policies together. No schema migration. Rollback may disable manual dispatch temporarily but must retain the data/code boundary.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10B_CI_Release_Containers_Deployment.md",
+      "review_sha256": "76842b9134b5bd3c6aa862506dccdf184fa63f9e0590f5b30ae5facafcce1006",
+      "specification_sha256": "c23d87a88b94f2a8bc57c6c4e7fdc2f824e92720aa8b2be8319149774c7635d4",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23U"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23T_IMPLEMENTATION.md"
+    },
+    {
+      "pr": "COR23U",
+      "finding": "R10B-02",
+      "priority": "P2",
+      "title": "Release archive/image version and SHA labels are not bound consistently to the built artifact.",
+      "dependencies": [
+        "COR23",
+        "COR23Q",
+        "COR23S",
+        "COR23T"
+      ],
+      "target_paths": [
+        ".github/workflows/treehammock-release.yml",
+        "eng/release-proof.sh"
+      ],
+      "planned_regressions": [
+        "source_archive_image_and_tested_digest_share_version_and_commit",
+        "mismatched_sha_version_or_digest_blocks_release"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23U \u2014 Bind release artifacts to one source, version and tested digest\n\n- **Owns:** R10B-02. **Dependencies:** COR23T safe metadata; COR23S build/test configuration identity; COR24 artifact execution policy. No dependency on arbitrary activation product changes.\n- **Files:** GitLab/GitHub release workflows, shared publisher, Dockerfile, MSBuild identity inputs, manifest/checksum tooling, artifact inspection tests and release docs.\n- **Implementation:** validate canonical semantic version/base assembly version and source SHA once. Override all fixed release properties consistently during build, including the build stage preceding no-build publish. Populate OCI version/revision labels. Build an immutable candidate, record resolved bases and content digest, exercise the candidate and promote/copy that digest to enabled registries. Record each registry outcome, source/build identity and archive hashes in a release manifest. Use checkout SHA for SHA tags. Define later-version release policy separately from the deliberate GitHub bootstrap restriction.\n- **Acceptance:** inspect real archives/images for v1.1.0 and prerelease identities; prove trigger/checkout divergence cannot mislabel contents. Verify the tested and promoted digest match, immutable inputs are recorded, latest remains stable-only, and partial multi-registry failures produce honest recoverable status. Test against disposable registries without publication to production.\n- **Migration/rollback:** retain legacy tag aliases only with explicit digest/source mapping; document previously ambiguous metadata rather than fabricating provenance. Promote known verified digests for rollback. No database migration; never rebuild an old tag and assume identical bytes.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10B_CI_Release_Containers_Deployment.md",
+      "review_sha256": "76842b9134b5bd3c6aa862506dccdf184fa63f9e0590f5b30ae5facafcce1006",
+      "specification_sha256": "d0ef9ad19f44726a71ce06cf580b050d4e4deaca782a17b7cffcc3fece551fc0",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23U_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "eng/tests/test_release_artifacts.py",
+        "eng/test-release-artifacts.py",
+        "eng/ReleaseArtifactProbe/Program.cs"
+      ]
+    },
+    {
+      "pr": "COR23V",
+      "finding": "R10B-03",
+      "priority": "P2",
+      "title": "PowerShell API image wrapper overwrites the requested image tag with its base-image loop variable.",
+      "dependencies": [
+        "COR23",
+        "COR23Q"
+      ],
+      "target_paths": [
+        "eng/docker-api-image.ps1"
+      ],
+      "planned_regressions": [
+        "requested_api_image_tag_survives_multiple_base_image_checks",
+        "native_build_failure_propagates_without_tagging_wrong_image"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23V \u2014 Preserve the requested API image tag in PowerShell\n\n- **Owns:** R10B-03. **Dependencies:** COR23Q native-command failure contract. Coordinate Bash/PowerShell base override/configuration parity with remaining R10C wrapper review.\n- **Files:** eng/docker-api-image.ps1 and behavioral Docker-wrapper fixtures; supported-host documentation where needed.\n- **Implementation:** distinct immutable output-tag and loop variables, explicit final native result propagation, and consistent target/configuration/no-cache/progress forwarding. Avoid assigning an application build to a base-image reference.\n- **Acceptance:** real PowerShell fake-executable argv tests cover default/custom output tags, successful/failed pulls and failed build. Disposable real Docker builds produce the requested output tag and leave upstream base tags pointing to their original images.\n- **Migration/rollback:** explain how affected developers can inspect and restore accidentally overwritten local base tags; do not automatically delete unrelated images. No schema migration. Reverting variable safety is not an acceptable rollback.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10B_CI_Release_Containers_Deployment.md",
+      "review_sha256": "76842b9134b5bd3c6aa862506dccdf184fa63f9e0590f5b30ae5facafcce1006",
+      "specification_sha256": "b553aaa055c4768edce76a4276fbdb707d1760bebbbc166f70a4e64d19b5227c",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23V_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "eng/tests/test_api_image_tag.py",
+        "eng/test-api-image-wrapper.py"
+      ]
+    },
+    {
+      "pr": "COR23W",
+      "finding": "R10B-04",
+      "priority": "P2",
+      "title": "Compose test commands continue after failed readiness or locked restore and can mask those failures.",
+      "dependencies": [
+        "COR23",
+        "COR23Q"
+      ],
+      "target_paths": [
+        "eng/docker-system-stack-tests.sh"
+      ],
+      "planned_regressions": [
+        "readiness_migration_and_restore_failure_stop_system_proof",
+        "failed_restore_status_survives_owned_cleanup"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23W \u2014 Make Compose prerequisites fail the proof lane\n\n- **Owns:** R10B-04. **Dependencies:** runner host/tool policy and COR24 test execution/artifact contract; coordinate COR23Q for wrapper parity.\n- **Files:** integration/ci-system Compose commands, readiness helper or runner image, direct/proxy/system runners and executable lane-failure fixtures.\n- **Implementation:** fail-fast shell contract for every prerequisite; explicit bounded HTTP attempts and overall readiness deadline; deterministic HTTP tooling provision. Preserve the actual failing stage/code and pass it through Compose to CI. Require fresh results with nonzero expected discovery/execution rather than accepting a successful final command alone.\n- **Acceptance:** injected failures at readiness, install, collection file validation, restore and tests stop later commands and return nonzero at container/runner/CI layers. A hung HTTP response terminates within budget. Real supported Compose/.NET/Bruno runs demonstrate both success and failure; stale assets/results cannot satisfy the lane.\n- **Migration/rollback:** update runner provisioning and result consumers together, clearing only per-run fixture output. No schema migration. A failing prerequisite should stay failed even if provisioning changes must be rolled back.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10B_CI_Release_Containers_Deployment.md",
+      "review_sha256": "76842b9134b5bd3c6aa862506dccdf184fa63f9e0590f5b30ae5facafcce1006",
+      "specification_sha256": "124bd1051ea08972e38e4062e851759df1e4e1600b342f77c945183bf84e68a3",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23W_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "eng/tests/test_compose_proof.py",
+        "eng/test-compose-proof.py",
+        "eng/ComposeProofProbe/Program.cs"
+      ]
+    },
+    {
+      "pr": "COR23X",
+      "finding": "R10B-05",
+      "priority": "P2",
+      "title": "Local test stacks publish state and privileged test services on wildcard host ports by default.",
+      "dependencies": [
+        "COR23",
+        "COR23D"
+      ],
+      "target_paths": [
+        "docker-compose.integration.yml"
+      ],
+      "planned_regressions": [
+        "fixture_state_ports_bind_loopback_and_have_unique_run_ownership",
+        "non_test_environment_denies_seed_capture_and_privileged_fixture_routes"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23X \u2014 Isolate local fixture state and test capabilities\n\n- **Owns:** R10B-05. **Dependencies:** COR23D production rejection of test capabilities; R10C host/container runner network design. Coordinate COR24 isolation qualification.\n- **Files:** all Compose variants, host-stack launch/configuration helpers, generated fixture credential plumbing and local deployment docs/tests.\n- **Implementation:** container-only default network without host state publications; explicit restricted host-backed profiles; generated credentials/key and lifecycle scoped to each disposable test project. Design a restricted proxy-to-host API route with supported Desktop/Linux behavior and opt-in remote lab access. Keep effective configuration inspectable and avoid profile combinations that reopen wildcard access inadvertently.\n- **Acceptance:** rendered Compose variants expose only intended endpoints, including merged overrides. Verify host/container usability and denied unrelated peer access under supported IPv4/IPv6/daemon versions, including any older-engine limits. Ensure test inspection is inaccessible without the per-run key, production rejects it, and parallel projects do not reuse ports/state/keys unexpectedly.\n- **Migration/rollback:** update local connection documentation and generated fixture configuration together; recreate disposable state only with explicit fixture ownership. Do not delete a developer's unrelated volumes or modify global firewall settings implicitly. Rollback can restore a documented restricted host lane while retaining isolation requirements.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10B_CI_Release_Containers_Deployment.md",
+      "review_sha256": "76842b9134b5bd3c6aa862506dccdf184fa63f9e0590f5b30ae5facafcce1006",
+      "specification_sha256": "0e1a6e73036f1d15414b96cba1ae1f0765942f6af3d1bc7fc32ebb9c50381f12",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23X_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "eng/tests/test_fixture_isolation.py",
+        "eng/test-fixture-isolation.py",
+        "treehammock.Tests/Unit/DockerHostSystemStackTests.cs",
+        "treehammock.Tests/Unit/DockerSqlContractRunnerTests.cs"
+      ]
+    },
+    {
+      "pr": "COR23Y",
+      "finding": "R10C-01",
+      "priority": "P2",
+      "title": "System test runners reset shared default Compose projects and delete fixture volumes without per-run ownership.",
+      "dependencies": [
+        "COR23",
+        "COR23W",
+        "COR23X"
+      ],
+      "target_paths": [
+        "eng/docker-system-stack-tests.sh",
+        "eng/docker-system-stack-tests.ps1"
+      ],
+      "planned_regressions": [
+        "concurrent_runs_cannot_reset_or_remove_each_others_volumes",
+        "cleanup_preserves_unowned_service_and_state"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23Y \u2014 Give test runs owned, isolated resources\n\n- **Owns:** R10C-01. **Depends on:** coordinate COR23X host/network profile design; align COR24 run/result identity. Can precede application fixes.\n- **Files:** container/host/all-tests runners, Compose profiles, generated override/result plumbing and lifecycle documentation/behavioral fixtures.\n- **Implementation:** create a validated unique test project/run ID; separate disposable test and persistent developer identities. Pass the same explicit project ID/files through every operation and teardown. Namespace artifacts and generated overrides. Allocate restricted host ports or serialize an explicitly supported host lane. Label/manifest ownership and remove only owned test resources. Keep deliberate developer reset commands distinct in behavior and documentation.\n- **Acceptance:** sentinel developer state survives tests and cleanup; two concurrent test runs cannot reset or overwrite each other. Cancellation of one preserves the other. Verify namespace, state, keys, ports, artifacts and merged configuration on supported daemons. Assert no broad/prune/default-project deletion occurs in test failure paths.\n- **Migration/rollback:** introduce test identities without migrating or deleting developer volumes. Explain legacy fixture cleanup as an explicit targeted action. No production schema migration. Rollback may restrict concurrency temporarily while retaining ownership-safe deletion.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10C_Docker_Wrappers_Host_System_Runners.md",
+      "review_sha256": "b818bc488f7041b0fde0c36463ffc1e363fece419324e537999b5d682a122a18",
+      "specification_sha256": "2effb483ced3d5596d1e41d69f082e3a0f34bf0ec89ba2bb148a87512da54839",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23Y_IMPLEMENTATION.md",
+      "authored_regressions": [
+        "eng/tests/test_test_ownership.py",
+        "eng/test-test-ownership.py",
+        "eng/test-powershell-runners.py"
+      ]
+    },
+    {
+      "pr": "COR23Z",
+      "finding": "R10C-02",
+      "priority": "P2",
+      "title": "Host test cleanup is installed after Compose startup, leaving a partial-startup failure outside its cleanup boundary.",
+      "dependencies": [
+        "COR23",
+        "COR23Q",
+        "COR23Y"
+      ],
+      "target_paths": [
+        "eng/docker-system-stack-tests.sh",
+        "eng/docker-system-stack-tests.ps1"
+      ],
+      "planned_regressions": [
+        "partial_start_failure_triggers_already_installed_owned_cleanup",
+        "bounded_cleanup_failure_preserves_primary_failure_diagnostics"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23Z \u2014 Cover acquisition failures with bounded owned cleanup\n\n- **Owns:** R10C-02. **Depends on:** COR23Y ownership; COR23Q native failure contract. Coordinate COR24 diagnostic retention.\n- **Files:** Bash/PowerShell host runners, reusable acquisition/cleanup helpers if useful, outer CI safety cleanup and lifecycle failure fixtures.\n- **Implementation:** prepare an owned run manifest and cleanup boundary before acquisition; track partial resources/API process trees. Preserve the original error/result independently of teardown, collect bounded diagnostics, perform idempotent cleanup with time limits, and provide narrowly scoped abandoned-run recovery. Restore process environment despite cleanup failure. Distinguish deliberate retained-debug resources from a successful cleanup claim.\n- **Acceptance:** each acquisition/startup/restore/readiness/test failure triggers owned cleanup and a nonzero primary result; injected cleanup failure cannot turn the run green or hide the initiating failure. Supported interrupts clean up within budget. Real partial Compose startup and .NET child lifecycle are qualified, not just local markers.\n- **Migration/rollback:** no data migration; enable cleanup only for resources owned under the new identity contract. Keep outer CI safety cleanup using that same identity. Rollback can retain owned resources with an explicit failure diagnostic, never delete unowned resources to achieve a clean report.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10C_Docker_Wrappers_Host_System_Runners.md",
+      "review_sha256": "b818bc488f7041b0fde0c36463ffc1e363fece419324e537999b5d682a122a18",
+      "specification_sha256": "350653092caf96bf833868709ce3657d29aaea1a63a27d2be550889bfdb0ddec",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "status": "FixedPendingQualification",
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23Z_IMPLEMENTATION.md",
+      "implementation_summary": "Owned manifest before acquisition; gated Linux/Windows supervisor receipts; bounded primary-preserving cleanup; environment restoration; explicit RetainedDebug and exact idempotent recovery. Controlled executable regressions and authored real Compose/SDK matrix; native qualification pending."
+    },
+    {
+      "pr": "COR23AA",
+      "finding": "R10C-03",
+      "priority": "P2",
+      "title": "Host system proof can succeed after its launched API exits because readiness is not tied to that process or run.",
+      "dependencies": [
+        "COR23",
+        "COR23D",
+        "COR23U",
+        "COR23Y",
+        "COR23Z"
+      ],
+      "target_paths": [
+        "eng/docker-host-system-stack-tests.sh"
+      ],
+      "planned_regressions": [
+        "owned_api_process_exit_fails_even_if_another_server_answers",
+        "tested_listener_and_launched_process_identity_are_bound"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23AA \u2014 Prove the host lane tests its launched application\n\n- **Owns:** R10C-03. **Depends on:** COR23Y isolated endpoints, COR23Z lifecycle monitoring; coordinate COR23U artifact identity and COR24 qualification. COR23D must gate any fixture-only identity surface.\n- **Files:** host runners, explicit application build/launch commands, safe test-only run/build identity plumbing, readiness checks and executable wrong-target regressions.\n- **Implementation:** build and launch the exact intended assembly/configuration; record its identity in the run manifest. Track owned process exit continuously during startup/tests, bind expected proxy/endpoint identity to the run, and fail promptly on launch/early exit or mismatched target. Avoid accepting arbitrary successful HTTP responses. Define one aggregate monotonic startup budget and useful sanitized failure output.\n- **Acceptance:** healthy old-process/port conflict, startup exception, wrong proxy target, exit during readiness/tests and mismatched identity all fail proof. Successful real runs establish current artifact, process, endpoint and backing-state identity and produce fresh expected test results. No production secret/debug leakage is introduced.\n- **Migration/rollback:** fixture identity exists only under the safe test capability contract; update runner and fixture together. No production database migration. A rollback must preserve fail-on-launch failure, isolated targeting and honest qualification status.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10C_Docker_Wrappers_Host_System_Runners.md",
+      "review_sha256": "b818bc488f7041b0fde0c36463ffc1e363fece419324e537999b5d682a122a18",
+      "specification_sha256": "fe5e7c6075c9f0d0a6ae63b35dc63b61283e30af308de1a57a574f98c2e9d4c0",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AA_IMPLEMENTATION.md",
+      "implementation_summary": "Exact Release DLL/build/reference and loaded capability-gated run/process identity; direct/proxy/backing readiness, continuous monitoring, aggregate startup budget and fresh complete System assembly/TRX proof. Real native fault matrix authored; qualification pending."
+    },
+    {
+      "pr": "COR23AB",
+      "finding": "R10C-04",
+      "priority": "P2",
+      "title": "PowerShell host runner unconditionally requires powershell.exe despite selecting/supporting other PowerShell hosts.",
+      "dependencies": [
+        "COR23",
+        "COR23Q",
+        "COR23Z"
+      ],
+      "target_paths": [
+        "eng/docker-host-system-stack-tests.ps1"
+      ],
+      "planned_regressions": [
+        "declared_pwsh_host_runs_on_supported_non_windows_host",
+        "missing_tool_or_unsupported_host_fails_before_resource_acquisition"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "### COR23AB \u2014 Use the declared PowerShell host and verify prerequisites\n\n- **Owns:** R10C-04. **Depends on:** COR23Q native invocation policy; coordinate COR23Z lifecycle and supported-host matrix.\n- **Files:** PowerShell host runner, CMD launcher if required, lock invocation/host-selection helper, Bash tool preflight, DockerHostSystemStackTests and command docs.\n- **Implementation:** call lock audit in the current host or an explicitly resolved compatible child executable. Keep Windows-only process policy handling conditional and avoid switching hosts implicitly. Check supported platforms, Docker/Compose, .NET, readiness tools and required configuration before mutation. Replace the test that demands the legacy executable string with behavioral host/result checks.\n- **Acceptance:** supported Windows/pwsh-only Unix entrypoints use the intended host, handle paths with spaces and propagate missing/failed prerequisites before acquisition. Unsupported hosts get a clear early diagnostic. CMD continues forwarding the selected host's result without changing machine-wide policy.\n- **Migration/rollback:** publish the supported host/version contract and update command instructions together. No schema migration or global execution-policy change. If a host cannot be supported, disable that variant explicitly and retain a working documented alternative rather than silently invoking an absent tool.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10C_Docker_Wrappers_Host_System_Runners.md",
+      "review_sha256": "b818bc488f7041b0fde0c36463ffc1e363fece419324e537999b5d682a122a18",
+      "specification_sha256": "e3ac3a43bbb1fc6e821d80d97272e9d8946c5234effa376a87ddd1f3d21a7440",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AB_IMPLEMENTATION.md",
+      "implementation_summary": "Exact selected PowerShell lock/ACL child; explicit CMD selection and exit forwarding; read-only supported-host/Docker/Compose/.NET/config/lock prerequisites before acquisition. Actual host CI fixture authored; native qualification pending."
+    },
+    {
+      "pr": "COR23AC",
+      "finding": "R10E-01",
+      "priority": "P2",
+      "title": "HTTP failure-envelope helpers accept status-only legacy shapes and skip required envelope/error-code assertions.",
+      "dependencies": [
+        "COR23",
+        "COR23L"
+      ],
+      "target_paths": [
+        "treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs",
+        "treehammock.Tests/Integration/AccountAdjustIntegrationTests.cs"
+      ],
+      "planned_regressions": [
+        "status_only_wrong_code_and_wrong_errors_shape_fail_contract_assertion",
+        "actual_host_emits_exact_account_failure_envelopes"
+      ],
+      "current_recheck": "Assert the current exact envelopes after COR03\u201322; permitting framework status-only bodies remains outside the contract.",
+      "implementation_specification": "## Detailed PR specification \u2014 COR23AC\n\n**Problem and result.** Account failure-contract tests accept responses missing the contract they claim to enforce. A corrected test lane must fail when success/statusCode/code disappear or validation errors change shape, while preserving successful checks of the currently intended responses.\n\n**Primary files.** treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs and AccountAdjustIntegrationTests.cs. Add a shared test-only HTTP assertion helper under Infrastructure if useful, then reconcile equivalent helpers in other suites during their full review. ApiResponse, ApiResponses, Program and the authorization filter define the reference behavior; a production change is not required solely to fix this finding.\n\n**Implementation.** Require a JSON object with correctly typed success, statusCode and code; assert false, the expected HTTP/envelope status and exact expected error code. Check the expected account validation error array, field names and nonempty string message lists. Preserve route-specific data/result assertions and agree null/omission behavior for optional data/errors rather than silently allowing unrelated schemas. Remove the status-only branch and object-map validation compatibility from these account assertions. Name any intentionally supported alternative contract explicitly and limit it to its intended endpoints.\n\n**Executable acceptance.** Run both affected HTTP suites in the actual host. Missing/malformed body, invalid identifiers/password/country/factor fields, protected-route denial, adjustment validation/duplicate/stale trust and required-key 428 must retain exact envelopes. In a disposable mutation run, replace model-state envelope registration with the framework default and require the relevant HTTP tests to fail for schema/code differences even when status remains 400. Also make a required-key denial omit or alter its code while retaining 428 and require that test to fail. Restore the production path and prove the same cases pass. Retain discovery and results under COR01/COR24; source text assertions alone cannot close this finding.\n\n**Dependencies.** The schema correction can be implemented against the current behavior without waiting for every domain fix. Final execution requires a working SDK/restore lane and configuration consistent with COR23L; later security/privacy changes must update expected responses deliberately. Coordinate the eventual shared helper with R10F, whose full suites remain unreviewed here. This PR owns R10E-01 only; related domain findings retain their earlier owners.\n\n**Migration/rollback.** Test-only change; no schema migration or public API change. Reverting assertions would restore the verification hole. Any proposed production compatibility exception must be documented as an explicit supported contract and tested separately before it can replace the current expectation.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10E_Large_Authentication_Suites_HTTP_Assertions.md",
+      "review_sha256": "4fa449457fd89f46e9fc284230d0b27428df4569276e90be302d07c9e4726540",
+      "specification_sha256": "45b495101b411fb0fa38beab99936f0ec412402782a4c02123c86b76897d1240",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AC_IMPLEMENTATION.md",
+      "implementation_summary": "Strict test-only account envelope/validation/data contracts; actual CLR adversarial and private framework/428-code mutation fixtures authored with complete fresh results and exact restoration. Native qualification pending."
+    },
+    {
+      "pr": "COR23AD",
+      "finding": "R10F-01",
+      "priority": "P2",
+      "title": "Two-factor flow harness owns application factories without deterministic disposal in fifteen tests.",
+      "dependencies": [
+        "COR01",
+        "COR23"
+      ],
+      "target_paths": [
+        "treehammock.Tests/Integration/AccountFlowRegressionTests.cs"
+      ],
+      "planned_regressions": [
+        "all_factories_clients_and_async_resources_are_disposed_on_failure",
+        "repeated_suite_runs_do_not_leak_background_hosts"
+      ],
+      "current_recheck": "Rebase the frozen specification onto the current COR22 source. Verify whether earlier corrections changed this behavior; preserve the current security contract. Source inspection alone cannot close this finding.",
+      "implementation_specification": "## Detailed corrective PR \u2014 COR23AD\n\n**Title:** Dispose owned two-factor flow factories after each test.\n\n**Problem/result:** Fifteen tests leave their factory-owned application lifetime without explicit teardown. The PR makes each helper-owned factory stop and dispose when its owning test finishes or exits exceptionally.\n\n**Files:** `treehammock.Tests/Integration/AccountFlowRegressionTests.cs`; add a focused lifecycle test/support probe only if needed to verify host stop/disposal. Shared factory changes are unnecessary unless the selected ownership API needs a reusable fixture helper. No application endpoints, schema, authentication behavior or delivery policy changes are part of this PR.\n\n**Implementation:** Give `LoginTwoFactorHarness` explicit ownership via `IAsyncDisposable` delegating to its factory and change all fifteen test allocations to `await using`. A scoped factory in every caller is an acceptable alternative if equally explicit. Keep client scopes inside the owner lifetime; stop/dispose the host once after requests complete. Make creation/cleanup exception-safe. Existing twelve scoped factory cases must retain correct ownership. Also close JSON document lifetimes in helper call sites that currently discard returned documents; prefer helpers returning only needed values or explicit caller scopes. Keep these cleanup changes in the same PR rather than creating an additional finding.\n\n**Validation:** Execute the complete account-flow suite on the pinned SDK/package graph. Use a disposable DI service/hosted-service probe to observe normal host shutdown and disposal, including an intentional exception after host start that is caught by the lifecycle test. Assert disposal happens exactly once and the original exception remains observable. Cover a harness whose factory never starts. Repeat the focused lifecycle cases in one process to detect undisposed probe instances; no timing or memory threshold alone substitutes for observing ownership cleanup. Confirm all existing flow assertions continue to pass and that no later test accesses a disposed factory.\n\n**Acceptance:** Every owned factory has a test/fixture teardown owner; host/server/provider cleanup is observed after normal and exceptional exits; no shared host is accidentally disposed by an individual request. Publish the discovered tests and outcomes. Static `await using` presence alone does not close the runtime cleanup criterion.\n\n**Dependencies/order:** Can land independently of production corrections; COR01 supplies result evidence and COR24 includes it in integrated qualification. Do not delay cleanup until all authentication PRs are implemented. No migration or deployment sequencing is needed. Rollback changes test lifetime only and reopens this finding if teardown is removed.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10F_Account_Flows_Endpoint_Contracts.md",
+      "review_sha256": "1e4831558c07ae821a778b5944f5593833f745cd79e13b4dc5c1527194bf9bf6",
+      "specification_sha256": "00b8ca8d14e807700a94b64812c542d0140637776f30fc3a890bc1f243cb29b2",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AD_IMPLEMENTATION.md",
+      "implementation_summary": "Async harness ownership for all fifteen cases, scoped/detached helper JSON, partial-response cleanup and actual hosted-service disposal probes with in-process repetition. Full native flow qualification pending."
+    },
+    {
+      "pr": "COR23AE",
+      "finding": "R10H-01",
+      "priority": "P2",
+      "title": "System registration verification success test accepts HTTP 200 failure pages without checking verified account state.",
+      "dependencies": [
+        "COR23",
+        "COR23AA",
+        "COR23Y"
+      ],
+      "target_paths": [
+        "treehammock.Tests.System/SystemStackAccountFlowTests.cs"
+      ],
+      "planned_regressions": [
+        "http_200_error_page_cannot_satisfy_verification_success",
+        "independent_database_observer_proves_only_intended_account_verified"
+      ],
+      "current_recheck": "Use isolated run-owned fixtures; account verification SQL state must be observed independently. An HTML status code is insufficient.",
+      "implementation_specification": "## Detailed corrective PR \u2014 COR23AE\n\n**Title:** Prove successful registration verification in the system lane.\n\n**Owns:** R10H-01 only. Can land independently of production corrections; coordinate with COR11 verification state and COR23G public origins, and include results in COR01/COR24 qualification.\n\n**Files:** `treehammock.Tests.System/SystemStackAccountFlowTests.cs`; focused HTTP verification regression cases in the existing test project. Reuse configured verification templates and existing isolated persistence fixtures. A general production status-code change or new public inspection endpoint is unnecessary.\n\n**Implementation:** After verification, assert the intended successful HTML outcome/content type using the controlled fixture contract. In the dedicated registration scenario, independently prove the account is verified by successful normal login and a protected operation, or an existing isolated durable-state query. Keep registration helpers usable in unlock/other scenarios without introducing hidden session side effects. A pure rendering marker cannot substitute for committed account state, and a status assertion cannot substitute for either. Preserve specified already-verified, expired, invalid and unavailable behaviors.\n\n**Regression cases:** Known valid token and committed success; invalid token; expired token; completion rejected/failed; failed outcome HTML with HTTP 200. Force completion failure through an isolated integration fixture without adding a production fault-injection route. The unsuccessful HTTP-200 case must fail the success assertion, and durable verification must remain uncommitted. Confirm legitimate already-verified behavior is handled according to its contract. Keep fixtures/captured delivery owned by the run and close all HTTP/JSON scopes.\n\n**Acceptance:** The complete dedicated registration system case succeeds only after actual committed verification. A failure page with 200 is rejected; durable state and later authorized behavior agree. Execute the corrected real stack path and publish discovered test/results evidence; the source-derived witness alone does not close this finding.\n\n**Migration/rollback:** Test-only correction needs no schema or deployment migration. Rollback restores weak qualification and reopens the finding. Production verification migrations remain governed by their existing owners.\n",
+      "review_reference": "docs/corrections/evidence/Treehammock_Review_10H_API_Model_System_Account_Flows.md",
+      "review_sha256": "ba785203b1460ae8870dce9254b683f402f398f96677ada2cabdce68515cadc6",
+      "specification_sha256": "e8b2c3ade055de92a83bf4d90b70ffd4d4e5a000bd4aa2efb5bfbabe32035357",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AE_IMPLEMENTATION.md",
+      "implementation_summary": "Exact verification success template/content type, separate normal login/protected account state proof, owned isolated HTTP negative/completion regressions and exact native discovery runner. Native HTTP and full SQL/proxy System qualification pending."
+    },
+    {
+      "pr": "COR23AF",
+      "finding": "R23B-01",
+      "priority": "P2",
+      "title": "Authenticator repository replacement grant target omits predecessor identity and version.",
+      "dependencies": [
+        "COR08",
+        "COR16",
+        "COR23B",
+        "COR23"
+      ],
+      "target_paths": [
+        "Repos/AuthenticatorAppEnrollmentRepo.cs",
+        "Rigging/Security/SensitiveActionTargets.cs",
+        "Controllers/AccountTwoFactorController.cs",
+        "Services/AuthenticatorAppProvisioningService.cs"
+      ],
+      "planned_regressions": [
+        "actual_repository_replacement_with_predecessor_bound_grant_commits",
+        "stale_or_mismatched_target_preserves_original_setup",
+        "missing_predecessor_target_arguments_mutation_fails_native_replacement"
+      ],
+      "current_recheck": "COR23AF repaired the current repository comparison to SensitiveActionTargets.AuthenticatorSetup with five arguments: AuthId, Required, TotpProviderType, ExpectedEnrollmentId and ExpectedVersion. Upstream controller/service and SQL predecessor arguments remain bound. eng/check-authenticator-replacement.py and source/synthetic receipt checks cannot qualify it. Execute the eighteen current real repository/service/SQL outcomes, independent durable state/grant observers and the designated predecessor-omission mutation using eng/test-authenticator-replacement.py on owned fixtures. Native runtime/mutation/state qualification remains NotRun; do not describe the repaired source as still using three arguments.",
+      "implementation_specification": "## Detailed corrective PR \u2014 COR23AF\n\n**Title:** Bind authenticator replacement grant targets consistently through the repository.\n\n**Owns:** R23B-01 only. **Depends on:** COR08, COR16, COR23B and COR23. **Coordinates with:** COR23C actual reader qualification; COR24 runtime qualification.\n\n**Files:** Repos/AuthenticatorAppEnrollmentRepo.cs; Rigging/Security/SensitiveActionTargets.cs; focused actual repository and service regression cases. Inspect Controllers/AccountTwoFactorController.cs and Services/AuthenticatorAppProvisioningService.cs as the current upstream target contract.\n\n**Implementation:** Build the repository's canonical target with the command's expected predecessor enrollment ID and version, matching the controller and service. Preserve grant validation, expected identity/version SQL arguments, fresh setup null predecessor behavior, account/session/purpose binding and fail-closed mismatches. Use the current typed target helper; do not accept a target made for a different predecessor or omit predecessor binding to permit replacement.\n\n**Regression cases:** A fresh setup with null predecessor succeeds. A grant-bound replacement carrying the current predecessor ID/version reaches actual PostgreSQL and commits the new encrypted enrollment. A stale identity/version, changed label/required/provider, missing grant or target made for a different predecessor is denied with retained state. The actual repository negative control that removes the two predecessor arguments must fail the valid replacement case, not merely compile or trip a lexical witness. The service/controller and repository must agree on canonical target shape.\n\n**Acceptance:** Compile and execute the production repository/service path using real PostgreSQL, grant consumption, enrollment-bound v2 material and an independent durable-state observer. Publish exact passing cases and failing mutation evidence, retaining all native prerequisites and original gates. Source comparison alone cannot close this finding. Review result readers under the existing COR23C scope, without moving its ownership here.\n\n**Schema policy:** Direct current pre-1.0 contract edits; no upgrade, compatibility or backfill strategy. No schema change is expected. Record append-only implementation/qualification history and keep old unbound entry points denied.\n",
+      "review_reference": "docs/corrections/COR23B_ADDITIONAL_REVIEW.md",
+      "review_sha256": "92839c58805860beaf8a7d0be0a665e09160119dcf25a6eac940e27efd153290",
+      "specification_sha256": "85b3aeca382b14a9188d3d6403e943b11baf5e7bf9082b1b32b244fbe30457f5",
+      "qualification": "NotRun",
+      "schema_policy": "Direct pre-1.0 setup edits only; no upgrade/backfill/compatibility strategy.",
+      "coordination_references": [
+        "COR23C",
+        "COR24"
+      ],
+      "implementation_status": "FixedPendingQualification",
+      "implementation_reference": "docs/corrections/COR23AF_IMPLEMENTATION.md",
+      "implementation_summary": "Repository canonical target includes expected predecessor UUID/version, with local dependency logging parameter correction. Eighteen actual repository/service/SQL cases, independent state/grant observers and a designated runtime predecessor-omission mutation runner authored; native execution pending.",
+      "current_note_history": [
+        {
+          "pr": "COR25.38",
+          "previous_current_recheck": "The upstream helper serializes predecessor identity/version; the repository currently calls it with three arguments and denies valid replacements before SQL. Repair and qualify the current contract without weakening target binding.",
+          "previous_planned_regressions": [
+            "actual_repository_replacement_with_predecessor_bound_grant_commits",
+            "stale_or_mismatched_target_preserves_original_setup",
+            "missing_predecessor_target_arguments_mutation_fails_native_replacement"
+          ],
+          "reason": "Reconcile current implemented collector/predecessor contract without rewriting frozen specification or crediting native qualification."
+        }
+      ]
+    }
+  ]
+}

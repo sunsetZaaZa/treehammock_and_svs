@@ -1,0 +1,413 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:treehammock:authority-fleet:v2",
+  "title": "Authority fleet v2 structural schema",
+  "description": "Structural contract only; runtime semantic validation additionally checks complete purpose sets, uniqueness, current hashes, private routes and committed admission. Frames are <=32768 bytes and depth16; duplicate properties are rejected.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/inventory"
+    },
+    {
+      "$ref": "#/$defs/binding"
+    },
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/reply"
+    }
+  ],
+  "$defs": {
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "peers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "uri": {
+                "type": "string"
+              },
+              "serverPin": {
+                "type": "string"
+              },
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "purpose": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "purpose",
+                    "kind",
+                    "name"
+                  ]
+                },
+                "maxItems": 64
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "uri",
+              "serverPin",
+              "identities"
+            ]
+          },
+          "maxItems": 64
+        },
+        "caches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "port": {
+                "type": "integer"
+              },
+              "tlsHost": {
+                "type": "string"
+              },
+              "database": {
+                "type": "integer"
+              },
+              "version": {
+                "type": "string"
+              },
+              "runId": {
+                "type": "string"
+              },
+              "adminUser": {
+                "type": "string"
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 64
+              }
+            },
+            "required": [
+              "host",
+              "port",
+              "tlsHost",
+              "database",
+              "version",
+              "runId",
+              "adminUser",
+              "subjects"
+            ]
+          },
+          "maxItems": 64
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "databasePolicyHash": {
+          "type": "string"
+        },
+        "cachePolicyHash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "peers",
+        "caches",
+        "protocol",
+        "databasePolicyHash",
+        "cachePolicyHash"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "realm": {
+          "type": "string"
+        },
+        "generation": {
+          "type": "integer"
+        },
+        "barrier": {
+          "type": "string"
+        },
+        "inventoryHash": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "string"
+        },
+        "policy": {
+          "type": "string"
+        },
+        "primaryRunId": {
+          "type": "string"
+        },
+        "sqlIdentities": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "app": {
+              "type": "string"
+            },
+            "coordinator": {
+              "type": "string"
+            },
+            "validator": {
+              "type": "string"
+            },
+            "refiller": {
+              "type": "string"
+            },
+            "maintenance": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app",
+            "coordinator",
+            "validator",
+            "refiller",
+            "maintenance"
+          ]
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "identityHash": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "identityHash"
+            ]
+          },
+          "maxItems": 64
+        },
+        "databasePolicyHash": {
+          "type": "string"
+        },
+        "cachePolicyHash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "realm",
+        "generation",
+        "barrier",
+        "inventoryHash",
+        "mode",
+        "environment",
+        "epoch",
+        "policy",
+        "primaryRunId",
+        "sqlIdentities",
+        "participants",
+        "databasePolicyHash",
+        "cachePolicyHash"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "bootId": {
+          "type": "string"
+        },
+        "generation": {
+          "type": "integer"
+        },
+        "barrier": {
+          "type": "string"
+        },
+        "inventoryHash": {
+          "type": "string"
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/binding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prepared": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "protocol": {
+          "const": "authority-fleet.v2"
+        }
+      },
+      "required": [
+        "action",
+        "nonce",
+        "bootId",
+        "generation",
+        "barrier",
+        "inventoryHash",
+        "binding",
+        "prepared",
+        "protocol"
+      ]
+    },
+    "reply": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "const": "authority-fleet.v2"
+        },
+        "instance": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "bootId": {
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "generation": {
+          "type": "integer"
+        },
+        "barrier": {
+          "type": "string"
+        },
+        "inventoryHash": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "active": {
+          "type": "integer"
+        },
+        "prepared": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "policyHash": {
+          "type": "string"
+        },
+        "isolation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "rejected": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "purpose": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "purpose",
+                      "kind",
+                      "name"
+                    ]
+                  },
+                  "maxItems": 64
+                }
+              },
+              "required": [
+                "rejected"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "identityHash": {
+          "type": "string"
+        },
+        "cachePolicyHash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "protocol",
+        "instance",
+        "kind",
+        "bootId",
+        "nonce",
+        "generation",
+        "barrier",
+        "inventoryHash",
+        "mode",
+        "active",
+        "prepared",
+        "policyHash",
+        "isolation",
+        "identityHash",
+        "cachePolicyHash"
+      ]
+    }
+  }
+}

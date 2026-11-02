@@ -1,0 +1,437 @@
+{
+  "format": "SVS12Parity.v1",
+  "syntheticOnly": true,
+  "nativeQualification": false,
+  "now": "2026-10-20T12:00:00Z",
+  "issuer": "test-issuer",
+  "testKeyHex": "5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D",
+  "cases": [
+    {
+      "id": "issued-no-exp",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed"
+    },
+    {
+      "id": "ignored-jwt-exp",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "token": "expired-exp"
+    },
+    {
+      "id": "ignored-jwt-nbf",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "token": "future-nbf"
+    },
+    {
+      "id": "preauth-twofactor",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "preauth"
+    },
+    {
+      "id": "wrong-signing-key",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "wrong-key"
+    },
+    {
+      "id": "wrong-issuer",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "wrong-issuer"
+    },
+    {
+      "id": "hs384",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "hs384"
+    },
+    {
+      "id": "unsigned",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "unsigned"
+    },
+    {
+      "id": "missing-jti",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "missing-jti"
+    },
+    {
+      "id": "empty-jti",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "empty-jti"
+    },
+    {
+      "id": "missing-purpose",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "missing-purpose"
+    },
+    {
+      "id": "empty-purpose",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "empty-purpose"
+    },
+    {
+      "id": "missing-webkey",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "missing-webkey"
+    },
+    {
+      "id": "empty-webkey",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Malformed",
+      "token": "empty-webkey"
+    },
+    {
+      "id": "opaque-refresh",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "opaque-refresh"
+    },
+    {
+      "id": "malformed-jws",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "token": "malformed"
+    },
+    {
+      "id": "forbidden-capability",
+      "expectedCore": "Forbidden",
+      "expectedCoordinator": "Forbidden",
+      "expectedToken": "Passed",
+      "capabilities": [
+        "account.read"
+      ],
+      "requiredCapability": "account.manage"
+    },
+    {
+      "id": "empty-capabilities-eligible",
+      "expectedCore": "Forbidden",
+      "expectedCoordinator": "Forbidden",
+      "expectedToken": "Passed",
+      "capabilities": []
+    },
+    {
+      "id": "bad-signature-not-forbidden",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Failed",
+      "capabilities": [],
+      "token": "wrong-key"
+    },
+    {
+      "id": "locked-account",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "accountState": "Locked"
+    },
+    {
+      "id": "unverified-account",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "accountState": "Unverified"
+    },
+    {
+      "id": "disabled-account",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "accountState": "Disabled"
+    },
+    {
+      "id": "deleted-account",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "accountState": "Deleted"
+    },
+    {
+      "id": "unknown-account-evidence",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "accountState": "Unknown"
+    },
+    {
+      "id": "unlock-equality",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "unlockTicks": 0
+    },
+    {
+      "id": "unlock-future",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "unlockTicks": 1,
+      "accountState": "Locked"
+    },
+    {
+      "id": "access-before",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Expired",
+      "accessTicks": -1
+    },
+    {
+      "id": "access-equal",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Expired",
+      "accessTicks": 0
+    },
+    {
+      "id": "access-after",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "accessTicks": 1
+    },
+    {
+      "id": "hard-before",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "hardTicks": -1
+    },
+    {
+      "id": "hard-equal",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "hardTicks": 0
+    },
+    {
+      "id": "hard-after",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "hardTicks": 1
+    },
+    {
+      "id": "cutoff-before",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "cutoffTicks": -1
+    },
+    {
+      "id": "cutoff-equal",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "cutoffTicks": 0
+    },
+    {
+      "id": "cutoff-after",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "cutoffTicks": 1
+    },
+    {
+      "id": "stale-family",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "family"
+    },
+    {
+      "id": "stale-generation",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "generation"
+    },
+    {
+      "id": "stale-session-stamp",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "session-stamp"
+    },
+    {
+      "id": "stale-account-stamp",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "account-stamp"
+    },
+    {
+      "id": "second-login-old-credential",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "rotation"
+    },
+    {
+      "id": "revoked-family",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "revocation"
+    },
+    {
+      "id": "logout",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unauthenticated",
+      "expectedToken": "Passed",
+      "authority": "logout"
+    },
+    {
+      "id": "generation-zero",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "generation": 0
+    },
+    {
+      "id": "generation-too-large",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "generation": 9007199254740992
+    },
+    {
+      "id": "generation-max-exact",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "generation": 9007199254740991
+    },
+    {
+      "id": "wrong-session-protocol",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "protocol": 1
+    },
+    {
+      "id": "empty-family",
+      "expectedCore": "Unauthenticated",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "emptyFamily": true
+    },
+    {
+      "id": "credential-binding-mismatch",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "badBinding": true
+    },
+    {
+      "id": "missing-signing-key",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "shortKey": true
+    },
+    {
+      "id": "entitlement-version-zero",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "entitlementVersion": 0
+    },
+    {
+      "id": "future-projection",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "evaluatedTicks": 1
+    },
+    {
+      "id": "term-boundary-1",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "boundaryTicks": -1
+    },
+    {
+      "id": "term-boundary0",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "boundaryTicks": 0
+    },
+    {
+      "id": "term-boundary1",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "boundaryTicks": 1
+    },
+    {
+      "id": "grant-eligibility-1",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "eligibilityTicks": -1
+    },
+    {
+      "id": "grant-eligibility0",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "eligibilityTicks": 0
+    },
+    {
+      "id": "grant-eligibility1",
+      "expectedCore": "Active",
+      "expectedCoordinator": "Active",
+      "expectedToken": "Passed",
+      "eligibilityTicks": 1
+    },
+    {
+      "id": "grant-rights-disabled-tier-two",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "featureTier": 2
+    },
+    {
+      "id": "unknown-capability",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "capabilities": [
+        "unsupported"
+      ]
+    },
+    {
+      "id": "missing-action-policy",
+      "expectedCore": "Unavailable",
+      "expectedCoordinator": "Unavailable",
+      "expectedToken": "Passed",
+      "requiredCapability": "",
+      "expectedTreehammock": "Active"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+[Unit]
+Description=Private session validator replica %i
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=exec
+User=svs-%i
+Group=svs-%i
+WorkingDirectory=/opt/svs/current
+ExecStart=/usr/bin/bash /opt/svs/bin/secure-exec.sh /opt/svs/current/Treehammock.SessionValidation.Api.dll --config %d/host.json
+LoadCredential=host.json:/etc/svs/%i/host.json
+LoadCredential=server.pfx:/etc/svs/%i/server.pfx
+LoadCredential=fleet.pfx:/etc/svs/%i/fleet.pfx
+LoadCredential=services-ca.pem:/etc/svs/%i/services-ca.pem
+LoadCredential=clients-ca.pem:/etc/svs/%i/clients-ca.pem
+LoadCredential=controller-ca.pem:/etc/svs/%i/controller-ca.pem
+LoadCredential=sql-ca.pem:/etc/svs/%i/sql-ca.pem
+LoadCredential=cache-ca.pem:/etc/svs/%i/cache-ca.pem
+Environment=DOTNET_ROOT=/opt/dotnet
+Environment=PATH=/opt/dotnet:/usr/bin:/bin
+Environment=DOTNET_EnableDiagnostics=0 DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0
+UMask=0077
+StateDirectory=svs-%i
+StateDirectoryMode=0700
+RuntimeDirectory=svs-%i
+RuntimeDirectoryMode=0700
+Restart=on-failure
+RestartSec=2
+TimeoutStartSec=30
+TimeoutStopSec=30
+KillSignal=SIGTERM
+KillMode=control-group
+SendSIGKILL=yes
+LimitCORE=0
+LimitNOFILE=4096
+TasksMax=256
+CPUQuota=200%
+MemoryHigh=512M
+MemoryMax=768M
+MemorySwapMax=0
+OOMPolicy=stop
+CPUAccounting=yes
+MemoryAccounting=yes
+TasksAccounting=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=~@mount @reboot @swap @raw-io @debug @obsolete
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+IPAddressDeny=any
+IPAddressAllow=localhost
+# Add only the renderer's reviewed per-instance IPAddressAllow drop-in.
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

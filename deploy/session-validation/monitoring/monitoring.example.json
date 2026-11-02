@@ -1,0 +1,8 @@
+{
+  "monitoring": {
+    "identity": "spiffe://intranet.local/service/svs-monitor",
+    "leafSha256": [
+      "REPLACE_WITH_EXACT_REVIEWED_MONITOR_LEAF_PIN"
+    ]
+  }
+}

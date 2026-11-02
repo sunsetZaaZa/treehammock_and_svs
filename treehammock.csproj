@@ -1,0 +1,153 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>treehammock-local-dev</UserSecretsId>
+    <AssemblyName>treehammock</AssemblyName>
+    <RootNamespace>treehammock</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <Configurations>Debug;Release;Sandbox</Configurations>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<PredefinedCulturesOnly>true</PredefinedCulturesOnly>
+		<RetainVMGarbageCollection>false</RetainVMGarbageCollection>
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<ThreadPoolMinThreads>15</ThreadPoolMinThreads>
+		<ThreadPoolMaxThreads>100</ThreadPoolMaxThreads>
+		<TieredCompilation>true</TieredCompilation>
+		<TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+		<TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Util\**" />
+	  <Content Remove="Util\**" />
+	  <EmbeddedResource Remove="Util\**" />
+	  <None Remove="Util\**" />
+	  <Compile Remove="treehammock\**" />
+	  <Content Remove="treehammock\**" />
+	  <EmbeddedResource Remove="treehammock\**" />
+	  <None Remove="treehammock\**" />
+	  <Compile Remove="treehammock.Tests\**" />
+	  <Content Remove="treehammock.Tests\**" />
+	  <EmbeddedResource Remove="treehammock.Tests\**" />
+	  <None Remove="treehammock.Tests\**" />
+	  <Compile Remove="treehammock.Tests.SqlContracts\**" />
+	  <Content Remove="treehammock.Tests.SqlContracts\**" />
+	  <EmbeddedResource Remove="treehammock.Tests.SqlContracts\**" />
+	  <None Remove="treehammock.Tests.SqlContracts\**" />
+	  <Compile Remove="treehammock.Tests.System\**" />
+	  <Content Remove="treehammock.Tests.System\**" />
+	  <EmbeddedResource Remove="treehammock.Tests.System\**" />
+	  <None Remove="treehammock.Tests.System\**" />
+	  <Compile Remove="treehammock.Tests\**" />
+	  <Content Remove="treehammock.Tests\**" />
+	  <EmbeddedResource Remove="treehammock.Tests\**" />
+	  <None Remove="treehammock.Tests\**" />
+	  <Compile Remove="treehammock.Tests.SqlContracts\**" />
+	  <Content Remove="treehammock.Tests.SqlContracts\**" />
+	  <EmbeddedResource Remove="treehammock.Tests.SqlContracts\**" />
+	  <None Remove="treehammock.Tests.SqlContracts\**" />
+	  <Compile Remove="treehammock.Tests.System\**" />
+	  <Content Remove="treehammock.Tests.System\**" />
+	  <EmbeddedResource Remove="treehammock.Tests.System\**" />
+	  <None Remove="treehammock.Tests.System\**" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <!-- Independent SVS projects must not enter the public Web SDK's recursive globs. -->
+    <Compile Remove="src/**;tests/**" />
+    <Content Remove="src/**;tests/**" />
+    <EmbeddedResource Remove="src/**;tests/**" />
+    <None Remove="src/**;tests/**" />
+    <Compile Remove="eng\ReleaseArtifactProbe\**" />
+    <Compile Remove="eng\ComposeProofProbe\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" />
+    <PackageReference Include="Geralt" />
+    <PackageReference Include="MailKit" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="NewId" />
+    <PackageReference Include="NodaTime" />
+    <PackageReference Include="NodaTime.Serialization.JsonNet" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Npgsql.NodaTime" />
+    <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="System.Text.RegularExpressions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="email_templates/**/*.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="email_templates/**/*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="sms_templates/**/*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="html_templates/**/*.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CityHash">
+      <HintPath>Dependencies\CityHash_103.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+   <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
+    <RuntimeHostConfigurationOption Include="System.Net.DisableIPv6" Value="true" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Rigging/Database/Migrations/*.sql;Rigging/Database/Migrations/manifest.json">
+      <LogicalName>treehammock.Migrations.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rigging/Abuse/Scripts/*.lua">
+      <LogicalName>treehammock.AbuseScripts.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rigging/Replay/Scripts/*.lua">
+      <LogicalName>treehammock.ReplayScripts.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Rigging/Cache/pending-proof-projection.lua" LogicalName="treehammock.PendingProofProjection.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="src/Treehammock.SessionValidation.Core/Treehammock.SessionValidation.Core.csproj" />
+  </ItemGroup>
+</Project>

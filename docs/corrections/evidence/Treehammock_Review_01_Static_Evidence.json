@@ -1,0 +1,29 @@
+{
+  "source_files": 451,
+  "source_unchanged_vs_uploaded_archive": true,
+  "baseline_copies_only_differ_in_first_comment": true,
+  "session_id_has_random_default": true,
+  "rotation_does_not_mention_session_id": true,
+  "rotation_takes_account_lock": true,
+  "password_failure_sql_assigns_absolute_value": true,
+  "chunk_counts": {
+    "R01": 65,
+    "R02": 60,
+    "R03": 28,
+    "R04": 9,
+    "R05": 12,
+    "R06": 19,
+    "R07": 54,
+    "R08": 19,
+    "R09": 30,
+    "R10": 155
+  },
+  "files_with_R01_inspection_notes": 53,
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "redis-server": null
+  },
+  "evidence_kind": "Static source/inventory facts. Not application test results or runtime reproductions."
+}

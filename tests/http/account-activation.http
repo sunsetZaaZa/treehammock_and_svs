@@ -1,0 +1,52 @@
+@baseUrl = https://localhost:5001
+@accessToken = replace-with-current-access-token
+@grantId = replace-with-operator-approved-grant-id
+@requestId = replace-with-place-response-request-id
+@code = replace-with-published-delivery-code
+
+### Place a reviewed grant. No client-created tier grants authority.
+POST {{baseUrl}}/activations/place
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: cor19-place-operation-0001
+Security-Operation-Key: replace-with-unix-seconds-dot-uuid-N
+Security-Operation-Recovery-Key: replace-with-32-byte-base64-key
+Content-Type: application/json
+
+{"version":2,"grantId":"{{grantId}}","grantVersion":1,"emailAddress":"owner@example.test","featureSet":2,"term":"DAILY","recycle":"NONE"}
+
+### Verify after publication. Returned grantVersion is 2; rightsEnabled remains false.
+POST {{baseUrl}}/activations/verify
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: cor19-verify-operation-0001
+Security-Operation-Key: replace-with-unix-seconds-dot-uuid-N
+Security-Operation-Recovery-Key: replace-with-32-byte-base64-key
+Content-Type: application/json
+
+{"version":2,"grantId":"{{grantId}}","grantVersion":1,"requestId":"{{requestId}}","emailAddress":"owner@example.test","code":"{{code}}"}
+
+### Revoke active state using its current expected version.
+POST {{baseUrl}}/activations/disable
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: cor19-disable-operation-0001
+Security-Operation-Key: replace-with-fresh-unix-seconds-dot-uuid-N
+Security-Operation-Recovery-Key: replace-with-fresh-32-byte-base64-key
+Content-Type: application/json
+
+{"version":2,"grantId":"{{grantId}}","grantVersion":2,"requestId":"{{requestId}}","emailAddress":"owner@example.test"}
+
+### Alternatively cancel pending state, before verification, using version 1.
+POST {{baseUrl}}/activations/cancel
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: cor19-cancel-operation-0001
+Security-Operation-Key: replace-with-fresh-unix-seconds-dot-uuid-N
+Security-Operation-Recovery-Key: replace-with-fresh-32-byte-base64-key
+Content-Type: application/json
+
+{"version":2,"grantId":"{{grantId}}","grantVersion":1,"requestId":"{{requestId}}","emailAddress":"owner@example.test"}
+
+### COR21 creation outcomes
+# 202 means queued, not sent. Keep the same Idempotency-Key to recover requestId after response loss.
+# 429 preserves durable creation/delivery throttle or provider cooldown code and retryAfterSeconds/Retry-After.
+# 503 preserves delivery counter-store unavailable/timeout. A committed creation charge remains.
+# A fresh key, changed IP or cancelled/expired ticket never resets the durable account window/cooldown.
+# Do not replace a queued request; cancel its exact grant/request/version if appropriate.

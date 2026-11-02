@@ -1,0 +1,22 @@
+services:
+  system-tests:
+    image: ${TREEHAMMOCK_DOTNET_SDK_IMAGE:-mcr.microsoft.com/dotnet/sdk:8.0}
+    profiles: ["system"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+      haproxy:
+        condition: service_started
+    working_dir: /src
+    volumes:
+      - ./:/src
+      - ./artifacts/compose-proof:/reports
+    environment:
+      DOTNET_NOLOGO: "true"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+      TREEHAMMOCK_SYSTEM_BASE_URL: http://haproxy:8080
+      TREEHAMMOCK_SYSTEM_TEST_KEY: ${TREEHAMMOCK_FIXTURE_TEST_KEY:?Initialize fixture credentials}
+    command: ["bash", "./eng/compose-system-proof.sh"]

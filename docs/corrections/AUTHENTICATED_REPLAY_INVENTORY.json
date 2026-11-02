@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "pr": "COR06",
+  "scope": "13 existing idempotent authenticated actions; other mutation gates remain COR04; source inventory is not MVC discovery",
+  "actions": [
+    {
+      "controller": "Controllers/AccountDeleteController.cs",
+      "action": "DeleteAccount",
+      "route": "account/wipeout",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "AccountDeleteRequest",
+      "response_type": "AccountDeleteResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountDeleteController.cs",
+      "action": "FinalizeDeleteAccount",
+      "route": "account/wipeout/finalize",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "AccountDeleteFinalizeRequest",
+      "response_type": "AccountDeleteResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountProfileController.cs",
+      "action": "ModifyAccount",
+      "route": "account/adjust",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "AccountEditRequest",
+      "response_type": "AccountEditResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountSessionController.cs",
+      "action": "LogoffAccount",
+      "route": "account/logoff",
+      "method": "POST",
+      "required_key": false,
+      "request_type": "AuthenticateLogoffRequest",
+      "response_type": "AuthenticateLogoffResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountSessionController.cs",
+      "action": "LogoffAllAccount",
+      "route": "account/logoff/all",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "AuthenticateLogoffAllRequest",
+      "response_type": "AuthenticateLogoffAllResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountSessionController.cs",
+      "action": "RevokeSession",
+      "route": "account/sessions/revoke",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "AccountSessionRevokeRequest",
+      "response_type": "AccountSessionRevokeResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountTwoFactorController.cs",
+      "action": "StartAuthenticatorAppSetup",
+      "route": "account/twofactor/authenticator/setup",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "StartAuthenticatorAppSetupRequest",
+      "response_type": "StartAuthenticatorAppSetupResponse",
+      "generic_safe_replay": false,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountTwoFactorController.cs",
+      "action": "VerifyAuthenticatorAppSetup",
+      "route": "account/twofactor/authenticator/verify",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "VerifyAuthenticatorAppSetupRequest",
+      "response_type": "VerifyAuthenticatorAppSetupResponse",
+      "generic_safe_replay": false,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountTwoFactorController.cs",
+      "action": "CancelAuthenticatorAppSetup",
+      "route": "account/twofactor/authenticator/cancel",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "CancelAuthenticatorAppSetupRequest",
+      "response_type": "CancelAuthenticatorAppSetupResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountTwoFactorController.cs",
+      "action": "SetupTwoFactorMethod",
+      "route": "account/setuptwofactormethod",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "SetupLayeredAuthenticateMethodRequest",
+      "response_type": "SetupLayeredAuthenticateMethodResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/AccountTwoFactorController.cs",
+      "action": "RemoveTwoFactorMethod",
+      "route": "account/twofactor/method/remove",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "RemoveTwoFactorMethodRequest",
+      "response_type": "RemoveTwoFactorMethodResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/ActivationsController.cs",
+      "action": "PlaceActivation",
+      "route": "activations/place",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "ActivationCreationRequest",
+      "response_type": "ActivationCreationResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    },
+    {
+      "controller": "Controllers/ActivationsController.cs",
+      "action": "DisableActivation",
+      "route": "activations/disable",
+      "method": "POST",
+      "required_key": true,
+      "request_type": "ActivationUnSubscribeRequest",
+      "response_type": "ActivationUnSubscribeResponse",
+      "generic_safe_replay": true,
+      "content_binding": "validated DTO presence, sensitive proof, query; account security epoch"
+    }
+  ]
+}

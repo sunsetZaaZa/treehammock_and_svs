@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "environment": "qualification",
+  "epoch": "77777777777747778777777777777777",
+  "policy": "auth.v1",
+  "nonce": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+  "revision": "0",
+  "state": "Blocked",
+  "accountId": "11111111111141118111111111111111"
+}

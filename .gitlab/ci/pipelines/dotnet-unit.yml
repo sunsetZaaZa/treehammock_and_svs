@@ -1,0 +1,28 @@
+stages:
+  - unit
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+
+variables:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  BUILD_CONFIGURATION: "Release"
+
+dotnet-unit-tests:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: unit
+  timeout: 20 minutes
+  before_script:
+    - chmod +x eng/*.sh
+    - dotnet --info
+  script:
+    - ./eng/check-locks.sh
+    - ./eng/dotnet-unit-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+  artifacts:
+    when: always
+    paths:
+      - "**/treehammock-unit-tests.trx"
+    expire_in: 14 days

@@ -1,0 +1,6 @@
+{
+  "original": "pre-SVS-02 design-v1.1 JsonWebTokenMiddleware.cs",
+  "original_sha256": "d74c8f93ede1f37fb49f67b131da8e36cd0ba29e5d8d0c8e3476c3b9844eae3d",
+  "adapted_sha256": "99f313fa4a3be6e8fc01ecc50f86c34f3f9c9b2ac90354bf1819dcff48ec20e4",
+  "adaptation": "Only namespace, class/logger type name, explicit original Web SDK namespace imports, and suppression of its pre-existing nullable warning. Original method bodies unchanged. Tests-only, not runtime fallback."
+}

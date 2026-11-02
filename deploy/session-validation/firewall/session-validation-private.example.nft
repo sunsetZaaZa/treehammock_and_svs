@@ -1,0 +1,23 @@
+# Review/merge on the declared role hosts; never flush an existing ruleset.
+table inet svs_private {
+    chain input {
+        type filter hook input priority -10; policy accept;
+        ip daddr { 10.77.0.10, 10.77.1.11, 10.77.2.21, 10.77.2.22, 10.77.4.20, 10.77.4.30 } tcp dport { 8443, 8444, 9443, 5433, 6379 } jump protected_services
+    }
+    chain protected_services {
+        ip daddr 10.77.0.10 ip saddr { 10.77.0.41, 10.77.0.42 } tcp dport 9443 accept
+        ip daddr 10.77.1.11 ip saddr 10.77.0.10 tcp dport 9443 accept
+        ip daddr { 10.77.2.21, 10.77.2.22 } ip saddr 10.77.1.11 tcp dport 8443 accept
+        ip daddr { 10.77.2.21, 10.77.2.22 } ip saddr 10.77.3.10 tcp dport 8444 accept
+        ip daddr 10.77.4.20 ip saddr { 10.77.2.21, 10.77.2.22, 10.77.2.11, 10.77.3.10 } tcp dport 5433 accept
+        ip daddr 10.77.4.30 ip saddr { 10.77.2.21, 10.77.2.22, 10.77.2.11, 10.77.3.10 } tcp dport 6379 accept
+        drop
+    }
+    chain output {
+        type filter hook output priority -10; policy accept;
+        meta skuid { 1654, 1655 } ct direction reply accept
+        meta skuid { 1654, 1655 } ip daddr 10.77.4.20 tcp dport 5433 accept
+        meta skuid { 1654, 1655 } ip daddr 10.77.4.30 tcp dport 6379 accept
+        meta skuid { 1654, 1655 } reject
+    }
+}

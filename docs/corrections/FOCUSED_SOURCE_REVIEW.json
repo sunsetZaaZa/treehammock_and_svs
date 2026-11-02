@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "reviewer": "COR23 implementation source inspection",
+  "qualification": "PendingNativeAndApplicableProvenance",
+  "files": [
+    {
+      "path": "Dependencies/CityHash.dll.config",
+      "source_disposition": "Metadata inspected",
+      "conclusion": "Declares .NET Framework 4.8 startup; not runtime support evidence. Retained alongside referenced DLL.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "Dependencies/CityHash_103.dll",
+      "source_disposition": "BinaryProvenanceAndNativeLoadBlocked",
+      "conclusion": "PE/.NET metadata and project reference inspected. Bytes retained. No ABI, signature, provenance, vulnerability or supported-platform conclusion.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "README.md",
+      "source_disposition": "Current claims reconciled",
+      "conclusion": "Source scope and pending native/release status now explicit.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+      "source_disposition": "Regenerated current literal routes",
+      "conclusion": "Includes 43 MVC actions plus GET status middleware; effective auth/envelopes and descriptor parity pending.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/release/PASSWORD_RESET_1_0_0.md",
+      "source_disposition": "Current COR12\u201314 contract reconciled",
+      "conclusion": "Generic request/proof protocol, durable reset and current Turnstile replaced stale release summary.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+      "source_disposition": "Current implementation anchors reconciled",
+      "conclusion": "43 rows link to current existing artifacts; source anchors do not qualify functionality. Removed unresolved historical anchors retained in document review record.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+      "source_disposition": "Regenerated all current definitions",
+      "conclusion": "170 canonical declarations replace stale 89-function list; lexical callers not executable contract/plan evidence.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/testing/TEST_COMMAND_GUIDE.md",
+      "source_disposition": "Command qualification boundary reconciled",
+      "conclusion": "Legacy wrappers and source indexes no longer described as sufficient release proof.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "docs/testing/treehammock-test-suite-inventory.html",
+      "source_disposition": "Regenerated source declarations",
+      "conclusion": "Static accessible table replaces oversized bundled page. No scripts or remote assets. No executed count, theory expansion or coverage claim.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+      "source_disposition": "Structured PromQL/dashboard source inspected",
+      "conclusion": "Fixed feature/dimension/reason labels and scrape metric names referenced. Actual exporter naming/configuration/scrape/alert semantics unobserved; COR23P owns transition counts.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "tests/http/bruno/treehammock/bruno.json",
+      "source_disposition": "Structured collection source inspected",
+      "conclusion": "Version/type/ignore configuration contains no credential material; not executed Bruno evidence.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "tests/http/bruno/treehammock/environments/docker-direct.bru",
+      "source_disposition": "Internal fixture URL inspected",
+      "conclusion": "api:5001 is an internal Compose DNS route, not public origin or TLS qualification.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    },
+    {
+      "path": "tests/http/bruno/treehammock/environments/docker-proxy.bru",
+      "source_disposition": "Internal fixture URL inspected",
+      "conclusion": "haproxy:8080 is internal Compose DNS route; production test isolation, proxy and origin checks remain pending.",
+      "review_owner": "COR23",
+      "qualification_owner": "COR24",
+      "source_gate": "Open; no state promoted"
+    }
+  ]
+}

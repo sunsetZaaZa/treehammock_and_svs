@@ -1,0 +1,19 @@
+{
+  "tlsName": "svs.internal.example",
+  "privateAddress": "10.20.0.21",
+  "port": 8443,
+  "serverRootCertificatePath": "/run/secrets/svs-server-root.cer",
+  "serverLeafSha256": [
+    "REPLACE_WITH_UPPERCASE_64_HEX_LEAF_SHA256"
+  ],
+  "clientCertificatePath": "/run/secrets/consumer-client.pfx",
+  "clientCertificatePassword": "REPLACE_FROM_SECRET_CONFIG",
+  "clientRootCertificatePath": "/run/secrets/consumer-client-root.cer",
+  "serviceIdentity": "spiffe://example.internal/service/contact-backup",
+  "policyVersion": "REPLACE_WITH_REVIEWED_POLICY_REVISION",
+  "requestTimeoutMilliseconds": 1000,
+  "maximumConcurrentCalls": 32,
+  "maximumConnections": 2,
+  "connectionLifetimeMilliseconds": 60000,
+  "shutdownTimeoutMilliseconds": 3000
+}

@@ -1,0 +1,35 @@
+<Project>
+  <Target Name="ValidateTreehammockReleaseIdentity" BeforeTargets="PrepareForBuild" Condition="'$(TreehammockReleaseTag)' != ''">
+    <Error Condition="'$(Configuration)' != 'Release' or '$(TreehammockProofRunId)' == ''" Text="Release builds require Release configuration and fresh build identity." />
+    <Error Condition="'$(TreehammockReleaseTag)' != 'v$(TreehammockReleaseVersion)'" Text="Release tag/version mismatch." />
+    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(TreehammockReleaseVersion)', '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'))" Text="Invalid release version." />
+    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(TreehammockReleaseBaseVersion)', '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'))" Text="Invalid assembly base version." />
+    <Error Condition="'$([System.Text.RegularExpressions.Regex]::Replace('$(TreehammockReleaseVersion)', '-.*$', ''))' != '$(TreehammockReleaseBaseVersion)'" Text="Release base/version mismatch." />
+    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(TreehammockReleaseSourceSha)', '^[0-9a-f]{40}$'))" Text="Invalid release source commit." />
+  </Target>
+  <Target Name="ValidateTreehammockConfiguration" BeforeTargets="PrepareForBuild;VSTest">
+    <Error Condition="'$(Configuration)' != 'Debug' and '$(Configuration)' != 'Release' and '$(Configuration)' != 'Sandbox'"
+           Text="Unsupported Treehammock build configuration." />
+    <Error Condition="'$(TreehammockProofRunId)' != '' and '$(TREEHAMMOCK_BUILD_CONFIGURATION)' != '$(Configuration)'"
+           Text="Build configuration differs from the requested proof configuration." />
+    <Error Condition="'$(TreehammockProofRunId)' != '' and !$([System.Text.RegularExpressions.Regex]::IsMatch('$(TreehammockProofRunId)', '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'))"
+           Text="Invalid Treehammock proof identity." />
+  </Target>
+  <Target Name="RecordTreehammockBuildIdentity" AfterTargets="Build"
+          Condition="'$(TreehammockProofRunId)' != '' and '$(TargetFramework)' != ''">
+    <Error Condition="!Exists('$(TargetPath)')" Text="Expected build output is missing." />
+    <WriteLinesToFile File="$(TargetPath).proof-id"
+                      Lines="$(TreehammockProofRunId)|$(Configuration)|$(MSBuildProjectName)|$(TargetFramework)"
+                      Overwrite="true" />
+  </Target>
+  <Target Name="CheckTreehammockNoBuildOutput" BeforeTargets="VSTest"
+          Condition="'$(TreehammockProofRunId)' != '' and '$(IsTestProject)' == 'true'">
+    <Error Condition="!Exists('$(TargetPath)') or !Exists('$(TargetPath).proof-id')"
+           Text="Current test output or build identity receipt is missing. Build the requested configuration first." />
+    <ReadLinesFromFile File="$(TargetPath).proof-id">
+      <Output TaskParameter="Lines" ItemName="_TreehammockBuiltIdentity" />
+    </ReadLinesFromFile>
+    <Error Condition="'@(_TreehammockBuiltIdentity)' != '$(TreehammockProofRunId)|$(Configuration)|$(MSBuildProjectName)|$(TargetFramework)'"
+           Text="Test output belongs to a different build invocation or configuration." />
+  </Target>
+</Project>

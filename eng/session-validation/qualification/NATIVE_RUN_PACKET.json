@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "status": "NotRun",
+  "approved_budgets": null,
+  "physical_inventory": null,
+  "source_digest_required": true,
+  "phases": [
+    {
+      "name": "cold-cache",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "hot-cache",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "mixed-refusals",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "login-storm",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "refresh-race",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "logout-race",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "ysql-leader-transfer",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "cache-loss",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "refill-outage",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "replica-loss",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "haproxy-failover",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "tls-rotation",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "network-partition",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "recovery",
+      "status": "NotRun",
+      "proof_sha256": null
+    },
+    {
+      "name": "soak-24h",
+      "status": "NotRun",
+      "proof_sha256": null
+    }
+  ],
+  "soak_measured_seconds": 0,
+  "cleanup": "NotRun",
+  "F01": "Open",
+  "F02": "Open",
+  "F03": "Open",
+  "F05": "Open",
+  "grant_rights": false,
+  "release_ready": false
+}

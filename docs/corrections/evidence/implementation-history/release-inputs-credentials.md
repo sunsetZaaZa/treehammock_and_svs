@@ -1,0 +1,15 @@
+# COR23T — release inputs as data and scoped publishing credentials
+
+Owner: R10B-01 only. Rebased on completed COR23S. Status: FixedPendingQualification; hosted qualification NotRun.
+
+The manual release workflow inserted tag/ref expressions into Bash before checking them, while every job inherited contents/package write privileges. Move metadata resolution to `eng/release-metadata.py`, executed from the trusted main checkout under a contents-read token. All dispatch fields enter through step environment variables; no context expression enters any release shell script. Validate event, tag, ref, flags and output prerequisites before external commands. Reject options, quotes, substitutions, whitespace, control characters, revision expressions and malformed ref names. Validate Git ref syntax, resolve with `--verify --end-of-options`, reject missing/ambiguous names and carry a checked immutable commit SHA.
+
+Preserve the intentional v1.0.0/initial-first-parent-main bootstrap and manual recovery policy. Other valid version tags, later pushes/targets and existing releases/tags skip publication. GitHub lookups are explicit GET requests; only an actual 404 means absence. Authentication, permission, rate-limit, server, malformed-response and transport failures stop metadata resolution and emit no outputs. Error messages never print submitted data, command output or tokens.
+
+Validate create/publish flags once and carry them as outputs for downstream conditions. Preflight, all six validation jobs and API packaging have only contents-read permission. GHCR has contents-read/packages-write; GitHub Release creation has only contents-write. Preflight retains its read-only checkout credential for the fixed main fetch; every downstream checkout disables credential persistence. Write-capable tokens appear only in their publication jobs. Repository authorization, workflow edits, protected-ref and environment policies are separate operator controls that need real hosted verification.
+
+Behavioral tests execute the actual workflow metadata command in Bash with a disposable local Git origin and real Git resolution. Harmless marker payloads, invalid syntax, ambiguous/missing refs, API/Git failures, bootstrap/recovery and validated flags are covered. GitHub is a controlled HTTP-header/exit fixture: these tests do not qualify Actions dispatch, expression conversion, CLI wire behavior, real token enforcement, registry access or application gates. Workflow mutation tests guard the data boundary, scopes, checkout source and metadata gates. Existing C# pipeline source contracts follow the extracted helper; compilation/execution remains pending without .NET.
+
+See [release input policy](../release/RELEASE_INPUT_POLICY.md) for supported input syntax and required hosted qualification. No SQL, package graph/lock, migration, compatibility system, frozen review or other finding changes. COR23U retains archive/image identity and digest promotion; optional GHCR failure remains independent of source release creation.
+
+Next: COR23U.

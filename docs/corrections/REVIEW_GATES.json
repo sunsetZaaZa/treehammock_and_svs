@@ -1,0 +1,2065 @@
+{
+  "schema_version": 1,
+  "inventory_rows": 451,
+  "legacy_pending_rows": 181,
+  "gates": [
+    {
+      "id": "source:Controllers/AccountControllerBase.LoginHelpers.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountControllerBase.LoginHelpers.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountControllerBase.RepositoryGuards.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountControllerBase.RepositoryGuards.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountControllerBase.TwoFactorHelpers.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountControllerBase.TwoFactorHelpers.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountControllerBase.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountControllerBase.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountDeleteController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountDeleteController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountLoginController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountLoginController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountProfileController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountProfileController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountRecoveryController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountRecoveryController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountRegistrationController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountRegistrationController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountSessionController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountSessionController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/AccountTwoFactorController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/AccountTwoFactorController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/ActivationsController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/ActivationsController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Controllers/PasswordResetController.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Controllers/PasswordResetController.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Account/AccountSessionSummary.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Account/AccountSessionSummary.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Account/IntraAccount.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Account/IntraAccount.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Account/TwoFactorDetails.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Account/TwoFactorDetails.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/ActivationCommandResult.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/ActivationCommandResult.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/ActivationStatus.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/ActivationStatus.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Cache/ActiveSession.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Cache/ActiveSession.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Cache/PasswordResetSession.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Cache/PasswordResetSession.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Cache/TwoFactorSession.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Cache/TwoFactorSession.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:DataLayer/Security/SensitiveActionTokens.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "DataLayer/Security/SensitiveActionTokens.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Dependencies/CityHash.dll.config",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Dependencies/CityHash.dll.config"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Dependencies/CityHash_103.dll",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Dependencies/CityHash_103.dll"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/AccountDeleteEvent.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/AccountDeleteEvent.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/AccountVerification.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/AccountVerification.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/Activations.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/Activations.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/AuthenticationProvider.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/AuthenticationProvider.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/AuthenticationProviderToken.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/AuthenticationProviderToken.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/DeleteStandy.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/DeleteStandy.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Entities/TwoFactorAuthentication.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Entities/TwoFactorAuthentication.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Account/AccountDelete.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Account/AccountDelete.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Account/AccountDetails.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Account/AccountDetails.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Account/AccountEdit.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Account/AccountEdit.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Activation/ActivationCreation.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Activation/ActivationCreation.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Activation/ActivationDetails.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Activation/ActivationDetails.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Activation/ActivationUnSubscribe.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Activation/ActivationUnSubscribe.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/AuthenticateLogin.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/AuthenticateLogin.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/AuthenticateLogoff.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/AuthenticateLogoff.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/AuthenticateSessions.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/AuthenticateSessions.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/AuthenticatorAppSetup.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/AuthenticatorAppSetup.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/LayeredAuthenticate.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/LayeredAuthenticate.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/LayeredAuthenticateMethods.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/LayeredAuthenticateMethods.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/RemoveTwoFactorMethod.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/RemoveTwoFactorMethod.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/SensitiveAction.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/SensitiveAction.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Authentication/SetupLayeredAuthenicateMethod.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Authentication/SetupLayeredAuthenicateMethod.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/PasswordReset/PasswordReset.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/PasswordReset/PasswordReset.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/Recovery/AccountRecovery.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/Recovery/AccountRecovery.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/TwoAuthProvider/TwoFactorDetails.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/TwoAuthProvider/TwoFactorDetails.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/TwoAuthProvider/TwoFactorRemove.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/TwoAuthProvider/TwoFactorRemove.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Models/TwoAuthProvider/TwoFactorSetup.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Models/TwoAuthProvider/TwoFactorSetup.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:README.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "README.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/AccessTokenHashUtility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/AccessTokenHashUtility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/AccessTokenTransport.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/AccessTokenTransport.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/Attributes/AllowAnonymous.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/Attributes/AllowAnonymous.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/AuthContextItems.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/AuthContextItems.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/JsonWebTokenMiddleware.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/JsonWebTokenPurpose.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/JsonWebTokenPurpose.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Authentication/JsonWebTokenUtility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Authentication/JsonWebTokenUtility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Cache/PasswordResetSessionService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Cache/PasswordResetSessionService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Cache/StaleActiveSessionCachePayloadException.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Cache/StaleActiveSessionCachePayloadException.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Cache/StalePendingTwoFactorCachePayloadException.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Cache/StalePendingTwoFactorCachePayloadException.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/JWTSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/JWTSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/LoginSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/LoginSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/PasswordResetSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/PasswordResetSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/RegistrationSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/RegistrationSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/SensitiveActionSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/SensitiveActionSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/TotpSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/TotpSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Config/TwoFactorSessionCacheSettings.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Config/TwoFactorSessionCacheSettings.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/AccountCryptoSizes.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/AccountCryptoSizes.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/AccountSecurityStampGuard.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/AccountSecurityStampGuard.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/AccountVerificationTokenUtility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/AccountVerificationTokenUtility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/Argon2idPasswordHashCodec.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/Argon2idPasswordHashCodec.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/SecretHashUtility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/SecretHashUtility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/SensitiveActionTokenConstants.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/SensitiveActionTokenConstants.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Rigging/Security/UserSecretHasher.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Rigging/Security/UserSecretHasher.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Actions/Account/AccountLoginAction.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Actions/Account/AccountLoginAction.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Actions/Account/AccountModifyAction.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Actions/Account/AccountModifyAction.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/AccountRecoveryCompatibility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/AccountRecoveryCompatibility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/AccountUnlockDeliveryMethod.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/AccountUnlockDeliveryMethod.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/AccountVerificationProcess.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/AccountVerificationProcess.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/ActivationStatus.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/ActivationStatus.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/AuthenticationProviderCompatibility.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/AuthenticationProviderCompatibility.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/PasswordResetBootstrapProof.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/PasswordResetBootstrapProof.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/PasswordResetSessionState.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/PasswordResetSessionState.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/PasswordResetTwoFactorConfigurationResolver.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/PasswordResetTwoFactorConfigurationResolver.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/SensitiveActionPurpose.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/SensitiveActionPurpose.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/TotpProviderType.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/TotpProviderType.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/TwoFactorAuthConfiguration.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/TwoFactorAuthConfiguration.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/TwoFactorAuthMethod.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/TwoFactorAuthMethod.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/TwoFactorAuthOutcome.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/TwoFactorAuthOutcome.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/TwoFactorSessionState.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/TwoFactorSessionState.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:RiggingSupport/Enum/VerificationStatus.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "RiggingSupport/Enum/VerificationStatus.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/AccountRecoveryService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/AccountRecoveryService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/AccountTokenVerificationAbuseProtectionServices.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/AccountTokenVerificationAbuseProtectionServices.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/AccountUnlockAbuseProtectionServices.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/AccountUnlockAbuseProtectionServices.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/ActivationAbuseProtectionServices.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/ActivationAbuseProtectionServices.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/ActivationService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/ActivationService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/AuthenticatorAppLoginService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/AuthenticatorAppLoginService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/AuthenticatorAppProvisioningService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/AuthenticatorAppProvisioningService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetAbuseProtectionServices.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetAbuseProtectionServices.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetCodeServices.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetCodeServices.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetDeliveryService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetDeliveryService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetPasswordMaterialService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetPasswordMaterialService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/PasswordResetTotpService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/PasswordResetTotpService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/SensitiveActionTokenService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/SensitiveActionTokenService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/TotpCodeVerifier.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/TotpCodeVerifier.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/TotpSecretProtectionService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/TotpSecretProtectionService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:Services/TwoFactorAuthenticateService.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "Services/TwoFactorAuthenticateService.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/release/API_ENDPOINT_MATRIX_1_0_0.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/release/PASSWORD_RESET_1_0_0.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/release/PASSWORD_RESET_1_0_0.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/testing/TEST_COMMAND_GUIDE.md",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/testing/TEST_COMMAND_GUIDE.md"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:docs/testing/treehammock-test-suite-inventory.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "docs/testing/treehammock-test-suite-inventory.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:email_templates/AccountDeleteVerify.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "email_templates/AccountDeleteVerify.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:email_templates/AccountUnlock.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "email_templates/AccountUnlock.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:email_templates/PasswordResetCode.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "email_templates/PasswordResetCode.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:email_templates/PasswordResetCode.txt",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "email_templates/PasswordResetCode.txt"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:html_templates/account_verification/already-verified.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "html_templates/account_verification/already-verified.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:html_templates/account_verification/expired.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "html_templates/account_verification/expired.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:html_templates/account_verification/failure.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "html_templates/account_verification/failure.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:html_templates/account_verification/success.html",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "html_templates/account_verification/success.html"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:ops/grafana/dashboards/abuse-controls-1-0-0.json",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "ops/grafana/dashboards/abuse-controls-1-0-0.json"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:sms_templates/PasswordResetCode.txt",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "sms_templates/PasswordResetCode.txt"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:tests/http/bruno/treehammock/bruno.json",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "tests/http/bruno/treehammock/bruno.json"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:tests/http/bruno/treehammock/environments/docker-direct.bru",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "tests/http/bruno/treehammock/environments/docker-direct.bru"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:tests/http/bruno/treehammock/environments/docker-proxy.bru",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "tests/http/bruno/treehammock/environments/docker-proxy.bru"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Integration/PasswordResetEndToEndRegressionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Integration/PasswordResetEndToEndRegressionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccessTokenHashUtilityTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccessTokenHashUtilityTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccessTokenTransportTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccessTokenTransportTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountControllerSetupVerificationTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountControllerSetupVerificationTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountCryptoSizesTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountCryptoSizesTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountRecoveryApiContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountRecoveryApiContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountRecoveryServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountRecoveryServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountRepoVerificationTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountRepoVerificationTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountTokenVerificationAbuseProtectionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountTokenVerificationAbuseProtectionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountUnlockAbuseProtectionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountUnlockAbuseProtectionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AccountVerificationTokenUtilityTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AccountVerificationTokenUtilityTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/ActivationApiContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/ActivationApiContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/ActivationServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/ActivationServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AuthenticateAttributeTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AuthenticateAttributeTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AuthenticatorAppEnrollmentSqlContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AuthenticatorAppEnrollmentSqlContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AuthenticatorAppLoginVerifierTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AuthenticatorAppLoginVerifierTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/AuthenticatorAppProvisioningServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/AuthenticatorAppProvisioningServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/DependencyInjectionRegistrationTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/DependencyInjectionRegistrationTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/IntraAccountTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/IntraAccountTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetAbuseProtectionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetAbuseProtectionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetApiContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetApiContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetCodeServicesTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetCodeServicesTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetControllerTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetControllerTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetDeliveryServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetDeliveryServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetPasswordMaterialFactoryTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetPasswordMaterialFactoryTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetRepositoryContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetRepositoryContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetRequestOrchestrationTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetRequestOrchestrationTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetResetSeriesRegressionCoverageTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetResetSeriesRegressionCoverageTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetSessionModelTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetSessionModelTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetSqlSchemaContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetSqlSchemaContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetTotpFinalizeTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetTotpFinalizeTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetTotpRepositoryContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetTotpRepositoryContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetTotpVerifierTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetTotpVerifierTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/PasswordResetTwoFactorConfigurationResolverTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/PasswordResetTwoFactorConfigurationResolverTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/SecretHashUtilityTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/SecretHashUtilityTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/SecurityStampModelTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/SecurityStampModelTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/SensitiveActionTokenServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/SensitiveActionTokenServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TotpCodeVerifierTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TotpCodeVerifierTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TotpHardeningRegressionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TotpHardeningRegressionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TotpSecretProtectionServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TotpSecretProtectionServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorAuthMethodEnumContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorAuthMethodEnumContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorAuthenticateServiceTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorAuthenticateServiceTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorAuthenticationPromotionTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorAuthenticationPromotionTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorChallengeCodeUtilityTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorChallengeCodeUtilityTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorDetailsLookupResultTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorDetailsLookupResultTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorEmailBindingContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorEmailBindingContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorEnrollmentLimitContractTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorEnrollmentLimitContractTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorMethodChallengeTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorMethodChallengeTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorMethodRemovalTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorMethodRemovalTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorSelectionEndpointTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorSelectionEndpointTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorSessionModelTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorSessionModelTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "source:treehammock.Tests/Unit/TwoFactorStubTests.cs",
+      "kind": "source",
+      "owner": "COR23",
+      "status": "Open",
+      "baseline_paths": [
+        "treehammock.Tests/Unit/TwoFactorStubTests.cs"
+      ],
+      "reason": "pending full-file review and applicable runtime checks",
+      "evidence": []
+    },
+    {
+      "id": "runtime",
+      "kind": "runtime",
+      "owner": "COR24",
+      "status": "Open",
+      "baseline_paths": [],
+      "reason": "No application/SQL/cache/system lane was executed during review.",
+      "evidence": []
+    },
+    {
+      "id": "migration-recovery",
+      "kind": "migration-recovery",
+      "owner": "COR02",
+      "status": "Open",
+      "baseline_paths": [],
+      "reason": "Qualify fresh current-schema setup and runtime roles, owned backup restore, authority and unknown-commit recovery, and retained-current-key recovery. Apply the pre-1.0 policy: recreate outdated development/test databases; no development-version schema upgrade, backfill or old-binary compatibility lane. Gate remains Open until actual source-bound native drills and cleanup are reviewed.",
+      "evidence": [],
+      "reason_history": [
+        {
+          "pr": "COR25.39",
+          "previous_reason": "Qualify fresh schema and representative upgrades and rollback.",
+          "reason": "Current pre-1.0 policy supersedes development-version upgrades/rollback; preserve historical gate identity and all actual recovery/security acceptance."
+        }
+      ],
+      "current_policy_references": [
+        "docs/corrections/PRE_1_0_SCHEMA_POLICY.md",
+        "docs/corrections/COR24_IMPLEMENTATION.md",
+        "docs/testing/INTEGRATED_QUALIFICATION.md",
+        "docs/corrections/COR25_39_IMPLEMENTATION.md"
+      ]
+    },
+    {
+      "id": "performance",
+      "kind": "performance",
+      "owner": "COR22",
+      "status": "Open",
+      "baseline_paths": [],
+      "reason": "Production workload, SLO, retention and measurements remain pending.",
+      "evidence": []
+    },
+    {
+      "id": "release",
+      "kind": "release",
+      "owner": "COR24",
+      "status": "Open",
+      "baseline_paths": [],
+      "reason": "All finding, source, runtime, recovery and budget gates must be resolved.",
+      "evidence": []
+    },
+    {
+      "id": "cor01-foundation",
+      "kind": "runtime",
+      "owner": "COR01",
+      "status": "Open",
+      "baseline_paths": [],
+      "reason": "Compile and execute the fast and owned SQL foundation on a capable host.",
+      "evidence": []
+    }
+  ],
+  "svs23_handoff": {
+    "pr": "SVS-23",
+    "status": "BlockedPendingNativeAdjudication",
+    "acceptance_record": "docs/session-validation/FINAL_ACCEPTANCE.md",
+    "handoff": "docs/session-validation/FINAL_HANDOFF.md",
+    "native_cases_executed": 0,
+    "grant_rights": false,
+    "release_ready": false
+  }
+}

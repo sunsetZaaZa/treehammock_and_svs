@@ -1,0 +1,19 @@
+# COR23P — Operational counts represent real transitions
+
+Date: 2026-10-09 (America/Chicago). Baseline: delivered COR23O. Finding: R09-04. Status: FixedPendingQualification; native compilation/execution and PromQL NotRun.
+
+Current source already had an atomic Lua creation bit from COR05 and a PostgreSQL committed creation result from COR23M. The remaining telemetry defect was `RecordPolicyDenied` implicitly recording a start for every existing-cooldown denial. The same policy counter was also recorded by the store and four application denial-mapping helpers. Free-form tag sanitization could admit unbounded, sensitive values despite a bounded tag-name list.
+
+The public counter admission boundary now records exactly one terminal outcome after durable/cache resolution. Four caller-side duplicate emissions are removed. The replacement admission metric states its dimension-level counting contract rather than claiming to count requests. `CounterDecision` carries `CooldownCreated` from the atomic server result. The Lua script uses the actual SET-NX return; repeat denial and the losing branch return false. Redis validates the reply shape, flag and decision consistency before recording a creation; SQL validates the bit, exposes it, and records only after confirmed commit and cleanup.
+
+Raw cache transition telemetry runs inside the retained raw command task. A timeout/canceled wait cannot convert a late success into admission, but a known late creation remains observable. The existing DependencyDeadline observes late faults. No retry or additional cache command is introduced. Admission outcomes exclude canceled calls that never return a result. Transition counts remain best-effort process telemetry; unknown commit/reply/exporter outcomes cannot be solved by inventing events.
+
+Existing cooldown blocks have a separate metric and exclude creation denials, reads, infrastructure failures and zero-cooldown limits. Creation tags distinguish durable and Redis-compatible backend ownership; provider circuit metrics stay separate. Finite exact catalogs replace arbitrary tag normalization, including undefined enum and unknown method/dependency values. Every declared AbuseReasonCodes member is catalogued. Labels retain the existing bounded eight names.
+
+See [ABUSE_METRIC_COUNTING_CONTRACT.md](ABUSE_METRIC_COUNTING_CONTRACT.md) for exact units, queries, backend semantics and loss/reset limitations. The current dashboard uses new metric names exclusively, adds blocked attempts, and retains its installation identity with revision 2. No compatibility system, persisted-key rename, schema or package change is introduced.
+
+Authored native MeterListener regressions check actual values for creation/repeat denial/read separation, malformed replies, late completion, durable/cache resolution, a real unlock-policy denial before proof work, pre-canceled calls and hostile tag values. Real SQL/cache regressions use independent cache connections under concurrent pressure, verify one creation, preserved TTL, reset/recreation, zero cooldown, durable commit state and healthy/broken-cache paths. The existing SQL fixture collector and Redis/Dragonfly CI matrix require these regressions. Supplemental Python tests reject contract mutations and check synthetic dashboard event selection/grouping. Exact PromQL fixtures are provided for Promtool; native PromQL execution remains blocked.
+
+Qualification must execute the pinned .NET/cache/Npgsql stack, both cache products, real SQL contention and MeterListener values, plus Promtool dashboard fixtures. Source/string checks cannot close R09-04 or any release gate. No historical evidence, original review inventory or gates are rewritten; all other findings remain unchanged.
+
+Next: COR23Q — first-failure propagation for PowerShell proof runners.

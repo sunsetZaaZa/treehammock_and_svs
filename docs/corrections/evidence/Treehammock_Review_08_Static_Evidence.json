@@ -1,0 +1,200 @@
+{
+  "evidence_kind": "Structural source assertions, catalogs and hashes; NOT executable application/provider tests",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "production_source_pass": "complete",
+    "assigned_files": 19,
+    "complete_source_inspected_files": 19,
+    "assigned_test_files_inspected_not_executed": 4,
+    "cross_chunk_inspection": {
+      "Rigging/Config/ConfigurationValidation.cs": "R08 complete validation source cross-check of provider routing versus missing Twilio prerequisites; no runtime execution.",
+      "Rigging/Config/SidewalkSettings.cs": "R08 complete provider configuration cross-check; no runtime execution.",
+      "Rigging/Config/EmailTemplateSettings.cs": "R08 complete template configuration cross-check; no runtime execution.",
+      "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs": "R08 focused singleton/provider/options composition slice; R07 source qualification retained.",
+      "Services/AccountService.cs": "R08 email/deletion non-success cleanup and throttle slices; full R07 qualification retained.",
+      "Services/PasswordResetService.cs": "R08 delivery result cancellation/revocation and cancellation-token caller slices; no new full-file audit.",
+      "Services/PasswordResetDeliveryService.cs": "R08 complete source cross-check of delivery helpers/cancellation/typed-result loss; not executed.",
+      "Services/TwoFactorAuthenticateService.cs": "R08 SMS failure accounting and test-purpose adapter slices; no new full-file audit.",
+      "Services/AccountRecoveryService.cs": "R08 unlock transport/destination and failure-accounting slices; no new full-file audit.",
+      "Services/ActivationService.cs": "R08 delivery/throttle/cancel slices; original R05 qualification retained.",
+      "Services/DeliveryAbuseThrottleService.cs": "R08 targeted global channel-circuit key, admission ordering, failure accounting and destination normalization slices; full R09 audit pending.",
+      "Rigging/Abuse/DragonflyAbuseCounterStore.cs": "R08 threshold comparison/cooldown transition slice; full R09 pass and real-cache execution pending.",
+      "treehammock.Tests/Unit/DeliveryAbuseThrottlePolicyTests.cs": "R08 method catalog and global-key/active-cooldown assertions inspected; full R09 source audit pending; not executed.",
+      "treehammock.Tests/Integration/StartupConfigurationTests.cs": "R08 complete SMS routing/alias cases at 286\u2013371 consulted; remaining full-file audit pending R10; not executed.",
+      "packages.lock.json": "R08 exact MailKit/MimeKit/AWS SDK version fields checked; full dependency audit pending R10.",
+      "Directory.Packages.props": "R08 provider version declarations checked; full dependency audit pending R10.",
+      "treehammock.csproj": "R08 dependency/template output and publish metadata slices; full build/publish qualification pending R10.",
+      "appsettings.json": "R08 template paths, non-secret SMTP routing and failure-cooldown defaults checked; full R07 source qualification retained.",
+      "email_templates/AccountDeleteVerify.html": "R08 complete source cross-check of active deletion template; no rendering/execution; existing qualification retained.",
+      "email_templates/AccountUnlock.html": "R08 complete source cross-check of active unlock template; no rendering/execution; existing qualification retained.",
+      "email_templates/PasswordResetCode.html": "R08 complete source cross-check of active reset email template; no rendering/execution; existing qualification retained.",
+      "sms_templates/PasswordResetCode.txt": "R08 complete source cross-check of active reset SMS template; no execution; existing qualification retained.",
+      "eng/dotnet-unit-tests.sh": "R08 existing runner attempted; exited 127 at missing SDK before restore/build/test."
+    },
+    "runtime_qualified": false
+  },
+  "static_checks": {
+    "mailkit_and_mimekit_pinned_4_16_0": true,
+    "aws_sdk_versions_pinned": true,
+    "smtp_connect_explicitly_disables_tls_before_auth_send": true,
+    "smtp_settings_have_no_tls_option": true,
+    "smtp_transport_errors_return_null": true,
+    "smtp_interface_has_no_cancellation_token": true,
+    "sms_interfaces_and_adapters_have_no_cancellation_token": true,
+    "sns_adapter_has_no_cancellation_token": true,
+    "twilio_http_send_has_no_supplied_token": true,
+    "sns_client_constructed_per_publish": true,
+    "provider_results_lack_unknown_acceptance_state": true,
+    "twilio_timeout_becomes_provider_unavailable": true,
+    "missing_twilio_sid_becomes_failure": true,
+    "sms_fallback_only_stops_for_success": true,
+    "email_change_and_deletion_non_success_cancel_proof": true,
+    "reset_non_delivery_cancels_or_revokes": true,
+    "activation_delivery_failure_cancels_pending": true,
+    "reset_delivery_token_checked_only_once_at_entry": true,
+    "reset_email_sms_helpers_omit_token": true,
+    "all_unsuccessful_factor_sms_calls_charge_provider_failure": true,
+    "provider_failure_key_only_channel_scoped": true,
+    "provider_failure_record_accepts_no_typed_outcome": true,
+    "cooldown_gate_precedes_per_account_and_destination_limits": true,
+    "default_cooldown_policy_enabled_five_limit_900_seconds": true,
+    "real_counter_allows_threshold_and_trips_above_it": true,
+    "sidewalk_twilio_prerequisites_are_nullable_without_required_annotations": true,
+    "startup_validator_omits_twilio_prerequisite_fields": true,
+    "sidewalk_options_have_startup_validation_registration": true,
+    "twilio_runtime_missing_setting_guards_exist": true,
+    "twilio_https_per_request_auth_and_encoded_form": true,
+    "sms_provider_chain_aliases_deduplicated": true,
+    "smtp_templates_loaded_in_constructor_with_fallback": true,
+    "template_rendering_is_direct_replacement": true,
+    "publishing_metadata_includes_html_and_txt_templates": true,
+    "test_smtp_bypasses_production_renderer": true
+  },
+  "assigned_file_sha256": {
+    "Rigging/Config/SMTPSettings.cs": "96bd7e2ff0458456632f5052e0d08e4937fe6fba7344211d455a03ed22cb4a3f",
+    "Rigging/Config/SmsProviderNames.cs": "333ff3290702914cd71e83dd5f9ac2f161bbac082b52d6a522baec1ad662371e",
+    "Rigging/Sidewalk/AWSService.cs": "26e0d5a5fac0d47cbc70b976052ca95087433280d882aca0fda1629e39df9fae",
+    "Rigging/Sidewalk/AspenTrees.cs": "6e7da0415c0df65a4355aeb1b1e9d4ce0e683922dcd4a76dbfc39813bb921e25",
+    "Rigging/Sidewalk/ProviderDeliveryResult.cs": "b085b606edb7f7d66638a537c20d5439aee24556bf90d6de12fad3c68a08ef97",
+    "Services/SMTPService.cs": "c7d527b0e9a501969e9fb4a03b1cbcfb692dffb1330ab430f6f2ed5851414c67",
+    "Services/SmsSender.cs": "00e5740504ee73804a3449f2141b98bd44348cd124a4619b9eecf9bffeac88f3",
+    "Services/SystemTesting/SystemTestSmsSender.cs": "fb496c2864cb3aa717fb8ad0e9cdf22417649d64914f8ea3d344460c7467b675",
+    "Services/SystemTesting/SystemTestSmtpService.cs": "7ce634f369280ba9b4f893aa1fca0ff53cc406e060564fbc4a423c3ff4e4b9c3",
+    "email_templates/AccountEmailChangeVerify.html": "0e3bcf8760bbc9543a957027f2795ab6c8a72e1ff03d3ba1523f1a02f83269ba",
+    "email_templates/AccountVerify.html": "35e34c9564436d68865472e358e0d24287fee1c682907d0feeeb51407bc05d01",
+    "email_templates/AccountVerifyResend.html": "bc75b256e8281e7507a537c6d07ca64edd7d03522a2104cbe374e10e216316df",
+    "email_templates/TwoFactorDelete.html": "8994db6aedc75793439d259166b5f8fa9a5736c09e920dda6d76c602e949d3c3",
+    "email_templates/TwoFactorKeyOutbound.html": "4d872ec509b18f482a7ff16c746acc7ade5b64626345f88b7d8ec2a97a8f7264",
+    "email_templates/TwoFactorSetup.html": "bc040a01123ba329d3795849242e0367b30da1be7b22351a8883ad509c0d2086",
+    "treehammock.Tests/Unit/SMTPServiceConfigurationTests.cs": "9d4134c00731307b253a74d150686eed3d1a2709ff6c39cb391804e808fa95cf",
+    "treehammock.Tests/Unit/SmsProviderServiceTests.cs": "e0f67996dcc04972d3c28559ce50d80331a54c0ce91e22019f513654d7f1903d",
+    "treehammock.Tests/Unit/SmsSenderTests.cs": "99456479c1e4504b78d4231aa40d4ab0f217ddc0b92ff63b2e226c99f7ba8800",
+    "treehammock.Tests/Unit/TwilioMessageClientTests.cs": "7605bf170a4acba7fcd552ee90e800759e197cc7d343cadc1f4863654a8c4ddf"
+  },
+  "assigned_test_method_catalogs_all_source_inspected_NOT_executed": {
+    "treehammock.Tests/Unit/SMTPServiceConfigurationTests.cs": [
+      "Constructor_uses_fallback_templates_when_configured_files_are_missing",
+      "SMTPSettings_exposes_only_runtime_smtp_transport_configuration",
+      "Appsettings_do_not_include_removed_smtp_contract_settings"
+    ],
+    "treehammock.Tests/Unit/SmsProviderServiceTests.cs": [
+      "AwsService_returns_disabled_when_feature_flag_is_off",
+      "AwsService_returns_sent_when_provider_returns_message_id",
+      "TwilioSmsService_returns_configuration_missing_before_provider_call",
+      "TwilioSmsService_returns_sent_when_provider_returns_sid"
+    ],
+    "treehammock.Tests/Unit/SmsSenderTests.cs": [
+      "SendCode_uses_aws_primary_provider_before_twilio",
+      "SendCode_falls_back_to_twilio_when_aws_fails",
+      "SendCode_fails_closed_when_sms_is_disabled",
+      "SendCode_skips_provider_when_specific_feature_flag_is_disabled",
+      "SendCode_rejects_unknown_provider_without_calling_known_providers",
+      "SendCode_normalizes_aws_sns_provider_aliases",
+      "SendCode_deduplicates_provider_aliases_before_fallback",
+      "SendMessage_uses_raw_provider_message_for_templated_sms_delivery"
+    ],
+    "treehammock.Tests/Unit/TwilioMessageClientTests.cs": [
+      "TwilioMessageClient_uses_per_request_http_basic_auth_without_static_twilio_client",
+      "TwilioMessageClient_maps_rate_limit_and_provider_rejection_without_throwing",
+      "Twilio_provider_does_not_reference_twilio_static_client_or_sdk_packages"
+    ]
+  },
+  "template_catalog_NOT_rendered": {
+    "email_templates/AccountEmailChangeVerify.html": {
+      "markers": [
+        "%verifyUrl"
+      ],
+      "remote_resources": [],
+      "sha256": "0e3bcf8760bbc9543a957027f2795ab6c8a72e1ff03d3ba1523f1a02f83269ba"
+    },
+    "email_templates/AccountVerify.html": {
+      "markers": [
+        "%verifyUrl"
+      ],
+      "remote_resources": [],
+      "sha256": "35e34c9564436d68865472e358e0d24287fee1c682907d0feeeb51407bc05d01"
+    },
+    "email_templates/AccountVerifyResend.html": {
+      "markers": [
+        "%verifyUrl"
+      ],
+      "remote_resources": [],
+      "sha256": "bc75b256e8281e7507a537c6d07ca64edd7d03522a2104cbe374e10e216316df"
+    },
+    "email_templates/TwoFactorDelete.html": {
+      "markers": [
+        "%verifySequence"
+      ],
+      "remote_resources": [],
+      "sha256": "8994db6aedc75793439d259166b5f8fa9a5736c09e920dda6d76c602e949d3c3"
+    },
+    "email_templates/TwoFactorKeyOutbound.html": {
+      "markers": [
+        "%verifySequence"
+      ],
+      "remote_resources": [],
+      "sha256": "4d872ec509b18f482a7ff16c746acc7ade5b64626345f88b7d8ec2a97a8f7264"
+    },
+    "email_templates/TwoFactorSetup.html": {
+      "markers": [
+        "%verifySequence"
+      ],
+      "remote_resources": [],
+      "sha256": "bc040a01123ba329d3795849242e0367b30da1be7b22351a8883ad509c0d2086"
+    }
+  },
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "qualification": {
+    "build_tests": "runner exited 127 before restore/build/test; not executed",
+    "tls_provider_acknowledgement_cancellation": "source-derived behavior; not reproduced",
+    "channel_circuit": "source-derived threshold; real-cache scenario not executed",
+    "templates": "source/markers/publishing metadata only; not rendered or delivered",
+    "performance": "not measured",
+    "deployment": "not inspected",
+    "published_mailkit_reference": "4.17.0 docs; pinned 4.16.0 runtime qualification pending"
+  },
+  "new_finding_pr_ownership": {
+    "R08-01": "COR23H",
+    "R08-02": "COR23I",
+    "R08-03": "COR23J",
+    "R08-04": "COR23K",
+    "R08-05": "COR23L"
+  },
+  "reference_urls": [
+    "https://mimekit.net/docs/html/T_MailKit_Security_SecureSocketOptions.htm",
+    "https://datatracker.ietf.org/doc/html/rfc5321",
+    "https://www.twilio.com/docs/api/errors/20429",
+    "https://mimekit.net/docs/html/M_MailKit_Net_Smtp_SmtpClient_ConnectAsync_2.htm",
+    "https://mimekit.net/docs/html/Overload_MailKit_Net_Smtp_SmtpClient_SendAsync.htm",
+    "https://docs.aws.amazon.com/sdkfornet/v4/apidocs/items/SNS/MSNSPublishAsyncPublishRequestCancellationToken.html"
+  ]
+}

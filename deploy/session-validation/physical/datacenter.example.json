@@ -1,0 +1,25 @@
+{
+  "datacenter": "dc1",
+  "tlsName": "svs.dc1.example.internal",
+  "ingressIp": "10.77.0.10",
+  "haproxyIp": "10.77.1.11",
+  "replicaIps": [
+    "10.77.2.21",
+    "10.77.2.22"
+  ],
+  "replicaUids": [
+    1654,
+    1655
+  ],
+  "controllerIp": "10.77.3.10",
+  "writerIps": [
+    "10.77.2.11"
+  ],
+  "callerIps": [
+    "10.77.0.41",
+    "10.77.0.42"
+  ],
+  "databaseIp": "10.77.4.20",
+  "cacheIp": "10.77.4.30",
+  "cacheTlsName": "cache.dc1.example.internal"
+}

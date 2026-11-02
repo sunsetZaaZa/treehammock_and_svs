@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><TargetFrameworks>net8.0;net10.0</TargetFrameworks><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors><IsPackable>false</IsPackable></PropertyGroup>
+<ItemGroup><PackageReference Include="Grpc.Net.Client"/><ProjectReference Include="../Treehammock.SessionValidation.Contracts/Treehammock.SessionValidation.Contracts.csproj"/><InternalsVisibleTo Include="Treehammock.SessionValidation.ClientTests"/><InternalsVisibleTo Include="Treehammock.SessionValidation.HostTests"/></ItemGroup>
+</Project>

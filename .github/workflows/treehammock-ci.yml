@@ -1,0 +1,515 @@
+name: Treehammock CI
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - main
+      - develop
+      - "release/**"
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: Validation lane to run. Heavy lanes are manual so normal PRs stay fast.
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - unit
+          - integration
+          - sql
+          - docker-direct
+          - docker-proxy
+          - docker-system
+          - cor24
+
+permissions:
+  contents: read
+
+concurrency:
+  group: treehammock-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  correction-baseline:
+    name: Correction evidence and fast baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - name: Initialize correction diagnostics
+        run: |
+          mkdir -p .correction-results
+          git rev-parse HEAD > .correction-results/current-commit.txt
+          python3 --version > .correction-results/python-version.txt
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Validate evidence and state transitions
+        run: python3 eng/check-correction-evidence.py --previous-revision HEAD^ --initial-import-ledger-sha256 ee3a33805ece63287c82f62490cd16ccf67c3c1a9c5d445b7950030d847cc48e 2>&1 | tee .correction-results/integrity.txt
+      - name: Verify migrations and generated baselines
+        run: python3 eng/generate-database-baseline.py --check # Pre-1.0 schema edited directly; no deployed upgrade history.
+      - name: Verify durable factor identity source contracts
+        run: python3 eng/check-factor-identities.py
+      - name: Verify SQL output binding source audit
+        run: python3 eng/check-sql-output-bindings.py
+      - name: Verify activation reader scope boundaries
+        run: python3 eng/check-activation-reader-scopes.py
+      - name: Verify current source and advertised surface reconciliation
+        run: python3 eng/reconcile-source-inventory.py --check
+      - name: Verify PowerShell native failure boundaries
+        run: python3 eng/check-powershell-native-boundaries.py
+      - name: Exercise PowerShell source rejection and fixture plumbing
+        run: python3 -m unittest discover -s eng/tests -p 'test_powershell_native_boundaries.py'
+      - name: Verify atomic abuse metric counting boundaries
+        run: python3 eng/check-abuse-metric-counting.py
+      - name: Exercise metric boundary mutations and synthetic dashboard series
+        run: python3 -m unittest discover -s eng/tests -p 'test_abuse_metric_counting.py'
+      - name: Verify bounded readiness source boundaries
+        run: python3 eng/check-readiness-probes.py
+      - name: Exercise readiness source rejection witnesses
+        run: python3 -m unittest discover -s eng/tests -p 'test_readiness_probes.py'
+      - name: Verify owned test acquisition and cleanup boundaries
+        run: |
+          python3 eng/check-test-ownership.py
+          python3 eng/check-test-lifecycle.py
+          python3 eng/check-host-system-proof.py
+
+      - name: Verify strict account failure assertion boundaries
+        run: python3 eng/check-account-failure-envelopes.py
+      - name: Run actual account envelope suites and disposable schema mutations
+        run: python3 eng/test-account-failure-envelopes.py --output .correction-results/cor23ac-account-envelopes.json
+      - name: Verify account-flow fixture ownership
+        run: python3 eng/check-account-flow-lifetimes.py
+      - name: Run complete account flows and actual host disposal probes
+        run: python3 eng/test-account-flow-lifetimes.py --output .correction-results/cor23ad-account-flows.json
+      - name: Verify integrated qualification boundaries
+        run: python3 eng/check-cross-feature-qualification.py
+      - name: Verify authenticator predecessor target binding
+        run: python3 eng/check-authenticator-replacement.py
+      - name: Verify registration HTML and independent account-state proof
+        run: python3 eng/check-registration-verification.py
+      - name: Run actual registration verification HTTP regressions
+        run: python3 eng/test-registration-verification.py --output .correction-results/cor23ae-registration-http.json
+      - name: Verify database-backed session cache warmup boundaries
+        run: python3 eng/check-session-cache-warmup.py
+      - name: Exercise session cache warmup source rejection witnesses
+        run: python3 -m unittest discover -s eng/tests -p 'test_session_cache_warmup.py'
+      - name: Verify cache client ownership and lifecycle source boundaries
+        run: python3 eng/check-cache-client-lifecycle.py
+      - name: Exercise cache lifecycle source rejection witnesses
+        run: python3 -m unittest discover -s eng/tests -p 'test_cache_client_lifecycle.py'
+      - name: Verify authoritative abuse budget configuration and source boundaries
+        run: python3 eng/check-authoritative-abuse-budgets.py
+      - name: Exercise authoritative abuse budget rejection witnesses
+        run: python3 -m unittest discover -s eng/tests -p 'test_authoritative_abuse_budgets.py'
+      - name: Verify selected SMS transport configuration boundaries
+        run: python3 eng/check-sms-transport-configuration.py
+      - name: Exercise selected SMS configuration source mutations
+        run: python3 -m unittest discover -s eng/tests -p 'test_sms_transport_configuration.py'
+      - name: Exercise evidence rejection and collector failures
+        run: python3 -m unittest discover -s eng/tests -p 'test_correction_*.py' 2>&1 | tee .correction-results/tooling-tests.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify session client response and recovery contract
+        run: node --test tests/client/session-protocol.test.mjs 2>&1 | tee .correction-results/session-client.txt
+      - name: Collect the current fast baseline
+        run: bash eng/correction-baseline.sh --lane fast
+      - name: Preflight shipped physical SMS configuration without workers or provider I/O
+        env:
+          ASPNETCORE_ENVIRONMENT: Container
+          DOTNET_ENVIRONMENT: Container
+          SystemTestSettings__Enabled: "false"
+          SystemTestSettings__EnableTestInspectionEndpoints: "false"
+          SystemTestSettings__TestKey: ""
+        run: dotnet run --project treehammock.csproj --configuration Release --no-build --no-restore --no-launch-profile -- validate-sms-config
+      - name: Publish current baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-correction-baseline
+          path: .correction-results/**
+          include-hidden-files: true
+          if-no-files-found: error
+
+  correction-sql-harness:
+    name: Owned PostgreSQL fixture and observed schedules (${{ matrix.cache-product }})
+    strategy:
+      fail-fast: false
+      matrix:
+        cache-product: [redis, dragonfly]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - name: Initialize SQL fixture diagnostics
+        run: |
+          mkdir -p .correction-results
+          git rev-parse HEAD > .correction-results/current-commit.txt
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Run the isolated SQL foundation
+        run: bash eng/correction-sql-fixture.sh --cache-product ${{ matrix.cache-product }}
+      - name: Run actual authenticator repository replacement and predecessor mutation
+        run: bash eng/correction-sql-fixture.sh --cache-product ${{ matrix.cache-product }} --authenticator-replacement
+      - name: Publish SQL schedule and owned teardown evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-correction-sql-harness-${{ matrix.cache-product }}
+          path: .correction-results/**
+          include-hidden-files: true
+          if-no-files-found: error
+
+  dotnet-unit-tests:
+    name: .NET unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lane == 'all' || github.event.inputs.lane == 'unit' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run unit lane
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/dotnet-unit-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-unit-tests
+          path: "**/treehammock-unit-tests.trx"
+          if-no-files-found: warn
+
+  dotnet-integration-tests:
+    name: .NET in-process integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lane == 'all' || github.event.inputs.lane == 'integration' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run integration lane
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/dotnet-integration-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-integration-tests
+          path: "**/treehammock-integration-tests.trx"
+          if-no-files-found: warn
+
+  dotnet-sql-contracts:
+    name: PostgreSQL SQL contract tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.lane == 'all' || github.event.inputs.lane == 'sql') }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: treehammock_contract
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d treehammock_contract"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS: "true"
+      TREEHAMMOCK_DB_CONTRACT_CONNECTION: "Host=localhost;Port=5432;Database=treehammock_contract;Username=postgres;Password=postgres"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run SQL contract lane
+        run: |
+          chmod +x eng/*.sh
+          ./eng/check-locks.sh
+          ./eng/sql-contracts.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+
+      - name: Upload SQL contract test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-sql-contracts
+          path: "**/treehammock-sql-contracts.trx"
+          if-no-files-found: warn
+
+  docker-direct-integration:
+    name: Docker direct HTTP integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.lane == 'all' || github.event.inputs.lane == 'docker-direct') }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Run Docker direct lane
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-http-contracts-direct.sh
+
+      - name: Tear down Docker direct lane
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker direct reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-docker-direct-reports
+          path: |
+            artifacts/test-runs/**/compose-proof/**/run.json
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/*.trx
+            artifacts/test-runs/**/compose-proof/**/proof.json
+            artifacts/test-runs/**/compose-proof/**/results.json
+            artifacts/test-runs/**/compose-proof/**/results/*.trx
+          if-no-files-found: warn
+
+  docker-proxy-integration:
+    name: Docker HAProxy HTTP integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.lane == 'all' || github.event.inputs.lane == 'docker-proxy') }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Run Docker proxy lane
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-http-contracts-proxy.sh
+
+      - name: Tear down Docker proxy lane
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker proxy reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-docker-proxy-reports
+          path: |
+            artifacts/test-runs/**/compose-proof/**/run.json
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/*.trx
+            artifacts/test-runs/**/compose-proof/**/proof.json
+            artifacts/test-runs/**/compose-proof/**/results.json
+            artifacts/test-runs/**/compose-proof/**/results/*.trx
+          if-no-files-found: warn
+
+  docker-system-stack:
+    name: Docker system stack tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.lane == 'all' || github.event.inputs.lane == 'docker-system') }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          cache: true
+          cache-dependency-path: |
+            packages.lock.json
+            **/packages.lock.json
+
+      - name: Run Docker host-backed system stack lane
+        run: |
+          chmod +x eng/*.sh
+          docker version
+          docker compose version
+          ./eng/docker-host-system-stack-tests.sh
+
+
+      - name: Tear down Docker system stack lane
+        if: always()
+        run: python3 eng/test-ownership.py cleanup-ci
+
+      - name: Upload Docker system reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-docker-system-reports
+          path: |
+            artifacts/test-runs/**/host/*.trx
+            artifacts/test-runs/**/run.json
+            artifacts/test-runs/**/cleanup.json
+            artifacts/test-runs/**/rendered-ownership.json
+            artifacts/test-runs/**/docker-logs/*.log
+          if-no-files-found: warn
+
+  powershell-native-boundaries:
+    name: PowerShell first-failure matrix (${{ matrix.os }}, ${{ matrix.host }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            host: pwsh
+          - os: windows-latest
+            host: pwsh
+          - os: windows-latest
+            host: powershell.exe
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Execute actual host and controlled native failure matrix
+        run: python eng/test-powershell-runners.py --host ${{ matrix.host }} --output .correction-results/cor23q-powershell.json
+      - name: Execute declared host prerequisite checks
+        run: python eng/test-host-prerequisites.py --host ${{ matrix.host }} --require-native --output .correction-results/cor23ab-host.json
+      - name: Publish runner matrix result
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: powershell-native-${{ matrix.os }}-${{ matrix.host }}
+          path: |
+            .correction-results/cor23q-powershell.json
+            .correction-results/cor23ab-host.json
+
+  cor24-qualification:
+    name: COR24 integrated evidence (release remains gated)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.lane == 'cor24'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Collect complete local native and tooling evidence
+        run: python3 eng/verify-cross-feature-qualification.py --output .correction-results/cor24
+      - name: Publish qualification packet and blockers
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: treehammock-cor24-qualification
+          path: .correction-results/cor24/**
+          include-hidden-files: true
+          if-no-files-found: error
+
+  svs-managed-tests:
+    name: SessionValidation managed (.NET 8 and 10)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lane == 'all' || github.event.inputs.lane == 'unit' || github.event.inputs.lane == 'integration' }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Test SVS release archive integrity checks
+        run: python3 -m unittest discover -s eng/tests -p 'test_session_validation_artifacts.py'
+      - name: Test SessionValidation managed suites
+        run: bash eng/session-validation-release.sh test artifacts/session-validation/managed-tests
+      - name: Upload SVS managed test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: session-validation-managed-tests
+          path: artifacts/session-validation/managed-tests/**/*.xml
+          if-no-files-found: warn

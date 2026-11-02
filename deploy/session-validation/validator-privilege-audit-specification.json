@@ -1,0 +1,8 @@
+{
+  "source": "TreeHammock THS-12A",
+  "archive_sha256": "02d9907e9e0b806acbb019fd67ba55666a6d8565717f4cc8598f4bb914a9cbcc",
+  "helper_source_sha256": "c02f5d45e405ca677ca5072d34b94afbc27c3c92d5f7da95a0e4e7d5aad2ff4e",
+  "policy_sha256": "7a96be0e259aa33a82f7a8456fd004770304589ca206e1b8f0b0c9f40f666950",
+  "schema": "public",
+  "native_qualified": false
+}

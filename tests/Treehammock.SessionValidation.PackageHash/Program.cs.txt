@@ -1,0 +1,22 @@
+using System.Text.Json;
+using NuGet.Packaging;
+// SDK-owned NuGet reader supplies signed/unsigned content-hash semantics.
+// Paths/results stay in private CI scratch; no package content is printed.
+try
+{
+    if(args.Length!=2)return 2;
+    var paths=JsonSerializer.Deserialize<string[]>(File.ReadAllText(args[0]))??throw new InvalidDataException();
+    var hashes=new Dictionary<string,string>(StringComparer.Ordinal);
+    foreach(var path in paths)
+    {
+        using var reader=new PackageArchiveReader(path);
+        if(await reader.IsSignedAsync(CancellationToken.None))
+        {
+            var signature=await reader.GetPrimarySignatureAsync(CancellationToken.None)??throw new InvalidDataException();
+            await reader.ValidateIntegrityAsync(signature.SignatureContent,CancellationToken.None);
+        }
+        hashes.Add(path,reader.GetContentHash(CancellationToken.None));
+    }
+    File.WriteAllText(args[1],JsonSerializer.Serialize(hashes));return 0;
+}
+catch{Console.Error.WriteLine("PACKAGE_CONTENT_VERIFICATION_FAILED");return 1;}

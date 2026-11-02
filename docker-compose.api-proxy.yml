@@ -1,0 +1,10 @@
+services:
+  api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: ContainerReverseProxy
+      DOTNET_ENVIRONMENT: ContainerReverseProxy
+      RegistrationSettings__PublicOrigin: ${TREEHAMMOCK_PUBLIC_ORIGIN:-http://localhost:8080}
+      HostingSettings__UseForwardedHeaders: "true"
+      HostingSettings__ForwardLimit: "1"
+      HostingSettings__RequireHeaderSymmetry: "true"
+      HostingSettings__TrustAllForwardedHeaderProxies: "true"

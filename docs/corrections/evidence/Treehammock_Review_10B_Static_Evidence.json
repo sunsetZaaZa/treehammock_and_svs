@@ -1,0 +1,316 @@
+{
+  "evidence_kind": "Source/configuration assertions, needs graphs and isolated shell command-stub flows; NOT runtime release/application qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "assigned_parent_chunk": "R10",
+    "selected_files": 29,
+    "complete_source_or_configuration_files": 29,
+    "assigned_csharp_test_sources_inspected_not_executed": 5,
+    "remaining_R10_assigned_files": 93,
+    "prior_R06_partial_test_files_remain_deferred": 3,
+    "cross_chunk_inspection": {
+      "Dockerfile": "R10B complete source cross-check of build/publish stages and metadata; R07 assignment retained, no Docker execution.",
+      ".dockerignore": "R10B complete source cross-check of build context exclusions; prior qualification retained.",
+      "Directory.Build.props": "R10B complete fixed release version cross-check; R10A qualification retained.",
+      "eng/docker-system-stack-tests.sh": "R10B complete caller source cross-check of Compose exit-code-from behavior; separate wrapper qualification remains scheduled.",
+      "eng/docker-http-contracts-direct.sh": "R10B complete caller source cross-check of Compose run invocation; separate wrapper qualification remains scheduled.",
+      "eng/docker-http-contracts-proxy.sh": "R10B complete caller source cross-check of Compose run invocation; separate wrapper qualification remains scheduled.",
+      "README.md": "R10B targeted release/deployment policy searches only; full document review remains pending.",
+      "docs/deployment/CLOUDFLARE_HAPROXY_ABUSE_PROFILE_1_0_0.md": "R10B targeted local versus production edge-policy cross-check; prior qualification retained."
+    },
+    "isolated_shell_command_stub_checks": 13,
+    "runtime_qualified": false,
+    "policy_limits_not_defects": [
+      "GitHub release intentionally restricted to v1.0.0 from initial main commit; later corrected releases need a separately defined release policy.",
+      "GitHub source release is explicitly independent of optional GHCR publication."
+    ]
+  },
+  "selected_file_sha256": {
+    ".github/workflows/treehammock-ci.yml": "a2cc512a4cab3dbf4a69397b3cf005899be4956650736082db33b3bcc8e9a8f8",
+    ".github/workflows/treehammock-release.yml": "620d2f5a7ecf60602f3813f8bf7ecca7bfae5bbeb3ecc0b3d1555f96426b8571",
+    ".gitlab-ci.yml": "378306f84b7205becaf964433e288502f7aedac8f062aeb06db11f8908a9682b",
+    ".gitlab/ci/pipelines/dotnet-unit.yml": "0ea301f6ec29f68fe085ca295b413852d9503b27498bc2498cd715c2ba5c0d12",
+    ".gitlab/ci/pipelines/dotnet-integration.yml": "7f40aebbffef6f51accab47b3b807022dcd9d627d4fd4fd227e49feb1c4ca3c8",
+    ".gitlab/ci/pipelines/dotnet-sql.yml": "31ee2a5e6e20f8786e8207fd7bfb59cc3df03bb9bdb66bd5c21a4bd5018e90e4",
+    ".gitlab/ci/pipelines/docker-direct.yml": "1609f4c084d0d1c3eed6fb5fcae686b409c1720999cb4b9089b3c040b44f92ce",
+    ".gitlab/ci/pipelines/docker-proxy.yml": "2f8ac2783adee2831f6137b028984287afeb41a5247a61e6cb528af768ed7cf6",
+    ".gitlab/ci/pipelines/docker-system.yml": "33ffd3930124a19fda734613d7691cec1ea62629b1c93354c559a0a216a40f3b",
+    ".gitlab/ci/pipelines/release.yml": "9d5454cd268086511be647112b236a866c58aef4b843819132de08fe0369b604",
+    "deploy/haproxy/haproxy.cfg": "8c69e405ab3fbd423086c74b31b89b7f3803c46f5c9e252cd1a392513297632e",
+    "deploy/haproxy/haproxy.host-system.cfg": "a002c38695f1d65f8b3539910f3eedf415828380cd803dde9376885089dd397a",
+    "docker-compose.integration.yml": "81a9c61dd37d6e5de218e6fe82ea04b521fca3de182966c33582e113c4b05f40",
+    "docker-compose.api-direct.yml": "ec02635960bd8ac45e59925a38ccf32209f7357694e5fde01517d6a8a6fdafd7",
+    "docker-compose.api-proxy.yml": "cc7911ee6044df7e436961dc28bcb8bd55a610eff978d5c11e87921437560665",
+    "docker-compose.ci-system.yml": "0476353683910467bf518ade8e17334c1073b9d52857a0fa7f1877e0d9a65bef",
+    "docker-compose.local-system.yml": "b4d23f7737c79cd57585da943d6b1b83e7c0e5f0077e8b0f4f249d5290e20e60",
+    "eng/release-container-publish.sh": "3985b5b93882a12ead7fcf0c7c034105285b865c66b53ed2fea81aa717c58223",
+    "eng/docker-api-image.sh": "f77fe79791f37a4a179d3dac45e9cb83072f1867ed4ce97ae2afc94f5bb82457",
+    "eng/docker-api-image.ps1": "2d6f29395a9f7558daf267600296fa4ee62e9878ee20afdaa855244b42befdd0",
+    "eng/docker-unit-tests.sh": "74351f876ed673541d09228543409999c519264da752adc817565dba68f3798c",
+    "eng/docker-unit-tests.ps1": "2f7cf08e87cd382b2d81d78853bf280f42c5aef9a7b69e7a9bb57cf884c6df29",
+    "eng/docker-cli.sh": "e03b87dae6e85971e70a6c2be58ad832476aba6bc5d5ac033bc59160185f1f93",
+    "treehammock.Tests/Unit/GitHubActionsPipelineTests.cs": "c658ce209f1c7db458956063d18567458f150e94cb9e53dfb306ada6199b6c01",
+    "treehammock.Tests/Unit/GitLabCiPipelineTests.cs": "73ccf7b43c15e4ec93b473a622b2736c6e1f62e8348560aeafb5bc22b1a0319c",
+    "treehammock.Tests/Unit/GitLabDockerIntegrationCiTests.cs": "4995e61fd8d2349055bcad36f6305af3db21645217a59205bff54678c6d96a84",
+    "treehammock.Tests/Unit/GitLabReleasePipelineTests.cs": "a88ba4b66e64693cf34f816d1402cbfc57fc4d51cedba998aca2f5c2fbc6ed66",
+    "treehammock.Tests/Unit/DockerProxyConfigurationTests.cs": "ffc4d29945dc10a834a486f427e25f2d2909d783d235d6a766678b08e0eac9bf",
+    "docs/release/GITHUB_CI_CD_RELEASE_1_0_0.md": "80706cddd971f038da25aab306f53e11ac6a4d66eecfc5a05e17c51d8b98ff5a"
+  },
+  "static_checks": {
+    "all_selected_yaml_parsed": true,
+    "release_needs_graphs_have_known_nodes_and_no_cycles": true,
+    "both_package_jobs_require_all_six_validation_gates": true,
+    "gitlab_enabled_image_jobs_require_all_six_gates": true,
+    "gitlab_parent_triggers_wait_on_child_status": true,
+    "manual_inputs_interpolated_into_script_before_validation": true,
+    "release_workflow_grants_write_by_default": true,
+    "gh_image_sha_is_trigger_context_not_checkout_ref": true,
+    "gitlab_package_publish_omits_release_version_properties": true,
+    "container_publisher_rebuilds_without_release_version_build_args": true,
+    "dockerfile_has_no_release_identity_args": true,
+    "default_assembly_version_fixed": true,
+    "ps_loop_reuses_case_insensitive_target_variable": true,
+    "http_compose_commands_have_no_errexit": true,
+    "system_compose_restore_is_not_fail_fast": true,
+    "readiness_http_requests_have_no_per_request_timeout": true,
+    "local_and_integration_state_ports_have_no_host_address": true,
+    "test_proxy_and_direct_api_ports_have_no_host_address": true,
+    "integration_test_capability_enabled_with_fixture_key": true,
+    "gh_bootstrap_policy_explicit_and_documented": true,
+    "gh_optional_registry_does_not_gate_release_creation": true
+  },
+  "release_needs_graphs": {
+    "github_release": {
+      "release-preflight": [],
+      "release-dotnet-unit-gate": [
+        "release-preflight"
+      ],
+      "release-dotnet-integration-gate": [
+        "release-preflight"
+      ],
+      "release-dotnet-sql-gate": [
+        "release-preflight"
+      ],
+      "release-docker-direct-gate": [
+        "release-preflight"
+      ],
+      "release-docker-proxy-gate": [
+        "release-preflight"
+      ],
+      "release-docker-system-gate": [
+        "release-preflight"
+      ],
+      "release-package-api": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-ghcr-image": [
+        "release-preflight",
+        "release-package-api"
+      ],
+      "create-github-release": [
+        "release-preflight",
+        "release-package-api",
+        "release-ghcr-image"
+      ]
+    },
+    "gitlab_release": {
+      "release-preflight": [],
+      "release-dotnet-unit-gate": [
+        "release-preflight"
+      ],
+      "release-dotnet-integration-gate": [
+        "release-preflight"
+      ],
+      "release-dotnet-sql-gate": [
+        "release-preflight"
+      ],
+      "release-docker-direct-gate": [
+        "release-preflight"
+      ],
+      "release-docker-proxy-gate": [
+        "release-preflight"
+      ],
+      "release-docker-system-gate": [
+        "release-preflight"
+      ],
+      "release-package-api": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-container-gitlab-registry": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-container-self-hosted-registry": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-container-dockerhub": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-container-aws-ecr": [
+        "release-preflight",
+        "release-dotnet-unit-gate",
+        "release-dotnet-integration-gate",
+        "release-dotnet-sql-gate",
+        "release-docker-direct-gate",
+        "release-docker-proxy-gate",
+        "release-docker-system-gate"
+      ],
+      "release-upload-assets": [
+        "release-preflight",
+        "release-package-api",
+        "release-container-gitlab-registry",
+        "release-container-self-hosted-registry",
+        "release-container-dockerhub",
+        "release-container-aws-ecr"
+      ],
+      "create-gitlab-release": [
+        "release-preflight",
+        "release-upload-assets",
+        "release-container-gitlab-registry",
+        "release-container-self-hosted-registry",
+        "release-container-dockerhub",
+        "release-container-aws-ecr"
+      ]
+    }
+  },
+  "source_inspected_test_method_catalog_NOT_executed": {
+    "treehammock.Tests/Unit/GitHubActionsPipelineTests.cs": [
+      "Github_ci_runs_fast_validation_by_default_and_exposes_manual_heavy_lanes",
+      "Github_release_workflow_defaults_to_1_0_0_and_runs_all_release_gates_before_packaging",
+      "Github_release_workflow_publishes_versioned_assets_and_can_create_the_github_release",
+      "Github_release_workflow_is_pinned_to_v1_0_0_initial_main_commit_only",
+      "Github_release_workflow_can_publish_opt_in_ghcr_image",
+      "Release_version_is_pinned_to_1_0_0_for_msbuild_and_ci"
+    ],
+    "treehammock.Tests/Unit/GitLabCiPipelineTests.cs": [
+      "Root_gitlab_pipeline_dispatches_validation_and_release_child_pipelines",
+      "Each_child_pipeline_has_its_own_explicit_trigger_variable",
+      "Dotnet_unit_child_pipeline_runs_only_unit_test_namespace",
+      "Dotnet_integration_child_pipeline_runs_only_in_process_integration_namespace",
+      "Dotnet_sql_child_pipeline_runs_project_tests_with_disposable_postgres",
+      "Docker_system_child_pipeline_runs_full_compose_stack_through_haproxy",
+      "Docker_context_keeps_gitlab_pipeline_files_available_for_contract_tests"
+    ],
+    "treehammock.Tests/Unit/GitLabDockerIntegrationCiTests.cs": [
+      "Docker_direct_integration_child_pipeline_starts_postgres_dragonfly_and_api_without_haproxy",
+      "Docker_proxy_integration_child_pipeline_starts_postgres_dragonfly_api_and_haproxy",
+      "Docker_system_child_pipeline_starts_full_stack_and_system_test_runner",
+      "Root_dispatcher_names_match_required_usage_modes"
+    ],
+    "treehammock.Tests/Unit/GitLabReleasePipelineTests.cs": [
+      "Root_dispatcher_exposes_release_child_pipeline_with_its_own_trigger",
+      "Release_child_pipeline_runs_all_release_gates_before_packaging",
+      "Release_pipeline_publishes_versioned_package_assets",
+      "Release_pipeline_has_opt_in_container_registry_jobs",
+      "Release_pipeline_supports_aws_ecr_oidc_and_optional_registry_needs",
+      "Release_container_publish_script_supports_all_required_registry_targets",
+      "Release_creation_uses_gitlab_release_assets"
+    ],
+    "treehammock.Tests/Unit/DockerProxyConfigurationTests.cs": [
+      "Compose_stack_defines_optional_haproxy_proxy_service",
+      "Proxy_override_enables_container_reverse_proxy_profile_for_api",
+      "Haproxy_routes_to_api_service_and_health_checks_ready_endpoint"
+    ]
+  },
+  "published_port_catalog": {
+    "docker-compose.integration.yml": {
+      "postgres": [
+        "5432:5432"
+      ],
+      "dragonfly": [
+        "6379:6379"
+      ],
+      "api": [],
+      "haproxy": [
+        "8080:8080"
+      ],
+      "sql-contract-tests": [],
+      "http-contract-tests-direct": [],
+      "http-contract-tests-proxy": []
+    },
+    "docker-compose.api-direct.yml": {
+      "api": [
+        "5001:5001"
+      ]
+    },
+    "docker-compose.api-proxy.yml": {
+      "api": []
+    },
+    "docker-compose.ci-system.yml": {
+      "system-tests": []
+    },
+    "docker-compose.local-system.yml": {
+      "postgres": [
+        "5432:5432"
+      ],
+      "dragonfly": [
+        "6379:6379"
+      ],
+      "haproxy-host": [
+        "8080:8080"
+      ]
+    }
+  },
+  "runtime_tools": {
+    "dotnet": null,
+    "pwsh": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "actual_image_runner_exit": 1,
+  "new_finding_pr_ownership": {
+    "R10B-01": "COR23T",
+    "R10B-02": "COR23U",
+    "R10B-03": "COR23V",
+    "R10B-04": "COR23W",
+    "R10B-05": "COR23X"
+  },
+  "reference_urls": [
+    "https://docs.github.com/en/actions/concepts/security/script-injections",
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts",
+    "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_case-sensitivity?view=powershell-7.6",
+    "https://docs.docker.com/engine/network/port-publishing/",
+    "https://docs.gitlab.com/ci/yaml/#needsoptional"
+  ],
+  "qualification": {
+    "ci": "Source graphs only; no workflow execution or hosted lint validation",
+    "powershell": "Case sensitivity contract and source inference only; pwsh unavailable",
+    "docker": "Original runner blocked at absent CLI; fake publisher commands perform no build/login/push",
+    "state": "No PostgreSQL/Redis-like service or peer-network reachability execution",
+    "performance": "Not measured"
+  }
+}

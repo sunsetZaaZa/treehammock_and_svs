@@ -1,0 +1,21 @@
+R10I original SQL runners; no mock SQL/cache execution
+
+Command: bash eng/sql-contracts.sh --configuration Release --locked-restore
+Exit: 2
+STDOUT:
+
+STDERR:
+TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS must be true or 1 to run SQL contract tests.
+
+
+Command: bash eng/docker-sql-contracts.sh
+Exit: 1
+STDOUT:
+
+STDERR:
+Docker CLI with Compose is required, but no reachable Docker CLI was found.
+Install/start Docker Desktop or Docker Engine, then retry this script.
+On Windows, the host-backed lane can also be run with: .\eng\docker-host-system-stack-tests.cmd
+
+Runtime availability: {"dotnet": null, "docker": null, "pwsh": null, "psql": null, "postgres": null, "redis-server": null}
+No synthetic database opt-in/connection was supplied. No restore/build/discovery/test/SQL/cache/HTTP execution or performance measurement occurred.

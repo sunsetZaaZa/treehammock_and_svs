@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage" enabled="true">
+        <Configuration>
+          <Format>cobertura</Format>
+          <IncludeTestAssembly>False</IncludeTestAssembly>
+          <CodeCoverage>
+            <ModulePaths>
+              <Include><ModulePath>.*[\\/]treehammock\.dll$</ModulePath></Include>
+            </ModulePaths>
+            <EnableStaticManagedInstrumentation>True</EnableStaticManagedInstrumentation>
+            <EnableStaticManagedInstrumentationRestore>True</EnableStaticManagedInstrumentationRestore>
+            <EnableDynamicManagedInstrumentation>True</EnableDynamicManagedInstrumentation>
+            <EnableStaticNativeInstrumentation>False</EnableStaticNativeInstrumentation>
+            <EnableDynamicNativeInstrumentation>False</EnableDynamicNativeInstrumentation>
+          </CodeCoverage>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

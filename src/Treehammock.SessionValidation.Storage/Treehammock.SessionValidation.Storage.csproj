@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFrameworks>net8.0;net10.0</TargetFrameworks><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><IsPackable>false</IsPackable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <ItemGroup><PackageReference Include="Npgsql"/><PackageReference Include="Npgsql.NodaTime"/><PackageReference Include="StackExchange.Redis"/>
+    <ProjectReference Include="../Treehammock.SessionValidation.Core/Treehammock.SessionValidation.Core.csproj"/>
+    <InternalsVisibleTo Include="Treehammock.SessionValidation.StorageTests"/>
+    <InternalsVisibleTo Include="Treehammock.SessionValidation.HostTests"/><InternalsVisibleTo Include="Treehammock.SessionValidation.Api"/><InternalsVisibleTo Include="treehammock"/><InternalsVisibleTo Include="treehammock.Tests"/><InternalsVisibleTo Include="treehammock.Tests.SqlContracts"/>
+    <InternalsVisibleTo Include="Treehammock.SessionValidation.CacheTests"/>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../deploy/session-validation/validator-role-specification.json" LogicalName="SVS05_ROLE_SPEC.json"/>
+    <EmbeddedResource Include="../../deploy/session-validation/sql/inspect-validator-identity.sql" LogicalName="svs05-inspect-identity.sql"/>
+    <EmbeddedResource Include="../../deploy/session-validation/treehammock-validator-policy.json" LogicalName="SVS07_THS_POLICY.json"/>
+    <EmbeddedResource Include="../../deploy/session-validation/validator-privilege-audit-specification.json" LogicalName="SVS07_THS_AUDIT_SPEC.json"/>
+  </ItemGroup>
+<ItemGroup><EmbeddedResource Include="authority-transition.lua" LogicalName="Treehammock.SessionValidation.Storage.authority-transition.lua"/><EmbeddedResource Include="../../deploy/session-validation/ths12c/publication-database-policy.json" LogicalName="Treehammock.SessionValidation.Storage.PublicationDatabasePolicy.json"/></ItemGroup></Project>

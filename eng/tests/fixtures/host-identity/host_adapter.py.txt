@@ -1,0 +1,61 @@
+"""Controlled SDK/API/proxy/TRX adapter. Never native application qualification."""
+import hashlib,http.server,json,os,signal,subprocess,sys,threading,time,uuid
+from pathlib import Path
+
+def build(root,environment,project):
+ run=environment['TREEHAMMOCK_BUILD_RUN_ID'];folder=root/'bin/Release/net8.0';folder.mkdir(parents=True,exist_ok=True)
+ app=folder/'treehammock.dll';app.write_text('controlled-app:'+run)
+ (folder/'treehammock.dll.proof-id').write_text(run+'|Release|treehammock|net8.0')
+ if 'Tests.System' in project:
+  tests=root/'treehammock.Tests.System/bin/Release/net8.0';tests.mkdir(parents=True,exist_ok=True)
+  (tests/'treehammock.Tests.System.dll').write_text('controlled-tests:'+run)
+  (tests/'treehammock.Tests.System.dll.proof-id').write_text(run+'|Release|treehammock.Tests.System|net8.0')
+  (tests/'treehammock.dll').write_bytes(app.read_bytes())
+def result(root,environment):
+ folder=root/'treehammock.Tests.System/bin/Release/net8.0';build=environment['TREEHAMMOCK_BUILD_RUN_ID'];app=folder/'treehammock.dll'
+ digest=lambda path:hashlib.sha256(path.read_bytes()).hexdigest();mvid=lambda path:str(uuid.uuid5(uuid.NAMESPACE_URL,digest(path)))
+ data=dict(run_id=build,configuration='Release',assemblies=[dict(name=name,path=str(folder/(name+'.dll')),sha256=digest(folder/(name+'.dll')),mvid=mvid(folder/(name+'.dll'))) for name in ['treehammock.Tests.System','treehammock']])
+ (folder/'treehammock.Tests.System.identity.json').write_text(json.dumps(data))
+ index=json.loads((root/'docs/corrections/APPLICATION_SURFACE_INDEX.json').read_text());names=[row['method'] for row in index['attributed_test_methods'] if row['path'].startswith('treehammock.Tests.System/') or row['path']=='treehammock.Tests/Infrastructure/BuildIdentity.cs']
+ if environment.get('COR23AA_MISSING_TEST')=='true':names.pop()
+ count=len(names);rows=''.join('<UnitTestResult testName="'+name+'" executionId="'+str(uuid.uuid4())+'" outcome="Passed" />' for name in names)
+ text='<TestRun xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010"><Results>'+rows+'</Results><ResultSummary><Counters total="'+str(count)+'" executed="'+str(count)+'" passed="'+str(count)+'" failed="0" notExecuted="0" /></ResultSummary></TestRun>'
+ (Path(environment['TREEHAMMOCK_TEST_HOST_LOG_ROOT'])/'treehammock-system-host-tests.trx').write_text(text)
+def api(environment):
+ if environment.get('COR23Z_DOTNET_FAIL')=='run':return 47
+ marker=Path(environment['TREEHAMMOCK_TEST_ARTIFACT_ROOT'])/'api.pid';marker.write_text(str(os.getpid()))
+ app=Path(sys.argv[1]);hash=hashlib.sha256(app.read_bytes()).hexdigest()
+ began=time.monotonic()
+ value=dict(run_id=environment['HostSystemTestProof__RunId'],build_run_id=environment['HostSystemTestProof__BuildRunId'],configuration='Release',assembly_sha256=hash,mvid=str(uuid.uuid5(uuid.NAMESPACE_URL,hash)),process_id=os.getpid(),challenge=environment['HostSystemTestProof__Challenge'])
+ class Handler(http.server.BaseHTTPRequestHandler):
+  def log_message(self,*args):pass
+  def do_GET(self):
+   status=200;payload=dict(value)
+   if self.headers.get('X-System-Test-Key')!=environment['SystemTestSettings__TestKey']:status=401;payload={}
+   elif self.path=='/health/ready':
+    payload=dict(status='ready',dependencies=[dict(name=name,status='healthy') for name in ['postgresql','dragonfly_active_sessions','dragonfly_two_factor_sessions','dragonfly_abuse_counters']])
+    if environment.get('COR23Z_READINESS_FAIL')=='true':status=503
+   elif self.server.server_port==8080 and (environment.get('COR23AA_PROXY_WRONG')=='true' or environment.get('COR23AA_PROXY_SWAP_DELAY') and time.monotonic()-began>float(environment['COR23AA_PROXY_SWAP_DELAY'])):payload['run_id']=str(uuid.uuid4())
+   if environment.get('COR23AA_WRONG_HASH')=='true':payload['assembly_sha256']='0'*64
+   data=json.dumps(payload).encode();self.send_response(status);self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)
+ servers=[]
+ for port in [5001,8080]:
+  server=http.server.ThreadingHTTPServer(('127.0.0.1',port),Handler);server.daemon_threads=True;servers.append(server);threading.Thread(target=server.serve_forever,daemon=True).start()
+ if environment.get('COR23AA_PRINT_SECRET')=='true':print(environment['TREEHAMMOCK_TEST_RUN_TOKEN'],flush=True)
+ if environment.get('COR23AA_GRANDCHILD')=='true':subprocess.Popen([sys.executable,'-c','import time; time.sleep(60)'],start_new_session=True)
+ delay=environment.get('COR23AA_API_EXIT_DELAY')
+ if delay:time.sleep(float(delay));return int(environment.get('COR23AA_API_EXIT_CODE','47'))
+ while True:time.sleep(.1)
+def main():
+ environment=dict(os.environ);root=Path.cwd();args=sys.argv[1:]
+ if args and args[0].endswith('treehammock.dll'):return api(environment)
+ stage=args[0]
+ if stage=='--list-sdks':print('8.0.400 [controlled SDK]');return 0
+ if stage=='--list-runtimes':print('Microsoft.NETCore.App 8.0.10 [controlled runtime]\nMicrosoft.AspNetCore.App 8.0.10 [controlled runtime]');return 0
+ if stage==environment.get('COR23Z_DOTNET_FAIL'):return 47
+ if stage=='build':build(root,environment,args[1])
+ if stage=='test':
+  time.sleep(float(environment.get('COR23AA_TEST_DELAY','0')))
+  if environment.get('COR23AA_NO_RESULTS')!='true':result(root,environment)
+ return 0
+if __name__=='__main__':raise SystemExit(main())

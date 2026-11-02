@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "workload_id": "cor22-owned-deep-history-v1",
+  "budget_status": "Proposed",
+  "review_reference": null,
+  "budgets": null,
+  "warmup_requests_per_scenario": 100,
+  "measured_requests_per_scenario": 1000,
+  "concurrency": [1, 8, 32],
+  "instances": [1, 2],
+  "scenarios": ["warm_auth", "cold_auth", "cache_down", "reset_lookup", "normalized_phone", "deep_retention", "account_delete"],
+  "controls": ["same hardware and runtime", "same Argon2 policy", "same current-schema fixture seed and sizes", "same pool limits", "same cache profile and TLS", "same provider substitutes", "independent run ids", "separate captures per concurrency/instance profile"],
+  "qualification": "No numeric resource budget or native measurement has been approved or executed in this delivery."
+}

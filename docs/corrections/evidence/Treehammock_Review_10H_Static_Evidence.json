@@ -1,0 +1,483 @@
+{
+  "evidence_kind": "Complete source inspection, attribute catalog, source-derived failure-page witness and blocked original runners; NOT application runtime qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "assigned_parent_chunk": "R10",
+    "selected_files": 10,
+    "complete_source_files": 10,
+    "selected_lines": 1653,
+    "selected_bytes": 70657,
+    "csharp_test_classes_inspected_not_executed": 5,
+    "test_support_files": 5,
+    "system_http_fact_methods_in_source": 22,
+    "additional_prior_chunk_files_completed": [
+      "Controllers/AccountControllerBase.RegistrationHelpers.cs",
+      "Rigging/Authentication/TwoFactorChallengeCodeUtility.cs"
+    ],
+    "remaining_R10_assigned_files": 13,
+    "prior_R06_partial_test_files_remain_deferred": 3,
+    "cross_chunk_inspection": {
+      "Controllers/AccountControllerBase.RegistrationHelpers.cs": "R10H complete source cross-check of HTML content and verification hash comparison; no MVC execution.",
+      "Rigging/Authentication/TwoFactorChallengeCodeUtility.cs": "R10H complete numeric code generation/hash source cross-check; no C# execution.",
+      "Controllers/AccountRegistrationController.cs": "R10H complete VerifyAccountCreation action and response-branch slices; not a full controller audit.",
+      "Controllers/AccountControllerBase.cs": "R10H verification HTML constants and template selection slices; prior qualification retained.",
+      "treehammock.Tests/Unit/AccountControllerSetupVerificationTests.cs": "R10H valid verification and completion-failure assertion slices; full earlier pending qualification retained.",
+      "Controllers/SystemTestDeliveryController.cs": "R10H complete capture access/clear/latest source cross-check; R09 qualification retained.",
+      "Services/SystemTesting/SystemTestDeliveryCapture.cs": "R10H complete capture schema/query/clear source cross-check; R09 qualification retained.",
+      "Models/Authentication/AuthenticateLogin.cs": "R10H model validation/response cross-check; earlier qualification retained.",
+      "Models/Account/AccountCreation.cs": "R10H configured-length location searches only; earlier qualification retained.",
+      "docker-compose.ci-system.yml": "R10H complete original system lane command/configuration cross-check; R10B qualification retained.",
+      "docker-compose.integration.yml": "R10H system test providers, cache topology and raised abuse-ceiling environment slices; R10B qualification retained.",
+      "docker-compose.local-system.yml": "R10H complete backing-service fixture cross-check; R10B qualification retained.",
+      "eng/docker-system-stack-tests.sh": "R10H complete original runner source cross-check and blocked prerequisite execution; R10C qualification retained.",
+      "eng/docker-host-system-stack-tests.sh": "R10H test provider/abuse/key/base-URL environment slices; R10C qualification retained.",
+      "treehammock.Tests.System/treehammock.Tests.System.csproj": "R10H complete project/framework reference cross-check; R10A qualification retained."
+    },
+    "runtime_qualified": false,
+    "deduplicated_closure_requirements": {
+      "COR01/COR24": "Distinguish DTO/reflection/metadata checks from runtime pipeline discovery; use real registration in appropriate system paths and reconcile older per-file qualifications.",
+      "COR06": "Preserve a client key across actual retries and changed-body attempts; the system helper currently generates a fresh key per mutation.",
+      "COR09/COR10/COR13": "Use issued active credentials on protected operations, deny preauth/reset tokens on active routes, and verify durable revocation plus real stale-authority and concurrent proof schedules.",
+      "COR15/COR16": "Carry exact enrollment TOTP parameters to follow-up flows, reject malformed metadata, prove replay/expiry, and adapt email/SMS setup to real fresh-purpose proof.",
+      "COR18": "Retain post-delete login and prior-token denial; add durable lineage/budget/cascade state qualification and fresh deletion proof.",
+      "COR23AC/COR23E/COR24": "Require exact HTTP envelope/enum/privacy shape, semantic outcome and no-store policy; do not discard unknown enum values in contract assertions.",
+      "COR23W/COR23AA": "Bind system readiness and redirects to the owned run/endpoint; one monotonic aggregate deadline must cancel each in-flight request.",
+      "COR23D/COR23X/COR23Y": "Keep seed/capture/clear capabilities isolated and per-run owned; assembly serialization is not multi-run storage isolation.",
+      "COR24": "Select wrong codes guaranteed unequal to the captured challenge; add proof-loop progress bounds and outcome/state checks across reset configurations."
+    },
+    "global_coverage_caveat": "R10 remainder is not global outstanding scope. Reconcile earlier R01\u2013R05 legacy pending qualifications and indexed/partial test suites before global completion."
+  },
+  "selected_file_metadata": {
+    "treehammock.Tests/Unit/GreenfieldApiNegativeContractTests.cs": {
+      "sha256": "cbc08b72135dbedb52f8092f9949953d363b3823ab1abccec51238403d7fb350",
+      "lines": 79,
+      "bytes": 2806
+    },
+    "treehammock.Tests/Unit/ModelValidationConsistencyTests.cs": {
+      "sha256": "3364c9b97025e68006dd98d993ec8924033cac6273da46d097979047ed345b76",
+      "lines": 116,
+      "bytes": 4110
+    },
+    "treehammock.Tests/Unit/TreehammockLicenseTests.cs": {
+      "sha256": "c22cb878768b4d2dd1f10225e8ccd0ad2f123b2438643371e7a74c14a0d06581",
+      "lines": 61,
+      "bytes": 1979
+    },
+    "treehammock.Tests/Unit/TreehammockRenameCompletionTests.cs": {
+      "sha256": "069cf88b3bdf3268a695bc7787d90037afbf2b62e77377a5660a3082ee0d431b",
+      "lines": 124,
+      "bytes": 3867
+    },
+    "treehammock.Tests.SqlContracts/GlobalUsings.cs": {
+      "sha256": "50436eb3a60162e0cfad749eddfb06f8908f821a90ca44532df946a53e071359",
+      "lines": 1,
+      "bytes": 20
+    },
+    "treehammock.Tests.SqlContracts/Properties/AssemblyInfo.cs": {
+      "sha256": "e7e85f760b321c6b71fa051a722278efe834f0fb46f2ca62d221eef2596fc2ad",
+      "lines": 8,
+      "bytes": 477
+    },
+    "treehammock.Tests.System/AssemblyInfo.cs": {
+      "sha256": "3f7edd72eac91614fcf49f709dd4e560c74ebef8da68a53a02947e5611cd1869",
+      "lines": 3,
+      "bytes": 80
+    },
+    "treehammock.Tests.System/GlobalUsings.cs": {
+      "sha256": "50436eb3a60162e0cfad749eddfb06f8908f821a90ca44532df946a53e071359",
+      "lines": 1,
+      "bytes": 20
+    },
+    "treehammock.Tests.System/Support/TreehammockEnvironment.cs": {
+      "sha256": "7c65dcfc53ec55abebbe7c22563b02178268bddf8a40ca20567109ac6235a485",
+      "lines": 15,
+      "bytes": 363
+    },
+    "treehammock.Tests.System/SystemStackAccountFlowTests.cs": {
+      "sha256": "a75fad75b6e74678ba4779b0e10202b1d317b23d26d1d0e70ac387a6ad510af5",
+      "lines": 1245,
+      "bytes": 56935
+    }
+  },
+  "additional_completed_source_metadata": {
+    "Controllers/AccountControllerBase.RegistrationHelpers.cs": {
+      "sha256": "d0aeb0a122528d0c16ac75b019f821b6003abca3dcf75963e2ac94dce410a695",
+      "lines": 52,
+      "bytes": 1823
+    },
+    "Rigging/Authentication/TwoFactorChallengeCodeUtility.cs": {
+      "sha256": "775340886c6eb63523301ad4bb0df356591fc7ddb4d682eac0c1c37ebb40dfe7",
+      "lines": 42,
+      "bytes": 1238
+    }
+  },
+  "source_attribute_counts_NOT_runtime_discovery": {
+    "fact_methods": 35,
+    "theory_methods": 2,
+    "inline_data_rows": 8,
+    "system_http_fact_methods": 22
+  },
+  "source_inspected_test_method_catalog_NOT_executed": {
+    "treehammock.Tests/Unit/GreenfieldApiNegativeContractTests.cs": [
+      {
+        "method": "Login_twofactor_legacy_method_endpoint_is_absent_from_controller_route_metadata",
+        "line": 13,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_request_model_exposes_delivery_channel_not_legacy_method",
+        "line": 27,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_public_delivery_channels_are_greenfield_only",
+        "line": 46,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 40,
+            "source": "[InlineData(\"email\", true)]"
+          },
+          {
+            "line": 41,
+            "source": "[InlineData(\"sms\", true)]"
+          },
+          {
+            "line": 42,
+            "source": "[InlineData(\"authenticator\", false)]"
+          },
+          {
+            "line": 43,
+            "source": "[InlineData(\"AUTHENTICATOR_APP\", false)]"
+          },
+          {
+            "line": 44,
+            "source": "[InlineData(\"email_code_totp\", false)]"
+          },
+          {
+            "line": 45,
+            "source": "[InlineData(\"sms_code_totp\", false)]"
+          }
+        ]
+      }
+    ],
+    "treehammock.Tests/Unit/ModelValidationConsistencyTests.cs": [
+      {
+        "method": "Account_creation_model_does_not_hard_code_configured_minimum_lengths",
+        "line": 14,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Account_creation_model_rejects_country_none_sentinel",
+        "line": 28,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_model_keeps_minimum_length_rules_in_runtime_validation",
+        "line": 42,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_model_requires_email_or_username_shape",
+        "line": 54,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 52,
+            "source": "[InlineData(null, null)]"
+          },
+          {
+            "line": 53,
+            "source": "[InlineData(\"\", \"\")]"
+          }
+        ]
+      },
+      {
+        "method": "Two_factor_method_model_rejects_none_sentinel",
+        "line": 66,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Two_factor_auth_model_rejects_none_sentinel",
+        "line": 76,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_logoff_all_request_defaults_to_include_current_session",
+        "line": 86,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Account_session_management_models_preserve_session_identity_without_token_hashes",
+        "line": 96,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests/Unit/TreehammockLicenseTests.cs": [
+      {
+        "method": "Repository_includes_mit_license_file",
+        "line": 9,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Project_metadata_declares_mit_license_expression_for_all_projects",
+        "line": 22,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests/Unit/TreehammockRenameCompletionTests.cs": [
+      {
+        "method": "Repository_file_and_directory_names_are_treehammock_only",
+        "line": 41,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Text_repository_content_is_treehammock_only",
+        "line": 60,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests.SqlContracts/GlobalUsings.cs": [],
+    "treehammock.Tests.SqlContracts/Properties/AssemblyInfo.cs": [],
+    "treehammock.Tests.System/AssemblyInfo.cs": [],
+    "treehammock.Tests.System/GlobalUsings.cs": [],
+    "treehammock.Tests.System/Support/TreehammockEnvironment.cs": [],
+    "treehammock.Tests.System/SystemStackAccountFlowTests.cs": [
+      {
+        "method": "Registration_verify_succeeds_through_haproxy",
+        "line": 23,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Login_without_2fa_issues_active_session_through_haproxy",
+        "line": 34,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Invalid_login_fails_without_leaking_account_state_through_haproxy",
+        "line": 45,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Setup_email_2fa_succeeds_through_haproxy",
+        "line": 65,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Setup_sms_2fa_succeeds_through_haproxy",
+        "line": 76,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Setup_authenticator_app_succeeds_through_haproxy",
+        "line": 87,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Setup_all_2fa_methods_then_login_advertises_all_verified_methods_through_haproxy",
+        "line": 101,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Login_with_email_2fa_succeeds_through_haproxy",
+        "line": 120,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Login_with_sms_2fa_succeeds_through_haproxy",
+        "line": 134,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Login_with_authenticator_app_totp_succeeds_through_haproxy",
+        "line": 148,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Login_with_sms_and_authenticator_app_succeeds_through_haproxy",
+        "line": 163,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Wrong_login_2fa_code_fails_through_haproxy",
+        "line": 180,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_email_delivery_channel_succeeds_through_haproxy",
+        "line": 205,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_sms_delivery_channel_succeeds_through_haproxy",
+        "line": 235,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_email_delivery_channel_plus_authenticator_succeeds_through_haproxy",
+        "line": 255,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_email_delivery_channel_plus_sms_and_authenticator_succeeds_through_haproxy",
+        "line": 277,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_sms_delivery_channel_plus_authenticator_succeeds_through_haproxy",
+        "line": 302,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Account_delete_flow_finalizes_and_blocks_future_login_through_haproxy",
+        "line": 325,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Account_unlock_after_failed_password_lockout_succeeds_through_haproxy",
+        "line": 369,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Removing_authenticator_keeps_sms_login_and_reset_options_exclude_authenticator_through_haproxy",
+        "line": 410,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Legacy_login_twofactor_method_endpoint_is_absent_through_haproxy",
+        "line": 447,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Password_reset_authenticator_delivery_channel_is_rejected_through_haproxy",
+        "line": 463,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ]
+  },
+  "static_checks": {
+    "registration_system_case_has_no_post_verify_state_or_login_check": true,
+    "registration_get_asserts_only_http_ok": true,
+    "production_completion_failure_selects_failure_html": true,
+    "production_content_helper_does_not_set_failure_status": true,
+    "system_suite_uses_http_and_capture_instead_of_repository_substitutes": true,
+    "most_users_bypass_registration_via_verified_seed": true,
+    "system_mutation_helper_generates_fresh_keys_not_retries": true,
+    "system_email_sms_setup_has_no_sensitive_proof": true,
+    "system_totp_enrollment_reads_parameters_but_followups_use_defaults": true,
+    "system_negative_email_code_is_fixed_zero": true,
+    "zero_code_is_a_possible_generated_value": true,
+    "system_ready_budget_not_linked_to_each_http_request": true,
+    "system_client_retains_default_timeout_and_redirect_policy": true,
+    "system_delivery_clear_accepts_notfound": true,
+    "configuration_set_reader_discards_unknown_entries": true,
+    "sql_and_system_assemblies_disable_framework_parallelization": true
+  },
+  "source_derived_failure_page_witness_NOT_executed": {
+    "status": 200,
+    "body": "<html><body><h1>Account verification failed</h1></body></html>",
+    "account_verified": false,
+    "reason": "AccountPassedVerification false selects unsuccessful HTML; content helper does not set a failure status; RegisterAndVerify checks only HTTP OK and the dedicated registration case performs no post-verification action."
+  },
+  "new_finding_pr_ownership": {
+    "R10H-01": "COR23AE"
+  },
+  "official_framework_references": [
+    {
+      "url": "https://source.dot.net/Microsoft.AspNetCore.Mvc.Core/Infrastructure/ContentResultExecutor.cs.html",
+      "note": "Current illustrative executor changes status only when result.StatusCode is non-null; not pinned project runtime evidence."
+    },
+    {
+      "url": "https://source.dot.net/Microsoft.AspNetCore.Http/Features/HttpResponseFeature.cs.html",
+      "note": "Current illustrative response feature defaults to 200; no framework binary execution claimed."
+    }
+  ],
+  "original_runner_attempts": [
+    {
+      "command": "bash eng/dotnet-unit-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the unit-test lane.\n"
+    },
+    {
+      "command": "bash eng/dotnet-integration-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the integration-test lane.\n"
+    },
+    {
+      "command": "bash eng/docker-system-stack-tests.sh",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Docker CLI with Compose is required, but no reachable Docker CLI was found.\nInstall/start Docker Desktop or Docker Engine, then retry this script.\nOn Windows, the host-backed lane can also be run with: .\\eng\\docker-host-system-stack-tests.cmd\n"
+    }
+  ],
+  "runtime_tools": {
+    "dotnet": null,
+    "pwsh": null,
+    "powershell.exe": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "qualification": {
+    "application": "Not compiled, discovered or executed",
+    "http": "No TestServer/system HTTP requests executed",
+    "storage": "No real PostgreSQL/cache execution",
+    "performance": "Not measured"
+  },
+  "remaining_R10_paths": [
+    "Dependencies/CityHash.dll.config",
+    "Dependencies/CityHash_103.dll",
+    "README.md",
+    "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+    "docs/release/PASSWORD_RESET_1_0_0.md",
+    "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+    "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+    "docs/testing/TEST_COMMAND_GUIDE.md",
+    "docs/testing/treehammock-test-suite-inventory.html",
+    "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+    "tests/http/bruno/treehammock/bruno.json",
+    "tests/http/bruno/treehammock/environments/docker-direct.bru",
+    "tests/http/bruno/treehammock/environments/docker-proxy.bru"
+  ]
+}

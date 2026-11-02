@@ -1,0 +1,794 @@
+{
+  "evidence_kind": "Complete source inspection and ownership reasoning plus blocked original runners; NOT application runtime qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "assigned_parent_chunk": "R10",
+    "selected_files": 2,
+    "complete_source_files": 2,
+    "selected_lines": 2972,
+    "selected_bytes": 144325,
+    "csharp_test_classes_inspected_not_executed": 2,
+    "http_fact_methods_in_source": 27,
+    "direct_controller_fact_methods_in_source": 57,
+    "source_string_fact_methods": 1,
+    "remaining_R10_assigned_files": 38,
+    "prior_R06_partial_test_files_remain_deferred": 3,
+    "cross_chunk_inspection": {
+      "treehammock.Tests/Infrastructure/AllowingAuthenticatedMutationIdempotencyService.cs": "R10F complete source cross-check of key requirement/normalization and no-op completion; earlier qualification retained.",
+      "treehammock.Tests/Infrastructure/TreehammockWebApplicationFactory.cs": "R10F focused Testing/environment/configuration and inherited ownership cross-check; R10D full-source qualification retained.",
+      "Directory.Packages.props": "R10F pinned MVC Testing/TestHost 8.0.27 declaration cross-check; R10A qualification retained."
+    },
+    "runtime_qualified": false,
+    "deduplicated_closure_requirements": {
+      "COR06": "Retain the valid sixteen-character replay example, add key-boundary cases and prove request-bound reservation/completion/replay with the real coordination service; allowing completion is a no-op.",
+      "COR10": "Qualify cache serialization, TTL, replacement and current pending challenge authority through real SQL/cache; preserve no-intermediate-active-token assertions.",
+      "COR15/COR16": "Use real TOTP verification/replay and fresh proof gates; qualify concurrent factor removal with controlled SQL overlap and current stamp/pending authority.",
+      "COR17/COR18": "Qualify email and deletion proof/identity lineage with real persistence and post-commit authority checks; a preset TOKEN_MISMATCH is not cross-account protection proof.",
+      "COR19": "Retain activation flow orchestration assertions and add durable grant/activation transaction and delivery-capture checks.",
+      "COR23AC": "Retain strict flow-suite required success/statusCode/code checks when consolidating HTTP envelope helpers; do not generalize the legacy fallback.",
+      "COR01/COR24": "Preserve direct, HTTP and source-string boundaries; distinguish source method counts from runtime discovery; reconcile older per-file qualification before global completion."
+    },
+    "global_coverage_caveat": "R10 remainder is not a global outstanding-file count. Earlier R01\u2013R05 evidence includes legacy pending qualifications and indexed/partial suites; reconcile per-file before final completion."
+  },
+  "selected_file_metadata": {
+    "treehammock.Tests/Integration/AccountFlowRegressionTests.cs": {
+      "sha256": "ba1e0989715a66238c409dcf0ed6f03a23bef9b98f7cd6628bc6e6531249e7a8",
+      "lines": 1837,
+      "bytes": 86257
+    },
+    "treehammock.Tests/Unit/AccountEndpointContractTests.cs": {
+      "sha256": "0cc449327ab3f3568fa04812dadd6fc84e96d8b1d03f9a189f813e197f181da1",
+      "lines": 1135,
+      "bytes": 58068
+    }
+  },
+  "source_attribute_counts_NOT_runtime_discovery": {
+    "fact_methods": 85,
+    "theory_methods": 0,
+    "http_fact_methods": 27,
+    "direct_controller_fact_methods": 57,
+    "source_string_fact_methods": 1
+  },
+  "source_inspected_test_method_catalog_NOT_executed": {
+    "treehammock.Tests/Integration/AccountFlowRegressionTests.cs": [
+      {
+        "method": "Account_creation_endpoint_flows_through_validation_and_account_service",
+        "line": 42,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Password_login_endpoint_can_be_replayed_and_each_success_writes_a_new_active_session",
+        "line": 84,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Email_two_factor_login_endpoint_flow_issues_challenge_promotes_session_and_revokes_pending_session",
+        "line": 137,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_legacy_method_endpoint_is_not_public",
+        "line": 286,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Password_reset_request_rejects_legacy_method_payload_for_greenfield_contract",
+        "line": 304,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Password_reset_request_rejects_authenticator_as_public_delivery_channel",
+        "line": 331,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Password_reset_request_accepts_delivery_channel_shape_only_for_greenfield_contract",
+        "line": 358,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_rejects_proof_before_configuration_selection",
+        "line": 390,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_authenticator_app_selection_sends_no_delivery_and_promotes_after_totp",
+        "line": 415,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_login_response_does_not_send_delivery_until_select",
+        "line": 456,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_select_sms_sends_exactly_one_sms_challenge",
+        "line": 473,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_select_email_sends_exactly_one_email_challenge",
+        "line": 487,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_select_sms_and_authenticator_sends_first_sms_challenge_only",
+        "line": 501,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_select_email_and_authenticator_sends_first_email_challenge_only",
+        "line": 541,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_twofactor_session_expires_before_proof_verification",
+        "line": 581,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Sms_challenge_code_expires_independently_from_login_twofactor_session",
+        "line": 612,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_sms_and_authenticator_rejects_out_of_order_authenticator_proof",
+        "line": 645,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Login_sms_and_authenticator_promotes_only_after_both_proofs",
+        "line": 671,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Removing_authenticator_revokes_pending_login_session_and_future_login_keeps_sms_email_only",
+        "line": 716,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Removing_sms_revokes_pending_login_session_and_future_login_keeps_authenticator_available",
+        "line": 779,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Removing_email_revokes_pending_login_session_and_future_login_keeps_authenticator_available",
+        "line": 830,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Concurrent_method_removal_is_deterministic_and_stale_login_session_stays_unpromoted",
+        "line": 882,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Authenticated_activation_endpoint_flow_places_code_then_verifies_same_code",
+        "line": 940,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Account_unlock_endpoint_flow_starts_email_unlock_then_verifies_captured_token",
+        "line": 1024,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Account_delete_endpoint_flow_requests_verifies_and_finalizes_delete_with_session_revoke",
+        "line": 1099,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Required_authenticated_mutation_without_idempotency_key_returns_precondition_required",
+        "line": 1154,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      },
+      {
+        "method": "Current_session_logout_remains_optional_without_idempotency_key",
+        "line": 1178,
+        "attribute": "Fact",
+        "boundary": "HTTP orchestration with substituted dependencies"
+      }
+    ],
+    "treehammock.Tests/Unit/AccountEndpointContractTests.cs": [
+      {
+        "method": "ModifyAccount_rejects_null_body_as_validation_failure",
+        "line": 20,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_missing_body_without_auth_context_returns_unauthorized",
+        "line": 33,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "LogoffAccount_missing_body_without_auth_context_returns_unauthorized",
+        "line": 47,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_empty_body_object_as_validation_failure",
+        "line": 61,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_blank_adjustment_fields_as_validation_failure",
+        "line": 75,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_email_change_request_returns_pending_verification",
+        "line": 90,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_email_delivery_failure_returns_adjust_delivery_failed",
+        "line": 114,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_email_plus_username_as_ambiguous_adjustment",
+        "line": 135,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_username_without_auth_context_returns_unauthorized",
+        "line": 148,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_username_success_updates_authenticated_account",
+        "line": 162,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_duplicate_username_returns_bad_request",
+        "line": 186,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_stale_account_security_stamp_returns_unauthorized",
+        "line": 207,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_missing_account_returns_not_found",
+        "line": 228,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_missing_required_idempotency_key_returns_precondition_required_without_mutation",
+        "line": 251,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_invalid_idempotency_key_returns_validation_failed_without_mutation",
+        "line": 275,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_completed_idempotency_key_replays_result_without_mutation",
+        "line": 296,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_duplicate_email_returns_bad_request",
+        "line": 319,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_valid_token_returns_adjust_succeeded",
+        "line": 340,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_expired_token_returns_bad_request",
+        "line": 359,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_public_token_throttle_returns_too_many_requests",
+        "line": 377,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_counter_store_unavailable_returns_service_unavailable",
+        "line": 395,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_missing_payload_returns_validation_failed",
+        "line": 413,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyEmailChange_oversized_payload_returns_validation_failed",
+        "line": 426,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ViewAccount_missing_auth_context_returns_unauthorized",
+        "line": 442,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ViewAccount_authenticated_current_account_returns_safe_profile",
+        "line": 456,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ViewAccount_stale_account_security_stamp_returns_unauthorized",
+        "line": 490,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ViewAccount_missing_account_returns_not_found",
+        "line": 511,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_authenticated_request_returns_pending_delete",
+        "line": 532,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_authenticated_passphrase_request_returns_pending_delete",
+        "line": 554,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_stale_account_security_stamp_returns_unauthorized",
+        "line": 578,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_missing_account_returns_not_found",
+        "line": 599,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_rate_limited_returns_too_many_requests",
+        "line": 620,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_email_delivery_failure_returns_internal_server_error",
+        "line": 641,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_cleanup_failure_returns_internal_server_error",
+        "line": 662,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "LogoffAccount_valid_body_without_auth_context_returns_unauthorized",
+        "line": 683,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_invalid_email_as_validation_failure",
+        "line": 697,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_empty_username_as_validation_failure",
+        "line": 711,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "ModifyAccount_rejects_overlong_username_as_validation_failure",
+        "line": 725,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_rejects_blank_passphrase_as_validation_failure",
+        "line": 739,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "DeleteAccount_rejects_overlong_passphrase_as_validation_failure",
+        "line": 753,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_valid_token_returns_verified",
+        "line": 768,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_rejects_missing_payload_as_validation_failure",
+        "line": 788,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_expired_token_returns_bad_request",
+        "line": 801,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_public_token_throttle_returns_too_many_requests",
+        "line": 819,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_counter_store_unavailable_returns_service_unavailable",
+        "line": 837,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "VerifyDeleteAccount_oversized_payload_returns_validation_failed",
+        "line": 855,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_without_auth_context_returns_unauthorized",
+        "line": 871,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_authenticated_verified_token_returns_success_and_clear_token_header",
+        "line": 886,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_with_passphrase_sends_trimmed_passphrase_to_service",
+        "line": 914,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_verify_required_returns_bad_request",
+        "line": 935,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_valid_token_for_different_account_returns_token_mismatch",
+        "line": 956,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_attempt_limited_returns_too_many_requests",
+        "line": 977,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_abuse_finalize_throttle_returns_too_many_requests",
+        "line": 998,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_counter_store_unavailable_returns_service_unavailable",
+        "line": 1019,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_stale_account_security_stamp_returns_unauthorized",
+        "line": 1040,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_rejects_missing_delete_token_as_validation_failure",
+        "line": 1061,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "FinalizeDeleteAccount_rejects_blank_passphrase_as_validation_failure",
+        "line": 1075,
+        "attribute": "Fact",
+        "boundary": "direct controller with substituted dependencies"
+      },
+      {
+        "method": "Account_verification_public_get_rejects_unbounded_token_length_before_lookup",
+        "line": 1096,
+        "attribute": "Fact",
+        "boundary": "source-string assertion; not route execution"
+      }
+    ]
+  },
+  "static_checks": {
+    "fifteen_harness_allocations_are_not_using_scopes": true,
+    "harness_owns_new_factory": true,
+    "harness_does_not_implement_disposal": true,
+    "suite_has_no_factory_or_harness_cleanup": true,
+    "other_twelve_factories_are_scoped": true,
+    "flow_factory_always_replaces_abuse_and_replay": true,
+    "cache_substitutes_store_object_references": true,
+    "cache_substitutes_do_not_implement_ttl": true,
+    "authenticator_verifier_returns_success_for_any_code": true,
+    "factor_removal_race_is_predetermined_by_mock": true,
+    "flow_failure_envelope_helper_requires_all_three_fields": true,
+    "endpoint_replay_return_is_preset_without_initial_request": true,
+    "endpoint_replay_example_key_is_valid_minimum_length": true,
+    "allowing_fixture_requires_minimum_sixteen": true,
+    "endpoint_last_case_is_source_string_check": true
+  },
+  "owned_factory_harness_allocations_without_teardown": [
+    {
+      "line": 392,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.EMAIL]);",
+      "test_method": "Login_twofactor_rejects_proof_before_configuration_selection"
+    },
+    {
+      "line": 417,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Login_authenticator_app_selection_sends_no_delivery_and_promotes_after_totp"
+    },
+    {
+      "line": 458,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.EMAIL]);",
+      "test_method": "Login_twofactor_login_response_does_not_send_delivery_until_select"
+    },
+    {
+      "line": 475,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY]);",
+      "test_method": "Login_twofactor_select_sms_sends_exactly_one_sms_challenge"
+    },
+    {
+      "line": 489,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.EMAIL]);",
+      "test_method": "Login_twofactor_select_email_sends_exactly_one_email_challenge"
+    },
+    {
+      "line": 503,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Login_twofactor_select_sms_and_authenticator_sends_first_sms_challenge_only"
+    },
+    {
+      "line": 543,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.EMAIL, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Login_twofactor_select_email_and_authenticator_sends_first_email_challenge_only"
+    },
+    {
+      "line": 583,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY]);",
+      "test_method": "Login_twofactor_session_expires_before_proof_verification"
+    },
+    {
+      "line": 614,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY]);",
+      "test_method": "Sms_challenge_code_expires_independently_from_login_twofactor_session"
+    },
+    {
+      "line": 647,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Login_sms_and_authenticator_rejects_out_of_order_authenticator_proof"
+    },
+    {
+      "line": 673,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Login_sms_and_authenticator_promotes_only_after_both_proofs"
+    },
+    {
+      "line": 718,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([",
+      "test_method": "Removing_authenticator_revokes_pending_login_session_and_future_login_keeps_sms_email_only"
+    },
+    {
+      "line": 781,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Removing_sms_revokes_pending_login_session_and_future_login_keeps_authenticator_available"
+    },
+    {
+      "line": 832,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.EMAIL, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Removing_email_revokes_pending_login_session_and_future_login_keeps_authenticator_available"
+    },
+    {
+      "line": 884,
+      "source": "LoginTwoFactorHarness harness = BuildLoginTwoFactorHarness([TwoFactorAuthMethod.SMS_KEY, TwoFactorAuthMethod.AUTHENTICATOR_APP]);",
+      "test_method": "Concurrent_method_removal_is_deterministic_and_stale_login_session_stays_unpromoted"
+    }
+  ],
+  "other_factories_with_using_scope": [
+    {
+      "line": 55,
+      "source": "using var factory = FlowFactory(services => Replace(services, accountService));"
+    },
+    {
+      "line": 102,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 220,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 288,
+      "source": "using var factory = FlowFactory(_ => { });"
+    },
+    {
+      "line": 311,
+      "source": "using var factory = FlowFactory(services => Replace<IPasswordResetService>(services, service));"
+    },
+    {
+      "line": 338,
+      "source": "using var factory = FlowFactory(services => Replace<IPasswordResetService>(services, service));"
+    },
+    {
+      "line": 366,
+      "source": "using var factory = FlowFactory(services => Replace<IPasswordResetService>(services, service));"
+    },
+    {
+      "line": 980,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 1063,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 1116,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 1161,
+      "source": "using var factory = FlowFactory(services =>"
+    },
+    {
+      "line": 1187,
+      "source": "using var factory = FlowFactory(services =>"
+    }
+  ],
+  "official_ownership_reference": {
+    "url": "https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#disposal-of-objects",
+    "note": "ASP.NET Core 8 guidance ties TestServer disposal to WebApplicationFactory disposal. The harness is not an xUnit-owned fixture.",
+    "illustrative_current_implementation": "https://source.dot.net/Microsoft.AspNetCore.Mvc.Testing/WebApplicationFactory.cs.html",
+    "version_limit": "source.dot.net is current illustrative source, not exact pinned 8.0.27 implementation; no pinned binary execution or inspection claimed"
+  },
+  "original_runner_attempts": [
+    {
+      "command": "bash eng/dotnet-unit-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the unit-test lane.\n"
+    },
+    {
+      "command": "bash eng/dotnet-integration-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the integration-test lane.\n"
+    }
+  ],
+  "runtime_tools": {
+    "dotnet": null,
+    "pwsh": null,
+    "powershell.exe": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "new_finding_pr_ownership": {
+    "R10F-01": "COR23AD"
+  },
+  "qualification": {
+    "application": "Not compiled, discovered or executed",
+    "host_lifecycle": "No host teardown or resource measurement executed",
+    "http": "No TestServer or real HTTP request executed",
+    "storage": "No PostgreSQL or Redis-compatible execution",
+    "performance": "Not measured"
+  },
+  "remaining_R10_paths": [
+    "Dependencies/CityHash.dll.config",
+    "Dependencies/CityHash_103.dll",
+    "README.md",
+    "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+    "docs/release/PASSWORD_RESET_1_0_0.md",
+    "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+    "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+    "docs/testing/TEST_COMMAND_GUIDE.md",
+    "docs/testing/treehammock-test-suite-inventory.html",
+    "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+    "tests/http/bruno/treehammock/bruno.json",
+    "tests/http/bruno/treehammock/environments/docker-direct.bru",
+    "tests/http/bruno/treehammock/environments/docker-proxy.bru",
+    "treehammock.Tests/Integration/StartupConfigurationTests.cs",
+    "treehammock.Tests/Unit/AccountControllerSafeRepoWrapperTests.cs",
+    "treehammock.Tests/Unit/AccountRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/AccountRepoMappingTests.cs",
+    "treehammock.Tests/Unit/AccountServiceSetupTests.cs",
+    "treehammock.Tests/Unit/CacheJsonSettingsTests.cs",
+    "treehammock.Tests/Unit/GreenfieldApiNegativeContractTests.cs",
+    "treehammock.Tests/Unit/HostingProfileConfigurationTests.cs",
+    "treehammock.Tests/Unit/HostingSettingsTests.cs",
+    "treehammock.Tests/Unit/HostingStartupContractTests.cs",
+    "treehammock.Tests/Unit/LaunchSettingsJsonTests.cs",
+    "treehammock.Tests/Unit/ModelValidationConsistencyTests.cs",
+    "treehammock.Tests/Unit/RepositoryContractTests.cs",
+    "treehammock.Tests/Unit/RepositoryFailureBoundaryTests.cs",
+    "treehammock.Tests/Unit/SessionRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/SessionSqlConcurrencyContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockEnvironmentContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockLicenseTests.cs",
+    "treehammock.Tests/Unit/TreehammockRenameCompletionTests.cs",
+    "treehammock.Tests.SqlContracts/GlobalUsings.cs",
+    "treehammock.Tests.SqlContracts/Properties/AssemblyInfo.cs",
+    "treehammock.Tests.System/AssemblyInfo.cs",
+    "treehammock.Tests.System/GlobalUsings.cs",
+    "treehammock.Tests.System/Support/TreehammockEnvironment.cs",
+    "treehammock.Tests.System/SystemStackAccountFlowTests.cs"
+  ]
+}

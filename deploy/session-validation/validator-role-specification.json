@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "login": "treehammock_svs",
+  "group": "treehammock_svs_read",
+  "login_connection_limit": 16,
+  "column_count": 44,
+  "columns": {
+    "public.accounts": [
+      "account_id",
+      "cut_off",
+      "entitlement_version",
+      "security_stamp",
+      "unlock_when",
+      "verify_status"
+    ],
+    "public.sessions": [
+      "access_expiration",
+      "access_token_hash",
+      "account_id",
+      "account_security_stamp",
+      "cut_off",
+      "generation",
+      "protocol_version",
+      "refresh_token",
+      "security_stamp",
+      "session_expiration",
+      "session_id"
+    ],
+    "public.entitlement_grants": [
+      "account_id",
+      "approved_start",
+      "authorized_end",
+      "cadence",
+      "catalog",
+      "denied_capabilities",
+      "eligibility_until",
+      "grant_id",
+      "issuer",
+      "issuer_reference",
+      "materialized_cycle",
+      "max_cycles",
+      "origin_stamp",
+      "redeem_before",
+      "start_anchor",
+      "starts_at",
+      "state",
+      "term",
+      "tier",
+      "version"
+    ],
+    "public.entitlement_grant_audit": [
+      "account_id",
+      "action",
+      "actor",
+      "approval",
+      "credential_stamp",
+      "grant_id",
+      "grant_version"
+    ]
+  },
+  "functions": [
+    {
+      "signature": "public.svs_read_approval_audited(uuid)",
+      "source_sha256": "1611ad833aa0ba2c452d37117fd28dda3e0a79d6ef292952782b901985806dac",
+      "language": "plpgsql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.svs_read_activation_audited(uuid)",
+      "source_sha256": "69a1634220b06120607a351a86514c85e5987a1323942dde29614503c57e2f5e",
+      "language": "plpgsql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.svs_read_entitlements(uuid,timestamp with time zone)",
+      "source_sha256": "ca2b91ce8e33d9038d485aa730a3304d141ab278d7a4c2aac4da27c2d4ebdb6e",
+      "language": "plpgsql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.svs_read_current_session(text)",
+      "source_sha256": "975c8cce0c82a3be8f137594266962e26a53921556b9fb8f5a9b07f666e21a06",
+      "language": "sql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.cor19_is_issuer(name)",
+      "source_sha256": "3e0410eb096f673925cb93f03a77ad2225a9102bc162223c19faa64f3a2b7495",
+      "language": "plpgsql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.cor20_grant_rights_enabled()",
+      "source_sha256": "8c76ca65ed30506b156576d191b43692c5da3336d947a3a72a3d3fc0a964575c",
+      "language": "plpgsql",
+      "volatility": "s"
+    },
+    {
+      "signature": "public.cor20_capabilities(smallint)",
+      "source_sha256": "c5e3e37799d1c1256b7303d553b5421d159d8b846129b00f35b039d18445c0eb",
+      "language": "plpgsql",
+      "volatility": "i"
+    },
+    {
+      "signature": "public.cor20_term_boundary(timestamp with time zone,smallint,integer)",
+      "source_sha256": "439012a33a099bdc7d6a4c586a3d11b4a3e495838c6a57add7e854031ed97bbf",
+      "language": "plpgsql",
+      "volatility": "i"
+    },
+    {
+      "signature": "public.cor20_cycle_at(timestamp with time zone,smallint,integer,timestamp with time zone,timestamp with time zone)",
+      "source_sha256": "61b0037ff100b6e330fd13b2917fdab30209df3abaf3e2cd80c1576b208a02a7",
+      "language": "plpgsql",
+      "volatility": "i"
+    }
+  ],
+  "function_search_path": "search_path=pg_catalog, public, pg_temp",
+  "native_qualified": false
+}

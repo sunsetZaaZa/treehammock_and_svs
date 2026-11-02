@@ -1,0 +1,5 @@
+Command: bash eng/validate.sh --configuration Release --locked-restore
+Exit code: 127
+eng/validate.sh: line 51: dotnet: command not found
+
+No application tests executed.

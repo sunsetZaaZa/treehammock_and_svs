@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "pr": "SVS-00",
+  "scope": "Declarative source-derived parity fixtures; no tokens, account IDs, signing keys or native results. This is not an executable policy evaluator.",
+  "native_cases_executed": 0,
+  "status": "Specified/NotRun",
+  "references_are": "Repository-relative source evidence; runtime expectations require native confirmation.",
+  "cases": [
+    {
+      "id": "active",
+      "scenario": "Valid Active HS256 JWS without exp; current durable row, stamps and entitlement projection",
+      "path": "cold/hot",
+      "public_result": "Authenticated",
+      "expected_details": "Populate hash/webKey/ActiveSession and protocol/family/generation headers; do not require exp.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Authentication/JsonWebTokenUtility.cs"
+      ]
+    },
+    {
+      "id": "rotated",
+      "scenario": "Old access hash after committed family rotation, with stale cache",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Trust rejects old hash/generation; clear AppStatus; never refresh from generic middleware.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Services/SessionRefreshService.cs"
+      ]
+    },
+    {
+      "id": "revoked",
+      "scenario": "Committed logout/revoke before authority lookup; stale cache still present",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "SESSION_NOT_FOUND; best-effort cache removal; protected Authenticate returns 401.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Database/Baseline/000_canonical_database.sql"
+      ]
+    },
+    {
+      "id": "twofactor_pending",
+      "scenario": "Token has pending purpose and exists only in pending_two_factor_sessions",
+      "path": "cold",
+      "public_result": "Unauthenticated",
+      "expected_details": "No sessions row; cannot become Active.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Database/Baseline/000_canonical_database.sql"
+      ]
+    },
+    {
+      "id": "access_expired",
+      "scenario": "access_expiration equals or precedes now; family lifetime still future",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "CLIENT_CLEAR_ACCESS_TOKEN; cache revoke only, independent refresh lifetime preserved.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "hard_expired",
+      "scenario": "session_expiration equals or precedes now",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Hard expiration rejects even with valid signature.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "session_cutoff",
+      "scenario": "Session cutoff equals or precedes now, all other lifetimes future",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "EffectiveSessionExpiration includes cutoff.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "DataLayer/Cache/ActiveSession.cs"
+      ]
+    },
+    {
+      "id": "account_cutoff",
+      "scenario": "Account cutoff equals or precedes now",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "SQL combines account and session cutoff; earliest durable authority wins.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "wrong_purpose",
+      "scenario": "Existing active row bound to correctly signed JWS with non-Active purpose",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Purpose comparison is ordinal; reject, do not promote.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenUtility.cs",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "bad_signature",
+      "scenario": "Existing current row; access JWS signed with another key",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "TOKEN_FAILED_VALIDATION; no identity published.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenUtility.cs",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "wrong_issuer",
+      "scenario": "Existing current row; JWS issuer differs from configured issuer",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Issuer validation rejects.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenUtility.cs"
+      ]
+    },
+    {
+      "id": "missing_required_claim",
+      "scenario": "Signed JWS missing webKey, purpose or JTI; vary each separately",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "TOKEN_VALIDATION_MALFORMED; whitespace is missing.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenUtility.cs"
+      ]
+    },
+    {
+      "id": "missing_token",
+      "scenario": "No Bearer or AccessToken header",
+      "path": "none",
+      "public_result": "Unauthenticated",
+      "expected_details": "Continue anonymous; protected Authenticate emits 401; no cache/DB operation.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Authentication/Attributes/Authenticate.cs"
+      ]
+    },
+    {
+      "id": "header_precedence",
+      "scenario": "Both valid Bearer and AccessToken headers contain different credentials",
+      "path": "cold/hot",
+      "public_result": "Authenticated",
+      "expected_details": "Use nonempty Bearer first; test fallback when Bearer empty or unsupported scheme.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/AccessTokenTransport.cs"
+      ]
+    },
+    {
+      "id": "session_stamp_changed",
+      "scenario": "Cached session security stamp differs from SQL row",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "SECURITY_STAMP_MISMATCH; no cache-only authorization.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "account_stamp_changed",
+      "scenario": "Cached account stamp differs from session/account SQL stamp",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "ACCOUNT_SECURITY_STAMP_MISMATCH; cold join also rejects session/account mismatch.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "family_generation_mismatch",
+      "scenario": "Trust response has valid but different family/generation from cached projection",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Middleware rejects identity mismatch without rotation.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Repos/SessionRepo.cs"
+      ]
+    },
+    {
+      "id": "invalid_protocol",
+      "scenario": "SQL trust response protocol not 2, invalid generation or empty family",
+      "path": "hot",
+      "public_result": "Unavailable",
+      "expected_details": "ReadCachedSessionTrustResultAsync throws invalid dependency response; 503, not Active.",
+      "native_status": "NotRun",
+      "references": [
+        "Repos/SessionRepo.cs",
+        "Rigging/Dependencies/DependencyExceptionMiddleware.cs"
+      ]
+    },
+    {
+      "id": "locked_cached",
+      "scenario": "Account unlock_when in future; valid current cached session",
+      "path": "hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "SQL ACCOUNT_AUTHORITY_EXPIRED rejects cache trust.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "locked_cold",
+      "scenario": "Account unlock_when in future; no cache; otherwise current row/stamps",
+      "path": "cold",
+      "public_result": "ReviewRequired",
+      "expected_details": "get_session lacks explicit lock predicate; resolver returns empty capabilities; IsCurrent does not require nonempty capabilities. Paired native fixture must record identity outcome; never claim cold/hot lock parity from this static audit.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "DataLayer/Entitlements/EntitlementProjection.cs",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "unverified_cold",
+      "scenario": "Account verify_status != 1; no cache; otherwise current row/stamps",
+      "path": "cold",
+      "public_result": "ReviewRequired",
+      "expected_details": "Same explicit account-authority predicate asymmetry as locked_cold. Record current behavior before refactoring; no invented rejection.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "DataLayer/Entitlements/EntitlementProjection.cs",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "entitlement_boundary",
+      "scenario": "Entitlement NextBoundary <= now; reread returns same identity and current projection",
+      "path": "hot",
+      "public_result": "Authenticated",
+      "expected_details": "May reread authority; use fresh current capabilities and recheck time before publishing.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "DataLayer/Entitlements/EntitlementProjection.cs"
+      ]
+    },
+    {
+      "id": "entitlement_refresh_mismatch",
+      "scenario": "Expired entitlement projection; reread changes account/stamps/family/generation",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "No identity on changed authority during refresh.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "entitlement_malformed",
+      "scenario": "Missing/malformed durable entitlement JSON or unsupported capability",
+      "path": "cold/hot",
+      "public_result": "Unavailable",
+      "expected_details": "Explicit Parse rejects; repository wraps as dependency failure; no basic fallback.",
+      "native_status": "NotRun",
+      "references": [
+        "DataLayer/Entitlements/EntitlementProjection.cs",
+        "Repos/SessionRepo.cs"
+      ]
+    },
+    {
+      "id": "capability_absent",
+      "scenario": "Current basic projection with no permission for requested downstream action",
+      "path": "cold/hot",
+      "public_result": "Authenticated",
+      "expected_details": "Identity authentication is distinct from action authorization; entitlement consumer must deny missing capability. New SVS action mapping belongs to SVS-01+.",
+      "native_status": "NotRun",
+      "references": [
+        "DataLayer/Entitlements/EntitlementProjection.cs",
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "grant_rights_disabled",
+      "scenario": "Current source cor20_grant_rights_enabled returns false",
+      "path": "cold/hot",
+      "public_result": "Authenticated",
+      "expected_details": "Preserve basic/rights-disabled projection; do not enable paid rights in SVS-00.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Database/Baseline/000_canonical_database.sql",
+        "DataLayer/Entitlements/EntitlementProjection.cs"
+      ]
+    },
+    {
+      "id": "cache_missing",
+      "scenario": "Cache GET missing; current valid SQL authority",
+      "path": "cold",
+      "public_result": "Authenticated",
+      "expected_details": "One GetSession; successful auth normally hydrates cache.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "cache_corrupt",
+      "scenario": "Malformed cached payload; current valid SQL authority",
+      "path": "cold",
+      "public_result": "Authenticated",
+      "expected_details": "Best-effort revoke then database lookup/hydration; never trust malformed fields.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Cache/ActiveUserCacheService.cs"
+      ]
+    },
+    {
+      "id": "cache_down",
+      "scenario": "Cache GET timeout/outage; current valid SQL authority",
+      "path": "cold",
+      "public_result": "Authenticated",
+      "expected_details": "Cache failure falls back; writes best effort; durable evidence still required.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "cache_only_db_down",
+      "scenario": "Valid cached projection; SQL trust unavailable",
+      "path": "hot",
+      "public_result": "Unavailable",
+      "expected_details": "Dependency middleware returns 503; no Active from cache.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Rigging/Dependencies/DependencyExceptionMiddleware.cs"
+      ]
+    },
+    {
+      "id": "db_down_cold",
+      "scenario": "No cache; SQL lookup unavailable",
+      "path": "cold",
+      "public_result": "Unavailable",
+      "expected_details": "Repository throws dependency failure; 503 rather than anonymous success.",
+      "native_status": "NotRun",
+      "references": [
+        "Repos/SessionRepo.cs",
+        "Rigging/Dependencies/DependencyExceptionMiddleware.cs"
+      ]
+    },
+    {
+      "id": "cache_write_failed",
+      "scenario": "Valid SQL/JWT; best-effort SET returns false or times out",
+      "path": "cold/hot",
+      "public_result": "Authenticated",
+      "expected_details": "Recheck expiry/entitlements after cache operation; failure alone does not undo valid authority.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "expiry_during_cache_write",
+      "scenario": "Initially valid session expires while hydrating cache",
+      "path": "cold/hot",
+      "public_result": "Unauthenticated",
+      "expected_details": "Post-write and final clock checks reject.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "cancelled",
+      "scenario": "RequestAborted cancellation during dependency wait",
+      "path": "cold/hot",
+      "public_result": "ReviewRequired",
+      "expected_details": "Propagate cancellation; publish no identity; exact server HTTP completion is native transport evidence.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs"
+      ]
+    },
+    {
+      "id": "refresh_bypass",
+      "scenario": "POST /account/refresh with or without trailing slash, case insensitive",
+      "path": "refresh",
+      "public_result": "Bypass",
+      "expected_details": "Skip generic access validation; controller/service must validate opaque refresh credential itself.",
+      "native_status": "NotRun",
+      "references": [
+        "Rigging/Authentication/JsonWebTokenMiddleware.cs",
+        "Services/SessionRefreshService.cs"
+      ]
+    },
+    {
+      "id": "refresh_replay",
+      "scenario": "Previously consumed refresh family/generation/credential",
+      "path": "refresh",
+      "public_result": "Unauthenticated",
+      "expected_details": "Separate refresh service rejects stale credential (409); generic Authenticate 401 rule does not describe this endpoint.",
+      "native_status": "NotRun",
+      "references": [
+        "Services/SessionRefreshService.cs",
+        "Repos/SessionRefreshRepo.cs",
+        "Rigging/Database/Baseline/000_canonical_database.sql"
+      ]
+    }
+  ]
+}

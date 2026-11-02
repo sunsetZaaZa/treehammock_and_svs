@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:treehammock:svs:coherent-cache:v1",
+  "title": "Coherent account authority v1",
+  "description": "Codec additionally enforces nonzero/canonical UUIDs, Int64 bounds, canonical Instants/base64; reader enforces eligibility, identity, policy and time bounds. JSON shape never proves admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "const": 1
+        },
+        "environment": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]{1,32}$"
+        },
+        "epoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "policy": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]{1,64}$"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^[0-9A-F]{64}$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$"
+        },
+        "state": {
+          "const": "Blocked"
+        },
+        "accountId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        }
+      },
+      "required": [
+        "schema",
+        "environment",
+        "epoch",
+        "policy",
+        "nonce",
+        "revision",
+        "state",
+        "accountId"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "const": 1
+        },
+        "environment": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]{1,32}$"
+        },
+        "epoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "policy": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]{1,64}$"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^[0-9A-F]{64}$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$"
+        },
+        "state": {
+          "const": "Ready"
+        },
+        "accountId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "credentialHash": {
+          "type": "string",
+          "pattern": "^[0-9A-F]{64}$"
+        },
+        "producedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notAfter": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "familyId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "generation": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,18}$"
+            },
+            "protocol": {
+              "const": 2
+            },
+            "sessionStamp": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "accountStamp": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            }
+          },
+          "required": [
+            "accountId",
+            "familyId",
+            "generation",
+            "protocol",
+            "sessionStamp",
+            "accountStamp"
+          ]
+        },
+        "lifetime": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accessExpiration": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "hardExpiration": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "cutoff": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "accessExpiration",
+            "hardExpiration",
+            "cutoff"
+          ]
+        },
+        "account": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exists": {
+              "type": "boolean"
+            },
+            "verificationStatus": {
+              "type": "integer",
+              "minimum": -32768,
+              "maximum": 32767
+            },
+            "unlockWhen": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "currentStamp": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "sessionCurrent": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "exists",
+            "verificationStatus",
+            "unlockWhen",
+            "currentStamp",
+            "sessionCurrent"
+          ]
+        },
+        "entitlements": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,18}$"
+            },
+            "featureTier": {
+              "type": "integer"
+            },
+            "capabilities": {
+              "type": "array",
+              "maxItems": 16,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rightsEnabled": {
+              "type": "boolean"
+            },
+            "evaluatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nextBoundary": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "eligibilityUntil": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "grantsPresent": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "accountId",
+            "version",
+            "featureTier",
+            "capabilities",
+            "rightsEnabled",
+            "evaluatedAt",
+            "nextBoundary",
+            "eligibilityUntil",
+            "grantsPresent"
+          ]
+        },
+        "signingKey": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "minLength": 44,
+          "maxLength": 684,
+          "description": "Server-only signing bytes; canonical base64 of 32-512 bytes; never a consumer DTO."
+        }
+      },
+      "required": [
+        "schema",
+        "environment",
+        "epoch",
+        "policy",
+        "nonce",
+        "revision",
+        "state",
+        "accountId",
+        "credentialHash",
+        "producedAt",
+        "notAfter",
+        "identity",
+        "lifetime",
+        "account",
+        "entitlements",
+        "signingKey"
+      ]
+    }
+  ]
+}

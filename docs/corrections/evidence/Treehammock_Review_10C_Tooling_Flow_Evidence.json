@@ -1,0 +1,1523 @@
+{
+  "qualification": "36 copied Bash syntax/command-flow checks with fake Docker/dotnet/curl and child lanes. No Docker state, .NET/PowerShell/application tests or network calls. Simulated partial-resource marker is only a disposable local fixture; no actual container leak or data deletion was reproduced.",
+  "results": [
+    {
+      "scenario": "bash_syntax_eng/docker-all-runtime-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-all-tests.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-api-direct-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-api-proxy-scale.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-api-proxy-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-down.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-dragonfly-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-help.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-host-system-stack-tests.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-http-contracts-direct.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-http-contracts-proxy.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-infra-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-postgres-up.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-sql-contracts.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_eng/docker-system-stack-tests.sh",
+      "exit": 0
+    },
+    {
+      "scenario": "docker-postgres-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "up",
+            "postgres"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-dragonfly-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "up",
+            "dragonfly"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-infra-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "up",
+            "postgres",
+            "dragonfly"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-api-direct-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-direct.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "up",
+            "--build",
+            "postgres",
+            "dragonfly",
+            "api"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-api-proxy-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "up",
+            "--build",
+            "postgres",
+            "dragonfly",
+            "api",
+            "haproxy"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-api-proxy-scale_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "up",
+            "--build",
+            "--scale",
+            "api=2",
+            "postgres",
+            "dragonfly",
+            "api",
+            "haproxy"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-all-runtime-up_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "up",
+            "--build",
+            "postgres",
+            "dragonfly",
+            "api",
+            "haproxy"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-http-contracts-direct_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "http",
+            "run",
+            "--rm",
+            "--build",
+            "http-contract-tests-direct"
+          ],
+          "phase": "run",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-http-contracts-proxy_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "--profile",
+            "http-proxy",
+            "run",
+            "--rm",
+            "--build",
+            "http-contract-tests-proxy"
+          ],
+          "phase": "run",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-sql-contracts_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "--profile",
+            "sql",
+            "run",
+            "--rm",
+            "--build",
+            "sql-contract-tests"
+          ],
+          "phase": "run",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-down_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-direct.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            "docker-compose.ci-system.yml",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "proxy",
+            "--profile",
+            "sql",
+            "--profile",
+            "http",
+            "--profile",
+            "http-proxy",
+            "--profile",
+            "system",
+            "--profile",
+            "host-system",
+            "down"
+          ],
+          "phase": "down",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "docker-system-stack-tests_propagates_final_compose_failure",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/sdk:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "mcr.microsoft.com/dotnet/aspnet:8.0"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "postgres:16"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "haproxy:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            "docker-compose.ci-system.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "--profile",
+            "system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.integration.yml",
+            "-f",
+            "docker-compose.api-proxy.yml",
+            "-f",
+            "docker-compose.ci-system.yml",
+            "-f",
+            ".docker/treehammock-compose-images.override.yml",
+            "--profile",
+            "proxy",
+            "--profile",
+            "system",
+            "up",
+            "--build",
+            "--abort-on-container-exit",
+            "--exit-code-from",
+            "system-tests",
+            "system-tests"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ]
+    },
+    {
+      "scenario": "host_partial_compose_startup",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "postgres:16"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "haproxy:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "up",
+            "-d",
+            "postgres",
+            "dragonfly",
+            "haproxy-host"
+          ],
+          "phase": "up",
+          "fixture_exit": 37
+        }
+      ],
+      "fixture_partial_resource_remaining": true
+    },
+    {
+      "scenario": "host_failed_restore_with_cleanup",
+      "exit": 37,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "postgres:16"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "haproxy:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "up",
+            "-d",
+            "postgres",
+            "dragonfly",
+            "haproxy-host"
+          ],
+          "phase": "up",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "restore",
+            "treehammock.Tests.System/treehammock.Tests.System.csproj",
+            "--locked-mode"
+          ],
+          "phase": "restore",
+          "fixture_exit": 37
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        }
+      ],
+      "fixture_partial_resource_remaining": false
+    },
+    {
+      "scenario": "host_failed_api_launch_ready_endpoint",
+      "exit": 0,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "postgres:16"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "haproxy:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "up",
+            "-d",
+            "postgres",
+            "dragonfly",
+            "haproxy-host"
+          ],
+          "phase": "up",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "restore",
+            "treehammock.Tests.System/treehammock.Tests.System.csproj",
+            "--locked-mode"
+          ],
+          "phase": "restore",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "run",
+            "--project",
+            "treehammock.csproj",
+            "--configuration",
+            "Release",
+            "--no-restore",
+            "--urls",
+            "http://0.0.0.0:5001"
+          ],
+          "phase": "run",
+          "fixture_exit": 37
+        },
+        {
+          "tool": "curl",
+          "args": [
+            "--fail",
+            "--silent",
+            "--show-error",
+            "--max-time",
+            "5",
+            "http://localhost:8080/health/ready"
+          ],
+          "phase": "curl",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "test",
+            "treehammock.Tests.System/treehammock.Tests.System.csproj",
+            "--no-restore",
+            "--logger",
+            "trx;LogFileName=treehammock-system-host-tests.trx"
+          ],
+          "phase": "test",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        }
+      ],
+      "fixture_partial_resource_remaining": false
+    },
+    {
+      "scenario": "host_failed_test_with_cleanup",
+      "exit": 1,
+      "fake_tool_calls": [
+        {
+          "tool": "docker",
+          "args": [
+            "version"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "version"
+          ],
+          "phase": "metadata",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "info"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "postgres:16"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "image",
+            "inspect",
+            "haproxy:latest"
+          ],
+          "phase": "docker",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "up",
+            "-d",
+            "postgres",
+            "dragonfly",
+            "haproxy-host"
+          ],
+          "phase": "up",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "restore",
+            "treehammock.Tests.System/treehammock.Tests.System.csproj",
+            "--locked-mode"
+          ],
+          "phase": "restore",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "run",
+            "--project",
+            "treehammock.csproj",
+            "--configuration",
+            "Release",
+            "--no-restore",
+            "--urls",
+            "http://0.0.0.0:5001"
+          ],
+          "phase": "run",
+          "fixture_exit": 37
+        },
+        {
+          "tool": "curl",
+          "args": [
+            "--fail",
+            "--silent",
+            "--show-error",
+            "--max-time",
+            "5",
+            "http://localhost:8080/health/ready"
+          ],
+          "phase": "curl",
+          "fixture_exit": 0
+        },
+        {
+          "tool": "dotnet",
+          "args": [
+            "test",
+            "treehammock.Tests.System/treehammock.Tests.System.csproj",
+            "--no-restore",
+            "--logger",
+            "trx;LogFileName=treehammock-system-host-tests.trx"
+          ],
+          "phase": "test",
+          "fixture_exit": 37
+        },
+        {
+          "tool": "docker",
+          "args": [
+            "compose",
+            "-f",
+            "docker-compose.local-system.yml",
+            "--profile",
+            "host-system",
+            "down",
+            "--volumes",
+            "--remove-orphans"
+          ],
+          "phase": "down",
+          "fixture_exit": 0
+        }
+      ],
+      "fixture_partial_resource_remaining": false
+    },
+    {
+      "scenario": "all_tests_stops_at_docker-unit-tests",
+      "exit": 37,
+      "fixture_lane_calls": [
+        {
+          "lane": "docker-unit-tests"
+        }
+      ]
+    },
+    {
+      "scenario": "all_tests_stops_at_docker-sql-contracts",
+      "exit": 37,
+      "fixture_lane_calls": [
+        {
+          "lane": "docker-unit-tests"
+        },
+        {
+          "lane": "docker-sql-contracts"
+        }
+      ]
+    },
+    {
+      "scenario": "all_tests_stops_at_docker-http-contracts-direct",
+      "exit": 37,
+      "fixture_lane_calls": [
+        {
+          "lane": "docker-unit-tests"
+        },
+        {
+          "lane": "docker-sql-contracts"
+        },
+        {
+          "lane": "docker-http-contracts-direct"
+        }
+      ]
+    },
+    {
+      "scenario": "all_tests_stops_at_docker-http-contracts-proxy",
+      "exit": 37,
+      "fixture_lane_calls": [
+        {
+          "lane": "docker-unit-tests"
+        },
+        {
+          "lane": "docker-sql-contracts"
+        },
+        {
+          "lane": "docker-http-contracts-direct"
+        },
+        {
+          "lane": "docker-http-contracts-proxy"
+        }
+      ]
+    },
+    {
+      "scenario": "all_tests_stops_at_docker-system-stack-tests",
+      "exit": 37,
+      "fixture_lane_calls": [
+        {
+          "lane": "docker-unit-tests"
+        },
+        {
+          "lane": "docker-sql-contracts"
+        },
+        {
+          "lane": "docker-http-contracts-direct"
+        },
+        {
+          "lane": "docker-http-contracts-proxy"
+        },
+        {
+          "lane": "docker-system-stack-tests"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+stages: [policy, validation, signing]
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+default:
+  image:
+    name: "$SVS14_CI_IMAGE"
+    entrypoint: [""]
+  tags: [svs-linux-x64]
+  interruptible: true
+  cache: []
+variables:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  DOTNET_PROCESSOR_COUNT: "4"
+  MSBUILDDISABLENODEREUSE: "1"
+  RUNNER_SCRIPT_TIMEOUT: "38m"
+  RUNNER_AFTER_SCRIPT_TIMEOUT: "2m"
+svs14-policy:
+  stage: policy
+  timeout: 5 minutes
+  script:
+    - python3 eng/session-validation/ci/policy.py check
+    - python3 -m unittest discover -s eng/session-validation/ci -p 'test_*.py'
+svs14-validation:
+  stage: validation
+  timeout: 40 minutes
+  needs: [svs14-policy]
+  script:
+    - bash eng/session-validation/restore-build-test.sh
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 14 days
+    paths:
+      - artifacts/session-validation/public/summary.json
+      - artifacts/session-validation/public/provenance.json
+      - artifacts/session-validation/public/payload.tar.gz
+      - artifacts/session-validation/public/manifest.json
+svs14-signature:
+  stage: signing
+  interruptible: false
+  tags: [svs-signing-protected]
+  timeout: 5 minutes
+  needs:
+    - job: svs14-validation
+      artifacts: true
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_TAG && $SVS14_SIGN_ARTIFACTS == "true"'
+    - when: never
+  script:
+    - python3 eng/session-validation/ci/artifacts.py sign --directory artifacts/session-validation/public
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 30 days
+    paths:
+      - artifacts/session-validation/public/manifest.json
+      - artifacts/session-validation/public/manifest.ed25519
+      - artifacts/session-validation/public/signing-public.pem

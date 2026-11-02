@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFrameworks>net8.0;net10.0</TargetFrameworks><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><OutputType>Exe</OutputType><IsPackable>false</IsPackable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <ItemGroup><PackageReference Include="xunit.v3"/><ProjectReference Include="../../src/Treehammock.SessionValidation.Storage/Treehammock.SessionValidation.Storage.csproj"/></ItemGroup>
+<ItemGroup><None Include="../../deploy/session-validation/conformance/authority-transition.lua" Link="authority-transition.lua" CopyToOutputDirectory="PreserveNewest"/></ItemGroup></Project>

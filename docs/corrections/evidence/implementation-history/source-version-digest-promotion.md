@@ -1,0 +1,17 @@
+# COR23U — one source/version identity and tested digest promotion
+
+Owner: R10B-02 only. Rebased on completed COR23T. Status: FixedPendingQualification; native and hosted qualification NotRun.
+
+Release properties previously changed at publish time while no-build output retained earlier metadata, and registry jobs built independently using trigger SHA tags. Introduce canonical semantic/base version and immutable checkout identity before compilation, propagate them through no-build test/publish, and add actual package/source/build metadata plus OCI version/revision/UUID labels. A package-free .NET PE inspector checks real archive and image assemblies, including file/informational version, Release configuration, module ID and byte hash.
+
+Build one pinned-input Linux/amd64 OCI candidate through the unit-test stage. Load and validate its exact config/filesystem identity, extract the API tarball from the candidate, inspect both payloads, then require actual liveness/readiness against owned PostgreSQL/cache resources. Failed build, inspection, readiness or owned cleanup cannot create a promotable candidate. The manifest records source/build identity, all archive/evidence hashes, original candidate/config digests and resolved SDK/runtime/BuildKit/frontend/database/cache inputs.
+
+GitHub and GitLab package jobs consume all six existing gates. Every registry job downloads the candidate and copies its original manifest with Skopeo digest preservation. Version/full checkout-SHA tags reject conflicting bytes; latest is stable-only and configurable. Per-tag outcomes survive partial failure, retry verifies matching completed tags and reuses the original candidate, and combined publication evidence retains each enabled destination's result. GitLab incomplete enabled publication blocks assets/release; optional GHCR failure retains an incomplete summary without vetoing a passing source package release.
+
+Add a separate later-version GitHub workflow with tag/manual dispatch and main-ancestor source policy, preserving the deliberate initial-main/v1.0.0 bootstrap. Both retain COR23T input validation, immutable downstream checkout and scoped credentials. No trigger-SHA fallback or registry-specific rebuild remains.
+
+Sixty-four Python regressions cover canonical inputs, actual local Git byte/source checks, versioned metadata execution, synthetic OCI/archive integrity, controlled candidate/cleanup command sequences, partial promotion/retry and CI summaries, and wiring mutations. Three existing C# source-contract classes are updated; their source literals are checked supplementally but compilation/execution is NotRun. `eng/test-release-artifacts.py` authors real stable/prerelease SDK/image/runtime and two disposable-registry digest/latest/partial-retry qualification. Missing Docker/Skopeo prevents execution here. Synthetic fixture passes are not native proof.
+
+See [release artifact identity](../release/RELEASE_ARTIFACT_IDENTITY.md) for commands, recovery, policy, proof scope and hosted qualification. The local release-proof wrappers remain source/SQL gates and now explicitly document that scope. Full final-image flows, hosted artifact transport/permissions and actual enabled registry backends remain COR24 qualification obligations. No database, lock, package graph, migration, compatibility or historical review changes. Other findings and followups retain their states; all 186 gates remain Open.
+
+Next: COR23V.

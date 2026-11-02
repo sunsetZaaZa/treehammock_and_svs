@@ -1,0 +1,202 @@
+{
+  "active": {
+    "Status": 200,
+    "Code": "SESSIONS_LISTED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": true
+  },
+  "cache-down": {
+    "Status": 200,
+    "Code": "SESSIONS_LISTED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": true
+  },
+  "cache-corrupt": {
+    "Status": 200,
+    "Code": "SESSIONS_LISTED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": true
+  },
+  "cache-write-false": {
+    "Status": 200,
+    "Code": "SESSIONS_LISTED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": true
+  },
+  "cache-write-throws": {
+    "Status": 200,
+    "Code": "SESSIONS_LISTED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": true
+  },
+  "wrong-key": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "wrong-issuer": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "wrong-algorithm": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "missing-webkey": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "missing-purpose": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "missing-jti": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "preauth": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "opaque-refresh": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "malformed": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "expired-access": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "expired-hard": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "cutoff": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "authority-denied": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "no-session": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": true,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "no-credential": {
+    "Status": 401,
+    "Code": "AUTHENTICATION_FAILED",
+    "ClearToken": false,
+    "Protocol": false,
+    "HashHeader": false,
+    "CallsController": false
+  },
+  "capability-denied": {
+    "Status": 403,
+    "Code": "CAPABILITY_DENIED",
+    "ClearToken": false,
+    "Protocol": true,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "db-down": {
+    "Status": 503,
+    "Code": "DEPENDENCY_UNAVAILABLE",
+    "ClearToken": false,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "trust-null": {
+    "Status": 503,
+    "Code": "DEPENDENCY_UNAVAILABLE",
+    "ClearToken": false,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "trust-failed": {
+    "Status": 503,
+    "Code": "DEPENDENCY_UNAVAILABLE",
+    "ClearToken": false,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  },
+  "malformed-db": {
+    "Status": 503,
+    "Code": "DEPENDENCY_UNAVAILABLE",
+    "ClearToken": false,
+    "Protocol": false,
+    "HashHeader": true,
+    "CallsController": false
+  }
+}

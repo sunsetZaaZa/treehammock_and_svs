@@ -1,0 +1,10 @@
+# Explicit disposable test composition. Layer after direct/proxy transport overrides.
+# Generic Container/ContainerReverseProxy profiles never authorize test capabilities.
+services:
+  api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Testing
+      DOTNET_ENVIRONMENT: Testing
+      SystemTestSettings__Enabled: "true"
+      SystemTestSettings__EnableTestInspectionEndpoints: "true"
+      SystemTestSettings__TestKey: ${TREEHAMMOCK_FIXTURE_TEST_KEY:?Initialize fixture credentials}

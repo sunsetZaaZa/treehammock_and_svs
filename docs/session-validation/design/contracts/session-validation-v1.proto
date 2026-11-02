@@ -1,0 +1,36 @@
+syntax = "proto3";
+package treehammock.sessionvalidation.v1;
+option csharp_namespace = "Treehammock.SessionValidation.Contracts.V1";
+
+// Internal contract v1, distinct from Treehammock session protocol v2.
+// No service is hosted in SVS-01. Identity comes only from authenticated mTLS.
+service SessionValidator {
+  rpc Validate(ValidateRequest) returns (ValidateReply);
+}
+message ValidateRequest {
+  uint32 contract_version = 1;
+  bytes access_credential = 2; // sensitive UTF-8, 1..8192 bytes; never log
+  string requested_action = 3;
+  string request_id = 4; // random lowercase UUID-N, no user identifiers
+  // No caller, account, claims or refresh fields. Deadline is gRPC context.
+}
+enum Decision {
+  DECISION_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  UNAUTHENTICATED = 2;
+  FORBIDDEN = 3;
+  UNAVAILABLE = 4;
+}
+message ValidateReply {
+  Decision decision = 1;
+  bytes account_id_uuid = 2; // RFC 4122 network byte order; Active only
+  bytes session_family_uuid = 3; // RFC 4122 network byte order; Active only
+  int64 generation = 4; // Active only, 1..9007199254740991
+  uint32 session_protocol_version = 5; // Active only, must be 2
+  int64 checked_at_unix_ms = 6;
+  int64 valid_until_unix_ms = 7; // Active only; not a positive-cache permit
+  string policy_version = 8;
+  string decision_id = 9; // random lowercase UUID-N
+  uint32 contract_version = 10; // must be 1, including refusals
+  string request_id = 11; // binds reply to this request
+}

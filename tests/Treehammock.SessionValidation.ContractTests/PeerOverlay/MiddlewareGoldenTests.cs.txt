@@ -1,0 +1,64 @@
+using treehammock.DataLayer.Cache;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
+using NodaTime;
+using Svs12.Golden;
+using Svs12.Harness;
+using Treehammock.SessionValidation.Core;
+using treehammock.Rigging.Authorization;
+using treehammock.Rigging.Authorization.Attributes;
+using treehammock.Rigging.Dependencies;
+using Xunit;
+namespace treehammock.Tests.Unit;
+// Applied only to an isolated exact THS-12C test checkout by validate-parity.py.
+// No peer production source, policy, fixture or dependency lock is replaced.
+public sealed class Svs12MiddlewareGoldenTests
+{
+    public static IEnumerable<object[]> Cases()=>TreehammockParityFixtures.Cases();
+    [Theory][MemberData(nameof(Cases))]
+    public async Task Actual_THS12C_request_validator_matches_the_same_golden_profile(string id)
+    {
+        using var h=new ParityHarness(id,true);var validator=new SessionRequestValidator(h.Coordinator());
+        var decision=await validator.ValidateAsync(h.Credential,h.Now+Duration.FromSeconds(2),TestContext.Current.CancellationToken,h.Case.RequiredCapability);
+        Assert.Equal(h.Case.ExpectedTreehammock??h.Case.ExpectedCoordinator,decision.Decision.ToString());
+        if(decision.Decision==SessionDecision.Active){Assert.NotNull(decision.Session);Assert.Equal(h.Identity.AccountId,decision.Session.accountId);Assert.False(string.IsNullOrWhiteSpace(decision.WebKey));}
+        TreehammockParityFixtures.Report("peer-"+id,new{Id=id,Decision=decision.Decision.ToString(),Subject=decision.Session is not null});
+    }
+    [Fact] public async Task Record_actual_middleware_local_overhead_with_no_SQL_or_hint()
+    {
+        using var h=new ParityHarness("issued-no-exp",true,SystemClock.Instance.GetCurrentInstant());var validator=new SessionRequestValidator(h.Coordinator());
+        var middleware=new JsonWebTokenMiddleware(_=>Task.CompletedTask);var samples=new double[200];
+        for(int i=0;i<samples.Length;i++)
+        {
+            var c=new DefaultHttpContext();c.RequestAborted=TestContext.Current.CancellationToken;c.Request.Headers.Authorization="Bearer "+h.Credential;
+            long start=System.Diagnostics.Stopwatch.GetTimestamp();await middleware.InvokeAsync(c,validator);samples[i]=System.Diagnostics.Stopwatch.GetElapsedTime(start).TotalMicroseconds;
+            Assert.IsAssignableFrom<IAuthenticatedSession>(c.Items[AuthContextItems.ActiveSession]);
+        }
+        Array.Sort(samples);Assert.Equal(0,h.Database.Calls);Assert.Equal(0,h.Refill.Calls);
+        TreehammockParityFixtures.Report("peer-performance",new{Iterations=samples.Length,MedianMicroseconds=samples[100],P95Microseconds=samples[189],Scope="Exact THS12C middleware with synthetic storage; informational, no approved host cap"});
+    }
+    [Theory]
+    [InlineData("issued-no-exp",200)][InlineData("wrong-signing-key",401)][InlineData("preauth-twofactor",401)]
+    [InlineData("forbidden-capability",403)][InlineData("empty-capabilities-eligible",403)][InlineData("unverified-account",401)]
+    [InlineData("locked-account",401)][InlineData("unknown-account-evidence",503)]
+    public async Task Actual_THS12C_middleware_preserves_HTTP_context_refusals_and_protocol(string id,int expected)
+    {
+        using var h=new ParityHarness(id,true,SystemClock.Instance.GetCurrentInstant());var context=new DefaultHttpContext();context.RequestAborted=TestContext.Current.CancellationToken;
+        context.Request.Headers.Authorization="Bearer "+h.Credential;context.Items[AuthContextItems.ActiveSession]="untrusted";context.Items[AuthContextItems.WebKey]="untrusted";
+        context.SetEndpoint(new Endpoint(_=>Task.CompletedTask,new EndpointMetadataCollection(new RequireCapability(h.Case.RequiredCapability)),"golden"));
+        int status=0;
+        Task Downstream(HttpContext c)
+        {
+            var filter=new AuthorizationFilterContext(new ActionContext(c,new RouteData(),new ActionDescriptor()),[]);new Authenticate().OnAuthorization(filter);if(filter.Result is null)new RequireCapability(h.Case.RequiredCapability).OnAuthorization(filter);status=(filter.Result as JsonResult)?.StatusCode??200;return Task.CompletedTask;
+        }
+        try{await new JsonWebTokenMiddleware(Downstream).InvokeAsync(context,new SessionRequestValidator(h.Coordinator()));}
+        catch(DependencyUnavailableException){status=503;}
+        Assert.Equal(expected,status);Assert.Equal(expected==200,context.Items[AuthContextItems.ActiveSession] is IAuthenticatedSession);
+        if(expected!=200)Assert.Null(context.Items[AuthContextItems.WebKey]);
+        if(expected is 200 or 403){Assert.Equal("2",context.Response.Headers[SessionProtocol.VersionHeader].ToString());Assert.Equal("7",context.Response.Headers[SessionProtocol.GenerationHeader].ToString());}
+        if(id is "issued-no-exp" or "wrong-signing-key" or "preauth-twofactor" or "forbidden-capability" or "empty-capabilities-eligible"){Assert.Equal(0,h.Database.Calls);Assert.Equal(0,h.Refill.Calls);}
+    }
+}

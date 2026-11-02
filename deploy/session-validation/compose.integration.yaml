@@ -1,0 +1,553 @@
+{
+  "name": "${SVS15_PROJECT:?Unique project}",
+  "services": {
+    "cache-old": {
+      "image": "${SVS15_DRAGONFLY_IMAGE:?Approved digest}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 64,
+      "mem_limit": "512m",
+      "cpus": 2,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "dragonfly",
+        "--flagfile=/run/fixture/flags"
+      ],
+      "networks": {
+        "data": {
+          "ipv4_address": "172.29.90.31"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/cache-old",
+          "target": "/run/fixture",
+          "read_only": false
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "ulimits": {
+        "memlock": {
+          "soft": -1,
+          "hard": -1
+        }
+      }
+    },
+    "cache-new": {
+      "image": "${SVS15_DRAGONFLY_IMAGE:?Approved digest}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 64,
+      "mem_limit": "512m",
+      "cpus": 2,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "dragonfly",
+        "--flagfile=/run/fixture/flags"
+      ],
+      "networks": {
+        "data": {
+          "ipv4_address": "172.29.90.30"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/cache-new",
+          "target": "/run/fixture",
+          "read_only": false
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "ulimits": {
+        "memlock": {
+          "soft": -1,
+          "hard": -1
+        }
+      }
+    },
+    "yugabyte": {
+      "image": "${SVS15_YUGABYTE_IMAGE:?Approved digest}",
+      "user": "${SVS15_DBUSER:?Yugabyte UID and fixture GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 512,
+      "mem_limit": "3g",
+      "cpus": 2,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "/home/yugabyte/bin/yugabyted",
+        "start",
+        "--base_dir=/var/lib/yugabyte",
+        "--listen=172.29.90.20",
+        "--advertise_address=172.29.90.20",
+        "--daemon=false",
+        "--ui=false",
+        "--master_flags=replication_factor=1",
+        "--tserver_flags=pgsql_proxy_bind_address=0.0.0.0:5433,ysql_enable_auth=true,use_client_to_server_encryption=true,certs_for_client_dir=/run/fixture,ysql_hba_conf_csv={hostssl all yugabyte 127.0.0.1/32 trust,hostssl all all 172.29.90.0/24 scram-sha-256}"
+      ],
+      "networks": {
+        "data": {
+          "ipv4_address": "172.29.90.20"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/yugabyte",
+          "target": "/run/fixture",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "/var/lib/yugabyte:rw,nosuid,uid=${SVS15_UID},gid=${SVS15_GID:?Fixture GID},mode=0700,size=2g"
+      ],
+      "logging": {
+        "driver": "none"
+      }
+    },
+    "writer": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "768m",
+      "cpus": 2,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "dotnet",
+        "/apps/treehammock/treehammock.dll",
+        "--environment",
+        "Fixture",
+        "--contentRoot",
+        "/apps/treehammock"
+      ],
+      "networks": {
+        "data": {},
+        "control": {
+          "ipv4_address": "172.29.92.11"
+        },
+        "ingress": {
+          "ipv4_address": "172.29.93.11"
+        },
+        "mail": {}
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/writer",
+          "target": "/run/fixture",
+          "read_only": true
+        },
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE}/writer/appsettings.Fixture.json",
+          "target": "/apps/treehammock/appsettings.Fixture.json",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "/state:rw,nosuid,uid=${SVS15_UID},gid=${SVS15_GID},mode=0700,size=1m"
+      ],
+      "logging": {
+        "driver": "none"
+      }
+    },
+    "svs-1": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "512m",
+      "cpus": 1,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "bash",
+        "/apps/secure-exec.sh",
+        "/apps/svs/Treehammock.SessionValidation.Api.dll",
+        "--config",
+        "/run/fixture/host.json"
+      ],
+      "networks": {
+        "data": {},
+        "validation": {
+          "ipv4_address": "172.29.91.21"
+        },
+        "control": {
+          "ipv4_address": "172.29.92.21"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/svs-1",
+          "target": "/run/fixture",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "/state:rw,nosuid,uid=${SVS15_UID},gid=${SVS15_GID},mode=0700,size=1m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "working_dir": "/apps/svs",
+      "ulimits": {
+        "core": {
+          "soft": 0,
+          "hard": 0
+        }
+      }
+    },
+    "caller-1": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "256m",
+      "cpus": 1,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "dotnet",
+        "/apps/caller/Treehammock.SessionValidation.DisposableCaller.dll"
+      ],
+      "networks": {
+        "validation": {},
+        "ingress": {
+          "ipv4_address": "172.29.93.41"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/caller-1",
+          "target": "/run/fixture",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "working_dir": "/apps/caller"
+    },
+    "svs-2": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "512m",
+      "cpus": 1,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "bash",
+        "/apps/secure-exec.sh",
+        "/apps/svs/Treehammock.SessionValidation.Api.dll",
+        "--config",
+        "/run/fixture/host.json"
+      ],
+      "networks": {
+        "data": {},
+        "validation": {
+          "ipv4_address": "172.29.91.22"
+        },
+        "control": {
+          "ipv4_address": "172.29.92.22"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/svs-2",
+          "target": "/run/fixture",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "/state:rw,nosuid,uid=${SVS15_UID},gid=${SVS15_GID},mode=0700,size=1m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "working_dir": "/apps/svs",
+      "ulimits": {
+        "core": {
+          "soft": 0,
+          "hard": 0
+        }
+      }
+    },
+    "caller-2": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "256m",
+      "cpus": 1,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "dotnet",
+        "/apps/caller/Treehammock.SessionValidation.DisposableCaller.dll"
+      ],
+      "networks": {
+        "validation": {},
+        "ingress": {
+          "ipv4_address": "172.29.93.42"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/caller-2",
+          "target": "/run/fixture",
+          "read_only": true
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "working_dir": "/apps/caller"
+    },
+    "smtp": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "128m",
+      "cpus": 0.5,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "python3",
+        "/driver/smtp_sink.py"
+      ],
+      "networks": {
+        "mail": {
+          "ipv4_address": "172.29.94.20"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/smtp",
+          "target": "/run/fixture",
+          "read_only": true
+        },
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE}/smtp/captures",
+          "target": "/capture",
+          "read_only": false
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      }
+    },
+    "operator": {
+      "image": "${SVS15_APP_IMAGE:?Build the isolated fixture image}",
+      "user": "${SVS15_USER:?Owned fixture UID and GID}",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "512m",
+      "cpus": 1,
+      "restart": "no",
+      "init": true,
+      "stop_grace_period": "15s",
+      "command": [
+        "python3",
+        "/driver/native.py",
+        "flows"
+      ],
+      "networks": {
+        "data": {},
+        "control": {
+          "ipv4_address": "172.29.92.10"
+        },
+        "ingress": {
+          "ipv4_address": "172.29.93.10"
+        }
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE:?Private fixture directory}/operator",
+          "target": "/run/fixture",
+          "read_only": true
+        },
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE}/smtp/captures",
+          "target": "/capture",
+          "read_only": true
+        },
+        {
+          "type": "bind",
+          "source": "${SVS15_STATE}/operator/session",
+          "target": "/session",
+          "read_only": false
+        }
+      ],
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,size=64m"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "profiles": [
+        "tools"
+      ]
+    }
+  },
+  "networks": {
+    "data": {
+      "internal": true,
+      "ipam": {
+        "config": [
+          {
+            "subnet": "172.29.90.0/24"
+          }
+        ]
+      }
+    },
+    "validation": {
+      "internal": true,
+      "ipam": {
+        "config": [
+          {
+            "subnet": "172.29.91.0/24"
+          }
+        ]
+      }
+    },
+    "control": {
+      "internal": true,
+      "ipam": {
+        "config": [
+          {
+            "subnet": "172.29.92.0/24"
+          }
+        ]
+      }
+    },
+    "ingress": {
+      "internal": true,
+      "ipam": {
+        "config": [
+          {
+            "subnet": "172.29.93.0/24"
+          }
+        ]
+      }
+    },
+    "mail": {
+      "internal": true,
+      "ipam": {
+        "config": [
+          {
+            "subnet": "172.29.94.0/24"
+          }
+        ]
+      }
+    }
+  }
+}

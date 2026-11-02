@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "old_source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "svs_source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "trusted_key_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "replicas": ["svs-1", "svs-2"],
+  "min_samples_per_replica": 1000,
+  "max_p99_us": 1,
+  "max_fallback_sql_reads": 0,
+  "max_writer_fence_us": 1,
+  "previous_basis_points": 0,
+  "next_basis_points": 100,
+  "packet_max_age_seconds": 3600
+}

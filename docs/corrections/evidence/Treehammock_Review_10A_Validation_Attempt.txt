@@ -1,0 +1,3 @@
+The .NET SDK is required to run the unit-test lane.
+Actual runner exit: 127
+No restore, build or application tests executed.

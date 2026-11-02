@@ -1,0 +1,226 @@
+{
+  "evidence_kind": "Complete source inspection, source method catalog, source observations and blocked original SQL runners; NOT runtime qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_unchanged_vs_upload": true,
+  "source_file_count": 451,
+  "selected_file_metadata": {
+    "treehammock.Tests.SqlContracts/Integration/Database/BooleanProcedureContractTests.cs": {
+      "lines": 2936,
+      "bytes": 159086,
+      "sha256": "9c0c9cc56035581919b233feab20c93102c13366176368603dc1de130afe2f91"
+    },
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs": {
+      "lines": 671,
+      "bytes": 32971,
+      "sha256": "9a1811bed3d0ac4a29c0eecfeb004e35fe34d6f171e58bd4fa5fdca16f27696c"
+    },
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs": {
+      "lines": 1258,
+      "bytes": 59176,
+      "sha256": "dea8e95ae9f265533ffefad896e77f0eee04cdc15b5fb13295c84fe450c52c2b"
+    }
+  },
+  "scope": {
+    "selected_files": 3,
+    "complete_source_files": 3,
+    "selected_lines": 4865,
+    "selected_bytes": 251233,
+    "source_fact_methods_NOT_runtime_discovery": 19,
+    "prior_R06_partial_test_files_completed": [
+      "treehammock.Tests.SqlContracts/Integration/Database/BooleanProcedureContractTests.cs",
+      "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs",
+      "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs"
+    ],
+    "prior_R06_partial_test_files_remaining": 0,
+    "remaining_R10_assigned_files": 13,
+    "cross_chunk_inspection": {
+      "treehammock.Tests.SqlContracts/Integration/Database/SqlContractSettings.cs": "R10I complete opt-in/environment source cross-check; existing complete qualification retained.",
+      "Rigging/Database/Baseline/000_treehammock_canonical_database.sql": "R10I selected reset create/promote/upsert/TOTP function bodies and finalize lookup slices; existing R06 complete qualification retained.",
+      "Repos/PasswordResetRepo.cs": "R10I promotion/upsert parameter, mapping, reader-disposal and commit bodies; existing R06 qualification retained.",
+      "Rigging/Database/StorageContext.cs": "R10I complete source cross-check of base pool construction and absent disposal interface; existing R06 qualification retained.",
+      "eng/sql-contracts.sh": "R10I complete lane prerequisite/restore/build/test flow and blocked prerequisite execution; existing R10A qualification retained.",
+      "eng/docker-sql-contracts.sh": "R10I complete Docker lane flow and blocked prerequisite execution; existing R10C qualification retained.",
+      "treehammock.Tests.SqlContracts/treehammock.Tests.SqlContracts.csproj": "R10I complete framework/project reference cross-check; existing R10A qualification retained."
+    },
+    "deduplicated_closure_requirements": {
+      "COR02/COR24": "Assert exact SQL result schema/types/cardinality and named constraint SQLSTATE; avoid nullable type coercion; run against the installed baseline and upgrade.",
+      "COR04/COR13": "Use two-connection barriers for create/promote, stale proof/resend/revoke and expiry at authoritative commit; require rollback/no partial password or audit mutation.",
+      "COR09/COR10": "Keep sequential trust/logout state checks; create a real current pending row before asserting stamp rejection; exercise competing refresh/logout/revoke and challenge replacement.",
+      "COR11/COR12": "Align verification-token replacement assertions with durable delivery admission and duplicate signup/resend races; delivery cancellation must preserve the committed valid artifact as specified.",
+      "COR13/COR16": "Replace incomplete-session promotion positives with rejected incomplete authorization and valid exact completed-proof promotion; invoke actual factor removal then deny old reset proofs and stale writes.",
+      "COR15": "Preserve repository byte mapping/step replay tests; add missing/revoked/expired/unverified/wrong-provider enrollment branches and real protection/TOTP verification with metadata and simultaneous replay.",
+      "COR18/COR22": "Preserve deletion/email final-state and audit checks; test cancellation, expiry, purge and failed delivery without restoring request/attempt budgets; qualify bounded retention and workload costs.",
+      "COR03/COR22/COR24": "Own/dispose both fixture and production data sources, close a connection if search-path setup fails, use bounded cancellation/cleanup and coherent database/app clocks; measure before asserting resource cost."
+    },
+    "runtime_qualified": false,
+    "global_coverage_caveat": "Completing these three R06 partial suites and listing 13 R10 paths does not establish global completion. Reconcile older pending/indexed/slice-only file evidence before closing COR01/COR24."
+  },
+  "source_test_method_catalog_NOT_discovered_or_executed": {
+    "treehammock.Tests.SqlContracts/Integration/Database/BooleanProcedureContractTests.cs": [
+      {
+        "method": "Deferred_sql_procedure_contract_returns_status_rows_for_auth_and_session_surface",
+        "line": 27,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Effective_cutoff_is_preserved_and_enforced_by_credential_lookup_set_session_and_rotation",
+        "line": 1463,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Canonical_sql_baseline_creates_registration_verification_contracts",
+        "line": 1714,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Validate_cached_session_trust_returns_expected_contract_statuses",
+        "line": 1837,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Two_factor_challenge_delivery_failure_cancel_clears_issued_challenge_without_burning_resend_budget",
+        "line": 1997,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Begin_twofactor_auth_detail_creates_selection_required_session_with_available_configurations",
+        "line": 2110,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Two_factor_pending_and_finalization_require_current_account_security_stamp_and_rotation_clears_pending_pointer",
+        "line": 2239,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Logout_contracts_expire_current_session_rotate_account_stamp_and_clear_pending_state",
+        "line": 2323,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Twofactor_setup_verification_keeps_one_pending_setup_per_account_and_blocks_replay",
+        "line": 2540,
+        "attribute": "Fact"
+      }
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs": [
+      {
+        "method": "Password_reset_sql_lifecycle_is_account_bound_single_active_and_atomic_on_promotion",
+        "line": 10,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Password_reset_totp_lookup_requires_verified_authenticator_app_secret_and_rejects_replay",
+        "line": 260,
+        "attribute": "Fact"
+      },
+      {
+        "method": "Password_reset_request_rate_limit_enforces_cooldown_window_and_block",
+        "line": 365,
+        "attribute": "Fact"
+      }
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs": [
+      {
+        "method": "PasswordResetRepo_promotes_password_and_invalidates_existing_sessions_against_real_sql",
+        "line": 30,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetTotpRepo_loads_verified_authenticator_secret_and_rejects_replay_against_real_sql",
+        "line": 189,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetRepo_creating_second_active_reset_cancels_first_against_real_sql",
+        "line": 272,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetRepo_cancel_request_marks_artifact_cancelled_against_real_sql",
+        "line": 415,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetService_persists_selected_pending_session_against_real_sql",
+        "line": 539,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetService_rehydrates_pending_session_with_fresh_sql_backed_service_instances",
+        "line": 645,
+        "attribute": "Fact"
+      },
+      {
+        "method": "PasswordResetRepo_revokes_pending_sessions_on_terminal_reset_events_against_real_sql",
+        "line": 733,
+        "attribute": "Fact"
+      }
+    ]
+  },
+  "static_checks": {
+    "three_suites_use_isolated_guid_schemas_and_finally_drop": true,
+    "selected_suites_do_not_schedule_concurrent_requests": true,
+    "terminal_method_removal_case_calls_revocation_helper_directly": true,
+    "terminal_promotion_saves_incomplete_challenge_before_promoting": true,
+    "pending_save_helper_selects_and_starts_challenge_without_completion": true,
+    "promotion_sql_has_no_completed_authorization_predicate": true,
+    "reset_create_and_promote_lock_in_opposite_orders": true,
+    "upsert_conflict_branch_overwrites_proof_and_clears_revocation": true,
+    "pending_stamp_test_never_creates_authoritative_pending_row": true,
+    "registration_case_explicitly_accepts_old_and_resend_tokens": true,
+    "service_rehydration_uses_three_sequential_fresh_runtimes": true,
+    "sql_service_runtime_substitutes_totp_material_delivery_and_abuse": true,
+    "totp_repository_case_checks_bytes_and_replay_but_not_decryption": true,
+    "duplicate_active_reset_test_accepts_any_postgres_exception": true,
+    "reader_helpers_assert_first_row_but_not_exact_row_cardinality": true,
+    "nullable_string_reader_coerces_unexpected_types_to_null": true,
+    "repository_storage_owns_override_pool_but_constructs_unused_base_pool": true,
+    "repository_promotion_disposes_reader_before_commit_in_both_branches": true,
+    "fixed_future_expiration_uses_a_clock_not_injected_into_sql_creation": true
+  },
+  "original_runner_attempts": [
+    {
+      "command": "bash eng/sql-contracts.sh --configuration Release --locked-restore",
+      "exit": 2,
+      "stdout": "",
+      "stderr": "TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS must be true or 1 to run SQL contract tests.\n"
+    },
+    {
+      "command": "bash eng/docker-sql-contracts.sh",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Docker CLI with Compose is required, but no reachable Docker CLI was found.\nInstall/start Docker Desktop or Docker Engine, then retry this script.\nOn Windows, the host-backed lane can also be run with: .\\eng\\docker-host-system-stack-tests.cmd\n"
+    }
+  ],
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "pwsh": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "new_distinct_findings": 0,
+  "open_findings": {
+    "total": 83,
+    "P1": 18,
+    "P2": 65
+  },
+  "remaining_R10_paths": [
+    "Dependencies/CityHash.dll.config",
+    "Dependencies/CityHash_103.dll",
+    "README.md",
+    "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+    "docs/release/PASSWORD_RESET_1_0_0.md",
+    "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+    "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+    "docs/testing/TEST_COMMAND_GUIDE.md",
+    "docs/testing/treehammock-test-suite-inventory.html",
+    "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+    "tests/http/bruno/treehammock/bruno.json",
+    "tests/http/bruno/treehammock/environments/docker-direct.bru",
+    "tests/http/bruno/treehammock/environments/docker-proxy.bru"
+  ]
+}

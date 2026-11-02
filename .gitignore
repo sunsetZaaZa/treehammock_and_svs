@@ -1,0 +1,136 @@
+# Build outputs
+bin/
+obj/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# .NET generated files
+*.user
+*.rsuser
+*.suo
+*.cache
+*.pidb
+*.svclog
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.nupkg
+*.snupkg
+project.assets.json
+project.nuget.cache
+*.nuget.g.props
+*.nuget.g.targets
+
+# Test outputs
+.correction-results/
+__pycache__/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage-results/
+*.cobertura.xml
+*.lcov
+lcov.info
+
+# Release/package artifacts
+artifacts/
+publish/
+dist/
+out/
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.sha256
+treehammock-api-v*.tar.gz
+treehammock-api-v*.sha256
+
+# Temporary PR/apply scripts
+apply-pr*.ps1
+apply-pr*.sh
+*.patch.tmp
+*.rej
+*.orig
+
+# IDE/editor files
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Node/Bruno tooling
+node_modules/
+.npm/
+.pnpm-store/
+tests/http/**/reports/
+tests/http/**/.bruno/
+tests/http/**/node_modules/
+
+# Docker / compose local state
+.docker/
+docker-compose.override.yml
+docker-compose.*.override.yml
+*.docker.local
+.env
+.env.*
+!.env.example
+
+# Local databases and temp data
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.tmp
+*.temp
+tmp/
+temp/
+
+# OS metadata
+ehthumbs.db
+Icon?
+.Spotlight-V100
+.Trashes
+
+# Keep package lock files committed
+!packages.lock.json
+!package-lock.json
+!pnpm-lock.yaml
+!yarn.lock
+
+# Keep license and release docs committed
+!LICENSE
+!docs/release/
+/bin
+/obj
+/treehammock.Tests/bin
+/treehammock.Tests/obj
+/treehammock.Tests/TestResults
+/bin
+/obj
+/treehammock.Tests/bin
+/treehammock.Tests/obj
+/treehammock.Tests/TestResults
+
+# Guard against extracting a source archive into the repository root.
+/treehammock/

@@ -1,0 +1,7 @@
+{
+  "AbuseControlSettings": {
+    "CounterFailureMode": "RequirePostgreSqlBudgetV1",
+    "PostgreSqlFallbackPolicies": ["Login", "Delivery"],
+    "PostgreSqlBudgetTimeoutMilliseconds": 1000
+  }
+}

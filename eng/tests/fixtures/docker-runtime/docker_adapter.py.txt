@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Controlled Docker protocol adapter. No Docker/network/application qualification."""
+import fcntl,json,os,re,sys,time,uuid
+from pathlib import Path
+import yaml
+args=sys.argv[1:];state_path=Path(os.environ['COR23Y_STATE']);lock=state_path.with_suffix('.lock');lock.touch()
+with lock.open('r+') as mutex:
+ fcntl.flock(mutex,fcntl.LOCK_EX)
+ state=json.loads(state_path.read_text()) if state_path.exists() else {'resources':{},'calls':[]}
+ state['calls'].append(dict(args=args,project=os.environ.get('COMPOSE_PROJECT_NAME'),run_id=os.environ.get('TREEHAMMOCK_TEST_RUN_ID'),cwd=os.getcwd()))
+ state_path.write_text(json.dumps(state))
+if os.environ.get('COR23Y_FAIL') and os.environ['COR23Y_FAIL'] in ' '.join(args):sys.exit(47)
+if os.environ.get('COR23Z_HANG') and os.environ['COR23Z_HANG'] in ' '.join(args):time.sleep(30)
+def mutate(function):
+ with lock.open('r+') as mutex:
+  fcntl.flock(mutex,fcntl.LOCK_EX);state=json.loads(state_path.read_text());result=function(state);state_path.write_text(json.dumps(state));return result
+def graph():
+ project=args[args.index('-p')+1] if '-p' in args else os.environ.get('COMPOSE_PROJECT_NAME','unowned')
+ env=dict(os.environ)
+ if '--env-file' in args:env.update(dict(line.split('=',1) for line in Path(args[args.index('--env-file')+1]).read_text().splitlines()))
+ def expand(value):
+  if isinstance(value,dict):return {k:expand(v) for k,v in value.items()}
+  if isinstance(value,list):return [expand(v) for v in value]
+  if isinstance(value,str):return re.sub(r'\$\{([^}:]+)(?::[-?]([^}]*))?\}',lambda m:env.get(m[1],m[2] or ''),value)
+  return value
+ def merge(a,b):
+  for key,value in b.items():
+   if isinstance(value,dict) and isinstance(a.get(key),dict):merge(a[key],value)
+   else:a[key]=value
+ result={'name':project,'services':{},'volumes':{},'networks':{'default':{}}}
+ for index,arg in enumerate(args):
+  if arg=='-f':merge(result,expand(yaml.safe_load(Path(args[index+1]).read_text())))
+ for kind in ['volumes','networks']:
+  for name,item in result[kind].items():
+   if item is None:item={};result[kind][name]=item
+   item['name']=project+'_'+name
+ for name,service in result['services'].items():
+  if not service.get('image') and not service.get('build'):sys.exit(2)
+  ports=service.get('ports',[]);service['ports']=[dict(host_ip=p.split(':')[0],published=p.split(':')[1],target=int(p.split(':')[2])) if isinstance(p,str) else p for p in ports]
+ return result
+if args[:3]==['compose','version','--short']:print('2.32.0');sys.exit(0)
+if args[:1]==['compose']:
+ value=graph()
+ if 'config' in args:print(json.dumps(value));sys.exit(0)
+ if any(command in args for command in ['run','up']):
+  def provision(state):
+   for kind in ['volumes','networks']:
+    for name,item in value[kind].items():
+     ident=item['name'];state['resources'][ident]=dict(kind=kind[:-1],Name=ident,Labels=item.get('labels',{}),sentinel='owned-state')
+   for name,item in value['services'].items():
+    ident=value['name']+'-'+name;labels=dict(item.get('labels',{}));labels['com.docker.compose.project']=value['name'];state['resources'][ident]=dict(kind='container',Name=ident,Config={'Labels':labels},sentinel='owned-state')
+  mutate(provision)
+  if os.environ.get('COR23Z_PARTIAL_START')=='true':sys.exit(47)
+  if os.environ.get('COR23Y_WAIT')=='true':
+   Path(os.environ['COR23Y_STARTED']+'/'+os.environ['TREEHAMMOCK_TEST_RUN_ID']).touch()
+   while True:time.sleep(.1)
+  if os.environ.get('COR23Y_PRINT_CREDENTIALS')=='true':print(os.environ['TREEHAMMOCK_FIXTURE_TEST_KEY']+' '+os.environ['TREEHAMMOCK_TEST_RUN_TOKEN'])
+  sys.exit(int(os.environ.get('COR23Y_LANE_EXIT','0')))
+if args[:1]==['build']:
+ labels={args[i+1].split('=',1)[0]:args[i+1].split('=',1)[1] for i,arg in enumerate(args) if arg=='--label'};ident=args[args.index('-t')+1]
+ mutate(lambda state:state['resources'].update({ident:dict(kind='image',Id=ident,Config={'Labels':labels})}));sys.exit(0)
+if args[:1]==['version']:print('28.0.0' if '--format' in args else 'Docker controlled adapter');sys.exit(0)
+if args[:2]==['context','show']:print('controlled');sys.exit(0)
+if args[:2]==['context','inspect']:print('unix:///controlled-fixture.sock');sys.exit(0)
+if args[:1]==['info']:print('{"OSType":"linux","OperatingSystem":"controlled fixture"}');sys.exit(0)
+if args[:2]==['compose','version']:print('controlled compose');sys.exit(0)
+if args[:1]==['pull']:sys.exit(0)
+kind='container' if args[:1] in (['ps'],['inspect'],['rm']) else args[0]
+if 'inspect' in args:
+ ident=args[-1];record=mutate(lambda state:state['resources'].get(ident))
+ if record is None:sys.exit(1)
+ print(json.dumps([record]));sys.exit(0)
+if args[:1]==['ps'] or 'ls' in args:
+ query=args[args.index('--filter')+1] if '--filter' in args else None
+ def select(state):
+  output=[]
+  for ident,record in state['resources'].items():
+   if record['kind']!=kind:continue
+   labels=record.get('Config',{}).get('Labels',{}) if kind in ('container','image') else record.get('Labels',{})
+   if query:
+    key,value=query.removeprefix('label=').split('=',1)
+    if labels.get(key)!=value:continue
+   output.append(ident)
+  return output
+ print('\n'.join(mutate(select)));sys.exit(0)
+if 'rm' in args:
+ ident=args[-1]
+ if os.environ.get('COR23Y_CLEANUP_FAIL')=='true':sys.exit(63)
+ mutate(lambda state:state['resources'].pop(ident,None));sys.exit(0)
+sys.exit(0)

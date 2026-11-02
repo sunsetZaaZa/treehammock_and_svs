@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "run_id": "00000000000000000000000000000000",
+  "scope": "UNCONFIGURED",
+  "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "inventory_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "replicas": [
+    "svs-1",
+    "svs-2"
+  ],
+  "benchmark_dll": "/private/qualification/Svs.Benchmark.dll",
+  "benchmark_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "dotnet": "/private/dotnet/dotnet",
+  "hook": "/private/qualification/site-hook.py",
+  "hook_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "budgets": {
+    "min_requests_per_replica": 1000,
+    "min_requests_per_second_per_server_core": 1,
+    "max_p99_us": 1,
+    "max_sql_read_p99_us": 1,
+    "max_pool_wait_p99_us": 1,
+    "max_server_cpu_percent": 1,
+    "max_working_set_bytes": 1,
+    "max_file_descriptors": 1,
+    "max_writer_fence_p99_us": 1,
+    "max_revocation_lag_us": 1,
+    "max_fallback_sql_reads": 0,
+    "max_publisher_writes": 0
+  },
+  "phases": [
+    {
+      "name": "cold-cache",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/cold-cache-clients.json",
+      "vectors_file": "/private/qualification/cold-cache-vectors.json"
+    },
+    {
+      "name": "hot-cache",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/hot-cache-clients.json",
+      "vectors_file": "/private/qualification/hot-cache-vectors.json"
+    },
+    {
+      "name": "mixed-refusals",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/mixed-refusals-clients.json",
+      "vectors_file": "/private/qualification/mixed-refusals-vectors.json"
+    },
+    {
+      "name": "login-storm",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/login-storm-clients.json",
+      "vectors_file": "/private/qualification/login-storm-vectors.json"
+    },
+    {
+      "name": "refresh-race",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/refresh-race-clients.json",
+      "vectors_file": "/private/qualification/refresh-race-vectors.json"
+    },
+    {
+      "name": "logout-race",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/logout-race-clients.json",
+      "vectors_file": "/private/qualification/logout-race-vectors.json"
+    },
+    {
+      "name": "ysql-leader-transfer",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/ysql-leader-transfer-clients.json",
+      "vectors_file": "/private/qualification/ysql-leader-transfer-vectors.json"
+    },
+    {
+      "name": "cache-loss",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/cache-loss-clients.json",
+      "vectors_file": "/private/qualification/cache-loss-vectors.json"
+    },
+    {
+      "name": "refill-outage",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/refill-outage-clients.json",
+      "vectors_file": "/private/qualification/refill-outage-vectors.json"
+    },
+    {
+      "name": "replica-loss",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/replica-loss-clients.json",
+      "vectors_file": "/private/qualification/replica-loss-vectors.json"
+    },
+    {
+      "name": "haproxy-failover",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/haproxy-failover-clients.json",
+      "vectors_file": "/private/qualification/haproxy-failover-vectors.json"
+    },
+    {
+      "name": "tls-rotation",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/tls-rotation-clients.json",
+      "vectors_file": "/private/qualification/tls-rotation-vectors.json"
+    },
+    {
+      "name": "network-partition",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/network-partition-clients.json",
+      "vectors_file": "/private/qualification/network-partition-vectors.json"
+    },
+    {
+      "name": "recovery",
+      "duration_seconds": 300,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/recovery-clients.json",
+      "vectors_file": "/private/qualification/recovery-vectors.json"
+    },
+    {
+      "name": "soak-24h",
+      "duration_seconds": 86460,
+      "concurrency": 16,
+      "requests_per_second": 1000,
+      "request_limit": 100000000,
+      "clients_file": "/private/qualification/soak-24h-clients.json",
+      "vectors_file": "/private/qualification/soak-24h-vectors.json"
+    }
+  ]
+}

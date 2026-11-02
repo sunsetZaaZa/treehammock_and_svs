@@ -1,0 +1,51 @@
+# Run: promtool test rules ops/prometheus/abuse-counting-contract.test.yml
+# Native PromQL oracle; synthetic endpoint arithmetic in Python is supplemental only.
+rule_files: []
+evaluation_interval: 1m
+tests:
+  - name: one_creation_many_denials_and_old_series_excluded
+    interval: 1m
+    input_series:
+      - series: 'treehammock_abuse_cooldowns_created_v2_total{dependency="dragonfly",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+        values: '0 0 1 1 1 1 1'
+      - series: 'treehammock_abuse_counter_admissions_v2_total{feature="login",dimension="account",outcome="denied",reason="abuse_counter_limit_exceeded"}'
+        values: '0 0 1 1 1 1 1'
+      - series: 'treehammock_abuse_counter_admissions_v2_total{feature="login",dimension="account",outcome="denied",reason="abuse_failure_cooldown_active"}'
+        values: '0 0 12 12 12 12 12'
+      - series: 'treehammock_abuse_cooldown_blocked_attempts_total{feature="login",dimension="account"}'
+        values: '0 0 12 12 12 12 12'
+      - series: 'treehammock_abuse_cooldowns_started_total{feature="login"}'
+        values: '0 0 99 99 99 99 99'
+      - series: 'treehammock_abuse_policy_decisions_total{outcome="denied"}'
+        values: '0 0 99 99 99 99 99'
+    promql_expr_test:
+      - expr: 'sum(increase(treehammock_abuse_counter_admissions_v2_total{outcome="denied"}[5m]))'
+        eval_time: 5m
+        exp_samples:
+          - labels: '{}'
+            value: 13
+      - expr: 'sum by (dependency, feature, dimension, reason) (increase(treehammock_abuse_cooldowns_created_v2_total[5m]))'
+        eval_time: 5m
+        exp_samples:
+          - labels: '{dependency="dragonfly",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+            value: 1
+      - expr: 'sum by (feature, dimension) (increase(treehammock_abuse_cooldown_blocked_attempts_total[5m]))'
+        eval_time: 5m
+        exp_samples:
+          - labels: '{feature="login",dimension="account"}'
+            value: 12
+  - name: counter_reset_and_two_backends_are_distinct
+    interval: 1m
+    input_series:
+      - series: 'treehammock_abuse_cooldowns_created_v2_total{dependency="dragonfly",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+        values: '0 4 0 1 1 1'
+      - series: 'treehammock_abuse_cooldowns_created_v2_total{dependency="postgresql",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+        values: '0 0 1 1 1 1'
+    promql_expr_test:
+      - expr: 'sum by (dependency, feature, dimension, reason) (increase(treehammock_abuse_cooldowns_created_v2_total[5m]))'
+        eval_time: 5m
+        exp_samples:
+          - labels: '{dependency="dragonfly",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+            value: 1.25
+          - labels: '{dependency="postgresql",feature="login",dimension="account",reason="abuse_counter_limit_exceeded"}'
+            value: 1

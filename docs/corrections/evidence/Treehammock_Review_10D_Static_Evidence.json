@@ -1,0 +1,1040 @@
+{
+  "evidence_kind": "Source catalog, source assertions and blocked runner attempt; NOT C# runtime qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "assigned_parent_chunk": "R10",
+    "selected_files": 13,
+    "complete_source_files": 13,
+    "test_classes_inspected_not_executed": 9,
+    "test_support_files": 4,
+    "selected_lines": 2501,
+    "selected_bytes": 119912,
+    "remaining_R10_assigned_files": 44,
+    "prior_R06_partial_test_files_remain_deferred": 3,
+    "cross_chunk_inspection": {
+      "Rigging/Authentication/JsonWebTokenUtility.cs": "R10D complete source cross-check of signing, claims, validation and supplied authoritative lifetime; not executed.",
+      "Rigging/Authentication/JsonWebTokenMiddleware.cs": "R10D focused cached-session database trust call/stamp slice; prior qualification retained.",
+      "Controllers/AccountSessionController.cs": "R10D logoff/logoff-all and replay requirement slices; no new full-file audit.",
+      "Program.cs": "R10D targeted middleware/controller pipeline registration search; prior qualification retained.",
+      "treehammock.Tests/Integration/StartupConfigurationTests.cs": "R10D startup factory construction slice; full audit remains pending.",
+      "treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs": "R10D targeted malformed-input/factory slices; full audit remains pending.",
+      "treehammock.Tests/Integration/AccountAdjustIntegrationTests.cs": "R10D targeted service replacement/factory slice; full audit remains pending.",
+      "treehammock.Tests/Integration/AccountFlowRegressionTests.cs": "R10D required-key 428 and optional current-logout HTTP cases at 1153\u20131200; catalog searches only elsewhere; full audit remains pending.",
+      "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs": "R10D method-name searches only; full audit remains pending.",
+      "treehammock.Tests/Unit/JsonWebTokenMiddlewareTests.cs": "R10D method-name searches only; full audit remains pending."
+    },
+    "runtime_qualified": false,
+    "new_independent_findings": 0,
+    "deduplicated_closure_requirements": {
+      "COR01/COR24": "Explicit fixture boundaries, runtime test discovery/result evidence, route inventory and pipeline qualification; preserve direct-action/reflection suites as scoped checks.",
+      "COR03/COR04/COR09": "Real cache-hit database trust, logout failure policy, concurrent refresh winner/loser, timeout-late commit and stable session-management IDs.",
+      "COR05/COR06": "Real counter atomicity and request-bound idempotency with owner/expiry races, safe replay payload and HTTP required-key enforcement.",
+      "COR07/COR08/COR10": "Production hash work-factor measurement, concurrent durable failure budgets, fresh two-factor challenge authority.",
+      "COR16/COR17": "Real fresh sensitive-action proof gates, purpose/stamp/expiry mismatch denial and no mutation on denial.",
+      "COR23D/COR23E/COR23L": "Production isolation of test routes, credential response no-store/privacy, enabled SMS provider validation and consistent fixture configuration."
+    }
+  },
+  "selected_file_metadata": {
+    "treehammock.Tests/GlobalUsings.cs": {
+      "sha256": "50436eb3a60162e0cfad749eddfb06f8908f821a90ca44532df946a53e071359",
+      "lines": 1,
+      "bytes": 20
+    },
+    "treehammock.Tests/Infrastructure/AccountControllerHarness.cs": {
+      "sha256": "0336d7c430f84cfacf72ce4a905574895c86e428f872bec24b7e85a094c290fe",
+      "lines": 332,
+      "bytes": 13396
+    },
+    "treehammock.Tests/Infrastructure/TestConfiguration.cs": {
+      "sha256": "11368f8cbbae397694d66e543dbca9c995b361915081cdb982e38a0f758b0d74",
+      "lines": 253,
+      "bytes": 17175
+    },
+    "treehammock.Tests/Infrastructure/TreehammockWebApplicationFactory.cs": {
+      "sha256": "d12133949d8f3462cc16c6fb409d6efde9385cbf62a6b48511ea2ba55dba4464",
+      "lines": 86,
+      "bytes": 3046
+    },
+    "treehammock.Tests/Unit/AccountControllerApiShapeTests.cs": {
+      "sha256": "2513a5ae8b89c4856955fbd1f71f0fede709faf2e7c46b62d41ff2787603c436",
+      "lines": 140,
+      "bytes": 6652
+    },
+    "treehammock.Tests/Unit/AccountControllerArchitectureTests.cs": {
+      "sha256": "bc2760567d30e8f2ae697a285b526d89b0abbccb13799bf6570e06ea47c89165",
+      "lines": 170,
+      "bytes": 7576
+    },
+    "treehammock.Tests/Unit/AccountControllerAuthorizationMetadataTests.cs": {
+      "sha256": "9f77fb700c90ac1fbf647631ba0eec3738bd97e310e12619db121930dc772e2e",
+      "lines": 224,
+      "bytes": 12798
+    },
+    "treehammock.Tests/Unit/AccountControllerLogoffTests.cs": {
+      "sha256": "5d5fd2cf90cd3a1f7a47076e4dbe5d01727ababf064a754c7b3fcd8ef14b22ef",
+      "lines": 443,
+      "bytes": 23697
+    },
+    "treehammock.Tests/Unit/ControllerAuthorizationIntentTests.cs": {
+      "sha256": "f417bd570725a58fe395923240f823b179bb3f3ca2c34350bdc4bd430b69e3d5",
+      "lines": 160,
+      "bytes": 7974
+    },
+    "treehammock.Tests/Unit/ApiResponsesTests.cs": {
+      "sha256": "bbf7bc93296b1cc9d5752b5756dcb4d0da99389899de1cf1e16e51eaaf71345a",
+      "lines": 228,
+      "bytes": 9417
+    },
+    "treehammock.Tests/Unit/AuthenticateResponseTests.cs": {
+      "sha256": "6fa24c6a6f0590f6ae7091d5a2e77f412ca3490351bce400e80780f74e492cbc",
+      "lines": 43,
+      "bytes": 1623
+    },
+    "treehammock.Tests/Unit/CredentialLookupResultTests.cs": {
+      "sha256": "e968b4b1baac1331a641ae596ea902d179722289cda9c72edb7d662f4f48a2da",
+      "lines": 82,
+      "bytes": 2385
+    },
+    "treehammock.Tests/Unit/JsonWebTokenUtilityTests.cs": {
+      "sha256": "e15ccbd6fbb59db03467c9e0c65a4e303a7217bd146a9f5dc397baa69ab3cf58",
+      "lines": 339,
+      "bytes": 14153
+    }
+  },
+  "source_attribute_counts_NOT_runtime_discovery": {
+    "fact_methods": 62,
+    "theory_methods": 12,
+    "inline_data_rows": 92,
+    "attributed_methods": 74
+  },
+  "source_inspected_test_method_catalog_NOT_executed": {
+    "treehammock.Tests/Unit/AccountControllerApiShapeTests.cs": [
+      {
+        "method": "Authenticate_invalid_payload_returns_400_envelope",
+        "line": 21,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Authenticate_auth_failure_returns_401_envelope",
+        "line": 39,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Authenticate_credential_lookup_failure_returns_500_envelope",
+        "line": 57,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Authenticate_locked_account_returns_423_envelope",
+        "line": 79,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Authenticate_bad_password_returns_401_envelope",
+        "line": 99,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Authenticate_session_persistence_failure_returns_500_envelope",
+        "line": 121,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/AccountControllerArchitectureTests.cs": [
+      {
+        "method": "Account_surface_is_split_into_named_bounded_controller_source_files",
+        "line": 12,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Account_controller_base_is_abstract_shared_base_and_has_no_http_actions",
+        "line": 35,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Named_account_controllers_own_mvc_metadata_and_account_route",
+        "line": 58,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 52,
+            "source": "[InlineData(typeof(AccountRegistrationController), \"AccountRegistrationController.cs\")]"
+          },
+          {
+            "line": 53,
+            "source": "[InlineData(typeof(AccountLoginController), \"AccountLoginController.cs\")]"
+          },
+          {
+            "line": 54,
+            "source": "[InlineData(typeof(AccountTwoFactorController), \"AccountTwoFactorController.cs\")]"
+          },
+          {
+            "line": 55,
+            "source": "[InlineData(typeof(AccountProfileController), \"AccountProfileController.cs\")]"
+          },
+          {
+            "line": 56,
+            "source": "[InlineData(typeof(AccountDeleteController), \"AccountDeleteController.cs\")]"
+          },
+          {
+            "line": 57,
+            "source": "[InlineData(typeof(AccountSessionController), \"AccountSessionController.cs\")]"
+          }
+        ]
+      },
+      {
+        "method": "Account_endpoint_actions_live_on_their_named_bounded_controllers",
+        "line": 77,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Bounded_account_controller_source_files_stay_under_size_limit",
+        "line": 138,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/AccountControllerAuthorizationMetadataTests.cs": [
+      {
+        "method": "Named_account_controllers_use_custom_authenticate_attribute",
+        "line": 23,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Account_controller_base_is_abstract_and_does_not_mark_derived_controllers_non_controller",
+        "line": 34,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Public_account_endpoints_use_custom_allow_anonymous",
+        "line": 51,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 43,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.AccountSetup))]"
+          },
+          {
+            "line": 44,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.ResendAccountVerification))]"
+          },
+          {
+            "line": 45,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.VerifyAccountCreation))]"
+          },
+          {
+            "line": 46,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          },
+          {
+            "line": 47,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.SelectTwoFactorConfiguration))]"
+          },
+          {
+            "line": 48,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.TwoFactorAuthenticate))]"
+          },
+          {
+            "line": 49,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.VerifyEmailChange))]"
+          },
+          {
+            "line": 50,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.VerifyDeleteAccount))]"
+          }
+        ]
+      },
+      {
+        "method": "Protected_endpoints_advertise_custom_authenticate_401_response",
+        "line": 77,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 62,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.StartAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 63,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 64,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.CancelAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 65,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.RemoveTwoFactorMethod))]"
+          },
+          {
+            "line": 66,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.SetupTwoFactorMethod))]"
+          },
+          {
+            "line": 67,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyTwoFactorMethod))]"
+          },
+          {
+            "line": 68,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.ModifyAccount))]"
+          },
+          {
+            "line": 69,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.ViewAccount))]"
+          },
+          {
+            "line": 70,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.DeleteAccount))]"
+          },
+          {
+            "line": 71,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.FinalizeDeleteAccount))]"
+          },
+          {
+            "line": 72,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.Reauthenticate))]"
+          },
+          {
+            "line": 73,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.LogoffAccount))]"
+          },
+          {
+            "line": 74,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.LogoffAllAccount))]"
+          },
+          {
+            "line": 75,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.ListActiveSessions))]"
+          },
+          {
+            "line": 76,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.RevokeSession))]"
+          }
+        ]
+      },
+      {
+        "method": "Counter_store_failure_paths_advertise_503_response",
+        "line": 94,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 89,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          },
+          {
+            "line": 90,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyTwoFactorMethod))]"
+          },
+          {
+            "line": 91,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.VerifyEmailChange))]"
+          },
+          {
+            "line": 92,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.VerifyDeleteAccount))]"
+          },
+          {
+            "line": 93,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.FinalizeDeleteAccount))]"
+          }
+        ]
+      },
+      {
+        "method": "Endpoints_with_validation_paths_advertise_400_response",
+        "line": 123,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 103,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.AccountSetup))]"
+          },
+          {
+            "line": 104,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.ResendAccountVerification))]"
+          },
+          {
+            "line": 105,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          },
+          {
+            "line": 106,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.StartAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 107,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 108,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.CancelAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 109,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.RemoveTwoFactorMethod))]"
+          },
+          {
+            "line": 110,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.SetupTwoFactorMethod))]"
+          },
+          {
+            "line": 111,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyTwoFactorMethod))]"
+          },
+          {
+            "line": 112,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.SelectTwoFactorConfiguration))]"
+          },
+          {
+            "line": 113,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.TwoFactorAuthenticate))]"
+          },
+          {
+            "line": 114,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.VerifyEmailChange))]"
+          },
+          {
+            "line": 115,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.VerifyDeleteAccount))]"
+          },
+          {
+            "line": 116,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.ModifyAccount))]"
+          },
+          {
+            "line": 117,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.DeleteAccount))]"
+          },
+          {
+            "line": 118,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.FinalizeDeleteAccount))]"
+          },
+          {
+            "line": 119,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.Reauthenticate))]"
+          },
+          {
+            "line": 120,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.LogoffAccount))]"
+          },
+          {
+            "line": 121,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.LogoffAllAccount))]"
+          },
+          {
+            "line": 122,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.RevokeSession))]"
+          }
+        ]
+      },
+      {
+        "method": "Endpoints_with_rate_limit_paths_advertise_429_response",
+        "line": 138,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 131,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          },
+          {
+            "line": 132,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.DeleteAccount))]"
+          },
+          {
+            "line": 133,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.FinalizeDeleteAccount))]"
+          },
+          {
+            "line": 134,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 135,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyTwoFactorMethod))]"
+          },
+          {
+            "line": 136,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.VerifyEmailChange))]"
+          },
+          {
+            "line": 137,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.VerifyDeleteAccount))]"
+          }
+        ]
+      },
+      {
+        "method": "Endpoints_with_required_idempotency_key_advertise_428_response",
+        "line": 157,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 147,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.StartAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 148,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.VerifyAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 149,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.CancelAuthenticatorAppSetup))]"
+          },
+          {
+            "line": 150,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.RemoveTwoFactorMethod))]"
+          },
+          {
+            "line": 151,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.SetupTwoFactorMethod))]"
+          },
+          {
+            "line": 152,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.ModifyAccount))]"
+          },
+          {
+            "line": 153,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.DeleteAccount))]"
+          },
+          {
+            "line": 154,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.FinalizeDeleteAccount))]"
+          },
+          {
+            "line": 155,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.LogoffAllAccount))]"
+          },
+          {
+            "line": 156,
+            "source": "[InlineData(typeof(AccountSessionController), nameof(AccountSessionController.RevokeSession))]"
+          }
+        ]
+      },
+      {
+        "method": "Account_lockout_paths_advertise_423_response",
+        "line": 168,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 166,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.AccountSetup))]"
+          },
+          {
+            "line": 167,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          }
+        ]
+      }
+    ],
+    "treehammock.Tests/Unit/AccountControllerLogoffTests.cs": [
+      {
+        "method": "LogoffAccount_success_expires_current_db_session_revokes_cache_and_clears_client_token",
+        "line": 22,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAccount_accepts_missing_body_as_empty_logout_request",
+        "line": 51,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAccount_returns_success_with_warning_when_cache_revoke_fails_after_db_success",
+        "line": 78,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAccount_database_failure_does_not_revoke_cache",
+        "line": 107,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAccount_missing_authenticated_session_context_returns_unauthorized_without_repo_work",
+        "line": 133,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAllAccount_success_rotates_account_stamp_revokes_current_cache_and_clears_client_token",
+        "line": 150,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAllAccount_accepts_missing_body_as_default_request",
+        "line": 180,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAllAccount_rejects_include_current_session_false",
+        "line": 208,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "LogoffAllAccount_database_failure_does_not_revoke_cache",
+        "line": 225,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ListActiveSessions_success_returns_session_summaries_without_cache_mutation",
+        "line": 253,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "RevokeSession_success_expires_owned_session_without_revoking_current_cache",
+        "line": 283,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "RevokeSession_preserves_already_missing_or_stale_success_code",
+        "line": 311,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "RevokeSession_stale_account_stamp_returns_unauthorized_without_cache_revoke",
+        "line": 338,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "RevokeSession_current_session_revokes_cache_and_clears_client_token",
+        "line": 364,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "RevokeSession_rejects_empty_session_id_as_validation_failure",
+        "line": 394,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/ControllerAuthorizationIntentTests.cs": [
+      {
+        "method": "Every_release_controller_declares_public_or_authenticated_intent_explicitly",
+        "line": 30,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Public_controllers_use_custom_allow_anonymous_at_controller_level",
+        "line": 48,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 45,
+            "source": "[InlineData(typeof(AccountRecoveryController))]"
+          },
+          {
+            "line": 46,
+            "source": "[InlineData(typeof(PasswordResetController))]"
+          },
+          {
+            "line": 47,
+            "source": "[InlineData(typeof(HealthController))]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticated_controllers_use_custom_authenticate_at_controller_level",
+        "line": 62,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 55,
+            "source": "[InlineData(typeof(AccountRegistrationController))]"
+          },
+          {
+            "line": 56,
+            "source": "[InlineData(typeof(AccountLoginController))]"
+          },
+          {
+            "line": 57,
+            "source": "[InlineData(typeof(AccountTwoFactorController))]"
+          },
+          {
+            "line": 58,
+            "source": "[InlineData(typeof(AccountProfileController))]"
+          },
+          {
+            "line": 59,
+            "source": "[InlineData(typeof(AccountDeleteController))]"
+          },
+          {
+            "line": 60,
+            "source": "[InlineData(typeof(AccountSessionController))]"
+          },
+          {
+            "line": 61,
+            "source": "[InlineData(typeof(ActivationsController))]"
+          }
+        ]
+      },
+      {
+        "method": "Public_account_actions_under_authenticated_controller_use_custom_allow_anonymous",
+        "line": 76,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 69,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.AccountSetup))]"
+          },
+          {
+            "line": 70,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.ResendAccountVerification))]"
+          },
+          {
+            "line": 71,
+            "source": "[InlineData(typeof(AccountLoginController), nameof(AccountLoginController.Authenticate))]"
+          },
+          {
+            "line": 72,
+            "source": "[InlineData(typeof(AccountRegistrationController), nameof(AccountRegistrationController.VerifyAccountCreation))]"
+          },
+          {
+            "line": 73,
+            "source": "[InlineData(typeof(AccountTwoFactorController), nameof(AccountTwoFactorController.TwoFactorAuthenticate))]"
+          },
+          {
+            "line": 74,
+            "source": "[InlineData(typeof(AccountProfileController), nameof(AccountProfileController.VerifyEmailChange))]"
+          },
+          {
+            "line": 75,
+            "source": "[InlineData(typeof(AccountDeleteController), nameof(AccountDeleteController.VerifyDeleteAccount))]"
+          }
+        ]
+      },
+      {
+        "method": "No_public_endpoint_relies_on_missing_controller_authorization_metadata",
+        "line": 86,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Release_controllers_do_not_use_framework_authorization_attributes",
+        "line": 114,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/ApiResponsesTests.cs": [
+      {
+        "method": "FromOutcome_wraps_success_response",
+        "line": 13,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "FromOutcome_wraps_failure_response",
+        "line": 32,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidPayload_with_field_message_returns_validation_failed_outcome_with_error",
+        "line": 51,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidPayload_with_null_errors_returns_default_validation_error",
+        "line": 66,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidPayload_with_empty_errors_returns_default_validation_error",
+        "line": 81,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidPayload_with_populated_errors_preserves_errors",
+        "line": 96,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "FromOutcome_preserves_validation_errors_on_failure_envelope",
+        "line": 115,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "FromOutcome_with_validation_failed_and_no_errors_returns_default_validation_error",
+        "line": 134,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "JsonFailure_with_validation_failed_and_empty_errors_returns_default_validation_error",
+        "line": 155,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Unauthorized_wraps_custom_auth_failure_response",
+        "line": 174,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidModelState_wraps_validation_errors_in_standard_envelope",
+        "line": 187,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "InvalidModelState_with_no_errors_returns_default_validation_error",
+        "line": 207,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/AuthenticateResponseTests.cs": [
+      {
+        "method": "AuthenticateResponse_serializes_access_token_as_explicit_response_field",
+        "line": 13,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "AuthenticateResponse_keeps_two_factor_methods_and_token_together",
+        "line": 29,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/CredentialLookupResultTests.cs": [
+      {
+        "method": "Found_requires_an_account",
+        "line": 16,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Found_always_carries_the_account",
+        "line": 22,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Non_found_results_never_carry_an_account",
+        "line": 36,
+        "attribute": "Theory",
+        "inline_data_rows": [
+          {
+            "line": 34,
+            "source": "[InlineData(CredentialLookupStatus.NotFound)]"
+          },
+          {
+            "line": 35,
+            "source": "[InlineData(CredentialLookupStatus.Failed)]"
+          }
+        ]
+      },
+      {
+        "method": "Result_state_cannot_be_bypassed_with_public_constructor",
+        "line": 48,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ],
+    "treehammock.Tests/Unit/JsonWebTokenUtilityTests.cs": [
+      {
+        "method": "GenerateAccessToken_signs_tokens_with_hmac_sha256",
+        "line": 19,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "GenerateAccessToken_emits_signed_compact_jws_not_encrypted_jwe",
+        "line": 31,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "GenerateAccessToken_uses_only_allowed_non_secret_claims",
+        "line": 45,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "GenerateAccessToken_includes_jti_and_iat_claims",
+        "line": 92,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "GenerateAccessToken_same_inputs_produce_different_hashes_because_jti_is_random",
+        "line": 105,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Generated_access_token_validates_with_matching_refresh_token",
+        "line": 118,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ValidateAccessToken_returns_refreshable_status_inside_refresh_window",
+        "line": 132,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ValidateAccessToken_returns_expired_status_after_expiration",
+        "line": 146,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "GenerateAccessToken_includes_the_requested_token_purpose",
+        "line": 160,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ValidateAccessToken_rejects_tokens_with_the_wrong_purpose",
+        "line": 172,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ValidateAccessToken_accepts_matching_pre_auth_purpose",
+        "line": 191,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "ValidateAccessToken_rejects_tokens_missing_jti",
+        "line": 210,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Json_web_token_validation_log_reasons_are_stable_and_bounded",
+        "line": 226,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Json_web_token_validation_logging_does_not_emit_exception_messages_or_stack_traces",
+        "line": 247,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      },
+      {
+        "method": "Json_web_token_validation_logging_uses_reason_codes_for_expected_invalid_paths",
+        "line": 264,
+        "attribute": "Fact",
+        "inline_data_rows": []
+      }
+    ]
+  },
+  "static_checks": {
+    "harness_sensitive_action_default_succeeds": true,
+    "harness_idempotency_default_not_applied": true,
+    "harness_abuse_default_allowed_count_one": true,
+    "harness_direct_controller_and_default_http_context": true,
+    "harness_injects_trusted_session_items": true,
+    "harness_reduced_password_hash_parameters": true,
+    "factory_testing_environment_and_replaced_configuration": true,
+    "factory_dependency_replacement_is_optional": true,
+    "factory_example_and_testing_config_files": true,
+    "jwt_embedded_lifetime_disabled_and_supplied_horizon_checked": true,
+    "middleware_db_trust_call_includes_token_account_and_both_stamps": true,
+    "existing_http_regression_has_required_key_428_case": true,
+    "existing_http_regression_has_optional_current_logout_case": true,
+    "test_config_enables_twilio_without_twilio_section": true
+  },
+  "runtime_tools": {
+    "dotnet": null,
+    "pwsh": null,
+    "powershell.exe": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "original_runner_exit": 127,
+  "new_finding_pr_ownership": {},
+  "reference_urls": [
+    "https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/testing?view=aspnetcore-10.0",
+    "https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0"
+  ],
+  "qualification": {
+    "application": "No compilation or xUnit discovery/execution",
+    "pipeline": "No TestServer/HTTP/filter execution",
+    "storage": "No actual PostgreSQL or Redis-compatible service execution",
+    "performance": "Not measured"
+  },
+  "remaining_R10_paths": [
+    "Dependencies/CityHash.dll.config",
+    "Dependencies/CityHash_103.dll",
+    "README.md",
+    "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+    "docs/release/PASSWORD_RESET_1_0_0.md",
+    "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+    "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+    "docs/testing/TEST_COMMAND_GUIDE.md",
+    "docs/testing/treehammock-test-suite-inventory.html",
+    "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+    "tests/http/bruno/treehammock/bruno.json",
+    "tests/http/bruno/treehammock/environments/docker-direct.bru",
+    "tests/http/bruno/treehammock/environments/docker-proxy.bru",
+    "treehammock.Tests/Integration/AccountAdjustIntegrationTests.cs",
+    "treehammock.Tests/Integration/AccountFlowRegressionTests.cs",
+    "treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs",
+    "treehammock.Tests/Integration/StartupConfigurationTests.cs",
+    "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs",
+    "treehammock.Tests/Unit/AccountControllerSafeRepoWrapperTests.cs",
+    "treehammock.Tests/Unit/AccountEndpointContractTests.cs",
+    "treehammock.Tests/Unit/AccountRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/AccountRepoMappingTests.cs",
+    "treehammock.Tests/Unit/AccountServiceSetupTests.cs",
+    "treehammock.Tests/Unit/CacheJsonSettingsTests.cs",
+    "treehammock.Tests/Unit/GreenfieldApiNegativeContractTests.cs",
+    "treehammock.Tests/Unit/HostingProfileConfigurationTests.cs",
+    "treehammock.Tests/Unit/HostingSettingsTests.cs",
+    "treehammock.Tests/Unit/HostingStartupContractTests.cs",
+    "treehammock.Tests/Unit/JsonWebTokenMiddlewareTests.cs",
+    "treehammock.Tests/Unit/LaunchSettingsJsonTests.cs",
+    "treehammock.Tests/Unit/ModelValidationConsistencyTests.cs",
+    "treehammock.Tests/Unit/RepositoryContractTests.cs",
+    "treehammock.Tests/Unit/RepositoryFailureBoundaryTests.cs",
+    "treehammock.Tests/Unit/SessionRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/SessionSqlConcurrencyContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockEnvironmentContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockLicenseTests.cs",
+    "treehammock.Tests/Unit/TreehammockRenameCompletionTests.cs",
+    "treehammock.Tests.SqlContracts/GlobalUsings.cs",
+    "treehammock.Tests.SqlContracts/Properties/AssemblyInfo.cs",
+    "treehammock.Tests.System/AssemblyInfo.cs",
+    "treehammock.Tests.System/GlobalUsings.cs",
+    "treehammock.Tests.System/Support/TreehammockEnvironment.cs",
+    "treehammock.Tests.System/SystemStackAccountFlowTests.cs"
+  ]
+}

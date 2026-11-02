@@ -1,0 +1,10 @@
+{
+  "capacity": {
+    "foregroundSqlOperations": 4,
+    "cacheReadOperations": 32,
+    "rawCacheOperations": 256,
+    "replicaCount": 2,
+    "writerConnectionReserve": 16,
+    "totalSqlConnectionBudget": 64
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "contract_status": "PROPOSED_NOT_IMPLEMENTED",
+  "exchange": "treehammock.auth.events.v1",
+  "transport": "RabbitMQ durable outbox dispatch, publisher confirms, at-least-once",
+  "event_types": [
+    "session.revoked",
+    "session.rotated",
+    "account.disabled",
+    "account.deleted",
+    "account.security_stamp_changed",
+    "entitlements.changed"
+  ],
+  "example_envelope": {
+    "version": 1,
+    "event_id": "opaque-event-uuid",
+    "entity_kind": "session_family",
+    "entity_reference": "non-secret-stable-opaque-reference",
+    "revision": 42,
+    "event_type": "session.revoked",
+    "committed_at": "2026-10-15T00:00:00Z",
+    "published_at": "2026-10-15T00:00:00Z"
+  },
+  "must_not_contain": [
+    "access credential",
+    "per-session HS256 signing key",
+    "refresh credential",
+    "private key",
+    "password",
+    "full session JSON",
+    "contact payload"
+  ],
+  "authorization_rule": "Event never grants authority, satisfies the precommit cache fence or directly publishes Ready state. Reconcile through current guarded writer-owned reads; normal validation uses coherent cache first, DB fallback on unusable cache.",
+  "idempotency": "consumers deduplicate event_id and ignore older entity revisions; reconcile gaps from database"
+}

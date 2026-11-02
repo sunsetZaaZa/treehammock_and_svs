@@ -1,0 +1,29 @@
+# Retain a new timestamp.UUID-without-dashes operation key and base64 32-byte
+# recovery key before POST. Obtain the session values from an actual v2 login.
+@baseUrl = http://localhost:8080
+@operationKey = REPLACE_WITH_RETAINED_OPERATION_KEY
+@recoveryKey = REPLACE_WITH_RETAINED_BASE64_RECOVERY_KEY
+@familyId = REPLACE_WITH_LOGIN_SESSION_ID
+@generation = 1
+@refreshToken = REPLACE_WITH_LOGIN_OPAQUE_REFRESH_TOKEN
+
+### Explicit refresh; an expired access token is not needed
+POST {{baseUrl}}/account/refresh
+Content-Type: application/json
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{recoveryKey}}
+
+{
+  "protocolVersion": 2,
+  "sessionId": "{{familyId}}",
+  "generation": {{generation}},
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Lost/uncertain output: reconcile the original identity, never guess via POST
+GET {{baseUrl}}/account/security-operations/status
+Security-Operation-Key: {{operationKey}}
+Security-Operation-Recovery-Key: {{recoveryKey}}
+
+# A committed refresh without its output requires a new password/factor login.
+# Pending/Unknown stays unresolved. This status route returns no credentials.

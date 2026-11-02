@@ -1,0 +1,23 @@
+meta {
+  name: Health live
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/health/live
+  body: none
+  auth: none
+}
+
+tests {
+  test("live endpoint returns HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("live endpoint reports live status", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("status");
+    expect(body.status).to.equal("live");
+  });
+}

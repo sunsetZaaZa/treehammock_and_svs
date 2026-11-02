@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore.Server"/>
+    <ProjectReference Include="../Treehammock.SessionValidation.Storage/Treehammock.SessionValidation.Storage.csproj"/>
+    <ProjectReference Include="../Treehammock.SessionValidation.Contracts/Treehammock.SessionValidation.Contracts.csproj"/>
+    <InternalsVisibleTo Include="Treehammock.SessionValidation.HostTests"/>
+  </ItemGroup>
+<ItemGroup><EmbeddedResource Include="../../deploy/session-validation/ths12c/cache-refill-policy.json" LogicalName="treehammock.SvsRefillCachePolicy.json"/></ItemGroup></Project>

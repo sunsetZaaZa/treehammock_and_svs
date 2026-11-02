@@ -1,0 +1,2421 @@
+{
+  "version": 2,
+  "roles": {
+    "App": {
+      "tables": {
+        "accounts": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_verifications": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_email_change_requests": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "sessions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_sensitive_action_tokens": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "two_factor_authentications": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "security_operations": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "account_id",
+            "state",
+            "http_status",
+            "finished_at"
+          ]
+        },
+        "security_operation_steps": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ]
+        },
+        "authenticated_mutation_replays": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "completed_at",
+            "response_status",
+            "response_code",
+            "safe_response"
+          ]
+        },
+        "account_login_attempt_versions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_reauthentication_budgets": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "sensitive_password_attempts": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "sensitive_action_proof_sessions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "sensitive_action_grants": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "pending_two_factor_sessions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "delivery_candidates": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "delivery_outbox": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "delivery_attempts": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_recoveries": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "password_reset_requests": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "pending_password_reset_sessions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "password_reset_rate_limits": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "password_reset_events": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "entitlement_grants": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "entitlement_grant_cycles": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "grant_activation_requests": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "entitlement_grant_audit": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "activations": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "delete_standby": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_delete_budgets": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_delete_admissions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "account_delete_events": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "session_logout_events": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "activation_creation_budgets": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "activation_creation_admissions": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "retention_jobs": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "retention_audit_delete_permits": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "abuse_admission_budgets_v1": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "ths_issuer_trust_denials": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_database_role_configuration": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_fleet_control": {
+          "SELECT": [
+            "*"
+          ]
+        }
+      },
+      "sequences": {},
+      "functions": [
+        "begin_authenticator_app_setup",
+        "begin_twofactor_setup",
+        "cancel_activation_request",
+        "cancel_password_reset_request",
+        "check_account_both_creds",
+        "check_account_emailaddress_creds",
+        "check_account_username_creds",
+        "cleanup_expired_password_reset_requests",
+        "cleanup_password_reset_rate_limits",
+        "cor02_expiration_is_live",
+        "cor02_require_live",
+        "cor08_factor_policy",
+        "cor08_live_sensitive_authority",
+        "cor10_login_snapshot",
+        "cor12_delivery_is_pending",
+        "cor12_delivery_predecessor",
+        "cor13_reset_configurations",
+        "cor13_reset_policy",
+        "cor16_require_setup",
+        "cor17_email_live",
+        "cor18_admission_live",
+        "cor18_delete_live",
+        "cor18_finalize_denial",
+        "cor18_origin_live",
+        "cor19_grant_live",
+        "cor19_is_issuer",
+        "cor19_request_live",
+        "cor20_activation_audited",
+        "cor20_approval_audited",
+        "cor20_capabilities",
+        "cor20_cycle_at",
+        "cor20_grant_rights_enabled",
+        "cor20_now",
+        "cor20_term_boundary",
+        "cor21_creation_live",
+        "cor22_account_empty",
+        "cor22_grant_obsolete",
+        "cor22_retention_policy",
+        "cor23j_delivery_can_send",
+        "cor23m_increment_budget_v1",
+        "cor23m_purge_budgets_v1",
+        "cor23m_reset_budget_v1",
+        "create_password_reset_request",
+        "disable_activation",
+        "get_account_reauthentication_credentials",
+        "get_current_active_session_hash",
+        "get_password_reset_request_for_finalize",
+        "get_password_reset_totp_enrollment",
+        "get_pending_authenticator_app_setup",
+        "get_pending_password_reset_session",
+        "get_twofactor_details",
+        "get_verified_totp_enrollment_for_account",
+        "issue_sensitive_action_token",
+        "lock_security_operation",
+        "lookup_locked_recovery_account",
+        "lookup_password_reset_account",
+        "place_activation",
+        "prepare_account_delete_finalize",
+        "purge_security_operations",
+        "reconcile_security_operation",
+        "register_password_reset_failed_attempt",
+        "register_password_reset_request_rate_limit",
+        "remove_account_lockout",
+        "remove_twofactor_method",
+        "request_account_delete",
+        "request_account_email_change",
+        "resolve_available_twofactor_configurations",
+        "revoke_pending_password_reset_session",
+        "session_refresh_credential_hash",
+        "set_account_lockout",
+        "set_account_login_failures",
+        "successful_login",
+        "svs_read_activation_audited",
+        "svs_read_approval_audited",
+        "svs_read_current_session",
+        "svs_read_entitlements",
+        "ths_database_role_safe",
+        "transition_pending_password_reset_session",
+        "validate_sensitive_action_token",
+        "verify_account_for_use",
+        "verify_activation",
+        "view_account"
+      ],
+      "memberships": []
+    },
+    "Coordinator": {
+      "tables": {
+        "accounts": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_verifications": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_email_change_requests": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "sessions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_sensitive_action_tokens": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "two_factor_authentications": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "security_operations": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "security_operation_steps": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "authenticated_mutation_replays": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_login_attempt_versions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_reauthentication_budgets": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "sensitive_password_attempts": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "sensitive_action_proof_sessions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "sensitive_action_grants": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "pending_two_factor_sessions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "delivery_candidates": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "delivery_outbox": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "delivery_attempts": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_recoveries": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "password_reset_requests": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "pending_password_reset_sessions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "password_reset_rate_limits": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "password_reset_events": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "entitlement_grants": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "entitlement_grant_cycles": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "grant_activation_requests": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "entitlement_grant_audit": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "activations": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "delete_standby": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_delete_budgets": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_delete_admissions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "account_delete_events": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "session_logout_events": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "activation_creation_budgets": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "activation_creation_admissions": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "retention_jobs": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "retention_audit_delete_permits": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "abuse_admission_budgets_v1": {
+          "SELECT": [
+            "*"
+          ],
+          "INSERT": [
+            "*"
+          ],
+          "UPDATE": [
+            "*"
+          ],
+          "DELETE": [
+            "*"
+          ]
+        },
+        "ths_authority_control": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_account_authority": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_authority_enrollments": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_retention_scopes": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_database_role_configuration": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_issuer_trust_denials": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_fleet_control": {
+          "SELECT": [
+            "*"
+          ]
+        }
+      },
+      "sequences": {},
+      "functions": [
+        "begin_authenticator_app_setup",
+        "begin_twofactor_setup",
+        "cancel_account_delete_request",
+        "cancel_account_email_change_request",
+        "cancel_activation_request",
+        "cancel_authenticator_app_setup",
+        "cancel_password_reset_request",
+        "cancel_twofactor_setup",
+        "cancel_unlock_account",
+        "check_account_both_creds",
+        "check_account_emailaddress_creds",
+        "check_account_username_creds",
+        "cleanup_expired_password_reset_requests",
+        "cleanup_password_reset_rate_limits",
+        "commit_account_delete_finalize",
+        "complete_account_email_change",
+        "complete_authenticator_app_setup_and_rotate_session",
+        "complete_verify_account",
+        "cor02_expiration_is_live",
+        "cor02_lock_account_authority",
+        "cor02_require_live",
+        "cor08_abandon_password_proof",
+        "cor08_authorized_begin_authenticator_app_setup",
+        "cor08_authorized_remove_twofactor_method",
+        "cor08_begin_password_proof",
+        "cor08_clear_login_attempts",
+        "cor08_factor_policy",
+        "cor08_finish_factor_proof",
+        "cor08_finish_password_proof",
+        "cor08_live_sensitive_authority",
+        "cor08_record_login_failure",
+        "cor08_reserve_factor_proof",
+        "cor08_validate_sensitive_grant",
+        "cor10_begin_login",
+        "cor10_cancel_challenge",
+        "cor10_complete_proof",
+        "cor10_issue_challenge",
+        "cor10_lock_login",
+        "cor10_login_snapshot",
+        "cor12_cancel_delivery",
+        "cor12_claim_delivery",
+        "cor12_delivery_is_pending",
+        "cor12_delivery_predecessor",
+        "cor12_expire_delivery",
+        "cor12_lock_delivery",
+        "cor12_publish_delivery",
+        "cor12_record_delivery",
+        "cor12_stage_delivery",
+        "cor13_reset_configurations",
+        "cor13_reset_policy",
+        "cor15_reencrypt_totp",
+        "cor16_begin_twofactor_setup",
+        "cor16_bind_setup",
+        "cor16_factor_changed",
+        "cor16_require_setup",
+        "cor17_authorized_request_email",
+        "cor17_email_gate",
+        "cor17_email_live",
+        "cor17_purge_email_requests",
+        "cor17_retire_email_request",
+        "cor18_admission_live",
+        "cor18_admit_delete",
+        "cor18_delete_live",
+        "cor18_finalize_denial",
+        "cor18_origin_live",
+        "cor18_retire_delete",
+        "cor18_revoke_delete",
+        "cor18_stage_delete",
+        "cor19_audit",
+        "cor19_grant_live",
+        "cor19_is_issuer",
+        "cor19_issue_grant",
+        "cor19_publish_activation",
+        "cor19_request_live",
+        "cor19_stage_activation",
+        "cor19_transition_activation",
+        "cor20_activation_audited",
+        "cor20_approval_audited",
+        "cor20_capabilities",
+        "cor20_cycle_at",
+        "cor20_grant_rights_enabled",
+        "cor20_materialize_cycles",
+        "cor20_now",
+        "cor20_renew_batch",
+        "cor20_resolve_account",
+        "cor20_term_boundary",
+        "cor21_admit_creation",
+        "cor21_creation_live",
+        "cor22_account_empty",
+        "cor22_claim_retention",
+        "cor22_fail_retention",
+        "cor22_grant_obsolete",
+        "cor22_retention_batch",
+        "cor22_retention_policy",
+        "cor23j_delivery_can_send",
+        "cor23m_budget_cooldown_v1",
+        "cor23m_increment_budget_v1",
+        "cor23m_purge_budgets_v1",
+        "cor23m_reset_budget_v1",
+        "create_password_reset_request",
+        "disable_activation",
+        "edit_account_username",
+        "expire_session",
+        "expire_verify_account",
+        "get_account_reauthentication_credentials",
+        "get_current_active_session_hash",
+        "get_password_reset_request_for_finalize",
+        "get_password_reset_totp_enrollment",
+        "get_pending_authenticator_app_setup",
+        "get_pending_password_reset_session",
+        "get_refresh_session",
+        "get_session",
+        "get_twofactor_details",
+        "get_verified_totp_enrollment_for_account",
+        "issue_sensitive_action_token",
+        "list_active_sessions",
+        "lock_security_operation",
+        "logout_all_sessions",
+        "logout_current_session",
+        "lookup_locked_recovery_account",
+        "lookup_password_reset_account",
+        "mark_password_reset_totp_step_used",
+        "mark_totp_step_used",
+        "place_activation",
+        "prepare_account_delete_finalize",
+        "promote_password_reset",
+        "promote_twofactor_new_login",
+        "promote_twofactor_rotation_login",
+        "purge_expired_account_email_change_requests",
+        "purge_expired_delete_standby",
+        "purge_security_operations",
+        "reconcile_security_operation",
+        "record_authenticator_app_setup_failure",
+        "refresh_session",
+        "register_password_reset_failed_attempt",
+        "register_password_reset_request_rate_limit",
+        "remove_account_lockout",
+        "remove_twofactor_method",
+        "request_account_delete",
+        "request_account_email_change",
+        "resend_verify_account",
+        "resolve_available_twofactor_configurations",
+        "revoke_pending_password_reset_session",
+        "revoke_pending_password_reset_sessions_for_account",
+        "revoke_session",
+        "revoke_session_for_account",
+        "rotate_account_security_stamp",
+        "rotate_active_session",
+        "session_refresh_credential_hash",
+        "set_account_lockout",
+        "set_account_login_failures",
+        "set_session",
+        "setup_account_both",
+        "setup_account_email",
+        "start_unlock_account",
+        "start_verify_account",
+        "successful_login",
+        "svs_read_activation_audited",
+        "svs_read_approval_audited",
+        "svs_read_current_session",
+        "svs_read_entitlements",
+        "ths_authority_advance",
+        "ths_authority_assert_finalized",
+        "ths_authority_begin",
+        "ths_claim_delivery",
+        "ths_complete_retention_scope",
+        "ths_database_role_safe",
+        "ths_enrolled_account_set",
+        "ths_expire_session",
+        "ths_list_active_sessions",
+        "ths_lock_global_authority",
+        "ths_lock_projection_authority",
+        "ths_read_refresh_session",
+        "ths_require_enrolled_account",
+        "ths_retention_assert",
+        "ths_retention_begin",
+        "ths_runtime_global_privileges_safe",
+        "transition_pending_password_reset_session",
+        "upgrade_account_password_hash",
+        "validate_cached_session_trust",
+        "validate_sensitive_action_token",
+        "verify_account_delete_token",
+        "verify_account_for_use",
+        "verify_activation",
+        "verify_twofactor_setup",
+        "verify_unlock_account",
+        "view_account"
+      ],
+      "memberships": [
+        "treehammock_entitlement_issuer"
+      ]
+    },
+    "Validator": {
+      "tables": {
+        "accounts": {
+          "SELECT": [
+            "account_id",
+            "security_stamp",
+            "cut_off",
+            "verify_status",
+            "unlock_when",
+            "entitlement_version"
+          ]
+        },
+        "sessions": {
+          "SELECT": [
+            "access_token_hash",
+            "account_id",
+            "session_id",
+            "generation",
+            "protocol_version",
+            "security_stamp",
+            "account_security_stamp",
+            "refresh_token",
+            "access_expiration",
+            "session_expiration",
+            "cut_off"
+          ]
+        },
+        "entitlement_grants": {
+          "SELECT": [
+            "account_id",
+            "grant_id",
+            "origin_stamp",
+            "issuer",
+            "catalog",
+            "tier",
+            "term",
+            "cadence",
+            "start_anchor",
+            "approved_start",
+            "authorized_end",
+            "max_cycles",
+            "redeem_before",
+            "issuer_reference",
+            "denied_capabilities",
+            "eligibility_until",
+            "starts_at",
+            "state",
+            "version",
+            "materialized_cycle"
+          ]
+        },
+        "entitlement_grant_audit": {
+          "SELECT": [
+            "grant_id",
+            "action",
+            "grant_version",
+            "account_id",
+            "credential_stamp",
+            "actor",
+            "approval"
+          ]
+        },
+        "ths_issuer_trust_denials": {
+          "SELECT": [
+            "issuer"
+          ]
+        },
+        "ths_database_role_configuration": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_fleet_control": {
+          "SELECT": [
+            "*"
+          ]
+        }
+      },
+      "sequences": {},
+      "functions": [
+        "cor19_is_issuer",
+        "cor20_capabilities",
+        "cor20_cycle_at",
+        "cor20_grant_rights_enabled",
+        "cor20_term_boundary",
+        "svs_read_activation_audited",
+        "svs_read_approval_audited",
+        "svs_read_current_session",
+        "svs_read_entitlements",
+        "ths_database_role_safe"
+      ],
+      "memberships": [
+        "treehammock_svs_read"
+      ]
+    },
+    "Refiller": {
+      "tables": {
+        "accounts": {
+          "SELECT": [
+            "account_id",
+            "security_stamp",
+            "cut_off",
+            "verify_status",
+            "unlock_when",
+            "entitlement_version"
+          ]
+        },
+        "sessions": {
+          "SELECT": [
+            "access_token_hash",
+            "account_id",
+            "session_id",
+            "generation",
+            "protocol_version",
+            "security_stamp",
+            "account_security_stamp",
+            "refresh_token",
+            "access_expiration",
+            "session_expiration",
+            "cut_off"
+          ]
+        },
+        "entitlement_grants": {
+          "SELECT": [
+            "account_id",
+            "grant_id",
+            "origin_stamp",
+            "issuer",
+            "catalog",
+            "tier",
+            "term",
+            "cadence",
+            "start_anchor",
+            "approved_start",
+            "authorized_end",
+            "max_cycles",
+            "redeem_before",
+            "issuer_reference",
+            "denied_capabilities",
+            "eligibility_until",
+            "starts_at",
+            "state",
+            "version",
+            "materialized_cycle"
+          ]
+        },
+        "entitlement_grant_audit": {
+          "SELECT": [
+            "grant_id",
+            "action",
+            "grant_version",
+            "account_id",
+            "credential_stamp",
+            "actor",
+            "approval"
+          ]
+        },
+        "ths_issuer_trust_denials": {
+          "SELECT": [
+            "issuer"
+          ]
+        },
+        "ths_database_role_configuration": {
+          "SELECT": [
+            "*"
+          ]
+        },
+        "ths_fleet_control": {
+          "SELECT": [
+            "*"
+          ]
+        }
+      },
+      "sequences": {},
+      "functions": [
+        "cor19_is_issuer",
+        "cor20_capabilities",
+        "cor20_cycle_at",
+        "cor20_grant_rights_enabled",
+        "cor20_term_boundary",
+        "svs_read_activation_audited",
+        "svs_read_approval_audited",
+        "svs_read_current_session",
+        "svs_read_entitlements",
+        "ths_database_role_safe",
+        "ths_svs_refill_candidates",
+        "ths_svs_refill_lock",
+        "ths_svs_refill_route"
+      ],
+      "memberships": [
+        "treehammock_svs_read"
+      ]
+    }
+  },
+  "functions": {
+    "begin_authenticator_app_setup": {
+      "body_sha256": "66cb5ef707a16b6aef35257b0bb4047f2f90a97f239ec94aab5b9c8eca528723",
+      "definer": false,
+      "volatility": "v"
+    },
+    "begin_twofactor_setup": {
+      "body_sha256": "44fdfc62619a79c18bc4525c5ba0d6e417e151fa583373a8a39076192b64fffb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_account_delete_request": {
+      "body_sha256": "c87a6e2f5e6824c37f81f062801932171cf97e52fe2355e3a8a225a2eed2de0a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_account_email_change_request": {
+      "body_sha256": "807822b9585384d61243288d93388dc761d146827d3ed9c452ec663657383ab5",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_activation_request": {
+      "body_sha256": "05a0dd2f9ff6ef37216e88d822019b747fe8b1adefdad7d0fd07e69289da736c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_authenticator_app_setup": {
+      "body_sha256": "74290f5873ecfc648e028726fbff7a6a4ecf8ab79f67f674c50298b529f1f428",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_password_reset_request": {
+      "body_sha256": "50d95772c40253025d59e0037b2eb3ec89701dee2d8b1ed902a09e275112dcba",
+      "definer": true,
+      "volatility": "v"
+    },
+    "cancel_twofactor_setup": {
+      "body_sha256": "fc0d9166f739043d3208d194e347adb84dfaaa0f32d2f340970a601f9d0aef03",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cancel_unlock_account": {
+      "body_sha256": "3049e075a4fe43b7c34cab636d663eeb40270ded4b1461feba7b35d539e0ec49",
+      "definer": false,
+      "volatility": "v"
+    },
+    "check_account_both_creds": {
+      "body_sha256": "1028849193a62870fcd3db78cbfb13b8d9416726ed9ce8dd0084da9035e80c35",
+      "definer": false,
+      "volatility": "s"
+    },
+    "check_account_emailaddress_creds": {
+      "body_sha256": "27c4e75f82c6603ebedfe5030c3ccc79ad7f6667950f1bc080038ad567d6bc40",
+      "definer": false,
+      "volatility": "s"
+    },
+    "check_account_username_creds": {
+      "body_sha256": "4a8040d34bd7554ce942ba30b2e8806daccfac6a87cb063266f6af1649d1c04e",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cleanup_expired_password_reset_requests": {
+      "body_sha256": "45d862751363684fd4382eac710d8a20a4da1d41081fd6e99063027de966bb00",
+      "definer": true,
+      "volatility": "v"
+    },
+    "cleanup_password_reset_rate_limits": {
+      "body_sha256": "3062de45d92c7bf48d0c8eabbfe8f599871148981dce8b970b340b818225b657",
+      "definer": true,
+      "volatility": "v"
+    },
+    "commit_account_delete_finalize": {
+      "body_sha256": "90692e4302cc3bd7b18a6716db8d183214bb768c5077c2272f680d4371a0a6d7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "complete_account_email_change": {
+      "body_sha256": "36ca0b9b38a903b1f7c5229e8ee819d30bdb4ab90812e88940449cced3188b06",
+      "definer": false,
+      "volatility": "v"
+    },
+    "complete_authenticator_app_setup_and_rotate_session": {
+      "body_sha256": "b7e20d46314527db0eae0fe1edefc07015103f4062eea28b8f6fbde1a1538e76",
+      "definer": false,
+      "volatility": "v"
+    },
+    "complete_verify_account": {
+      "body_sha256": "6f8b7267fa643d2bd4e0c3ad1872e79868c836aafe2b0047e47213909e82551c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor02_expiration_is_live": {
+      "body_sha256": "a5b605c44b6c2b7529b08fa1681a742ec4ae41acf6e1928cef336061a1574677",
+      "definer": false,
+      "volatility": "i"
+    },
+    "cor02_lock_account_authority": {
+      "body_sha256": "226f13c3cf4e3717350b1c99c230811913151a303c5e1eee3609963ce14da900",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor02_require_live": {
+      "body_sha256": "3e5a4e67c25743cf623c6dfa8af7d934f34ef1526b8c18f31f0ff2a6d20775d8",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_abandon_password_proof": {
+      "body_sha256": "9854fb80ad548d77b167003fe0371c7cba14db7ae5c22f0c2eae63aa69ee9c48",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_authorized_begin_authenticator_app_setup": {
+      "body_sha256": "f3bbaa7a932cd72a2e8643aadf5014ba85919658fe80620e2b8389927e4a7212",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_authorized_remove_twofactor_method": {
+      "body_sha256": "f4d8ae3ebfa95cdecf3a191f896aa81f8baa2f5ccb1fcaa50f167cc4ffeca181",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_begin_password_proof": {
+      "body_sha256": "1166cdf7a6cd1da4262fbd6f94502dc1ef6d352f806fe2e5f33f970348821626",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_clear_login_attempts": {
+      "body_sha256": "81f80b9bb105dcc3c1d785baeeadf9906f42eeeadbcf53803665c8b15c2e8d9a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_factor_policy": {
+      "body_sha256": "452a1112c75b0e812b6192abe825e932e06c6ed24a5c7e5bd07c17b81b45a9ff",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cor08_finish_factor_proof": {
+      "body_sha256": "08e16e020ed970bb3cb6b90d2c4d3a3459095d9abbaee9d61a8b2369ffd897c2",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_finish_password_proof": {
+      "body_sha256": "be431beb15412ee0c5e220e6a16f2357196a2f5eaf5ba429f4c6d3547a786b0a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_live_sensitive_authority": {
+      "body_sha256": "49b1b5befa52ab0baea05c24ec60577d0fb5aff1c9d8ae4148c23d7f089ac0bc",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_record_login_failure": {
+      "body_sha256": "1f37576d2bf1de3094824b117ad98ec94d46d43a994242e26c398b9eab7dfc37",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_reserve_factor_proof": {
+      "body_sha256": "a31bbc03428f581f85e739facfbf49f22a62b6787ecefb04fba9ee21b78539e9",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor08_validate_sensitive_grant": {
+      "body_sha256": "4d928d006d748823c5d24587d2b33f73bd96b679ce3c3e51cbf588c21cdea172",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_begin_login": {
+      "body_sha256": "4e750c33d9afdc441c68832b64fdb5792710d75c94f6708c1869d019e9e0c912",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_cancel_challenge": {
+      "body_sha256": "b47030b10e01395450165f106695713d482d6fe07b6dcf7336b8b40dae64a1dd",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_complete_proof": {
+      "body_sha256": "3d69aa25f07380c2f27a85798c3ae085175031ba101b1d06e3aebfa092f4aa86",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_issue_challenge": {
+      "body_sha256": "94dbdec2b5c4adcaa45e5ff36c1a0eba8ce241ba563a5ec0099eb71fa2b8a4e3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_lock_login": {
+      "body_sha256": "ce7a05b52b3e629d627120a4a3528d5cf7e31eb46851e0d575316868172e1542",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor10_login_snapshot": {
+      "body_sha256": "b6cfeadad15b3f8d2df186b2d5a26e30570c913fae219e9e2b01e718eb138f17",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_cancel_delivery": {
+      "body_sha256": "ba46ee69dc643a2c6c75f045841fec98bde4b72e9fe58adbffb4cbc9bd2b42d7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_claim_delivery": {
+      "body_sha256": "99764a3b0e3497c412c550dac7357e1d5b26726d39ae94dd8194bd257a6306c1",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_delivery_is_pending": {
+      "body_sha256": "bec9b56bbcc971a82e6b5dab705e33e2c52dcfe38dad7bb5b3ecc4e889c55b3f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_delivery_predecessor": {
+      "body_sha256": "a38a175d5b6b918dd7e12ce5b7653e88663141a0ac9702737e45d6b397e673a9",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cor12_expire_delivery": {
+      "body_sha256": "1c8223fa3d224a7fa2392ef5a07e19aff05678a57602667a82efaeebac102f96",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_lock_delivery": {
+      "body_sha256": "2fdb85384e6faa68b6675dc0ff8e230e4878d13e340accddcbdcf7f4abf26949",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_publish_delivery": {
+      "body_sha256": "f2c6711c2f5a28764a978c4398b68ce7f8b308b82a9006afa0853e3a42f30a74",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_record_delivery": {
+      "body_sha256": "6f22eb04a17e07b2f6f01f8c9abd6a4af538a43efb7e146c273dc9ed780af6db",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor12_stage_delivery": {
+      "body_sha256": "5754fdbe76bc8a5878eab8e327840f160cf9cea839ea792929e1a8e086cca1db",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor13_reset_configurations": {
+      "body_sha256": "9faa8d2560115599e187c8b440b7a45d37e0f39f289c3d4d6574194919527177",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor13_reset_policy": {
+      "body_sha256": "a7cede847be28a740a50a2cbf7a3d7a0a2dfd460c5ea0296c5c250e497563ab5",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cor15_enrollment_contract": {
+      "body_sha256": "ba651935a00d8025d5bcf57357a77dc0000907d92dd2ab0a6146b239f225d73f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor15_reencrypt_totp": {
+      "body_sha256": "a8a3c58d1e6ef21351f3cce0186fd8b5f68de4e23736b5470e2eb21c951fdf3a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor16_begin_twofactor_setup": {
+      "body_sha256": "12426c23cdedd9916fbdea9ed783df20055feb4969d3f5f064692f5fdcef6195",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor16_bind_setup": {
+      "body_sha256": "4c6188921cb198589afb2eeeb889e644339f79a76fd4b4b14e969ba4109cb35a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor16_clear_setup_authority": {
+      "body_sha256": "835b4c71d600faa49f30fc09430f4d2fc341e7a631223f31bb9fa63e22d60658",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor16_factor_changed": {
+      "body_sha256": "d9d6baf8e9b82d62394fc327999f159fea41f465f86f6a340070f7a387c3bd95",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor16_require_setup": {
+      "body_sha256": "06bb5c11643989bb066ea0897bdc3af7a26544eafd23dc5a59a8045885be90f8",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor17_authorized_request_email": {
+      "body_sha256": "7ec951284978e6192e907e6a3b8c266e1fabde5361c344dfa0377ab8ea85a34d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor17_email_gate": {
+      "body_sha256": "54f882f092fd911f499443e5807051907595d05ae7e1c4284d9c86117e5c66e1",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor17_email_live": {
+      "body_sha256": "d18f5003f790cc44f46f9200b42cb1bfcd5542f42ddcac911d41aff90bd0343c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor17_purge_email_requests": {
+      "body_sha256": "6dee3d58bd146d16e0326c2c5109caa0b9e6c8c2cd8aade4743c6e95f0bcb48c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor17_retire_email_request": {
+      "body_sha256": "1ab50dc27666085e24768cdf8225eaedcfca29782936b1eb561623753a2d5c57",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_account_security_event": {
+      "body_sha256": "d436798e52144596a5fbb384f13d053b63b1ad6bcdf7a20d191caaef43068bad",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_admission_live": {
+      "body_sha256": "d7379c2f77d7d7f4bb6aa30f45c3defdc5933866504cb2ac35b09a91cca16436",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_admit_delete": {
+      "body_sha256": "0ecc46a0b25d2d3829fc32ef887d298c21b3c91dc8f20a0703599ef8f9711bcb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_delete_live": {
+      "body_sha256": "fecc86b03e96941c00bdb294a48c6719151cc5f44cc36c0475e8e75b5bf8afbb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_factor_security_event": {
+      "body_sha256": "166d716a35ea2d4d4c1c51f296c71f1abc84cfe3fc059d746fa81098d97ee57d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_family_security_event": {
+      "body_sha256": "b1783b2bd907f32b2b6e56d1ed9d32d26a2ffb1078903ffdc11692152fb5a35d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_finalize_denial": {
+      "body_sha256": "5b0af462ee58bdd158a4ce2eece53c7a94631307ce851afea0578f55bb7b790d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_origin_live": {
+      "body_sha256": "94fbb1edc7bc358fac4f458467b3bdb050cc988fdd6e66539b3372de57b82e01",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_retire_delete": {
+      "body_sha256": "e7924ca92341a5e6d876f52835baa09af78d6b3e122dda83e21ab66a8a0199b2",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_revoke_delete": {
+      "body_sha256": "93ca726de5f786c24f040a373d8c5de08e7741b5477788321e0cd6862cefe46d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor18_stage_delete": {
+      "body_sha256": "442df6b5248f28a0f58afc0b66746444674056ccda23905be32f9b707bcea808",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_audit": {
+      "body_sha256": "19a2ad42e049e6f0f087fe03af86f0cbdd6643739d212f37948a02a0af64c07f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_grant_live": {
+      "body_sha256": "0069d22690e50433abf2ad1c93b4e894c551f0fc5da3e4989fd093e0a18473cc",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_is_issuer": {
+      "body_sha256": "15595b3900c2960a8efb59cfe9207abfe1ff91c01bf57f8953b7ee79dcee0583",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cor19_issue_grant": {
+      "body_sha256": "db24db46812b140307a44ff7680b768e61e3736203fb4ea5a1400f28b6cb2f6e",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_protect_audit": {
+      "body_sha256": "c3488f1792347fda43c77fc8ebbb983aad94a1f1d482a593938d91e5cf6a5868",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_publish_activation": {
+      "body_sha256": "977464a2200c6c4bb21ad15a50998b1a7c039ca05e962e1f1d1b5eeb2add0038",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_request_live": {
+      "body_sha256": "cde523f1bf593e8c54de39933d07b6a4efb02b7a77785256c626e89f88f19111",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_stage_activation": {
+      "body_sha256": "a88c7a888dcee2a9ce43828b0c42317bb3cbb0163942bdf9e73961d4a9fa79d7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor19_transition_activation": {
+      "body_sha256": "bd0a896202d0d4833a98ffae74c69fcce274ddd67d83fbe760320903e8858fc4",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_activation_audited": {
+      "body_sha256": "69a1634220b06120607a351a86514c85e5987a1323942dde29614503c57e2f5e",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_approval_audited": {
+      "body_sha256": "1611ad833aa0ba2c452d37117fd28dda3e0a79d6ef292952782b901985806dac",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_capabilities": {
+      "body_sha256": "c5e3e37799d1c1256b7303d553b5421d159d8b846129b00f35b039d18445c0eb",
+      "definer": false,
+      "volatility": "i"
+    },
+    "cor20_cycle_at": {
+      "body_sha256": "61b0037ff100b6e330fd13b2917fdab30209df3abaf3e2cd80c1576b208a02a7",
+      "definer": false,
+      "volatility": "i"
+    },
+    "cor20_grant_projection_event": {
+      "body_sha256": "97aeb097295d724a0e6adfc0fdf54080dee800813df6077830840485d150f045",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_grant_rights_enabled": {
+      "body_sha256": "8c76ca65ed30506b156576d191b43692c5da3336d947a3a72a3d3fc0a964575c",
+      "definer": false,
+      "volatility": "s"
+    },
+    "cor20_materialize_cycles": {
+      "body_sha256": "8c35aaa013fae2e1629f279230d477d8b7f16678b4ee25f2a40e9eb1bb6d60bb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_now": {
+      "body_sha256": "030d94abc737f9a6b5984547fa8da16e65924041daf13fb4fa1ad5a441cc9a06",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_renew_batch": {
+      "body_sha256": "ebbe92a29bd7b6ab3a8e4fb4db3c7092c80bf63167d5dff78edde7d96d66cac7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_resolve_account": {
+      "body_sha256": "d85c44ee2abddf99a757305d2c88f911a8a038617281e819ac6db67827b1ec10",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_session_projection_insert": {
+      "body_sha256": "3450140e64fa3fa3923b4ac5d27845a1e231c066242483ec24a12c92c888bda0",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor20_term_boundary": {
+      "body_sha256": "439012a33a099bdc7d6a4c586a3d11b4a3e495838c6a57add7e854031ed97bbf",
+      "definer": false,
+      "volatility": "i"
+    },
+    "cor21_admit_creation": {
+      "body_sha256": "ccb0994d3af37d7d70b335697afda9726247cf2e1d01940a189a123de8aa624f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor21_creation_live": {
+      "body_sha256": "b8a57893bb61fda03a0d65682cb3afb98b2227d1ddfbf4c7ce0de32a09fca7b6",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_account_empty": {
+      "body_sha256": "def936ee4d6f7560b0b21825a768116e60d70de33ab16935e80eadf832fa9c68",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_claim_retention": {
+      "body_sha256": "d0e464d336fcddf7bf9ab284ce29a29dcdce509c660e24f5258f4b3430eb84b7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_fail_retention": {
+      "body_sha256": "b5916893e4fb27b8747a93b46d52ebd4520918521ee3eefc29eac2aba5e73a33",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_grant_obsolete": {
+      "body_sha256": "c0017688b97412afb5cf0cc3dccdd9762f830505b44b97a3e244604fa8e50084",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_retention_batch": {
+      "body_sha256": "84dfef4c91cc4325765a79eeb7607715baf6bd464ed5d7e898e643f47c6fdc35",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor22_retention_policy": {
+      "body_sha256": "7ea96b57ceec1f60a5fd33b5b30cdbef2d795e844d66f32d8bbc20a766f2e73d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23i_attempt_identity": {
+      "body_sha256": "98fde5c288892cffe3a571278e1cae4f3d028e8d1b2e22c4c598cd61029ae787",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23j_delivery_can_send": {
+      "body_sha256": "26ba4c40dacbabbb5c5a6c18f268f1e316fe071bfd65d09ce932edb428fa72f9",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23m_budget_cooldown_v1": {
+      "body_sha256": "85d1489296e7cd7cbaa5b6fb51c045efad6444ce919f98aa4a08c0a7d967a48b",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23m_increment_budget_v1": {
+      "body_sha256": "4df6bb13018e9f5658248584cd79411fdd11e8106bbd15a659b729afdeafb441",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23m_purge_budgets_v1": {
+      "body_sha256": "3ef2df48daf9086c5ea1fa9e56873e5a8e0a1d1a8df240b44fa89a03826d4ad9",
+      "definer": false,
+      "volatility": "v"
+    },
+    "cor23m_reset_budget_v1": {
+      "body_sha256": "d4cd4650d9b81d148893269e69dd5d1cc830bdca86cb338a990dc6fbfe8d112a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "create_password_reset_request": {
+      "body_sha256": "92407c95477e0a3f897cf1c81f898e2d8c7e32122650bccd9d3492b7f0b713db",
+      "definer": true,
+      "volatility": "v"
+    },
+    "disable_activation": {
+      "body_sha256": "05a0dd2f9ff6ef37216e88d822019b747fe8b1adefdad7d0fd07e69289da736c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "edit_account_username": {
+      "body_sha256": "6b14a13e3876c672f14434ab3badbc2d1ec9f5cdf62492a9323de1a9322bd7c0",
+      "definer": false,
+      "volatility": "v"
+    },
+    "expire_session": {
+      "body_sha256": "4e5bb1ca10ea0189e4920630f322aa89199171b25011ecc4aa80e0462e9e9903",
+      "definer": false,
+      "volatility": "v"
+    },
+    "expire_verify_account": {
+      "body_sha256": "902253f8f28553197e388dade6dda773895efc85fdc7c1969d9974f06b94f5cc",
+      "definer": false,
+      "volatility": "v"
+    },
+    "get_account_reauthentication_credentials": {
+      "body_sha256": "d6b8159e0953076309e9a645c0ab5e4d085b7f198ea1ed14ca4927cdfa6cb421",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_current_active_session_hash": {
+      "body_sha256": "fb9952eb2c7146088d553fe6eb5c487849bc8da057ea02d7f0f6b0797147b11d",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_password_reset_request_for_finalize": {
+      "body_sha256": "6d4c9b2bfb1763d0790c59dce847f9d809f0938eeec739e8c7e882a81d090898",
+      "definer": false,
+      "volatility": "v"
+    },
+    "get_password_reset_totp_enrollment": {
+      "body_sha256": "35067c66cc8bdf25c3b7ff1a83feee7aa874aed92b5c48833713b6cda824ab91",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_pending_authenticator_app_setup": {
+      "body_sha256": "10586c7d37c6f7a975a8557285b7e92bfd602a4cf7767f015011f987ca822ff9",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_pending_password_reset_session": {
+      "body_sha256": "d4abb701f4c4739f90061dc175715ab583df71dbb23d943da95f3a240efc0063",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_refresh_session": {
+      "body_sha256": "943e0ef881704ba47365231b784e59cd2d9b39f9414c8e5ff2883bad3469098f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "get_session": {
+      "body_sha256": "b4733473f20e557c4387a305e513c84fd449eca86031b692e00440cc79a7fdc7",
+      "definer": false,
+      "volatility": "v"
+    },
+    "get_twofactor_details": {
+      "body_sha256": "cc92215b707fbca7e307b427b45a386de233bce6ba149c38ba9659a8bbfb3d99",
+      "definer": false,
+      "volatility": "s"
+    },
+    "get_verified_totp_enrollment_for_account": {
+      "body_sha256": "65da8043b2d600ae1c6594a47fba78fa6801dc124555005f212d19fe7ddebb14",
+      "definer": false,
+      "volatility": "s"
+    },
+    "issue_sensitive_action_token": {
+      "body_sha256": "8343bcb314db4f498d6d3e606aec17b413a20c90b2a080a4efe063a724e15b12",
+      "definer": false,
+      "volatility": "v"
+    },
+    "list_active_sessions": {
+      "body_sha256": "994aabe32f362edd40720acf37d1868356b5891d9482a802245707fbf9e7d6b1",
+      "definer": false,
+      "volatility": "v"
+    },
+    "lock_security_operation": {
+      "body_sha256": "3d3f34db0277cbbfd031e3ff38c08b73f1370b78b7fe1ac9eaaf1dd0a28e7a95",
+      "definer": false,
+      "volatility": "v"
+    },
+    "logout_all_sessions": {
+      "body_sha256": "bfdee3338c2b7f34c4ea6a0365ea9689353eaaa698803b124e108f10c659c0eb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "logout_current_session": {
+      "body_sha256": "632a96f3abdf8313775d16324f82456e981a4be42dc383d0227b5d17d4540721",
+      "definer": false,
+      "volatility": "v"
+    },
+    "lookup_locked_recovery_account": {
+      "body_sha256": "928645fde02098abab54ec7faa8f21839e93685f8b42d47dce7fefa67f2f0237",
+      "definer": false,
+      "volatility": "v"
+    },
+    "lookup_password_reset_account": {
+      "body_sha256": "63485fb0be5c3e3a967e334fd8111d4181630cc68c2cad7d820b4681f9d78f7f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "mark_password_reset_totp_step_used": {
+      "body_sha256": "65fc13ccfcd14cd97bc3b8162318848fdf77bb9058d4fb34d856abdd9b6f19f3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "mark_totp_step_used": {
+      "body_sha256": "8858926200089edb310e18d8503316fca50b765f10ebde8c96cbe30ae70e96a0",
+      "definer": false,
+      "volatility": "v"
+    },
+    "place_activation": {
+      "body_sha256": "05a0dd2f9ff6ef37216e88d822019b747fe8b1adefdad7d0fd07e69289da736c",
+      "definer": false,
+      "volatility": "v"
+    },
+    "prepare_account_delete_finalize": {
+      "body_sha256": "675d48fed2051987a42024679064a4ec6cd649fbd172a976d833634fc3b49ef2",
+      "definer": false,
+      "volatility": "v"
+    },
+    "promote_password_reset": {
+      "body_sha256": "4d38af14d940fac2ceae04066a21340aff17f77f4ba92aec209e3988144e17cd",
+      "definer": false,
+      "volatility": "v"
+    },
+    "promote_twofactor_new_login": {
+      "body_sha256": "2b9288f547903177aa73eb41118fb7e90e97aca73ade214e59528e84ffa38bfb",
+      "definer": false,
+      "volatility": "v"
+    },
+    "promote_twofactor_rotation_login": {
+      "body_sha256": "ccb9aeb31bab3aa75f8656a10ca9d621585f03224ebe25846b0dd20e68b9d678",
+      "definer": false,
+      "volatility": "v"
+    },
+    "purge_expired_account_email_change_requests": {
+      "body_sha256": "ab41b958ddc107ffb3ccdb0f98f13f81de8a78be5fcd3e32ef9d61aa35c7094d",
+      "definer": false,
+      "volatility": "v"
+    },
+    "purge_expired_delete_standby": {
+      "body_sha256": "8b7190649e77caba6d57e7c253218975e86a35c450b7a12be10d825897292f37",
+      "definer": false,
+      "volatility": "v"
+    },
+    "purge_security_operations": {
+      "body_sha256": "e4e6f386f030504cf407461e252448ae7258102357f18fe5bbf4d8802e1701aa",
+      "definer": true,
+      "volatility": "v"
+    },
+    "reconcile_security_operation": {
+      "body_sha256": "6d9e58f19ce09e58ca4056a61ced3caa803768b67aa88fd62f202d97c354e4b8",
+      "definer": true,
+      "volatility": "v"
+    },
+    "record_authenticator_app_setup_failure": {
+      "body_sha256": "c6165d8cc653ae530b93877f1cd6793f2ba6b60f91b9d57229a88423bbd8f68f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "refresh_session": {
+      "body_sha256": "691be3052d7222f0a33edf328175a71461727955fc20c2885d5d89e01b91b1d6",
+      "definer": false,
+      "volatility": "v"
+    },
+    "register_password_reset_failed_attempt": {
+      "body_sha256": "cb19149d5becb3c6c66f21cbbdfe221f2cea15787d934a79b310f2de0404c47a",
+      "definer": true,
+      "volatility": "v"
+    },
+    "register_password_reset_request_rate_limit": {
+      "body_sha256": "5c583d3c68df9b90338c3469771df23be3f8456b7f3f5fa346345d499f99bf1f",
+      "definer": true,
+      "volatility": "v"
+    },
+    "remove_account_lockout": {
+      "body_sha256": "c6d272a31b0785fbc054456331aa3ed69e185d5d5763004d13d250007fda76f3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "remove_twofactor_method": {
+      "body_sha256": "36c54eb79a409c3f228f7b9922c2f966231a22fc4548ce93bf3dc9ccc025041e",
+      "definer": false,
+      "volatility": "v"
+    },
+    "request_account_delete": {
+      "body_sha256": "4f2473915f8cd93c7d4a38de5c69e66373a09db5afd5d913a762b4616a407f16",
+      "definer": false,
+      "volatility": "v"
+    },
+    "request_account_email_change": {
+      "body_sha256": "1936aabc49efeee6e41a38e56677a0e237eb18653566f639ff5fd513e4096cd6",
+      "definer": false,
+      "volatility": "v"
+    },
+    "resend_verify_account": {
+      "body_sha256": "2e20812280acfe71b76fcf975b771902a8a4142692604b5e41b07bbfdee5a8dc",
+      "definer": false,
+      "volatility": "v"
+    },
+    "resolve_available_twofactor_configurations": {
+      "body_sha256": "a3e32e2650cc3ffa86b451f47717d2a19e69af9c1b0c6849521b519191382ead",
+      "definer": false,
+      "volatility": "v"
+    },
+    "revoke_pending_password_reset_session": {
+      "body_sha256": "625538ade6053ddcf9e39514cdad66b76ce1d2d87c565739e6badcbc3ce445ee",
+      "definer": true,
+      "volatility": "v"
+    },
+    "revoke_pending_password_reset_sessions_for_account": {
+      "body_sha256": "e7c5efad9082f28cc1c2b35c61074e3240b34aab383ef7464d8d5b89910fa127",
+      "definer": false,
+      "volatility": "v"
+    },
+    "revoke_session": {
+      "body_sha256": "39c78045633137e041cd3ff48c6fae7c9952d10b8cc4f7e392657ce06233535a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "revoke_session_for_account": {
+      "body_sha256": "2e8bea92d40e601fbe928c5a4bc107838bb6f0d0f4ff20f83ac8536b21c1003a",
+      "definer": false,
+      "volatility": "v"
+    },
+    "rotate_account_security_stamp": {
+      "body_sha256": "b83672c084a599ae94f1a65503e76d0265e56c837acda78321a28c24efb04053",
+      "definer": false,
+      "volatility": "v"
+    },
+    "rotate_active_session": {
+      "body_sha256": "10a969f8f1cdd421496d53779728592b39c099cffcb69706c9b6ac1174714dbe",
+      "definer": false,
+      "volatility": "v"
+    },
+    "session_refresh_credential_hash": {
+      "body_sha256": "c1633ffea0004b9652fb23c796199fe26ba180a4ebf7c07455ba9a163900493a",
+      "definer": false,
+      "volatility": "i"
+    },
+    "set_account_lockout": {
+      "body_sha256": "c6d272a31b0785fbc054456331aa3ed69e185d5d5763004d13d250007fda76f3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "set_account_login_failures": {
+      "body_sha256": "c6d272a31b0785fbc054456331aa3ed69e185d5d5763004d13d250007fda76f3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "set_session": {
+      "body_sha256": "9f24601c88861fcb2f7f15b843cabcecd5e34153a7790739bff8cebd75564118",
+      "definer": false,
+      "volatility": "v"
+    },
+    "setup_account_both": {
+      "body_sha256": "20e3b5e5c7f66d5a90502740ba3458f4e402fc51f65d9343858b717b077328ae",
+      "definer": false,
+      "volatility": "v"
+    },
+    "setup_account_email": {
+      "body_sha256": "432ba1a866a90a7c000f2cc934691b4b66d684fbb6d0e14347501e5a659ffa8f",
+      "definer": false,
+      "volatility": "v"
+    },
+    "start_unlock_account": {
+      "body_sha256": "2c8a428e008644b4c7e043b9d883fadb429d47b3e1f677e0119767fa9da13001",
+      "definer": false,
+      "volatility": "v"
+    },
+    "start_verify_account": {
+      "body_sha256": "f41123d003646c4ec93575d5e0f456b0907651631e3837fa0c357a873f6312f1",
+      "definer": false,
+      "volatility": "v"
+    },
+    "successful_login": {
+      "body_sha256": "c6d272a31b0785fbc054456331aa3ed69e185d5d5763004d13d250007fda76f3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "svs_read_activation_audited": {
+      "body_sha256": "69a1634220b06120607a351a86514c85e5987a1323942dde29614503c57e2f5e",
+      "definer": false,
+      "volatility": "s"
+    },
+    "svs_read_approval_audited": {
+      "body_sha256": "1611ad833aa0ba2c452d37117fd28dda3e0a79d6ef292952782b901985806dac",
+      "definer": false,
+      "volatility": "s"
+    },
+    "svs_read_current_session": {
+      "body_sha256": "975c8cce0c82a3be8f137594266962e26a53921556b9fb8f5a9b07f666e21a06",
+      "definer": false,
+      "volatility": "s"
+    },
+    "svs_read_entitlements": {
+      "body_sha256": "ca2b91ce8e33d9038d485aa730a3304d141ab278d7a4c2aac4da27c2d4ebdb6e",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_apply_issuer_policy": {
+      "body_sha256": "f278c980e111973af1a4ef3294a632053a10d51730d81f1f26f12dbf3ceef3d3",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_authority_advance": {
+      "body_sha256": "e3e326e392018d20c86df4e479485d46ccedf0fce9b1dddf2aa74bb658ddceaa",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_authority_assert_finalized": {
+      "body_sha256": "1ef966bbdcf14d754601d79a346101f757bec71c7836b0ed47b5e6ec1c6b5aec",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_authority_begin": {
+      "body_sha256": "c3ae26f9791e1080fe759f31838854bbb65ae7c48b3bc9911628062f2fb046b9",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_authority_effect_guard": {
+      "body_sha256": "c9678fad7a84076dcdf9ab424d99565be1d07ca41287646ca7c5a061f2e9755b",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_claim_delivery": {
+      "body_sha256": "97ca9c31fab34f679b191c3e418515d8869e2002f1ac380586827bcb29ade4bf",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_complete_retention_scope": {
+      "body_sha256": "0bfa9b32a9d7633b410ceeae5137fa72cefc764ec334176611b4d649ee89739c",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_database_role_safe": {
+      "body_sha256": "c02f5d45e405ca677ca5072d34b94afbc27c3c92d5f7da95a0e4e7d5aad2ff4e",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_enrolled_account_set": {
+      "body_sha256": "26d4856a054c9295b3ff70a436cec1cb5f0534cddcdb1bd7e67083ad8ba8fc96",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_expire_session": {
+      "body_sha256": "dffed3bae85a21b4efd4576eb6f1cecf4af8d9c4d35dddd3d8e135d1d6421f08",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_issuer_policy_begin": {
+      "body_sha256": "68421f8c7a91152b17cfaa3567478e11f292978b017aa01c9a1f702fcee33871",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_list_active_sessions": {
+      "body_sha256": "6624386115e88c8e81a56d02ff2985a659efd6a8a629a118518b8319b9a2a304",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_lock_global_authority": {
+      "body_sha256": "b6fcf446fc02e6e774bcce7082e703fd889e3f44a8a6d3a616951d783f7d47d3",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_lock_projection_authority": {
+      "body_sha256": "931870395b5c85417b04a571d6c67d8672e667bfabc1b2b6e5e0568b6bcf9ffd",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_read_refresh_session": {
+      "body_sha256": "1dfdd91de2ff3c8ef8fcbe14a0554c9654fda588937fb60cf8768254ae0b88a0",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_require_enrolled_account": {
+      "body_sha256": "69a60e41da989a02b0e4e039f1da463c733ae27b20b7588bc0c09f18fb8b6b46",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_retention_assert": {
+      "body_sha256": "d1ca3590e92c4413b9786276421cfb0d08af4b1b03a980e080a4c98573648891",
+      "definer": false,
+      "volatility": "v"
+    },
+    "ths_retention_begin": {
+      "body_sha256": "af34c528754aa59d4e0b5d7fc821ff469676f08335e94d7c202774d4959344de",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_runtime_global_privileges_safe": {
+      "body_sha256": "b52f4dc8f53ea5a69d815fb26652e79481cacbe90ce7eac86626eeb417e42fcf",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_svs_refill_candidates": {
+      "body_sha256": "f90aad134bd6c39426a5a70e259059c34852aeb3622ff0081e9ec442d3566ad5",
+      "definer": false,
+      "volatility": "s"
+    },
+    "ths_svs_refill_lock": {
+      "body_sha256": "257409edfa93e79c205ade1ba8b4f0949fb43d67ab41393d349514c7943fdffd",
+      "definer": true,
+      "volatility": "v"
+    },
+    "ths_svs_refill_route": {
+      "body_sha256": "1fbf013ab38e5a26e190fdbec34ddf58c98932cbf25e0266e9445f9bb0e9c324",
+      "definer": false,
+      "volatility": "s"
+    },
+    "transition_pending_password_reset_session": {
+      "body_sha256": "d24ad08a026e84a36a2759d1331f70b5c72ca7962c22e3b924957894f92cb9ec",
+      "definer": true,
+      "volatility": "v"
+    },
+    "upgrade_account_password_hash": {
+      "body_sha256": "d6341786ca3df41414a020e1b243abbbe82977c7503fde91baaa0b802d5c08b2",
+      "definer": false,
+      "volatility": "v"
+    },
+    "validate_cached_session_trust": {
+      "body_sha256": "aa3ba6d9968ee3d9fd7bca93b974227989e6aaa48c3299a9b56af6a8a3587617",
+      "definer": false,
+      "volatility": "v"
+    },
+    "validate_sensitive_action_token": {
+      "body_sha256": "28e0fb35c2b77959eb21b512e5a870d253cd6c31664b95ee936b878737bbda16",
+      "definer": false,
+      "volatility": "v"
+    },
+    "verify_account_delete_token": {
+      "body_sha256": "c50f62619a9151fff735fc4af83f78b0c162d7a193f8ab739966128bba4985a8",
+      "definer": false,
+      "volatility": "v"
+    },
+    "verify_account_for_use": {
+      "body_sha256": "90a8e36c55cee009d03306fd5cc7d72a92da6997b58b4ba2983f35499a90be5e",
+      "definer": false,
+      "volatility": "s"
+    },
+    "verify_activation": {
+      "body_sha256": "6278312c60073aad533e3c7891dab9346698a6f9c7f827f621027022fd9946fe",
+      "definer": false,
+      "volatility": "v"
+    },
+    "verify_twofactor_setup": {
+      "body_sha256": "ca5743cd92782cab0169996e58ac4064b95ac854421bece737747d0b07b5f6a5",
+      "definer": false,
+      "volatility": "v"
+    },
+    "verify_unlock_account": {
+      "body_sha256": "0e1501acb706133db293f3e8b829300a8e71d98fc3a5c91e74e475cab3f50424",
+      "definer": false,
+      "volatility": "v"
+    },
+    "view_account": {
+      "body_sha256": "cd3b7733cdef5e6bac225a73f5d8d9360e9f60a93a0c28bc2d0f0f0c96ea498b",
+      "definer": false,
+      "volatility": "s"
+    }
+  },
+  "triggers": [
+    {
+      "table": "two_factor_authentications",
+      "name": "cor15_enrollment_contract_before_write",
+      "function": "cor15_enrollment_contract",
+      "type": 23,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "delivery_attempts",
+      "name": "cor23i_delivery_attempt_identity",
+      "function": "cor23i_attempt_identity",
+      "type": 19,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "two_factor_authentications",
+      "name": "cor16_setup_lifecycle",
+      "function": "cor16_clear_setup_authority",
+      "type": 23,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "accounts",
+      "name": "cor18_account_security_event",
+      "function": "cor18_account_security_event",
+      "type": 17,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "sessions",
+      "name": "cor18_family_security_event",
+      "function": "cor18_family_security_event",
+      "type": 25,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "two_factor_authentications",
+      "name": "cor18_factor_security_event",
+      "function": "cor18_factor_security_event",
+      "type": 29,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "entitlement_grant_audit",
+      "name": "cor19_protect_audit",
+      "function": "cor19_protect_audit",
+      "type": 27,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "entitlement_grants",
+      "name": "cor20_grant_projection_event",
+      "function": "cor20_grant_projection_event",
+      "type": 29,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "sessions",
+      "name": "cor20_session_projection_insert",
+      "function": "cor20_session_projection_insert",
+      "type": 7,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "accounts",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 31,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "sessions",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 31,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "two_factor_authentications",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 31,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "entitlement_grants",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 31,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "entitlement_grant_cycles",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 31,
+      "columns": [],
+      "when": null
+    },
+    {
+      "table": "entitlement_grant_audit",
+      "name": "ths_authority_effect_guard",
+      "function": "ths_authority_effect_guard",
+      "type": 7,
+      "columns": [],
+      "when": null
+    }
+  ]
+}

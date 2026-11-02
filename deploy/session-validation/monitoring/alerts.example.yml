@@ -1,0 +1,16 @@
+# Operational notifications, not approved SLO acceptance.
+groups:
+  - name: svs-private
+    rules:
+      - alert: SvsNotReady
+        expr: svs_ready == 0
+        for: 1m
+      - alert: SvsScrapeUnavailable
+        expr: up{job="svs-private"} == 0
+        for: 1m
+      - alert: SvsCertificateNearExpiry
+        expr: svs_server_certificate_near_expiry == 1
+        for: 1m
+      - alert: SvsCapacityRejections
+        expr: rate(svs_capacity_rejected_total[5m]) > 0
+        for: 1m

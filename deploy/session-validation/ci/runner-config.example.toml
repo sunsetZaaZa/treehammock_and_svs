@@ -1,0 +1,22 @@
+# Merge deliberately into a dedicated Docker runner config; never commit a token.
+# Register separate svs-linux-x64 and protected svs-signing-protected runners.
+concurrent = 2
+[[runners]]
+  executor = "docker"
+  limit = 1
+  output_limit = 2048
+  [runners.docker]
+    privileged = false
+    disable_cache = true
+    cpus = "4"
+    memory = "8g"
+    memory_swap = "8g"
+    pids_limit = 512
+    # Replace with the same approved digest used by SVS14_CI_IMAGE.
+    allowed_images = ["registry.example.invalid/svs/ci@sha256:REVIEWED_DIGEST"]
+    # These are immutable input archives, never production services/credentials.
+    volumes = ["/srv/svs-ci-inputs:/svs-ci-inputs:ro"]
+# Set maximum_timeout=2400 and tags during runner registration/server setup.
+# Lock runners to this project; signer runner must be protected, with no MR access.
+# Never mount the host Docker socket, production data volumes or signing keys
+# onto the validation runner. Configure GitLab protected file variables separately.

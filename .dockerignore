@@ -1,0 +1,73 @@
+# Version control and editor state
+.git
+.gitignore
+.gitattributes
+!.gitlab-ci.yml
+!.gitlab/
+!.gitlab/ci/
+!.gitlab/ci/pipelines/
+!.gitlab/ci/pipelines/*.yml
+.vs
+.vscode
+.idea
+
+# Build outputs
+bin
+obj
+**/bin
+**/obj
+TestResults
+**/TestResults
+coverage
+**/coverage
+*.trx
+*.coverage
+*.coveragexml
+
+# User/local machine files
+*.user
+*.suo
+*.rsuser
+*.cache
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Local-only config and secrets
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
+secrets.json
+
+# Archives and generated packages
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.nupkg
+
+# Docker local files
+.docker
+
+# Node/API test runner local artifacts
+node_modules
+**/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Owned proof/evidence outputs must never seed a Docker build.
+.artifacts
+.correction-results
+
+# Release artifacts must not become source input.
+artifacts
+publish
+dist
+out

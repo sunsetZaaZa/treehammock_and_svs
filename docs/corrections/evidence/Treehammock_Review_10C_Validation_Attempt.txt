@@ -1,0 +1,12 @@
+R10C original host system runner attempt
+Command: bash eng/docker-host-system-stack-tests.sh
+Exit: 1
+STDOUT:
+
+STDERR:
+Docker CLI with Compose is required, but no reachable Docker CLI was found.
+Install/start Docker Desktop or Docker Engine, then retry this script.
+On Windows, the host-backed lane can also be run with: .\eng\docker-host-system-stack-tests.cmd
+
+Runtime tools: {"dotnet": null, "pwsh": null, "powershell.exe": null, "docker": null, "psql": null, "postgres": null, "redis-server": null}
+Blocked at Docker CLI selection, before Compose mutation, API launch or tests. Isolated copied-fixture checks recorded separately.

@@ -1,0 +1,189 @@
+{
+  "uid": "treehammock-abuse-controls-1-0-0",
+  "title": "Treehammock Abuse Controls 1.0.0",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "30s",
+  "tags": [
+    "treehammock",
+    "abuse-controls",
+    "1.0.0"
+  ],
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Denied counter admissions (not requests)",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(treehammock_abuse_counter_admissions_v2_total{outcome=\"denied\"}[5m]))",
+          "legendFormat": "denied"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Counter admissions by feature",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 6,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (feature, outcome) (rate(treehammock_abuse_counter_admissions_v2_total[5m]))",
+          "legendFormat": "{{feature}} {{outcome}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Confirmed cooldown creations by backend",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (dependency, feature, dimension, reason) (increase(treehammock_abuse_cooldowns_created_v2_total[5m]))",
+          "legendFormat": "{{dependency}} {{feature}} {{dimension}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Login throttles",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (dimension, reason) (rate(treehammock_login_throttled_total[5m]))",
+          "legendFormat": "{{dimension}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Password-reset throttles",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (feature, dimension, reason) (rate(treehammock_password_reset_throttled_total[5m]))",
+          "legendFormat": "{{feature}} {{dimension}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "2FA throttles",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (dimension, reason) (rate(treehammock_two_factor_throttled_total[5m]))",
+          "legendFormat": "{{dimension}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Delivery throttles",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 16
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (delivery_method, reason) (rate(treehammock_delivery_throttled_total[5m]))",
+          "legendFormat": "{{delivery_method}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Dragonfly abuse counter failures",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 16
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (operation, reason) (rate(treehammock_abuse_counter_store_failures_total{dependency=\"dragonfly\"}[5m]))",
+          "legendFormat": "{{operation}} {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Cloudflare / edge abuse events",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 16
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (event, outcome) (rate(treehammock_edge_abuse_events_total[5m]))",
+          "legendFormat": "{{event}} {{outcome}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Attempts blocked by existing cooldown",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (feature, dimension) (increase(treehammock_abuse_cooldown_blocked_attempts_total[5m]))",
+          "legendFormat": "{{feature}} {{dimension}}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "toolchain": "registry.example/svs14-ci@sha256:REPLACE_WITH_APPROVED_DIGEST",
+  "yugabyte": "yugabytedb/yugabyte@sha256:REPLACE_WITH_APPROVED_DIGEST",
+  "dragonfly": "docker.dragonflydb.io/dragonflydb/dragonfly@sha256:REPLACE_WITH_APPROVED_DIGEST",
+  "dragonflyVersion": "REPLACE_WITH_QUALIFIED_INFO_SERVER_VERSION"
+}

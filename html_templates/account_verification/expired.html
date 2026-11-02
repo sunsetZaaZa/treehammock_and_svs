@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account verification expired</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #fff8ed; color: #172033; }
+    main { min-height: 100vh; display: grid; place-items: center; padding: 2rem; box-sizing: border-box; }
+    .card { width: min(100%, 38rem); background: #ffffff; border: 1px solid #f4d6a3; border-radius: 1.25rem; padding: 2rem; box-shadow: 0 1.5rem 4rem rgba(23, 32, 51, 0.10); }
+    .eyebrow { margin: 0 0 .75rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #b54708; font-weight: 700; }
+    h1 { margin: 0 0 1rem; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; }
+    p { margin: 0; font-size: 1rem; line-height: 1.65; color: #48556a; }
+    @media (prefers-color-scheme: dark) { body { background: #1c160c; color: #fff5df; } .card { background: #211a11; border-color: #5b3f19; box-shadow: none; } p { color: #e3d1ae; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card" aria-labelledby="title">
+      <p class="eyebrow">Verification expired</p>
+      <h1 id="title">This link has expired</h1>
+      <p>Request a fresh verification email from the application and use the newest link.</p>
+    </section>
+  </main>
+</body>
+</html>

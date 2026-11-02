@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "basis": "Current executable case source inventory; NOT executed evidence or a complete cross-feature coverage claim",
+  "qualification": "NotRun",
+  "cases": [
+    {
+      "id": "reset-lock-authority",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/TransactionAuthorityTests.cs",
+      "method": null,
+      "required_observation": "Both reset/account mutation lock orders and post-wait expiry; execute all theories.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "reset-last-factor",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/ResetAuthorizationTests.cs",
+      "method": "Actual_last_factor_removal_cancels_parent_and_denies_old_finalize_and_rebootstrap",
+      "required_observation": "Real factor removal versus monotonic reset parent and old finalize/rebootstrap.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "reset-concurrent-mutation",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/ResetAuthorizationTests.cs",
+      "method": "Promotion_rechecks_authorization_after_observed_account_lock_wait",
+      "required_observation": "Observed account-lock wait with competing authority changes; all theory branches required.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "enrollment-authority-change",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/FactorEnrollmentTests.cs",
+      "method": "Verification_waiting_for_authoritative_change_cannot_promote_stale_setup",
+      "required_observation": "Observed wait and authoritative transition, all mutation branches.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "refresh-logout",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/SessionFamilyTests.cs",
+      "method": "Refresh_and_already_validated_logout_both_lock_orders_leave_family_revoked",
+      "required_observation": "Both observed lock orders leave the stable family revoked.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "refresh-sensitive-grant",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/SessionFamilyTests.cs",
+      "method": "Sensitive_grant_binds_the_stable_family_and_still_denies_the_superseded_generation",
+      "required_observation": "Family-bound grant authority and superseded access generation.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "refresh-pending-enrollment",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/FactorEnrollmentTests.cs",
+      "method": "Stable_family_refresh_preserves_pending_authority",
+      "required_observation": "Pending enrollment retains only stable live-family authority.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "maintenance-live-proofs",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/RetentionTests.cs",
+      "method": "Expired_parents_wait_for_children_and_live_sensitive_grants_keep_their_own_expiry",
+      "required_observation": "Independent child/proof/grant expiry and retention observation.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "maintenance-rollback",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/RetentionTests.cs",
+      "method": null,
+      "required_observation": "Run all policy, worker/lease/cursor/rollback/runtime-role tests; full policy coverage is not inferred from one method.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "totp-current-key-rotation",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/TotpKeyRotationTests.cs",
+      "method": "Production_command_resumes_partial_rotation_and_preserves_parameters_and_replay",
+      "required_observation": "Current v2 re-encryption command and checkpoint behavior; rolling multi-host drill still required.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "activation-live-entitlement",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/EntitlementTests.cs",
+      "method": null,
+      "required_observation": "Execute native expiry/revocation/projection cases; multi-host actual cache-hit evidence still required.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    },
+    {
+      "id": "delivery-unknown-acceptance",
+      "path": "treehammock.Tests.SqlContracts/Integration/Database/DeliveryOutboxTests.cs",
+      "method": null,
+      "required_observation": "Execute native durable acceptance/unknown/late receipt histories; actual provider/rolling-key drills still required.",
+      "execution_stages": [
+        "sql-redis",
+        "sql-dragonfly"
+      ]
+    }
+  ],
+  "remaining_integration": "Complete observed two-instance/final-image/cache/provider/rolling-key/recovery matrix requires concrete native evidence and operator adjudication"
+}

@@ -1,0 +1,474 @@
+stages:
+  - preflight
+  - validation
+  - package
+  - image
+  - publish
+  - release
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+
+variables:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  BUILD_CONFIGURATION: "Release"
+  RELEASE_PACKAGE_NAME: "treehammock-api"
+  DOCKER_BUILDKIT: "1"
+  PUBLISH_GITLAB_REGISTRY: "false"
+  PUBLISH_SELF_HOSTED_REGISTRY: "false"
+  PUBLISH_DOCKERHUB: "false"
+  PUBLISH_AWS_ECR: "false"
+  PUSH_LATEST_FOR_STABLE: "true"
+
+release-preflight:
+  image: alpine:3.20
+  stage: preflight
+  timeout: 5 minutes
+  variables:
+    GIT_DEPTH: "0"
+  before_script:
+    - apk add --no-cache python3 git
+  script:
+    - python3 eng/release_identity.py gitlab-preflight
+  artifacts:
+    reports:
+      dotenv: artifacts/release-intent.env
+    expire_in: 30 days
+
+release-dotnet-unit-gate:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: validation
+  timeout: 20 minutes
+  needs:
+    - release-preflight
+  before_script:
+    - chmod +x eng/*.sh
+    - dotnet --info
+  script:
+    - ./eng/check-locks.sh
+    - ./eng/dotnet-unit-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+  artifacts:
+    when: always
+    paths:
+      - "**/treehammock-unit-tests.trx"
+    expire_in: 30 days
+
+release-dotnet-integration-gate:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: validation
+  timeout: 20 minutes
+  needs:
+    - release-preflight
+  before_script:
+    - chmod +x eng/*.sh
+    - dotnet --info
+  script:
+    - ./eng/check-locks.sh
+    - ./eng/dotnet-integration-tests.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+  artifacts:
+    when: always
+    paths:
+      - "**/treehammock-integration-tests.trx"
+    expire_in: 30 days
+
+release-dotnet-sql-gate:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: validation
+  timeout: 30 minutes
+  needs:
+    - release-preflight
+  services:
+    - name: postgres:16
+      alias: postgres
+      variables:
+        POSTGRES_DB: treehammock_contract
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+  variables:
+    TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS: "true"
+    TREEHAMMOCK_DB_CONTRACT_CONNECTION: "Host=postgres;Port=5432;Database=treehammock_contract;Username=postgres;Password=postgres"
+  before_script:
+    - chmod +x eng/*.sh
+    - dotnet --info
+    - apt-get update
+    - apt-get install -y --no-install-recommends postgresql-client
+    - until pg_isready -h postgres -p 5432 -U postgres -d treehammock_contract; do sleep 2; done
+  script:
+    - ./eng/check-locks.sh
+    - ./eng/sql-contracts.sh --configuration "$BUILD_CONFIGURATION" --locked-restore
+  artifacts:
+    when: always
+    paths:
+      - "**/treehammock-sql-contracts.trx"
+    expire_in: 30 days
+
+release-docker-direct-gate:
+  image: docker:27-cli
+  stage: validation
+  timeout: 45 minutes
+  needs:
+    - release-preflight
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add --no-cache bash python3
+    - chmod +x eng/*.sh
+    - docker version
+    - docker compose version
+  script:
+    - ./eng/docker-http-contracts-direct.sh
+  after_script:
+    - python3 eng/test-ownership.py cleanup-ci
+  artifacts:
+    when: always
+    paths:
+      - artifacts/test-runs/**/compose-proof/**/run.json
+      - artifacts/test-runs/**/run.json
+      - artifacts/test-runs/**/cleanup.json
+      - artifacts/test-runs/**/rendered-ownership.json
+      - artifacts/test-runs/**/*.trx
+      - artifacts/test-runs/**/compose-proof/**/proof.json
+      - artifacts/test-runs/**/compose-proof/**/results.json
+      - artifacts/test-runs/**/compose-proof/**/results/*.trx
+    expire_in: 30 days
+
+release-docker-proxy-gate:
+  image: docker:27-cli
+  stage: validation
+  timeout: 45 minutes
+  needs:
+    - release-preflight
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add --no-cache bash python3
+    - chmod +x eng/*.sh
+    - docker version
+    - docker compose version
+  script:
+    - ./eng/docker-http-contracts-proxy.sh
+  after_script:
+    - python3 eng/test-ownership.py cleanup-ci
+  artifacts:
+    when: always
+    paths:
+      - artifacts/test-runs/**/compose-proof/**/run.json
+      - artifacts/test-runs/**/run.json
+      - artifacts/test-runs/**/cleanup.json
+      - artifacts/test-runs/**/rendered-ownership.json
+      - artifacts/test-runs/**/*.trx
+      - artifacts/test-runs/**/compose-proof/**/proof.json
+      - artifacts/test-runs/**/compose-proof/**/results.json
+      - artifacts/test-runs/**/compose-proof/**/results/*.trx
+    expire_in: 30 days
+
+release-docker-system-gate:
+  image: docker:27-cli
+  stage: validation
+  timeout: 60 minutes
+  needs:
+    - release-preflight
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add --no-cache bash python3
+    - chmod +x eng/*.sh
+    - docker version
+    - docker compose version
+  script:
+    - ./eng/docker-system-stack-tests.sh
+  after_script:
+    - python3 eng/test-ownership.py cleanup-ci
+  artifacts:
+    when: always
+    paths:
+      - artifacts/test-runs/**/compose-proof/**/run.json
+      - artifacts/test-runs/**/run.json
+      - artifacts/test-runs/**/cleanup.json
+      - artifacts/test-runs/**/rendered-ownership.json
+      - artifacts/test-runs/**/*.trx
+      - artifacts/test-runs/**/compose-proof/**/proof.json
+      - artifacts/test-runs/**/compose-proof/**/results.json
+      - artifacts/test-runs/**/compose-proof/**/results/*.trx
+    expire_in: 30 days
+
+release-package-api:
+  image: docker:27-cli
+  stage: package
+  timeout: 40 minutes
+  needs:
+    - release-preflight
+    - release-dotnet-unit-gate
+    - release-dotnet-integration-gate
+    - release-dotnet-sql-gate
+    - release-docker-direct-gate
+    - release-docker-proxy-gate
+    - release-docker-system-gate
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add --no-cache python3 py3-yaml bash git skopeo
+    - chmod +x eng/*.sh
+    - docker version
+    - docker buildx version
+  script:
+    - python3 eng/release_artifacts.py build --output artifacts/release
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/
+    expire_in: 90 days
+
+release-container-gitlab-registry:
+  image: docker:27-cli
+  stage: image
+  timeout: 30 minutes
+  needs:
+    - release-preflight
+    - release-package-api
+  variables:
+    RELEASE_MANIFEST: artifacts/release/release-manifest.json
+    REGISTRY_KIND: gitlab
+    IMAGE_ENV_FILE: image-gitlab.env
+  before_script:
+    - apk add --no-cache python3 py3-yaml bash skopeo
+    - chmod +x eng/*.sh
+  script:
+    - ./eng/release-container-publish.sh
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/*-publication.json
+    reports:
+      dotenv: image-gitlab.env
+    expire_in: 90 days
+  rules:
+    - if: '$PUBLISH_GITLAB_REGISTRY == "true"'
+    - when: never
+
+release-container-self-hosted-registry:
+  image: docker:27-cli
+  stage: image
+  timeout: 30 minutes
+  needs:
+    - release-preflight
+    - release-package-api
+  variables:
+    RELEASE_MANIFEST: artifacts/release/release-manifest.json
+    REGISTRY_KIND: generic
+    IMAGE_ENV_FILE: image-self-hosted.env
+  before_script:
+    - apk add --no-cache python3 py3-yaml bash skopeo
+    - chmod +x eng/*.sh
+  script:
+    - ./eng/release-container-publish.sh
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/*-publication.json
+    reports:
+      dotenv: image-self-hosted.env
+    expire_in: 90 days
+  rules:
+    - if: '$PUBLISH_SELF_HOSTED_REGISTRY == "true"'
+    - when: never
+
+release-container-dockerhub:
+  image: docker:27-cli
+  stage: image
+  timeout: 30 minutes
+  needs:
+    - release-preflight
+    - release-package-api
+  variables:
+    RELEASE_MANIFEST: artifacts/release/release-manifest.json
+    REGISTRY_KIND: dockerhub
+    IMAGE_ENV_FILE: image-dockerhub.env
+  before_script:
+    - apk add --no-cache python3 py3-yaml bash skopeo
+    - chmod +x eng/*.sh
+  script:
+    - ./eng/release-container-publish.sh
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/*-publication.json
+    reports:
+      dotenv: image-dockerhub.env
+    expire_in: 90 days
+  rules:
+    - if: '$PUBLISH_DOCKERHUB == "true"'
+    - when: never
+
+release-container-aws-ecr:
+  image: docker:27-cli
+  stage: image
+  timeout: 30 minutes
+  needs:
+    - release-preflight
+    - release-package-api
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  variables:
+    RELEASE_MANIFEST: artifacts/release/release-manifest.json
+    REGISTRY_KIND: aws-ecr
+    IMAGE_ENV_FILE: image-aws-ecr.env
+  before_script:
+    - apk add --no-cache python3 py3-yaml bash skopeo aws-cli
+    - chmod +x eng/*.sh
+    - aws --version
+  script:
+    - |
+      set -euo pipefail
+      umask 077
+      owned_token=""
+      trap '[ -z "$owned_token" ] || rm -f -- "$owned_token"' EXIT
+      if [ -n "${AWS_ROLE_ARN:-}" ] && [ -n "${GITLAB_OIDC_TOKEN:-}" ]; then
+        owned_token="${CI_PROJECT_DIR}/.aws-web-identity-token-${CI_JOB_ID}"
+        test ! -e "$owned_token"
+        export AWS_WEB_IDENTITY_TOKEN_FILE="$owned_token"
+        export AWS_ROLE_SESSION_NAME="${AWS_ROLE_SESSION_NAME:-treehammock-release-${CI_PIPELINE_ID}}"
+        printf '%s' "$GITLAB_OIDC_TOKEN" > "$AWS_WEB_IDENTITY_TOKEN_FILE"
+      fi
+      ./eng/release-container-publish.sh
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/*-publication.json
+    reports:
+      dotenv: image-aws-ecr.env
+    expire_in: 90 days
+  rules:
+    - if: '$PUBLISH_AWS_ECR == "true"'
+    - when: never
+
+release-publication-summary:
+  image: alpine:3.20
+  stage: publish
+  when: always
+  needs:
+    - release-preflight
+    - release-package-api
+    - job: release-container-gitlab-registry
+      optional: true
+    - job: release-container-self-hosted-registry
+      optional: true
+    - job: release-container-dockerhub
+      optional: true
+    - job: release-container-aws-ecr
+      optional: true
+  before_script:
+    - apk add --no-cache python3 py3-yaml
+  script:
+    - python3 eng/release_artifacts.py gitlab-summary
+  artifacts:
+    when: always
+    paths:
+      - artifacts/release/release-summary.json
+      - artifacts/release/*-publication.json
+    expire_in: 90 days
+
+release-upload-assets:
+  image: alpine:3.20
+  stage: publish
+  timeout: 10 minutes
+  needs:
+    - release-preflight
+    - release-package-api
+    - release-publication-summary
+  before_script:
+    - apk add --no-cache curl python3 py3-yaml
+  script:
+    - |
+      set -eu
+      python3 eng/release_artifacts.py verify --manifest artifacts/release/release-manifest.json
+      RELEASE_ASSET_BASE_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${RELEASE_PACKAGE_NAME}/${RELEASE_PACKAGE_VERSION}"
+      curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file "artifacts/release/${RELEASE_ARCHIVE}" "${RELEASE_ASSET_BASE_URL}/${RELEASE_ARCHIVE}"
+      curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file "artifacts/release/${RELEASE_CHECKSUM}" "${RELEASE_ASSET_BASE_URL}/${RELEASE_CHECKSUM}"
+      curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file artifacts/release/release-manifest.json "${RELEASE_ASSET_BASE_URL}/release-manifest.json"
+      curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file artifacts/release/release-summary.json "${RELEASE_ASSET_BASE_URL}/release-summary.json"
+      {
+        echo "RELEASE_ARCHIVE_URL=${RELEASE_ASSET_BASE_URL}/${RELEASE_ARCHIVE}"
+        echo "RELEASE_CHECKSUM_URL=${RELEASE_ASSET_BASE_URL}/${RELEASE_CHECKSUM}"
+      } > release-assets.env
+      cat release-assets.env
+  artifacts:
+    reports:
+      dotenv: release-assets.env
+    expire_in: 90 days
+
+create-gitlab-release:
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  stage: release
+  timeout: 10 minutes
+  needs:
+    - release-preflight
+    - release-upload-assets
+    - job: release-container-gitlab-registry
+      optional: true
+      artifacts: false
+    - job: release-container-self-hosted-registry
+      optional: true
+      artifacts: false
+    - job: release-container-dockerhub
+      optional: true
+      artifacts: false
+    - job: release-container-aws-ecr
+      optional: true
+      artifacts: false
+  script:
+    - echo "Creating GitLab release for ${CI_COMMIT_TAG}"
+  release:
+    name: "Treehammock $CI_COMMIT_TAG"
+    tag_name: "$CI_COMMIT_TAG"
+    description: |
+      Treehammock $CI_COMMIT_TAG release.
+
+      Release gates completed:
+      - .NET release proof with locked restore and deferred PostgreSQL SQL contracts
+      - Docker direct integration through PostgreSQL, DragonflyDB, and the API
+      - Docker HAProxy integration through PostgreSQL, DragonflyDB, API, and HAProxy
+
+      The release manifest records the built/source identity and archive hashes.
+      The release summary records per-registry copied and verified candidate digests.
+      Container images are promoted from one tested OCI artifact only to enabled targets:
+      - GitLab/self-hosted GitLab registry when PUBLISH_GITLAB_REGISTRY=true: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG and $CI_REGISTRY_IMAGE:$RELEASE_SOURCE_SHA
+      - Generic self-hosted OCI registry when PUBLISH_SELF_HOSTED_REGISTRY=true: $SELF_HOSTED_REGISTRY_IMAGE:$CI_COMMIT_TAG and $SELF_HOSTED_REGISTRY_IMAGE:$RELEASE_SOURCE_SHA
+      - Docker Hub when PUBLISH_DOCKERHUB=true: $DOCKERHUB_IMAGE:$CI_COMMIT_TAG and $DOCKERHUB_IMAGE:$RELEASE_SOURCE_SHA
+      - AWS ECR when PUBLISH_AWS_ECR=true: $AWS_ECR_IMAGE or $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY
+
+      Stable release tags also receive latest when PUSH_LATEST_FOR_STABLE=true. Prerelease tags do not receive latest.
+    assets:
+      links:
+        - name: "API publish archive"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${RELEASE_PACKAGE_NAME}/${CI_COMMIT_TAG}/${RELEASE_PACKAGE_NAME}-${CI_COMMIT_TAG}.tar.gz"
+          link_type: "package"
+        - name: "API publish archive SHA256"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${RELEASE_PACKAGE_NAME}/${CI_COMMIT_TAG}/${RELEASE_PACKAGE_NAME}-${CI_COMMIT_TAG}.sha256"
+          link_type: "other"
+        - name: "Release identity manifest"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${RELEASE_PACKAGE_NAME}/${CI_COMMIT_TAG}/release-manifest.json"
+          link_type: "other"
+        - name: "Registry publication summary"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${RELEASE_PACKAGE_NAME}/${CI_COMMIT_TAG}/release-summary.json"
+          link_type: "other"

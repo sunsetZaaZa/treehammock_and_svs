@@ -1,0 +1,90 @@
+{
+  "bindAddress": "10.0.0.20",
+  "port": 8443,
+  "serverCertificatePath": "/run/svs/server.pfx",
+  "serverCertificatePassword": "",
+  "serverRootCertificatePath": "/run/svs/server-ca.cer",
+  "clientRootCertificatePath": "/run/svs/client-ca.cer",
+  "callers": [
+    {
+      "identity": "spiffe://intranet.local/service/contact-backup",
+      "actions": [
+        "backup.read",
+        "backup.write",
+        "recovery_package.read",
+        "recovery_package.write"
+      ],
+      "leafSha256": [
+        "REPLACE_WITH_REVIEWED_UPPERCASE_SHA256"
+      ]
+    }
+  ],
+  "databaseConnectionString": "Host=db.intranet;Database=treehammock;Username=treehammock_svs;Password=REPLACE;SSL Mode=VerifyFull;Root Certificate=/run/svs/db-ca.cer;Enlist=false;Pooling=true;Maximum Pool Size=16;Minimum Pool Size=0;Timeout=2;Command Timeout=3;Cancellation Timeout=1000",
+  "roles": {
+    "app": "treehammock_app",
+    "coordinator": "treehammock_coordinator",
+    "validator": "treehammock_svs",
+    "maintenance": "treehammock_maintenance",
+    "owner": "treehammock_owner",
+    "validatorRead": "treehammock_svs_read",
+    "refiller": "treehammock_svs_refiller"
+  },
+  "cache": {
+    "address": "10.0.0.30",
+    "port": 6379,
+    "tlsName": "cache.intranet",
+    "username": "svs-reader",
+    "password": "REPLACE",
+    "rootCertificatePath": "/run/svs/cache-ca.cer",
+    "leafSha256": "REPLACE_WITH_REVIEWED_UPPERCASE_SHA256"
+  },
+  "issuer": "REPLACE_WITH_CURRENT_ISSUER",
+  "maximumConnections": 128,
+  "maximumConcurrentRequests": 64,
+  "http2StreamsPerConnection": 32,
+  "requestTimeoutMilliseconds": 2000,
+  "shutdownTimeoutMilliseconds": 5000,
+  "auditIntervalMilliseconds": 10000,
+  "actionPolicy": {
+    "version": "svs-actions-denyall.v1",
+    "requirements": {}
+  },
+  "refill": {
+    "databaseConnectionString": "Host=db.intranet;Database=treehammock;Username=treehammock_svs_refiller;Password=REPLACE_DISTINCT_REFILL_SQL_SECRET;SSL Mode=VerifyFull;Root Certificate=/run/svs/db-ca.cer;Enlist=false;Pooling=true;Maximum Pool Size=2;Minimum Pool Size=0;Timeout=2;Command Timeout=3;Cancellation Timeout=1000;Search Path=public,pg_catalog,pg_temp",
+    "publisherCache": {
+      "address": "10.0.0.30",
+      "port": 6379,
+      "tlsName": "cache.intranet",
+      "username": "svs-refiller",
+      "password": "REPLACE_DISTINCT_CACHE_PUBLISHER_SECRET",
+      "rootCertificatePath": "/run/svs/cache-ca.cer",
+      "leafSha256": "REPLACE_WITH_REVIEWED_UPPERCASE_SHA256"
+    },
+    "environment": "intranet",
+    "epoch": "REPLACE_WITH_FRESH_EPOCH_GUID",
+    "policy": "auth.v1",
+    "primaryRunId": "REPLACE_WITH_ACTUAL_40_LOWERCASE_HEX_RUN_ID",
+    "dragonflyVersion": "REPLACE_WITH_QUALIFIED_ENGINE_VERSION",
+    "queueCapacity": 128,
+    "workers": 2,
+    "publicationsPerSecond": 10,
+    "completedCooldownMilliseconds": 1000,
+    "maximumQueueAgeMilliseconds": 5000,
+    "operationTimeoutMilliseconds": 1500,
+    "warmupIntervalMilliseconds": 0
+  },
+  "fleet": {
+    "instanceId": "svs-1",
+    "realm": "REPLACE_WITH_FLEET_REALM_GUID",
+    "checkpointPath": "/var/lib/svs/fleet.checkpoint",
+    "bindAddress": "10.0.0.20",
+    "port": 8444,
+    "serverCertificatePath": "/run/svs/fleet-server.pfx",
+    "serverCertificatePassword": "REPLACE_WITH_FLEET_CERT_SECRET",
+    "controllerRootCertificatePath": "/run/svs/controller-ca.cer",
+    "controllerPins": [
+      "REPLACE_WITH_EXACT_64_UPPERCASE_HEX_CONTROLLER_PIN"
+    ],
+    "drainTimeoutMilliseconds": 10000
+  }
+}

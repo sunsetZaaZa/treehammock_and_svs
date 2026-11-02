@@ -1,0 +1,358 @@
+{
+  "qualification": "Copied Bash scripts with fake dotnet; no .NET/PowerShell/application tests executed. Fixture scripts made executable because uploaded ZIP stores no Unix modes.",
+  "results": [
+    {
+      "scenario": "bash_syntax_build-proof",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_check-locks",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_restore-locks",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_validate",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_release-proof",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_dotnet-unit-tests",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_dotnet-integration-tests",
+      "exit": 0
+    },
+    {
+      "scenario": "bash_syntax_sql-contracts",
+      "exit": 0
+    },
+    {
+      "scenario": "dotnet-unit-tests_stops_on_restore",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ]
+      ]
+    },
+    {
+      "scenario": "dotnet-unit-tests_stops_on_build",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ]
+      ]
+    },
+    {
+      "scenario": "dotnet-unit-tests_stops_on_test",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ],
+        [
+          "test",
+          "treehammock.Tests/treehammock.Tests.csproj",
+          "--configuration",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--filter",
+          "FullyQualifiedName~treehammock.Tests.Unit",
+          "--logger",
+          "trx;LogFileName=treehammock-unit-tests.trx"
+        ]
+      ]
+    },
+    {
+      "scenario": "dotnet-integration-tests_stops_on_restore",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ]
+      ]
+    },
+    {
+      "scenario": "dotnet-integration-tests_stops_on_build",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ]
+      ]
+    },
+    {
+      "scenario": "dotnet-integration-tests_stops_on_test",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ],
+        [
+          "test",
+          "treehammock.Tests/treehammock.Tests.csproj",
+          "--configuration",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--filter",
+          "FullyQualifiedName~treehammock.Tests.Integration",
+          "--logger",
+          "trx;LogFileName=treehammock-integration-tests.trx"
+        ]
+      ]
+    },
+    {
+      "scenario": "validate_stops_on_restore",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ]
+      ]
+    },
+    {
+      "scenario": "validate_stops_on_build",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ]
+      ]
+    },
+    {
+      "scenario": "validate_stops_on_test",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ],
+        [
+          "test",
+          "treehammock.Tests/treehammock.Tests.csproj",
+          "--configuration",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--filter",
+          "FullyQualifiedName~treehammock.Tests.Unit",
+          "--logger",
+          "trx;LogFileName=treehammock-unit-tests.trx"
+        ]
+      ]
+    },
+    {
+      "scenario": "build-proof_stops_on_restore",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ]
+      ]
+    },
+    {
+      "scenario": "build-proof_stops_on_build",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ]
+      ]
+    },
+    {
+      "scenario": "build-proof_stops_on_test",
+      "exit": 37,
+      "fake_dotnet_calls": [
+        [
+          "--info"
+        ],
+        [
+          "--info"
+        ],
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Release",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ],
+        [
+          "test",
+          "treehammock.Tests/treehammock.Tests.csproj",
+          "--configuration",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--filter",
+          "FullyQualifiedName~treehammock.Tests.Unit",
+          "--logger",
+          "trx;LogFileName=treehammock-unit-tests.trx"
+        ]
+      ]
+    },
+    {
+      "scenario": "unit_sandbox_coverage_argument_forwarding_only",
+      "exit": 0,
+      "fake_dotnet_calls": [
+        [
+          "restore",
+          "treehammock.sln",
+          "--use-lock-file",
+          "--locked-mode"
+        ],
+        [
+          "build",
+          "treehammock.sln",
+          "--configuration",
+          "Sandbox",
+          "--no-restore",
+          "-p:ContinuousIntegrationBuild=true"
+        ],
+        [
+          "test",
+          "treehammock.Tests/treehammock.Tests.csproj",
+          "--configuration",
+          "Sandbox",
+          "--no-build",
+          "--no-restore",
+          "--filter",
+          "FullyQualifiedName~treehammock.Tests.Unit",
+          "--logger",
+          "trx;LogFileName=treehammock-unit-tests.trx",
+          "--collect",
+          "XPlat Code Coverage"
+        ]
+      ]
+    },
+    {
+      "scenario": "missing_lock_rejected",
+      "exit": 1
+    }
+  ]
+}

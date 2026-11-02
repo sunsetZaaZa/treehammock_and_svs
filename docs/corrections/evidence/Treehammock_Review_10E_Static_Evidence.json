@@ -1,0 +1,1077 @@
+{
+  "evidence_kind": "Complete source review, attribute catalog, branch-derived examples and blocked runners; NOT application runtime qualification",
+  "reviewed_on": "2026-10-03",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_file_count": 451,
+  "source_unchanged_vs_upload": true,
+  "scope": {
+    "assigned_parent_chunk": "R10",
+    "selected_files": 4,
+    "complete_source_files": 4,
+    "selected_lines": 4239,
+    "selected_bytes": 248928,
+    "csharp_test_classes_inspected_not_executed": 4,
+    "additional_prior_chunk_file_completed": "Rigging/Authentication/Attributes/Authenticate.cs",
+    "remaining_R10_assigned_files": 40,
+    "prior_R06_partial_test_files_remain_deferred": 3,
+    "cross_chunk_inspection": {
+      "Rigging/Authentication/Attributes/Authenticate.cs": "R10E complete source cross-check of anonymous bypass and unauthorized envelope; no HTTP runtime execution.",
+      "Models/Api/ApiResponse.cs": "R10E complete model contract cross-check; R07 qualification retained.",
+      "Models/Api/ApiResponses.cs": "R10E InvalidModelState/error normalization/build slices; prior qualification retained.",
+      "Program.cs": "R10E controller model-state response factory and formatter registration slice; prior qualification retained.",
+      "treehammock.Tests/Infrastructure/AllowingAuthenticatedMutationIdempotencyService.cs": "R10E complete source cross-check: required key/normalization enforced, completion no-op; R09 qualification retained.",
+      "Rigging/Authentication/JsonWebTokenMiddleware.cs": "R10E targeted timeout, cached-session trust and rotation outcome slices; prior qualification retained.",
+      "Controllers/AccountLoginController.cs": "R10E login operation-name/location searches only; not a new full-file audit.",
+      "Controllers/AccountControllerBase.LoginHelpers.cs": "R10E lockout/failure/finalization call-site searches only; not a new full-file audit.",
+      "treehammock.Tests/Integration/AccountFlowRegressionTests.cs": "R10E complete strict failure-envelope helper at 1496\u20131501 and targeted name searches; full suite audit remains pending.",
+      "treehammock.Tests/Unit/AccountEndpointContractTests.cs": "R10E helper/assertion location searches only; full suite audit remains pending.",
+      "docs/release/API_ENDPOINT_MATRIX_1_0_0.md": "R10E targeted envelope/health exception and route-policy reference searches; full document audit remains pending.",
+      "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md": "R10E targeted session-cache/release qualification claims; full document audit remains pending."
+    },
+    "runtime_qualified": false,
+    "deduplicated_closure_requirements": {
+      "COR03": "Revise database-timeout/trust-unavailable client-clear assertions to the corrected transient outage contract, retaining denial of protected operations.",
+      "COR04": "Add timeout/late rotation completion and cancellation outcome schedules beyond indefinitely incomplete fake reads/writes.",
+      "COR05/COR08": "Prove admission before credential/password work with call-order and no-side-effect assertions; real counter/SQL races close atomicity findings.",
+      "COR09": "Reconcile old-session mismatch/client-clear assertions with winner/loser refresh behavior, ownership and stable management IDs.",
+      "COR10": "Retain preauth state/selection separation while qualifying fresh challenge authority, stamp/expiry and replacement races with real storage.",
+      "COR17/COR06": "Profile-change HTTP tests must qualify actual fresh proof and request-bound replay; the allowing fixture proves key syntax/admission only.",
+      "COR01/COR24": "Reconcile earlier source evidence versus legacy qualification markers before making a global every-file completion claim; source test counts are not runtime discovery."
+    },
+    "global_coverage_caveat": "R10 remainder is not a global outstanding-file count. Earlier R01\u2013R05 evidence includes full-source contracts and indexed/partial suites with legacy qualification markers; reconcile per-file before final completion."
+  },
+  "selected_file_metadata": {
+    "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs": {
+      "sha256": "b6e3e259255fcfef941a9670a7a0d293ab6bbdb0cf1f0da7ab10d4c19adff008",
+      "lines": 1879,
+      "bytes": 121955
+    },
+    "treehammock.Tests/Unit/JsonWebTokenMiddlewareTests.cs": {
+      "sha256": "a99aab56d6cec5394649f3f328bc757f9289cdf4f601c1b4459e1af441cfaf9b",
+      "lines": 1600,
+      "bytes": 96460
+    },
+    "treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs": {
+      "sha256": "ba5a890e3e057fc160ae40e5a4492abf4e272f255336dfb05b954cc9965ccccc",
+      "lines": 405,
+      "bytes": 15919
+    },
+    "treehammock.Tests/Integration/AccountAdjustIntegrationTests.cs": {
+      "sha256": "02aa03f343b197df3ea5ee9675c9d848ce8d7cffd8b5792fa668e4b56a41e235",
+      "lines": 355,
+      "bytes": 14594
+    }
+  },
+  "source_attribute_counts_NOT_runtime_discovery": {
+    "fact_methods": 113,
+    "theory_methods": 9,
+    "inline_data_rows": 14,
+    "member_data_references": 3,
+    "member_data_yield_rows": 13,
+    "attributed_methods": 122
+  },
+  "source_inspected_test_method_catalog_NOT_executed": {
+    "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs": [
+      {
+        "method": "Authenticate_rejects_invalid_password_shape_without_loading_account",
+        "line": 26,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_resolves_login_identifier_once_before_loading_account",
+        "line": 41,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 40,
+            "source_start": "[MemberData(nameof(LoginIdentifierCases))]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_rejects_invalid_login_identifier_without_loading_account",
+        "line": 58,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 57,
+            "source_start": "[MemberData(nameof(InvalidLoginIdentifierCases))]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_rejects_supplied_invalid_identifier_even_when_other_identifier_is_valid",
+        "line": 78,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 77,
+            "source_start": "[MemberData(nameof(SuppliedInvalidLoginIdentifierCases))]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_returns_duplicate_when_middleware_already_authenticated_request",
+        "line": 97,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_returns_verification_pending_after_password_check",
+        "line": 113,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 111,
+            "source_start": "[InlineData(VerificationStatus.SENT)]"
+          },
+          {
+            "line": 112,
+            "source_start": "[InlineData(VerificationStatus.REFRESHED)]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_bad_password_on_unverified_account_does_not_disclose_verification_state",
+        "line": 131,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_expired_verification_below_retry_limit_requests_renewal",
+        "line": 149,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_expired_verification_returns_locked_when_failure_increment_triggers_lockout",
+        "line": 169,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_active_lockout_returns_time_locked_and_does_not_attempt_session_work",
+        "line": 192,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_expired_lockout_is_removed_before_successful_login",
+        "line": 210,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_expired_lockout_cleanup_resets_failure_count_before_next_bad_password",
+        "line": 232,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_expired_lockout_cleanup_failure_returns_500",
+        "line": 260,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 258,
+            "source_start": "[InlineData(false)]"
+          },
+          {
+            "line": 259,
+            "source_start": "[InlineData(null)]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_bad_password_increments_failure_count",
+        "line": 287,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_bad_password_at_retry_limit_sets_lockout_and_returns_423",
+        "line": 305,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_bad_password_login_failure_persistence_failure_returns_500",
+        "line": 329,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 327,
+            "source_start": "[InlineData(false)]"
+          },
+          {
+            "line": 328,
+            "source_start": "[InlineData(null)]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_bad_password_lockout_persistence_failure_returns_500",
+        "line": 354,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 352,
+            "source_start": "[InlineData(false)]"
+          },
+          {
+            "line": 353,
+            "source_start": "[InlineData(null)]"
+          }
+        ]
+      },
+      {
+        "method": "Authenticate_cutoff_expired_not_logged_in_returns_401_without_creating_session",
+        "line": 378,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_cutoff_expired_two_factor_account_returns_401_without_pending_session",
+        "line": 404,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_without_two_factor_creates_active_session",
+        "line": 431,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_future_cutoff_is_copied_into_active_session",
+        "line": 457,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_without_cutoff_uses_short_access_expiration",
+        "line": 491,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_cutoff_after_short_period_still_uses_short_access_expiration",
+        "line": 520,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_cutoff_before_short_period_caps_access_expiration",
+        "line": 551,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_db_session_write_failure_returns_no_token",
+        "line": 578,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_redis_session_write_failure_still_returns_token_without_db_rollback",
+        "line": 601,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_successful_login_failure_rolls_back_cache_and_db_session",
+        "line": 626,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_rotation_db_failure_does_not_revoke_old_cache_or_publish_new_cache_session",
+        "line": 651,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_without_two_factor_rotates_session_db_first_then_cache_then_best_effort_old_revoke",
+        "line": 679,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_password_rotation_resets_refresh_count_and_database_lifespan",
+        "line": 729,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_without_stored_active_hash_fails_without_rotating_session",
+        "line": 784,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_old_active_cache_revoke_false_after_success_still_returns_token",
+        "line": 807,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_old_hash_mismatch_does_not_revoke_old_cache_or_write_new_cache",
+        "line": 838,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_new_cache_write_failure_still_returns_token_without_db_rollback",
+        "line": 865,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_old_active_cache_revoke_exception_after_success_still_returns_token",
+        "line": 896,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_finalization_failure_returns_db_rollback_failure_code_when_db_expire_fails",
+        "line": 928,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_finalization_failure_treats_cache_revoke_failure_as_nonfatal_when_db_expire_succeeds",
+        "line": 956,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_not_logged_in_cache_write_failure_never_expires_created_db_session",
+        "line": 984,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_new_cache_write_failure_never_expires_promoted_db_session",
+        "line": 1010,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_creates_pending_session_instead_of_active_session",
+        "line": 1041,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_future_cutoff_is_copied_into_pending_session",
+        "line": 1091,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_already_logged_in_with_two_factor_captures_prior_active_session_hash_for_final_rotation",
+        "line": 1125,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_revokes_previous_pending_session_after_replacing_database_pointer",
+        "line": 1171,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_cache_failure_does_not_persist_pending_token",
+        "line": 1217,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_persistence_failure_revokes_pending_cache_session",
+        "line": 1242,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_persistence_failure_and_revoke_failure_returns_revoke_failure",
+        "line": 1272,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_but_no_available_methods_fails_without_creating_session",
+        "line": 1302,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_details_found_but_only_none_method_fails_without_creating_session",
+        "line": 1323,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_details_found_but_missing_destination_fails_without_creating_session",
+        "line": 1351,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_verified_method_details_ignores_legacy_selected_account_method",
+        "line": 1379,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_authenticator_app_only_two_factor_details_creates_pending_session",
+        "line": 1420,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_email_sms_and_authenticator_app_details_advertises_all_verified_methods",
+        "line": 1468,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_details_lookup_failure_returns_lookup_failure",
+        "line": 1539,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_cache_exception_returns_challenge_persistence_failure",
+        "line": 1565,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_with_two_factor_persistence_failure_and_revoke_exception_returns_revoke_failure",
+        "line": 1593,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_abuse_policy_increments_ip_and_identifier_before_account_lookup",
+        "line": 1627,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_ip_throttle_returns_429_before_account_lookup",
+        "line": 1667,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_counter_unavailable_fails_closed_before_account_lookup",
+        "line": 1700,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_account_throttle_runs_after_sql_lockout_check",
+        "line": 1732,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_login_account_throttle_denies_generically_before_password_verification_and_sql_failure_increment",
+        "line": 1755,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticate_successful_password_resets_account_and_identifier_login_abuse_counters",
+        "line": 1791,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests/Unit/JsonWebTokenMiddlewareTests.cs": [
+      {
+        "method": "InvokeAsync_without_access_token_calls_next_once_and_leaves_context_unauthenticated",
+        "line": 21,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_valid_cached_session_sets_context_items_and_calls_next_once",
+        "line": 45,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_stale_cached_session_clears_token_without_authenticating",
+        "line": 85,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 81,
+            "source_start": "[InlineData(CachedSessionTrustStatus.SessionNotFound)]"
+          },
+          {
+            "line": 82,
+            "source_start": "[InlineData(CachedSessionTrustStatus.AccountNotFound)]"
+          },
+          {
+            "line": 83,
+            "source_start": "[InlineData(CachedSessionTrustStatus.SecurityStampMismatch)]"
+          },
+          {
+            "line": 84,
+            "source_start": "[InlineData(CachedSessionTrustStatus.AccountSecurityStampMismatch)]"
+          }
+        ]
+      },
+      {
+        "method": "InvokeAsync_with_cached_session_and_database_cutoff_update_clears_token_without_authenticating",
+        "line": 118,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_cached_session_uses_database_access_expiration_before_jwt_validation",
+        "line": 154,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_cached_session_and_database_access_expiration_expired_clears_token_without_authenticating",
+        "line": 200,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_cached_session_and_database_session_expiration_expired_clears_token_without_authenticating",
+        "line": 241,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_cutoff_expired_cached_session_clears_token_without_authenticating",
+        "line": 282,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_cutoff_expired_database_session_clears_token_without_cache_rehydrate",
+        "line": 317,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_misses_uses_database_session_before_validation",
+        "line": 352,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_misses_uses_database_access_expiration_not_hard_session_expiration",
+        "line": 391,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_access_expiration_is_expired_rejects_even_when_hard_session_is_valid",
+        "line": 429,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_refreshable_token_under_refresh_limit_rotates_token_and_sets_response_header",
+        "line": 462,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshing_token_uses_short_access_expiration_not_session_lifespan",
+        "line": 512,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshing_token_does_not_extend_beyond_hard_session_expiration",
+        "line": 573,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshing_token_with_cutoff_after_short_period_still_uses_short_access_expiration",
+        "line": 630,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshing_token_does_not_extend_beyond_account_cutoff",
+        "line": 694,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_session_is_missing_calls_next_without_validation",
+        "line": 752,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refresh_rotation_fails_does_not_revoke_old_session",
+        "line": 779,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refresh_rotation_reports_old_session_mismatch_revokes_stale_old_cache",
+        "line": 820,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refresh_rotation_throws_fails_without_cache_or_database_cleanup",
+        "line": 862,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_old_cache_revoke_returns_false_still_returns_refreshed_token",
+        "line": 902,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_old_cache_revoke_throws_still_returns_refreshed_token",
+        "line": 945,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshed_cache_write_returns_false_still_returns_refreshed_token_without_db_rollback",
+        "line": 987,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_refreshed_cache_write_throws_still_returns_refreshed_token_without_db_rollback",
+        "line": 1031,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_expired_token_over_refresh_limit_tells_client_to_clear_token",
+        "line": 1076,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_with_fully_expired_token_does_not_refresh_and_tells_client_to_clear_token",
+        "line": 1108,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_session_is_used_rehydrates_cache_with_features_and_cutoff",
+        "line": 1142,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_active_cache_payload_is_stale_revokes_cache_and_uses_database_session",
+        "line": 1191,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_active_cache_payload_is_stale_and_database_misses_revokes_cache_and_leaves_request_unauthenticated",
+        "line": 1228,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_read_throws_uses_database_session_before_validation",
+        "line": 1260,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_read_throws_and_database_misses_leaves_request_unauthenticated",
+        "line": 1295,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_session_cache_rehydrate_throws_still_authenticates_request",
+        "line": 1325,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_session_cache_rehydrate_returns_false_still_authenticates_request",
+        "line": 1359,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_read_times_out_uses_database_session_before_validation",
+        "line": 1393,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cache_read_times_out_and_database_times_out_denies_without_jwt_validation",
+        "line": 1428,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_cached_session_trust_validation_times_out_denies_without_jwt_validation",
+        "line": 1460,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "InvokeAsync_when_database_session_cache_rehydrate_times_out_still_authenticates_request",
+        "line": 1493,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests/Integration/ApiValidationEnvelopeTests.cs": [
+      {
+        "method": "Missing_body_returns_standard_validation_envelope",
+        "line": 16,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Malformed_json_returns_standard_validation_envelope",
+        "line": 32,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Invalid_model_data_returns_standard_validation_envelope",
+        "line": 48,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "None_two_factor_configuration_returns_standard_validation_envelope",
+        "line": 70,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Negative_two_factor_destination_returns_standard_validation_envelope",
+        "line": 91,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Empty_two_factor_code_key_returns_standard_validation_envelope",
+        "line": 112,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_config_validation_returns_standard_validation_envelope",
+        "line": 133,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_login_validation_rejects_supplied_short_username",
+        "line": 154,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_login_validation_rejects_supplied_invalid_email_even_with_valid_username",
+        "line": 176,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_setup_validation_rejects_supplied_short_username",
+        "line": 198,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_setup_validation_rejects_country_none",
+        "line": 221,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Runtime_setup_validation_returns_standard_validation_envelope",
+        "line": 243,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Custom_anonymous_requestaccess_reaches_model_validation_without_active_token",
+        "line": 265,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Custom_anonymous_setupaccount_reaches_model_validation_without_active_token",
+        "line": 285,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Unauthorized_protected_endpoint_returns_standard_auth_envelope",
+        "line": 307,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Unauthenticated_protected_placeholder_with_missing_body_returns_auth_envelope",
+        "line": 321,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ],
+    "treehammock.Tests/Integration/AccountAdjustIntegrationTests.cs": [
+      {
+        "method": "Authenticated_adjust_empty_body_object_returns_validation_failed",
+        "line": 32,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticated_adjust_missing_required_idempotency_key_returns_precondition_required",
+        "line": 46,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticated_adjust_email_only_returns_pending_verification",
+        "line": 65,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticated_adjust_username_only_returns_success",
+        "line": 91,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticated_adjust_duplicate_username_returns_bad_request",
+        "line": 117,
+        "attribute": "Fact",
+        "data_attributes": []
+      },
+      {
+        "method": "Authenticated_adjust_blank_or_email_plus_valid_field_returns_validation_failed",
+        "line": 155,
+        "attribute": "Theory",
+        "data_attributes": [
+          {
+            "line": 143,
+            "source_start": "[InlineData(\"\"\""
+          },
+          {
+            "line": 149,
+            "source_start": "[InlineData(\"\"\""
+          }
+        ]
+      },
+      {
+        "method": "Authenticated_adjust_with_stale_cached_session_trust_returns_unauthorized",
+        "line": 168,
+        "attribute": "Fact",
+        "data_attributes": []
+      }
+    ]
+  },
+  "member_data_source_yields_NOT_runtime_discovery": {
+    "LoginIdentifierCases": {
+      "file": "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs",
+      "rows_in_source": [
+        {
+          "line": 1875,
+          "source": "yield return new object[] { new AuthenticateLogin(\"reader@example.com\", AccountControllerHarness.ValidPassword), AccountLoginAction.EMAIL };"
+        },
+        {
+          "line": 1876,
+          "source": "yield return new object[] { new AuthenticateLogin(null!, \"reader\", AccountControllerHarness.ValidPassword), AccountLoginAction.USERNAME };"
+        },
+        {
+          "line": 1877,
+          "source": "yield return new object[] { new AuthenticateLogin(\"reader@example.com\", \"reader\", AccountControllerHarness.ValidPassword), AccountLoginAction.BOTH };"
+        }
+      ]
+    },
+    "InvalidLoginIdentifierCases": {
+      "file": "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs",
+      "rows_in_source": [
+        {
+          "line": 1857,
+          "source": "yield return new object[] { new AuthenticateLogin(\"not-an-email\", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1858,
+          "source": "yield return new object[] { new AuthenticateLogin(\"\", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1859,
+          "source": "yield return new object[] { new AuthenticateLogin(\"   \", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1860,
+          "source": "yield return new object[] { new AuthenticateLogin(null!, \"ab\", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1861,
+          "source": "yield return new object[] { new AuthenticateLogin(null!, \"\", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1862,
+          "source": "yield return new object[] { new AuthenticateLogin(null!, \"   \", AccountControllerHarness.ValidPassword) };"
+        },
+        {
+          "line": 1863,
+          "source": "yield return new object[] { new AuthenticateLogin(new string('a', 260) + \"@example.com\", AccountControllerHarness.ValidPassword) };"
+        }
+      ]
+    },
+    "SuppliedInvalidLoginIdentifierCases": {
+      "file": "treehammock.Tests/Unit/AccountControllerAuthenticateTests.cs",
+      "rows_in_source": [
+        {
+          "line": 1868,
+          "source": "yield return new object[] { new AuthenticateLogin(\"not-an-email\", \"reader\", AccountControllerHarness.ValidPassword), nameof(AuthenticateLogin.emailAddress) };"
+        },
+        {
+          "line": 1869,
+          "source": "yield return new object[] { new AuthenticateLogin(\"reader@example.com\", \"ab\", AccountControllerHarness.ValidPassword), nameof(AuthenticateLogin.username) };"
+        },
+        {
+          "line": 1870,
+          "source": "yield return new object[] { new AuthenticateLogin(\"reader@example.com\", new string('u', 31), AccountControllerHarness.ValidPassword), nameof(AuthenticateLogin.username) };"
+        }
+      ]
+    }
+  },
+  "static_checks": {
+    "both_failure_helpers_allow_status_only_fallback": true,
+    "validation_errors_accept_array_or_object": true,
+    "adjust_validation_errors_accept_object_map": true,
+    "production_api_model_requires_success_statusCode_code": true,
+    "production_api_validation_errors_are_list_records": true,
+    "production_model_binding_uses_envelope_factory": true,
+    "production_unauthorized_filter_uses_envelope": true,
+    "other_http_suite_failure_helper_is_strict": true,
+    "middleware_tests_substitute_crypto_cache_and_repository": true,
+    "middleware_timeout_cases_use_incomplete_tasks_and_ten_ms_settings": true,
+    "middleware_timeout_case_asserts_client_clear": true,
+    "login_rotation_test_checks_actual_mock_call_sequence": true,
+    "login_counter_before_lookup_test_has_no_order_assertion": true,
+    "adjust_factory_uses_allowing_replay_fixture": true,
+    "allowing_replay_fixture_checks_required_key_and_normalization": true,
+    "allowing_replay_fixture_completion_has_no_storage": true
+  },
+  "original_runner_attempts": [
+    {
+      "command": "bash eng/dotnet-unit-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the unit-test lane.\n"
+    },
+    {
+      "command": "bash eng/dotnet-integration-tests.sh --configuration Release --locked-restore",
+      "exit": 127,
+      "stdout": "",
+      "stderr": "The .NET SDK is required to run the integration-test lane.\n"
+    }
+  ],
+  "runtime_tools": {
+    "dotnet": null,
+    "pwsh": null,
+    "powershell.exe": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "new_finding_pr_ownership": {
+    "R10E-01": "COR23AC"
+  },
+  "source_derived_nonconforming_examples_NOT_executed": [
+    {
+      "helper": "ApiValidationEnvelopeTests.AssertFailureEnvelope plus AssertHasValidationErrorFor(password)",
+      "expected_http_status": 400,
+      "expected_code": "VALIDATION_FAILED",
+      "body": {
+        "status": 400,
+        "errors": {
+          "password": [
+            "invalid"
+          ]
+        }
+      },
+      "reason": "Absent success takes the status-only branch; object error map contains password. Required success/statusCode/code and array record schema are not checked."
+    },
+    {
+      "helper": "AccountAdjustIntegrationTests.AssertFailureEnvelope for missing required idempotency key",
+      "expected_http_status": 428,
+      "body": {
+        "status": 428
+      },
+      "reason": "Absent success takes the status-only branch; required success/statusCode/code are not checked."
+    }
+  ],
+  "qualification": {
+    "application": "Not compiled, discovered or executed",
+    "http": "No TestServer or real HTTP request executed; examples are source-derived reasoning only",
+    "storage": "No PostgreSQL or Redis-compatible execution",
+    "performance": "Not measured"
+  },
+  "remaining_R10_paths": [
+    "Dependencies/CityHash.dll.config",
+    "Dependencies/CityHash_103.dll",
+    "README.md",
+    "docs/release/API_ENDPOINT_MATRIX_1_0_0.md",
+    "docs/release/PASSWORD_RESET_1_0_0.md",
+    "docs/release/RELEASE_FEATURE_MATRIX_1_0_0.md",
+    "docs/sql/SQL_CONTRACT_MATRIX_1_0_0.md",
+    "docs/testing/TEST_COMMAND_GUIDE.md",
+    "docs/testing/treehammock-test-suite-inventory.html",
+    "ops/grafana/dashboards/abuse-controls-1-0-0.json",
+    "tests/http/bruno/treehammock/bruno.json",
+    "tests/http/bruno/treehammock/environments/docker-direct.bru",
+    "tests/http/bruno/treehammock/environments/docker-proxy.bru",
+    "treehammock.Tests/Integration/AccountFlowRegressionTests.cs",
+    "treehammock.Tests/Integration/StartupConfigurationTests.cs",
+    "treehammock.Tests/Unit/AccountControllerSafeRepoWrapperTests.cs",
+    "treehammock.Tests/Unit/AccountEndpointContractTests.cs",
+    "treehammock.Tests/Unit/AccountRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/AccountRepoMappingTests.cs",
+    "treehammock.Tests/Unit/AccountServiceSetupTests.cs",
+    "treehammock.Tests/Unit/CacheJsonSettingsTests.cs",
+    "treehammock.Tests/Unit/GreenfieldApiNegativeContractTests.cs",
+    "treehammock.Tests/Unit/HostingProfileConfigurationTests.cs",
+    "treehammock.Tests/Unit/HostingSettingsTests.cs",
+    "treehammock.Tests/Unit/HostingStartupContractTests.cs",
+    "treehammock.Tests/Unit/LaunchSettingsJsonTests.cs",
+    "treehammock.Tests/Unit/ModelValidationConsistencyTests.cs",
+    "treehammock.Tests/Unit/RepositoryContractTests.cs",
+    "treehammock.Tests/Unit/RepositoryFailureBoundaryTests.cs",
+    "treehammock.Tests/Unit/SessionRepoBooleanContractTests.cs",
+    "treehammock.Tests/Unit/SessionSqlConcurrencyContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockEnvironmentContractTests.cs",
+    "treehammock.Tests/Unit/TreehammockLicenseTests.cs",
+    "treehammock.Tests/Unit/TreehammockRenameCompletionTests.cs",
+    "treehammock.Tests.SqlContracts/GlobalUsings.cs",
+    "treehammock.Tests.SqlContracts/Properties/AssemblyInfo.cs",
+    "treehammock.Tests.System/AssemblyInfo.cs",
+    "treehammock.Tests.System/GlobalUsings.cs",
+    "treehammock.Tests.System/Support/TreehammockEnvironment.cs",
+    "treehammock.Tests.System/SystemStackAccountFlowTests.cs"
+  ]
+}

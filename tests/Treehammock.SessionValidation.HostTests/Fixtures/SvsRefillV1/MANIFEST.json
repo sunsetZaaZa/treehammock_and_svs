@@ -1,0 +1,11 @@
+{
+  "protocol": "authority-fleet.v2",
+  "fixture_only": true,
+  "native_qualification": false,
+  "files": {
+    "fleet-binding-v2.json": "9c3bc63b6768fe4fe71b79d4bd9e63828a597380ab9927baff2580d2d487d61d",
+    "fleet-inventory-v2.json": "e2b46ac3d2b107a18e1819e74ea2431c026e48f27c85c887cf2b66fbf5c047d5",
+    "fleet-prepare-v2.json": "d48af86c96530677550feecf037401b53963ff740e3cdd5c04552e04d573feb2",
+    "fleet-rejection-v2.json": "2bbb63ee30e93450e0a02831e7b68d20ff4f949ab2be93199532f9aa3d695084"
+  }
+}

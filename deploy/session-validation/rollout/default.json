@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "mode": "shadow",
+  "enforcement_basis_points": 0,
+  "configuration_applied": false,
+  "promotion_status": "BlockedNativeQualification",
+  "native_acceptance": "NotRun",
+  "shadow_can_grant": false,
+  "on_authority_unavailable": "503",
+  "local_jwt_fallback": false,
+  "legacy_json_fallback": false,
+  "ramp_basis_points": [0, 100, 500, 2500, 10000],
+  "scope": "operator review template; not consumed by request admission"
+}

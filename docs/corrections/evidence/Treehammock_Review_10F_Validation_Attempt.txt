@@ -1,0 +1,19 @@
+R10F original runners; no C# fixture simulations
+
+Command: bash eng/dotnet-unit-tests.sh --configuration Release --locked-restore
+Exit: 127
+STDOUT:
+
+STDERR:
+The .NET SDK is required to run the unit-test lane.
+
+
+Command: bash eng/dotnet-integration-tests.sh --configuration Release --locked-restore
+Exit: 127
+STDOUT:
+
+STDERR:
+The .NET SDK is required to run the integration-test lane.
+
+Runtime tools: {"dotnet": null, "pwsh": null, "powershell.exe": null, "docker": null, "psql": null, "postgres": null, "redis-server": null}
+Both attempts stopped before restore/build/discovery/test. No C# tests, HTTP requests, host teardown probes, real SQL/cache contracts or benchmarks executed.

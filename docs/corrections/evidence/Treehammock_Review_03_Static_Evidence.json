@@ -1,0 +1,290 @@
+{
+  "evidence_kind": "Source structural facts and test-method metadata; NOT runtime tests",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_unchanged_vs_uploaded_archive": true,
+  "source_file_count": 451,
+  "mapped_R03_files": 28,
+  "source_files_with_R03_notes": 51,
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "static_checks": {
+    "email_sms_setup_action_has_no_sensitive_action_validation": true,
+    "email_sms_verification_account_read_is_unlocked": true,
+    "email_sms_verification_has_no_row_count_check": true,
+    "email_sms_verification_factor_write_precedes_account_write": true,
+    "email_sms_verification_returns_success_after_conditional_account_update": true,
+    "default_and_example_protection_keys_identical": true,
+    "default_protection_key_has_valid_32_byte_shape": true,
+    "protected_secret_model_has_no_key_id": true,
+    "totp_verifier_uses_global_parameters": true,
+    "enrollment_record_has_no_algorithm_parameters": true,
+    "removal_locks_account_before_factor_write": true,
+    "email_sms_begin_has_no_row_lock_or_row_count_check": true,
+    "setup_delivery_calls_omit_account_id": true,
+    "delivery_account_counter_is_conditional": true,
+    "login_server_failure_classifier_omits_enrollment_unavailable": true,
+    "email_sms_begin_and_verify_do_not_clear_totp_columns": true,
+    "authenticator_completion_rotates_stamp_and_session": true,
+    "shared_totp_step_guard_is_locked_and_monotonic": true,
+    "sensitive_action_validation_locks_and_consumes_token": true,
+    "sensitive_action_validation_does_not_read_live_account_or_session": true
+  },
+  "sql_functions": {
+    "begin_twofactor_setup": {
+      "start_line": 3475,
+      "sha256": "1ef85196629231e6df105a236e028d0c117039f23ce17b095450eb47b88477e7",
+      "equal_in_second_baseline": true
+    },
+    "cancel_twofactor_setup": {
+      "start_line": 3647,
+      "sha256": "22aef47b55093a85981fb0ee6c29b9476bcd660d648dd2a662a9e16be7f21b3b",
+      "equal_in_second_baseline": true
+    },
+    "verify_twofactor_setup": {
+      "start_line": 3691,
+      "sha256": "1082c75de9a5b1e77487e577743ae42928640fe5aec97ccd4f97169ea07a8c7f",
+      "equal_in_second_baseline": true
+    },
+    "remove_twofactor_method": {
+      "start_line": 3842,
+      "sha256": "c996187efa7ead80d2140c19b73c6b8c845f92af6580cfb39b41b874c0493bb9",
+      "equal_in_second_baseline": true
+    },
+    "begin_authenticator_app_setup": {
+      "start_line": 4036,
+      "sha256": "b9f90e2e567a4f79fd9c0c11fba013083827450060849431b06b174ab65c1f62",
+      "equal_in_second_baseline": true
+    },
+    "get_pending_authenticator_app_setup": {
+      "start_line": 4086,
+      "sha256": "23b3470639f523650887fe00942e8305b51f99ba39bfe813b7db4253ef7fca5d",
+      "equal_in_second_baseline": true
+    },
+    "record_authenticator_app_setup_failure": {
+      "start_line": 4103,
+      "sha256": "cc6a68bd17f1e23a63b37a10e59b63151d78f40eb026418b9a58f5f8487951bf",
+      "equal_in_second_baseline": true
+    },
+    "complete_authenticator_app_setup_and_rotate_session": {
+      "start_line": 4142,
+      "sha256": "d86d3c0e348f0884eff36468041ee585c73361f31c95b9079a35207d6c2a4e96",
+      "equal_in_second_baseline": true
+    },
+    "cancel_authenticator_app_setup": {
+      "start_line": 4225,
+      "sha256": "534e9f9ca3be231cd7d21c84d43c17dc824adac4e23c8362474ffd3e8ae3bab9",
+      "equal_in_second_baseline": true
+    },
+    "get_verified_totp_enrollment_for_account": {
+      "start_line": 4244,
+      "sha256": "a91b0b55f6e0da38d303b4164e2334f805bbae005f41ae7ce0ba9bd745ce491c",
+      "equal_in_second_baseline": true
+    },
+    "mark_totp_step_used": {
+      "start_line": 4263,
+      "sha256": "5bf82691d33327b5124c5d9885fece3d3ffa1677209250087de8e95e888f6ee4",
+      "equal_in_second_baseline": true
+    },
+    "get_account_reauthentication_credentials": {
+      "start_line": 1051,
+      "sha256": "d56037be1232b6e5a08ed786a53f61561cce24a521031d0867fdbe025915613a",
+      "equal_in_second_baseline": true
+    },
+    "issue_sensitive_action_token": {
+      "start_line": 1076,
+      "sha256": "016db519c1ba72bf8206113328e974790e6131a9185ebc4365bb99799e4823ab",
+      "equal_in_second_baseline": true
+    },
+    "validate_sensitive_action_token": {
+      "start_line": 1168,
+      "sha256": "b8d0e951578bf703b33d6f6c0c25147cb5836fb1bba559d9aa2d690fde54b32d",
+      "equal_in_second_baseline": true
+    },
+    "resolve_available_twofactor_configurations": {
+      "start_line": 226,
+      "sha256": "5601a6beeb83e053e3809a88fadbeba940b2b2573a5ebc11ae92c5277be6d1bf",
+      "equal_in_second_baseline": true
+    }
+  },
+  "test_method_surface_catalog": {
+    "treehammock.Tests/Unit/AccountCryptoSizesTests.cs": [
+      "Account_crypto_sizes_are_single_source_of_truth",
+      "Account_crypto_storage_contract_matches_database_types"
+    ],
+    "treehammock.Tests/Unit/AuthenticatorAppEnrollmentSqlContractTests.cs": [
+      "AuthenticatorAppEnrollmentRepo_declares_sql_function_constants",
+      "AuthenticatorAppEnrollmentRepo_uses_expected_database_types",
+      "AuthenticatorAppEnrollmentRepo_interface_exposes_setup_and_shared_totp_contracts",
+      "Begin_setup_command_stores_protected_secret_and_hashed_setup_identifier_only",
+      "Authenticator_setup_result_models_do_not_carry_plaintext_secret_or_totp_code",
+      "Authenticator_completion_result_carries_rotated_account_security_stamp",
+      "Pending_setup_record_carries_protected_secret_fields_only",
+      "Canonical_sql_contains_authenticator_app_enrollment_functions_and_provider_columns",
+      "Two_factor_details_sql_advertises_only_usable_local_authenticator_enrollments",
+      "Authenticator_completion_sql_recomputes_two_auth_usage_from_usable_verified_methods"
+    ],
+    "treehammock.Tests/Unit/AuthenticatorAppLoginVerifierTests.cs": [
+      "VerifyForLogin_succeeds_for_valid_local_enrollment_code_and_marks_step_used",
+      "VerifyForLogin_fails_closed_when_enrollment_is_missing",
+      "VerifyForLogin_fails_for_managed_provider_until_provider_contract_exists",
+      "VerifyForLogin_fails_for_wrong_code_without_marking_step_used",
+      "VerifyForLogin_fails_when_step_marking_rejects_replay"
+    ],
+    "treehammock.Tests/Unit/AuthenticatorAppProvisioningServiceTests.cs": [
+      "Base32_encoder_emits_rfc4648_uppercase_without_padding",
+      "Provisioning_uri_builder_emits_standard_otpauth_uri",
+      "Local_provider_creates_manual_key_and_uri_for_standard_authenticator_apps",
+      "Provider_registry_uses_local_rfc6238_as_default_provider",
+      "Setup_service_protects_secret_and_stores_only_token_hash_in_sql_command",
+      "Setup_service_returns_already_attached_code_without_secret_material_when_repo_rejects_duplicate",
+      "Setup_service_rejects_managed_provider_until_dedicated_provider_contract_exists",
+      "Setup_service_cancels_pending_setup_using_hashed_setup_id",
+      "Setup_service_records_failure_when_setup_totp_is_invalid",
+      "Setup_service_completes_valid_totp_by_calling_atomic_rotation_contract",
+      "Setup_result_model_does_not_expose_raw_binary_secret",
+      "BeginAuthenticatorAppSetupAsync",
+      "GetPendingAuthenticatorAppSetupAsync",
+      "RecordAuthenticatorAppSetupFailureAsync",
+      "CompleteAuthenticatorAppSetupAndRotateSessionAsync",
+      "CancelAuthenticatorAppSetupAsync",
+      "GetVerifiedTotpEnrollmentForAccountAsync",
+      "MarkTotpStepUsedAsync"
+    ],
+    "treehammock.Tests/Unit/SecretHashUtilityTests.cs": [
+      "HashLookupToken_returns_stable_lowercase_sha256_hex_hash",
+      "HashOptionalLookupToken_returns_null_for_empty_optional_secrets",
+      "HashOptionalLookupToken_hashes_non_empty_optional_secrets",
+      "Argon2id_user_secret_hasher_verifies_correct_secret_and_rejects_wrong_secret"
+    ],
+    "treehammock.Tests/Unit/SecurityStampModelTests.cs": [
+      "Account_security_stamp_guard_rejects_null_stamp",
+      "Account_security_stamp_guard_rejects_empty_stamp",
+      "ActiveSession_generates_non_empty_security_stamp_when_not_provided",
+      "ActiveSession_replaces_empty_security_stamp_with_non_empty_stamp",
+      "ActiveSession_rejects_missing_or_empty_account_security_stamp",
+      "Session_generates_non_empty_security_stamp_when_not_provided",
+      "Session_replaces_empty_security_stamp_with_non_empty_stamp",
+      "Session_rejects_missing_or_empty_account_security_stamp",
+      "TwoFactorSession_rejects_missing_or_empty_account_security_stamp",
+      "IntraAccount_rejects_missing_or_empty_account_security_stamp"
+    ],
+    "treehammock.Tests/Unit/SensitiveActionTokenServiceTests.cs": [
+      "Reauthenticate_issues_hashed_scoped_token_when_password_is_correct",
+      "Reauthenticate_does_not_issue_token_when_password_is_wrong",
+      "Reauthenticate_does_not_issue_token_for_unverified_account"
+    ],
+    "treehammock.Tests/Unit/TotpCodeVerifierTests.cs": [
+      "Verify_accepts_valid_current_totp_code",
+      "Verify_accepts_previous_step_within_configured_skew",
+      "Verify_rejects_code_outside_configured_skew",
+      "Verify_rejects_replayed_step",
+      "Verify_rejects_malformed_codes",
+      "ComputeCode_matches_known_RFC_6238_sha1_test_vector"
+    ],
+    "treehammock.Tests/Unit/TotpHardeningRegressionTests.cs": [
+      "Authenticator_setup_api_requires_sensitive_action_for_start_and_idempotency_for_setup_verify_cancel",
+      "Authenticator_setup_idempotency_replay_does_not_replay_secret_material",
+      "Login_and_password_reset_share_verified_enrollment_and_replay_marker",
+      "Authenticator_setup_completion_sql_is_atomic_and_rotates_current_session",
+      "Local_totp_hardening_does_not_log_raw_setup_or_totp_proof_material",
+      "Sensitive_action_tokens_are_hash_only_short_lived_and_purpose_bound"
+    ],
+    "treehammock.Tests/Unit/TotpSecretProtectionServiceTests.cs": [
+      "Protect_returns_ciphertext_nonce_tag_and_version_without_plaintext_storage",
+      "Unprotect_round_trips_secret",
+      "Unprotect_fails_closed_when_ciphertext_is_tampered",
+      "Unprotect_fails_closed_when_secret_version_is_unknown",
+      "Protector_requires_valid_base64_32_byte_key"
+    ],
+    "treehammock.Tests/Unit/TwoFactorAuthenticationPromotionTests.cs": [
+      "TwoFactorAuthenticate_rejects_empty_code_key_as_validation_failure_without_loading_session",
+      "TwoFactorAuthenticate_accepts_authenticator_app_method_shape_but_requires_pending_session",
+      "TwoFactorAuthenticate_rejects_request_without_pre_auth_token",
+      "TwoFactorAuthenticate_rejects_and_revokes_expired_pending_two_factor_session",
+      "TwoFactorAuthenticate_promotes_new_login_atomically_in_database_before_cache_write",
+      "TwoFactorAuthenticate_cache_write_failure_after_new_promotion_still_returns_token_without_db_rollback",
+      "TwoFactorAuthenticate_promotes_rotation_atomically_in_database_before_cache_write",
+      "TwoFactorAuthenticate_cache_write_failure_after_rotation_promotion_still_returns_token_without_db_rollback",
+      "TwoFactorAuthenticate_failed_challenge_attempt_increments_abuse_counter_before_durable_failure",
+      "TwoFactorAuthenticate_denies_exhausted_challenge_attempts_without_checking_submitted_proof",
+      "TwoFactorAuthenticate_fails_closed_when_abuse_counter_store_is_unavailable_without_checking_submitted_proof",
+      "TwoFactorAuthenticate_resets_challenge_attempt_counter_on_success",
+      "TwoFactorAuthenticate_promotes_authenticator_app_login_after_backend_local_totp_verification",
+      "TwoFactorAuthenticate_records_authenticator_app_failure_without_promoting_session",
+      "TwoFactorAuthenticate_accepts_sms_first_for_sms_and_authenticator_without_promoting",
+      "TwoFactorAuthenticate_rejects_authenticator_before_sms_for_sms_and_authenticator",
+      "TwoFactorAuthenticate_promotes_after_authenticator_second_for_sms_and_authenticator",
+      "TwoFactorAuthenticate_allows_authenticator_second_when_delivered_challenge_window_is_stale",
+      "TwoFactorAuthenticate_accepts_email_first_for_email_and_authenticator_without_promoting"
+    ],
+    "treehammock.Tests/Unit/TwoFactorEmailBindingContractTests.cs": [
+      "Begin_twofactor_setup_binds_email_destination_to_account_email",
+      "Get_twofactor_details_returns_current_account_email_for_email_factor",
+      "Complete_account_email_change_turns_off_verified_email_factor",
+      "Setup_email_two_factor_uses_account_email_for_persistence_and_delivery"
+    ],
+    "treehammock.Tests/Unit/TwoFactorEnrollmentLimitContractTests.cs": [
+      "Canonical_sql_enforces_one_verified_factor_per_method",
+      "Begin_twofactor_setup_rejects_existing_verified_method_regardless_of_destination",
+      "Verify_twofactor_setup_checks_duplicate_method_before_promotion",
+      "Authenticator_setup_sql_rejects_second_active_app_with_stable_revocation_guard"
+    ],
+    "treehammock.Tests/Unit/TwoFactorMethodRemovalTests.cs": [
+      "Remove_authenticator_app_revokes_only_authenticator_dependent_configurations",
+      "Remove_sms_keeps_email_and_authenticator_app_options_when_they_remain_verified",
+      "Remove_method_returns_not_configured_when_repo_reports_no_active_method",
+      "Canonical_sql_revokes_removed_authenticator_material_and_expires_pending_sessions",
+      "Canonical_sql_exposes_account_wide_reset_session_revocation_for_method_removal",
+      "Canonical_sql_uses_revocation_aware_active_method_indexes_and_queries"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/BooleanProcedureContractTests.cs": [
+      "Deferred_sql_procedure_contract_returns_status_rows_for_auth_and_session_surface",
+      "Effective_cutoff_is_preserved_and_enforced_by_credential_lookup_set_session_and_rotation",
+      "Canonical_sql_baseline_creates_registration_verification_contracts",
+      "Validate_cached_session_trust_returns_expected_contract_statuses",
+      "Two_factor_challenge_delivery_failure_cancel_clears_issued_challenge_without_burning_resend_budget",
+      "Begin_twofactor_auth_detail_creates_selection_required_session_with_available_configurations",
+      "Two_factor_pending_and_finalization_require_current_account_security_stamp_and_rotation_clears_pending_pointer",
+      "Logout_contracts_expire_current_session_rotate_account_stamp_and_clear_pending_state",
+      "Twofactor_setup_verification_keeps_one_pending_setup_per_account_and_blocks_replay"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetProcedureContractTests.cs": [
+      "Password_reset_sql_lifecycle_is_account_bound_single_active_and_atomic_on_promotion",
+      "Password_reset_totp_lookup_requires_verified_authenticator_app_secret_and_rejects_replay",
+      "Password_reset_request_rate_limit_enforces_cooldown_window_and_block"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/PasswordResetRepositorySqlIntegrationTests.cs": [
+      "PasswordResetRepo_promotes_password_and_invalidates_existing_sessions_against_real_sql",
+      "PasswordResetTotpRepo_loads_verified_authenticator_secret_and_rejects_replay_against_real_sql",
+      "PasswordResetRepo_creating_second_active_reset_cancels_first_against_real_sql",
+      "PasswordResetRepo_cancel_request_marks_artifact_cancelled_against_real_sql",
+      "PasswordResetService_persists_selected_pending_session_against_real_sql",
+      "PasswordResetService_rehydrates_pending_session_with_fresh_sql_backed_service_instances",
+      "PasswordResetRepo_revokes_pending_sessions_on_terminal_reset_events_against_real_sql",
+      "SendPasswordResetCode",
+      "VerifyTotpForPasswordReset",
+      "IncrementAsync",
+      "ResetAsync",
+      "GetCooldownAsync"
+    ]
+  },
+  "reference_urls": [
+    "https://www.rfc-editor.org/rfc/rfc6238",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
+    "https://www.postgresql.org/docs/16/explicit-locking.html",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.aesgcm?view=net-8.0"
+  ],
+  "qualification": {
+    "build": "blocked: dotnet absent",
+    "unit_controller_suites": "not executed",
+    "postgresql_concurrency": "not executed",
+    "cache_http_system_suites": "not executed",
+    "performance_benchmarks": "not executed",
+    "production_key_override": "not available"
+  }
+}

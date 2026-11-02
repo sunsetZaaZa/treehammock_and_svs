@@ -1,0 +1,194 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: treehammock
+      POSTGRES_USER: treehammock
+      POSTGRES_PASSWORD: ${TREEHAMMOCK_FIXTURE_DB_PASSWORD:?Initialize fixture credentials}
+    volumes:
+      - ./Rigging/Database/Baseline/000_treehammock_canonical_database.sql:/docker-entrypoint-initdb.d/000_treehammock_canonical_database.sql:ro
+      - treehammock-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U treehammock -d treehammock"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.36.0
+    command: ["dragonfly", "--bind", "0.0.0.0", "--requirepass", "${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}"]
+    environment:
+      FIXTURE_CACHE_PASSWORD: ${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}
+    volumes:
+      - treehammock-dragonfly-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$FIXTURE_CACHE_PASSWORD redis-cli -h 127.0.0.1 -p 6379 ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      target: api
+      args:
+        DOTNET_SDK_IMAGE: ${TREEHAMMOCK_DOTNET_SDK_IMAGE:-mcr.microsoft.com/dotnet/sdk:8.0}
+        DOTNET_RUNTIME_IMAGE: ${TREEHAMMOCK_DOTNET_RUNTIME_IMAGE:-mcr.microsoft.com/dotnet/aspnet:8.0}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Container
+      DOTNET_ENVIRONMENT: Container
+      ASPNETCORE_URLS: http://+:5001
+      RegistrationSettings__PublicOrigin: ${TREEHAMMOCK_PUBLIC_ORIGIN:-http://localhost:5001}
+      # Disposable test stack only; supply an independent key for deployed instances.
+      DeliveryOutboxSettings__ActiveKeyVersion: "1"
+      DeliveryOutboxSettings__EncryptionKeys__1: ${TREEHAMMOCK_FIXTURE_OUTBOX_KEY:?Initialize fixture credentials}
+      SecurityOperationSettings__ActiveKeyVersion: "1"
+      SecurityOperationSettings__HmacKeys__1: ${TREEHAMMOCK_FIXTURE_OPERATION_KEY:?Initialize fixture credentials}
+
+      SessionCacheWarmupSettings__Enabled: ${SessionCacheWarmupSettings__Enabled:-false}
+      SessionCacheWarmupSettings__BatchSize: ${SessionCacheWarmupSettings__BatchSize:-100}
+      SessionCacheWarmupSettings__IntervalSeconds: ${SessionCacheWarmupSettings__IntervalSeconds:-10}
+      SessionCacheWarmupSettings__DurationSeconds: ${SessionCacheWarmupSettings__DurationSeconds:-300}
+      SessionCacheWarmupSettings__CacheTtlSeconds: ${SessionCacheWarmupSettings__CacheTtlSeconds:-300}
+      SessionCacheWarmupSettings__BatchTimeoutMilliseconds: ${SessionCacheWarmupSettings__BatchTimeoutMilliseconds:-5000}
+
+      DatabaseSettings__servers: postgres
+      DatabaseSettings__database: treehammock
+      DatabaseSettings__userId: treehammock
+      DatabaseSettings__password: ${TREEHAMMOCK_FIXTURE_DB_PASSWORD:?Initialize fixture credentials}
+      DatabaseSettings__lc_collation: en_US.UTF-8
+
+      ActiveUserBundleSettings__servers: dragonfly
+      ActiveUserBundleSettings__port: "6379"
+      ActiveUserBundleSettings__database: "0"
+      ActiveUserBundleSettings__clientName: treehammock-api
+      ActiveUserBundleSettings__allowAdmin: "false"
+      ActiveUserBundleSettings__reconnectRetryPolicy: "5000"
+      ActiveUserBundleSettings__abortOnConnectFail: "false"
+      ActiveUserBundleSettings__password: ${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}
+
+      TwoFactorSessionBundleSettings__servers: dragonfly
+      TwoFactorSessionBundleSettings__port: "6379"
+      TwoFactorSessionBundleSettings__database: "1"
+      TwoFactorSessionBundleSettings__clientName: treehammock-api-2fa
+      TwoFactorSessionBundleSettings__allowAdmin: "false"
+      TwoFactorSessionBundleSettings__reconnectRetryPolicy: "5000"
+      TwoFactorSessionBundleSettings__abortOnConnectFail: "false"
+      TwoFactorSessionBundleSettings__password: ${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}
+
+      AbuseCounterBundleSettings__servers: dragonfly
+      AbuseCounterBundleSettings__port: "6379"
+      AbuseCounterBundleSettings__database: "2"
+      AbuseCounterBundleSettings__clientName: treehammock-api-abuse-counters
+      AbuseCounterBundleSettings__allowAdmin: "false"
+      AbuseCounterBundleSettings__reconnectRetryPolicy: "5000"
+      AbuseCounterBundleSettings__abortOnConnectFail: "false"
+      AbuseCounterBundleSettings__password: ${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}
+
+      # The system lane exercises many happy-path flows from one proxy/client source.
+      # Keep production abuse controls enabled, but raise shared-IP test ceilings so
+      # unrelated end-to-end scenarios do not trip each other's delivery throttles.
+      AbuseControlSettings__Delivery__MaxEmailDeliveriesPerAccountPerHour: "100"
+      AbuseControlSettings__Delivery__MaxSmsDeliveriesPerAccountPerHour: "100"
+      AbuseControlSettings__Delivery__MaxEmailDeliveriesPerIpPerHour: "100"
+      AbuseControlSettings__Delivery__MaxSmsDeliveriesPerIpPerHour: "100"
+      AbuseControlSettings__PasswordReset__MaxRequestsPerAccountPerHour: "100"
+      AbuseControlSettings__PasswordReset__MaxRequestsPerIdentifierPerHour: "100"
+      AbuseControlSettings__PasswordReset__MaxRequestsPerIpPerHour: "100"
+      PasswordResetSettings__RequestCooldownSeconds: "0"
+      PasswordResetSettings__DailyRequestLimitPerAccount: "100"
+      PasswordResetSettings__DailyRequestLimitPerDestination: "100"
+      PasswordResetSettings__DailyRequestLimitPerIp: "100"
+
+      HostingSettings__ConfigureKestrel: "true"
+      HostingSettings__Port: "5001"
+      HostingSettings__BindAddress: 0.0.0.0
+      HostingSettings__UseHttps: "false"
+      HostingSettings__Protocols: Http1AndHttp2
+      HostingSettings__UseHttpsRedirection: "false"
+      HostingSettings__UseForwardedHeaders: "false"
+
+      SystemTestSettings__Enabled: "false"
+      SystemTestSettings__EnableTestInspectionEndpoints: "false"
+      SystemTestSettings__TestKey: ""
+    expose:
+      - "5001"
+
+  haproxy:
+    image: haproxy:latest
+    profiles: ["proxy"]
+    depends_on:
+      api:
+        condition: service_started
+    volumes:
+      - ./deploy/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    healthcheck:
+      test: ["CMD-SHELL", "haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  sql-contract-tests:
+    build:
+      context: .
+      target: build
+      args:
+        DOTNET_SDK_IMAGE: ${TREEHAMMOCK_DOTNET_SDK_IMAGE:-mcr.microsoft.com/dotnet/sdk:8.0}
+        DOTNET_RUNTIME_IMAGE: ${TREEHAMMOCK_DOTNET_RUNTIME_IMAGE:-mcr.microsoft.com/dotnet/aspnet:8.0}
+    profiles: ["sql"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      TREEHAMMOCK_RUN_DEFERRED_SQL_CONTRACTS: "true"
+      TREEHAMMOCK_DB_CONTRACT_CONNECTION: Host=postgres;Port=5432;Database=treehammock;Username=treehammock;Password=${TREEHAMMOCK_FIXTURE_DB_PASSWORD:?Initialize fixture credentials}
+    working_dir: /src
+    command: ["./eng/sql-contracts.sh", "--configuration", "Release", "--locked-restore"]
+
+  http-contract-tests-direct:
+    image: node:22-alpine
+    profiles: ["http"]
+    depends_on:
+      api:
+        condition: service_started
+    working_dir: /work/tests/http/bruno/treehammock
+    volumes:
+      - ./:/work:ro
+      - ./artifacts/compose-proof:/reports
+    environment:
+      TREEHAMMOCK_BASE_URL: http://api:5001
+    command: ["node", "/work/eng/compose-http-proof.mjs", "direct", "/work/tests/http/bruno/treehammock", "/reports"]
+
+
+  http-contract-tests-proxy:
+    image: node:22-alpine
+    profiles: ["http-proxy"]
+    depends_on:
+      haproxy:
+        condition: service_started
+    working_dir: /work/tests/http/bruno/treehammock
+    volumes:
+      - ./:/work:ro
+      - ./artifacts/compose-proof:/reports
+    environment:
+      TREEHAMMOCK_BASE_URL: http://haproxy:8080
+    command: ["node", "/work/eng/compose-http-proof.mjs", "proxy", "/work/tests/http/bruno/treehammock", "/reports"]
+
+volumes:
+  treehammock-postgres-data:
+  treehammock-dragonfly-data:
+
+networks:
+  default:
+    driver: bridge
+    enable_ipv6: false
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: nat

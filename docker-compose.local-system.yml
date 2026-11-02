@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: treehammock
+      POSTGRES_USER: treehammock
+      POSTGRES_PASSWORD: ${TREEHAMMOCK_FIXTURE_DB_PASSWORD:?Initialize fixture credentials}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ./Rigging/Database/Baseline/000_treehammock_canonical_database.sql:/docker-entrypoint-initdb.d/000_treehammock_canonical_database.sql:ro
+      - treehammock-local-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U treehammock -d treehammock"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    command: ["dragonfly", "--bind", "0.0.0.0", "--requirepass", "${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}"]
+    environment:
+      FIXTURE_CACHE_PASSWORD: ${TREEHAMMOCK_FIXTURE_CACHE_PASSWORD:?Initialize fixture credentials}
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - treehammock-local-dragonfly-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$FIXTURE_CACHE_PASSWORD redis-cli -h 127.0.0.1 -p 6379 ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  haproxy-host:
+    image: haproxy:latest
+    profiles: ["host-system"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+    network_mode: host
+    volumes:
+      - ./deploy/haproxy/haproxy.host-system.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    healthcheck:
+      test: ["CMD-SHELL", "haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  treehammock-local-postgres-data:
+  treehammock-local-dragonfly-data:

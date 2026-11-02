@@ -1,0 +1,119 @@
+{
+  "evidence_kind": "Source structural assertions, hashes and test metadata; NOT runtime tests",
+  "source_archive_sha256": "229ef2275f1caeff3a6a40186e678f7440a90fd54add2e0ba8de0fd6c645758f",
+  "source_unchanged_vs_uploaded_archive": true,
+  "source_file_count": 451,
+  "mapped_R05_files": 12,
+  "source_files_with_R05_notes": 35,
+  "runtime_tools": {
+    "dotnet": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "redis-server": null
+  },
+  "static_checks": {
+    "all_routes_authenticated_post": true,
+    "place_and_disable_require_idempotency": true,
+    "creation_uses_backend_random_18_byte_code": true,
+    "creation_model_has_no_client_code": true,
+    "all_activation_functions_check_stamp": true,
+    "activation_functions_have_no_for_update_or_share": true,
+    "verify_candidate_is_pending_or_request": true,
+    "verify_consumption_predicate_is_only_id": true,
+    "verify_success_does_not_check_affected_row": true,
+    "disable_excludes_verified_state_in_both_branches": true,
+    "place_commit_precedes_delivery_service_call": true,
+    "delivery_admission_is_inside_send_method": true,
+    "denied_delivery_discards_reason": true,
+    "activation_delivery_denial_can_map_to_500": true,
+    "cancel_retains_exact_pending_row": true,
+    "activation_secondary_index_is_only_unique_code": true,
+    "activation_table_has_no_origin_stamp_or_email": true,
+    "monthly_service_31_days_vs_sql_calendar_month": true,
+    "yearly_service_365_days_vs_sql_calendar_year": true,
+    "activation_functions_do_not_update_accounts_or_sessions": true,
+    "activation_service_and_controller_have_no_session_cache_dependency": true,
+    "activation_schema_has_no_trigger": true,
+    "verify_counter_admission_before_repository": true,
+    "activation_verify_details_response_omits_repeat": true,
+    "activation_http_service_supplies_null_delayed_start": true,
+    "repo_uses_parameterized_function_calls_and_timestamptz": true
+  },
+  "sql_functions": {
+    "place_activation": {
+      "start_line": 5868,
+      "sha256": "d1b1f51c4258d5c3f52053b62d53aa8d57768f05a2c642901f5ee9993b342634",
+      "equal_in_second_baseline": true
+    },
+    "cancel_activation_request": {
+      "start_line": 5978,
+      "sha256": "bde37d1ce507231339897518f90aee119f5ecb91999863822038043f79fd19b0",
+      "equal_in_second_baseline": true
+    },
+    "disable_activation": {
+      "start_line": 6020,
+      "sha256": "878d01cd761bce612bea635422d22624a7f4c54e516e6521e23e01c976c42533",
+      "equal_in_second_baseline": true
+    },
+    "verify_activation": {
+      "start_line": 6093,
+      "sha256": "070a8eb9d8fe485e2af86606c242c8d0394ed80160053483e4d7be249832d416",
+      "equal_in_second_baseline": true
+    },
+    "view_account": {
+      "start_line": 4359,
+      "sha256": "5bf6fc23b5aa1bd21987221db94494c48f904168f8ea6c25905a5dbcbad84b2b",
+      "equal_in_second_baseline": true
+    }
+  },
+  "activation_secondary_indexes": [
+    "create unique index if not exists ux_activations_code\n    on activations(code);"
+  ],
+  "complete_test_source_method_catalog": {
+    "treehammock.Tests/Unit/ActivationApiContractTests.cs": [
+      "Activations_controller_is_api_controller_not_mvc_view_shell",
+      "Activation_creation_request_no_longer_accepts_client_supplied_code",
+      "Activation_sql_returns_explicit_result_codes_for_stale_stamp_expired_and_code_mismatch",
+      "Activations_controller_maps_stale_stamp_to_401_and_expired_activation_to_410",
+      "Activation_sql_stores_backend_supplied_code_instead_of_generating_one",
+      "Activation_creation_validates_term_and_recycle_before_service_sql_contracts",
+      "Activation_controller_rejects_unbounded_email_and_code_inputs"
+    ],
+    "treehammock.Tests/Unit/ActivationServiceTests.cs": [
+      "PlaceActivation_generates_backend_code_persists_it_and_sends_it_to_the_account_email",
+      "PlaceActivation_cancels_pending_activation_when_email_delivery_fails",
+      "VerifyActivation_requires_matching_code_and_returns_activation_details",
+      "PlaceActivation_maps_stale_security_stamp_without_sending_email",
+      "VerifyActivation_preserves_expired_and_code_mismatch_results",
+      "Activation_abuse_key_factory_uses_safe_fingerprints_for_email_and_ip",
+      "VerifyActivation_denies_before_repository_when_activation_policy_is_exhausted",
+      "VerifyActivation_returns_counter_store_unavailable_before_repository_lookup",
+      "VerifyActivation_resets_activation_verify_counters_after_success",
+      "PlaceActivation_rejects_invalid_term_without_persisting_or_sending_email",
+      "PlaceActivation_rejects_invalid_recycle_without_persisting_or_sending_email"
+    ],
+    "treehammock.Tests.SqlContracts/Integration/Database/ActivationProcedureContractTests.cs": [
+      "Activation_procedures_return_distinct_result_codes_for_stale_stamp_expired_and_wrong_code"
+    ]
+  },
+  "selected_tests_inspected": [
+    "Activation_delivery_throttle_denial_suppresses_provider_send",
+    "Authenticated_activation_endpoint_flow_places_code_then_verifies_same_code",
+    "ActivationRepo_reads_explicit_activation_result_code_contracts"
+  ],
+  "reference_urls": [
+    "https://www.postgresql.org/docs/16/transaction-iso.html",
+    "https://www.nodatime.org/3.3.x/userguide/concepts"
+  ],
+  "qualification": {
+    "build": "blocked: dotnet absent",
+    "unit_service_controller_suites": "not executed",
+    "sql_concurrency_schedules": "source-derived; not executed",
+    "cache_http_system_suites": "not executed",
+    "provider_delivery": "not executed",
+    "performance_benchmarks_and_query_plans": "not executed",
+    "live_deployment": "not checked",
+    "entitlement_authority": "unresolved product contract; no activation-to-feature mutation found"
+  }
+}

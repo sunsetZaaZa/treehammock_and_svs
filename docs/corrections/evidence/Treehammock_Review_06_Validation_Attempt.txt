@@ -1,0 +1,15 @@
+R06 validation attempt, 2026-10-03
+Runtime tool availability:
+dotnet: unavailable
+docker: unavailable
+psql: unavailable
+postgres: unavailable
+redis-server: unavailable
+
+Command: bash eng/sql-contracts.sh --locked-restore
+Disposable local connection placeholder supplied; no connection attempted because dotnet is absent.
+Exit code: 127
+
+eng/sql-contracts.sh: line 53: dotnet: command not found
+
+No .NET build, runtime test, SQL application, concurrency reproduction, provider call, or benchmark executed.

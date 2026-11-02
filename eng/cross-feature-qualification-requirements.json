@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "pr": "COR24",
+  "specification": "docs/corrections/evidence/Treehammock_Detailed_Correction_PR_Plan_Original_Extracted.txt",
+  "schema_policy": "docs/corrections/PRE_1_0_SCHEMA_POLICY.md",
+  "required_stages": [
+    {
+      "id": "source-integrity",
+      "kind": "source",
+      "command": [
+        "{python}",
+        "eng/check-correction-evidence.py"
+      ],
+      "tools": [],
+      "timeout_seconds": 900,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "source-reconciliation",
+      "kind": "source",
+      "command": [
+        "{python}",
+        "eng/reconcile-source-inventory.py",
+        "--check"
+      ],
+      "tools": [],
+      "timeout_seconds": 900,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "current-schema",
+      "kind": "source",
+      "command": [
+        "{python}",
+        "eng/generate-database-baseline.py",
+        "--check"
+      ],
+      "tools": [],
+      "timeout_seconds": 900,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "python-tooling",
+      "kind": "tooling",
+      "command": [
+        "{python}",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "eng/tests"
+      ],
+      "tools": [],
+      "timeout_seconds": 1200,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "session-client",
+      "kind": "client",
+      "command": [
+        "node",
+        "--test",
+        "tests/client/session-protocol.test.mjs"
+      ],
+      "tools": [
+        "node"
+      ],
+      "timeout_seconds": 900,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "native-fast-coverage",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/correction-baseline.py",
+        "--lane",
+        "fast",
+        "--collect-coverage",
+        "--output",
+        ".correction-results/cor24-fast"
+      ],
+      "tools": [
+        "dotnet"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "sql-redis",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/correction-sql-fixture.py",
+        "--cache-product",
+        "redis",
+        "--configuration-host",
+        "bash",
+        "--configuration",
+        "Release"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "replacement-mutation-redis",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/correction-sql-fixture.py",
+        "--cache-product",
+        "redis",
+        "--authenticator-replacement"
+      ],
+      "tools": [
+        "dotnet",
+        "docker"
+      ],
+      "timeout_seconds": 1200,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "sql-dragonfly",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/correction-sql-fixture.py",
+        "--cache-product",
+        "dragonfly",
+        "--configuration-host",
+        "bash",
+        "--configuration",
+        "Release"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "replacement-mutation-dragonfly",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/correction-sql-fixture.py",
+        "--cache-product",
+        "dragonfly",
+        "--authenticator-replacement"
+      ],
+      "tools": [
+        "dotnet",
+        "docker"
+      ],
+      "timeout_seconds": 1200,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "http-direct",
+      "kind": "native",
+      "command": [
+        "bash",
+        "eng/docker-http-contracts-direct.sh"
+      ],
+      "tools": [
+        "docker",
+        "dotnet",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "http-proxy",
+      "kind": "native",
+      "command": [
+        "bash",
+        "eng/docker-http-contracts-proxy.sh"
+      ],
+      "tools": [
+        "docker",
+        "dotnet",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "system-container",
+      "kind": "native",
+      "command": [
+        "bash",
+        "eng/docker-system-stack-tests.sh"
+      ],
+      "tools": [
+        "docker",
+        "dotnet",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "system-host",
+      "kind": "native",
+      "command": [
+        "bash",
+        "eng/docker-host-system-stack-tests.sh"
+      ],
+      "tools": [
+        "docker",
+        "dotnet",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "fixture-isolation",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-fixture-isolation.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 3600,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "owned-lifecycle",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-test-lifecycle.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 3600,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "host-artifact-proof",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-host-system-proof.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 3600,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "compose-proof",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-compose-proof.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 3600,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "account-envelope-mutations",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-account-failure-envelopes.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "account-flow-disposal",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-account-flow-lifetimes.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "registration-http",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-registration-verification.py",
+        "--output",
+        "{evidence}/native.json"
+      ],
+      "tools": [
+        "dotnet"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "expected_cases": 10
+    },
+    {
+      "id": "configuration-bash",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-build-configuration.py",
+        "--host",
+        "bash",
+        "--output",
+        "{evidence}/configuration"
+      ],
+      "tools": [
+        "dotnet",
+        "docker",
+        "bash"
+      ],
+      "timeout_seconds": 3600,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "coverage-publish-bash",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-coverage-contract.py",
+        "--host",
+        "bash",
+        "--output",
+        "{evidence}/coverage"
+      ],
+      "tools": [
+        "dotnet",
+        "bash"
+      ],
+      "timeout_seconds": 2400,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    },
+    {
+      "id": "native-release-candidate",
+      "kind": "native",
+      "command": [
+        "{python}",
+        "eng/test-release-artifacts.py",
+        "--report",
+        "{evidence}/native.json",
+        "--output",
+        "{evidence}/candidates"
+      ],
+      "tools": [
+        "docker",
+        "skopeo",
+        "git"
+      ],
+      "timeout_seconds": 7200,
+      "platforms": [
+        "linux"
+      ],
+      "expected_cases": null
+    }
+  ],
+  "required_acceptance": [
+    {
+      "id": "finding-closure",
+      "requirement": "All 84 findings have source-bound executable closure or authorized disposition; implementation status alone is insufficient."
+    },
+    {
+      "id": "source-review",
+      "requirement": "Original 451-file inventory, all added files and 181 source gates have complete current review evidence."
+    },
+    {
+      "id": "supported-hosts",
+      "requirement": "Native Windows PowerShell 7, Windows PowerShell 5.1/Desktop and supported Linux paths, including cancellation/restart/collision evidence."
+    },
+    {
+      "id": "network-peers",
+      "requirement": "Independent IPv4/IPv6/L2 and authorized SSH tunnel observations for the run-owned fixture."
+    },
+    {
+      "id": "cross-feature-schedules",
+      "requirement": "Both observed lock orders for reset/enrollment/delete/email, last-factor removal/reset, refresh/logout/grant, activation revoke/expiry/cache hit and maintenance/live-proof interactions."
+    },
+    {
+      "id": "provider-losses",
+      "requirement": "Real controlled SMTP/SMS acceptance/refusal/disconnect/late receipt and worker crash/restart observations; no customer messages."
+    },
+    {
+      "id": "rolling-current-key-rotation",
+      "requirement": "TOTP v2, outbox and operation-envelope key rotation under multiple current instances; retained-key backup/recovery evidence."
+    },
+    {
+      "id": "fresh-recovery",
+      "requirement": "Fresh current-schema setup, runtime role/grant policy and backup/restore/unknown-commit recovery drills; no development-version schema upgrades."
+    },
+    {
+      "id": "performance",
+      "requirement": "Approved COR22 budgets and measured sustained/history workloads, plans, distributions, memory/CPU/queue/pool/lock/cache/WAL/storage costs."
+    },
+    {
+      "id": "final-image-product",
+      "requirement": "Complete direct/proxy/product behavior against the exact final OCI candidate with production test capabilities disabled; startup smoke alone is insufficient."
+    },
+    {
+      "id": "hosted-dependencies",
+      "requirement": "Actual dependency/image provenance, audit results and hosted workflow/registry transport/permissions in designated disposable accounts."
+    },
+    {
+      "id": "operator-examples",
+      "requirement": "Operator grant lifecycle, deployment/recovery examples and every advertised feature exercised on the declared supported configuration."
+    }
+  ],
+  "publication_policy": "Evidence only; no deployment, real registry promotion or ledger/gate changes"
+}

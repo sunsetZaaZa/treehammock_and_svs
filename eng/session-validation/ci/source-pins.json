@@ -1,0 +1,835 @@
+{
+  "schema": "svs-ci-source.v1",
+  "parent": "SVS-13",
+  "files": {
+    "Directory.Packages.props": "f7ead90d954924c1e900d74551e951c6f3d41795a757286a432113160c227083",
+    "Program.cs": "74631453a12eefd99ebce4c36d8ad4954a2688b187164ecbb21489d0c87bb753",
+    "treehammock.sln": "0e332ce687546c6a10ba5c38a6e13c487a324de7e051e58530204e2394cd9556",
+    "global.json": "84aa96f48aa20d14456121b5ac5f18967f29f7da504c6f886218c701687f47fa",
+    "treehammock.csproj": "028cdf31402c7355398fcf502e4144a3c59ca5f5b4309689c8052df065a64a69",
+    "packages.lock.json": "3235250ea4601ca796312c95a1b18ff8bced312ca23fedef6600c6d68ba6db98",
+    "Directory.Build.props": "15d8f6e0193e4b64f5da029cdc5bd53a79c41423edf1ae866728993ad2af7907",
+    "Directory.Build.targets": "81293572b7059d26beadd131f3689de69cc452924fbfc7321200df2cb528a5d5",
+    "src/global.json": "1c6737f7e65b0108778ab30ace593c3ec63382090718c2cbc3d6752486178a35",
+    "DataLayer/ActivationCommandResult.cs": "8182b2bed81ddf73edb27533d4d46c9bca9aafe2b51b65b6a38a109e22715c92",
+    "DataLayer/ActivationStatus.cs": "e7df8fb06c3f5432e4915ff12036d785fe085776b715b613e073faee62e23e7e",
+    "Entities/TwoFactorAuthentication.cs": "ba43429cd274d9689f8e21a063fec5c7a832c0ea17d110e46ad2cd093489abb5",
+    "Entities/AuthenticationProviderToken.cs": "408ab43c98f3743bfe358a3f603b43bf4a6d7013659c4c0a3044e1e2e722058b",
+    "Entities/AuthenticationProvider.cs": "f7a1afdd6b8ea2e7c6fe964b4861ac623be2dc52e3800637be72e3cf72165052",
+    "Entities/Account.cs": "80c5171c5a252e18520742b0c00a96d46a17b3d03fbc9d7b0544d6692266db40",
+    "Entities/Session.cs": "21b6b6da0386f71d34ec0832cd2d1d64617db099f04c74ed0a18b3ff671e2dc9",
+    "Entities/AccountVerification.cs": "bd83edf4f01bbf15cac8ebddf63d8598e70b9e94bb23beef0b56ae86ec4b38dd",
+    "Entities/Activations.cs": "c2c5053f00a939d39eb1a9e15791133b8dbc3d87f676fdd7cc7ac22a66b6673f",
+    "Entities/DeleteStandy.cs": "b9cedefc8247891e5fb9e033a8d55b89fac7d11190f590f8328de64338257d33",
+    "Entities/AccountDeleteEvent.cs": "2d15cd64bb25e220197b20cfbaca87b05961b56928735197d0db45eed8ac93c3",
+    "Repos/TotpReencryptionRepo.cs": "c7c116a908ee25099400e7c90c3d1b1ef0df33bbbdd463574030b6633dfbc259",
+    "Repos/SessionRepo.cs": "4a2f284dfbb665b54e7cd81b3001959783807f2eae5ce5419e0e1e2a0362831c",
+    "Repos/ActivationRepo.cs": "b68a2e0495bf2667a861f8a72249483839f55096e53d0ac4083883c931126feb",
+    "Repos/AuthenticatorAppEnrollmentRepo.cs": "0683d0165db2478a93f036c0dfde44c50e1a00d548465eab802db9dc5c7413b5",
+    "Repos/RepositoryLogScopes.cs": "d77c9f73a73207e9fbd43efdf8c2e3317ec8f8fb4a19e6f068f2de385899ec01",
+    "Repos/PasswordResetRepo.cs": "fcbaed3cb81e959c182cee0077d0e4fe6d9cd937779c0eb872ac88cb1568bb65",
+    "Repos/EntitlementRepo.cs": "162f094bab2eb0acacaf7e7cab3cd2f19f6403f42d577663b9fa2888c7d3bdec",
+    "Repos/AccountRepo.cs": "2359bb5a084116c0d7c26c302e939ef74b629c91c784a9f21cb0277c5939404b",
+    "Repos/DeliveryOutboxRepo.cs": "4153d3cb92429817766c294e54ddbb4b08c84f1991b56fa442a39dce3cda05a3",
+    "Repos/AccountRecoveryRepo.cs": "fa3bf8a2ef2532198512c82e93a1a9f20a8c5c9daec5e7914ba2a8ba4f477bc5",
+    "Repos/EntitlementGrantRepo.cs": "12cb10e8c9f63ac0fa3ca7518073f70a20990e89d993b89aec2e093728f0167b",
+    "Repos/SecurityOperationRepo.cs": "d5d881d4ff29abad1d11240e03cc217a334d5b105541a13532ec1427c272a273",
+    "Repos/SessionCacheWarmupRepo.cs": "250865b2c0779d50a27286f85902c7e3a00a6bb35ee66832aaf4b6f35652d2c0",
+    "Repos/RepositoryCommands.cs": "0fbbc85bf575b43496016c32e5d27dbdcf66aff00b80a90b15007fa5d3de151e",
+    "Repos/LoginProofRepo.cs": "a078e4db358f6b3a5693f9e48a6363d343fe31e195ed1cb92b8118288e9c40c5",
+    "Repos/SessionRefreshRepo.cs": "42aa15b8f72da711ad2d1f5b84427f55687ce35dd37e607a09b664cec4709b81",
+    "Repos/PasswordResetTotpRepo.cs": "5a68e5662341868e49cad26aa4b2a4dbcc153ec45ddaa789d3d6cbe9f5c2fb60",
+    "Repos/SensitiveActionTokenRepo.cs": "5cb8d02c3c7e15b253503bf3dc64e32e9d5c57a2501a61f2d1e9f22997ac2ea4",
+    "Repos/AuthenticatedMutationReplayRepo.cs": "611b8aa7f094b16f636201d5d0e40a216441f518a328f943ea6e9be18d865b95",
+    "Repos/RetentionRepo.cs": "903902b811758ac377a1e36511bb8162fa9e42d93f9a3286d17ca4fe4375971c",
+    "Repos/AccountRepo.LoginAttempts.cs": "42c557ebed55de7681f20c6b93b83d6d4ee3e70cc86cd721d655a2cb76d07a90",
+    "treehammock.Tests/packages.lock.json": "b57120e0905dbebb8815fc98b33da5222850d740e2735a704f61cf28ddd6b47b",
+    "Controllers/AccountControllerBase.LoginHelpers.cs": "b0516a430cf93f4f31efd651b1472f1be221ba2bb177d4a4db741c1bb086d62f",
+    "Controllers/SystemTestDeliveryController.cs": "162a015cca3a15afeded96e6d5c3a2ed764c76300395b23366a1710797d035e2",
+    "Controllers/ActivationsController.cs": "7ae5eae3ce8fbe8f6e88ff9795f9fc3ceb12499937e68e57cf15994bf23a2350",
+    "Controllers/AccountProfileController.cs": "d5a337fbf852fd73119d9ab794d0859b963b3bcdce9fd4192b2e4c1adaeb5618",
+    "Controllers/SystemTestIdentityController.cs": "94817616405994fd671ab7e874373f1713deb5f0ab72d321faf4fd7e1a7afa34",
+    "Controllers/AccountTwoFactorController.cs": "419db6061d6c4c869fdfd9b35ba4a1990f165a50118774ae90409c3b484bf04d",
+    "Controllers/AccountControllerBase.RepositoryGuards.cs": "62efbbcb5d83dd27b7fa3261741a343f1ec9eb455e3781df1900a06818d38a0e",
+    "Controllers/AccountControllerBase.cs": "c93b5098aa4213ba32c89991039e8f82e69630533cb10f4b8be2420f8932c9be",
+    "Controllers/AccountLoginController.cs": "d7d60790f8dd745610fa0635144072fb217d30f6a1ec356a120ffdb04aaf6b22",
+    "Controllers/PasswordResetController.cs": "c3b3d477c781a5e302abd4858a92f77aa9357467a5b9eba94603ce701e0b7158",
+    "Controllers/AccountControllerBase.SensitiveActions.cs": "7bdece759fc0b1934f0c784787cf355387f70801adfa0d9363bac4ad58c2dd53",
+    "Controllers/AccountDeleteController.cs": "d730c6a568276a754af32527a5d4ca20b8472e91ac1e9f5f7164e7a9d40faf65",
+    "Controllers/AccountRegistrationController.cs": "c3f7ee687e9d46052b9da8a24259fd03ff1a5e0b879b1dbca76b737959b5997d",
+    "Controllers/HealthController.cs": "f6deb5f3795a2d16117ee87134a98f55f0deacbeb8f569a9311cea511213cab5",
+    "Controllers/AccountSessionController.cs": "50f6b722a5ef589c046616200ca9cbdf326dcf9f73e381ddc2ac327792f878d5",
+    "Controllers/SystemTestAccountController.cs": "0a952d88d1b935f32b32a5dfc4c35a3043bea650aa950449e40d911ba69b8b12",
+    "Controllers/AccountControllerBase.TwoFactorHelpers.cs": "1a59c97ccb797b312b30cf20519b69eec26ad95f038f4611e27282bb27f519c9",
+    "Controllers/AccountControllerBase.Validation.cs": "5afc2ee565da9378b693eea795a8d2ac06da12ce2ea3526d849c030bd6aa35c7",
+    "Controllers/AccountControllerBase.RegistrationHelpers.cs": "d0aeb0a122528d0c16ac75b019f821b6003abca3dcf75963e2ac94dce410a695",
+    "Controllers/AccountRecoveryController.cs": "fd384e8a8611eb144731e2f3d8bb14d982b60095902e97676d1f4278f8ab8750",
+    "treehammock.Tests.System/packages.lock.json": "6970d8515d891be7a6220f473abaa233becbcc5d446566bf3ca4e9ec6d8bc43f",
+    "tests/global.json": "1c6737f7e65b0108778ab30ace593c3ec63382090718c2cbc3d6752486178a35",
+    "treehammock.Tests.SqlContracts/packages.lock.json": "6970d8515d891be7a6220f473abaa233becbcc5d446566bf3ca4e9ec6d8bc43f",
+    "Services/SessionRefreshService.cs": "83e1b8a4ea8a5d3adc2b146aebaee9644744851422c28f1262468807373c8c38",
+    "Services/AccountUnlockAbuseProtectionServices.cs": "c8a22f51c886991ee32e6f2837b197f049bb247e714550ca07a00e2bcefaac87",
+    "Services/SecurityOperationService.cs": "28446a8c331432ecce0a4a0477da7a48a4d1a2da9d529468fdf8ee0105cfc6a2",
+    "Services/RetentionWorker.cs": "c6bc41bbe0ecba54442329ed6ee4dc49286147f4d2aa7b0c097aebb32172cf83",
+    "Services/DeliveryProviderAdapter.cs": "3083a6baf11c7cca3d44807d95745f3a2d1bd95bf09f72227ad80753eca0454a",
+    "Services/CalendarTermCalculator.cs": "09c8da876b95b73d11fbffef757ab964ea7e347302e9db6203c79044823f984f",
+    "Services/SensitiveActionTokenService.cs": "5ed9f75e31d0d5f33ebf2e275dbb6688db0645da06b268ad8f4d368c7a9abfc3",
+    "Services/AccountRecoveryService.cs": "90a6ae0374b7c109f3486c6c31cc7c1e52751ee11c8799d969b42a4169029aaf",
+    "Services/ActivationService.cs": "37928c6cd231a69a9fa6c01141678afc4ac2df49e6f852fa2095a31ceb24abca",
+    "Services/PasswordResetAbuseProtectionServices.cs": "a93d0b49024793c1703ff3e81a21a54e96e7886319a7a779cabdfae7f4e95627",
+    "Services/LoginAbuseProtectionServices.cs": "d87d2617094f45f1becbfebaea6869ac826a31383e3b4548c72521db1bbe22ac",
+    "Services/PostgreSqlAbuseBudgetCleanupWorker.cs": "6359c491ef70928c2803faaec668b4fed5fe884a20db3f6f5426373c4605899a",
+    "Services/AccountTokenVerificationAbuseProtectionServices.cs": "8bb32dacf4e79d166a95efd3a8cf3a72342a7a4e9aef90b485fc8cea7e154fe9",
+    "Services/AuthenticatorAppProvisioningService.cs": "9108c4b548eac5a1fdc1c013e6ff7d1ff41cd7f62a0e6a233a09644883b293e1",
+    "Services/EntitlementGrantIssuerService.cs": "9258bd0f89251553c80c52f3044581d4519de6294d259d61018d68249cf4c2ee",
+    "Services/ProofVerificationStatus.cs": "fdef35af232b19ccca4b24074f6f682d828768ddbe7ed34fe91831a8f25d9ef7",
+    "Services/PasswordResetCodeServices.cs": "056a2370323aeb243e88aaa56e2b8b4e43d01148aabba2e0be92ddb3fb466b52",
+    "Services/TotpEnrollmentContext.cs": "a0efd8d50510f2a04717a8da8e56d73273e5fd0bfdfcd6edb5fb14ca0ce2672d",
+    "Services/PasswordResetPublicGate.cs": "213a8136c51305384e35247b910aae282d88458d3135f6e9442051e9fa834fa3",
+    "Services/PasswordResetDeliveryService.cs": "9daa0fd6333f20dc20857bae147343d47fb2f1dcc83f06c1dc4b0d0d2cdfc878",
+    "Services/EntitlementRenewalWorker.cs": "71b1879a06fc82f8a9d7652080edf24c9c7f3cda15837dc9d55244f614b68aa8",
+    "Services/PasswordResetPasswordMaterialService.cs": "f7502e684892924441f9f3f8ce6f878b7c89c470a616bcfe0989cfc3529a17dd",
+    "Services/TotpSecretProtectionService.cs": "e35a91dac10bcd70379a252a5933303c9e98a3beb0abeeb644073238b188e8ac",
+    "Services/SmsSender.cs": "a683a8bc8a8b125aa961aba9fa0c63dfb49b388e1f6aab8e4c58371da496a0d0",
+    "Services/PasswordResetCaptchaServices.cs": "5bfb022c1c2bb642e2d03c1893de53b7c8565a75e35dfb9bd0cff28258aa6008",
+    "Services/SMTPService.cs": "72034d36aa034423c8dce542fbebc754e6639247e44e369d078e6f03001396d6",
+    "Services/TwoFactorAuthenticateService.cs": "9a429434857b57c0234047db9eba2ac91ad9f33f3f1120bfe6df7d44270ed129",
+    "Services/DurableDeliveryService.cs": "492accd92a3fe9dbae5e6e9f9412e25a851efdb014028a2577be571b94cb9f41",
+    "Services/DeliveryAbuseThrottleService.cs": "a3af3202a71526b30788dd8d622db0d06ded601f8f049c7123addcf186944c2c",
+    "Services/AccountService.cs": "5aacb74b1efb2bc2618e87df75ce37ecbed00a2ce6af9d3701854a77195544e6",
+    "Services/PasswordResetService.cs": "2bda74f5f6389737b2f3a1d269edfeb51f3891462bc1519e46ae0a4d9cd84f02",
+    "Services/DeliveryOutboxWorker.cs": "78f26d896e8865488a56dc0773fd22bb6754bcc39758fefa025be7905cd1fcdc",
+    "Services/PasswordResetTotpService.cs": "aa9f69ca64c500f8a4a976b3fd42430ba45b20f36e135e3b8879e1eb1d8dee78",
+    "Services/HTTPService.cs": "7c964435a11e659aee0a0c7a89af65aa5ce84c342a9697c4fc43cc916a659fec",
+    "Services/SecurityOperationCleanupService.cs": "82eb5fc29d519ce0b77c031e1aae744d4728b077dc65f87597f765f510bba52b",
+    "Services/SessionCacheWarmupWorker.cs": "248a9d966f7e0d30a545408f9107fa7c677902f2d031dbad8036f2929396a13a",
+    "Services/AuthenticatorAppLoginService.cs": "fc5bfb449f709006356577ba67b3babb53696fbd99c450603dd3aec554b5f3ca",
+    "Services/TotpCodeVerifier.cs": "3dfac4ed51871244ec52cf62963056ab41d9165cfa54651c4ce73ec2c72a7ac0",
+    "Services/EntitlementResolver.cs": "7444a96c48186e6b93b8b7c1dabb97a6ad83054f1ab930a16c7d735ef084fd1e",
+    "Services/TotpReencryptionCommand.cs": "818064fc6cedc8ab49c3837ed7c4b57cf9ee5d93df16578e02c2fa073af53bb1",
+    "Services/ActivationAbuseProtectionServices.cs": "652ef8046ce9026d9bebdbd055ada846ad35297993a9b2d0d6e7c547314c456f",
+    "src/Treehammock.SessionValidation.Storage/SessionAuthorityBackend.cs": "1656a1635d7f0e49623482e1322e9473908d656d19b6fbbc25a07de2f05681fc",
+    "src/Treehammock.SessionValidation.Storage/TreehammockIdentityAuditor.cs": "284ef77dd2e857dc2fe340f0b28ca8af1e069ece8fac633eab269ba59f31d944",
+    "src/Treehammock.SessionValidation.Storage/authority-transition.lua": "5f27adee6652c110017dd377da54e7713aa8770d45a56d71195ef60d4525cab8",
+    "src/Treehammock.SessionValidation.Storage/AuthorityProjectionMapper.cs": "4d77e248c84929e83caee9e58ad07113003d931b017b5f6761744f4bd992d47b",
+    "src/Treehammock.SessionValidation.Storage/SessionEvidenceCoordinator.cs": "b3426f8729e2b9714f558ca5db81a241c2e683b755e2dba5ec008d05153c05b3",
+    "src/Treehammock.SessionValidation.Storage/PublicationCacheUnavailableException.cs": "89e58d275f19a09cae08aa827f7a94560f32f9859f98c4e8bcf75d72d1373e8d",
+    "src/Treehammock.SessionValidation.Storage/CacheTransition.cs": "9d7745304ea8eaa7bc9200a9fbd9f6e16291dddae9ed0ffa16df8b1fe6b4dccf",
+    "src/Treehammock.SessionValidation.Storage/CoherentSessionCacheReader.cs": "2ecece41a805062ddffa261335ba0fd666368ee3d586f6bc5fe27bae300d3e4f",
+    "src/Treehammock.SessionValidation.Storage/TreehammockIdentityPolicy.cs": "46de9404cf9a36651764bef3d8c0336520c38446e66f4e8c24950f64bfa98f3a",
+    "src/Treehammock.SessionValidation.Storage/DragonflyAuthorityStore.cs": "6e73be83b70242ee9168137686498b1ba4f0f031916d0d440f83bf6ec6c9bf70",
+    "src/Treehammock.SessionValidation.Storage/AuthorityProjectionBuilder.cs": "db9dcb465d04811358c2137cc82d188e246178910ba0760f9b78050f0e6992fc",
+    "src/Treehammock.SessionValidation.Storage/IReadonlySessionAuthority.cs": "74530e2693d9fbd6a19fb8c12e46b0d6b306e003bd8aa646e53636bf9320786b",
+    "src/Treehammock.SessionValidation.Storage/NpgsqlSnapshotExecutor.cs": "87ea6c6f8e62ca6512e5ac3c75aaf917ea99b57224f079cd615990ee334030d6",
+    "src/Treehammock.SessionValidation.Storage/ConditionalProjectionPublisher.cs": "cd29111040ce5cfc17dc069ecff738e427a4d3f7fba86dc250a91ac458560333",
+    "src/Treehammock.SessionValidation.Storage/ValidatorDatabaseIdentity.cs": "0dc53b19f3aade66005d2183dc8951a6d5f0280e5c116d9038715857106a26da",
+    "src/Treehammock.SessionValidation.Storage/CoherentCacheCodec.cs": "aef780ede4e5c1014782c17bac5c317f2c6bea22064e3a25f7177933d9b534f5",
+    "src/Treehammock.SessionValidation.Storage/packages.lock.json": "cc7e35c1476ae0949a97d514ddd6fde5160270ed20a908768b062f5a45cf5a41",
+    "src/Treehammock.SessionValidation.Storage/SvsRefillDatabase.cs": "5add15515428b21e9b22aeb0f66b2ed2ea8942f6033f992ac24cc53fde0fbb1b",
+    "src/Treehammock.SessionValidation.Storage/YsqlSessionAuthority.cs": "12dff7232c4f1d7a3e79e043efb6480b27b39198979a9c85c08958e668050fee",
+    "src/Treehammock.SessionValidation.Storage/AuthSessionProjection.cs": "513ddbe8ea336903eadf9d4b8cbd78f37d597217f84f9826be95639ca7f28898",
+    "src/Treehammock.SessionValidation.Storage/YsqlAuthorityDataSource.cs": "b8c4293aea20137700d1277a63670d43cca7ba16e9c60c5e2207c04b4c156588",
+    "src/Treehammock.SessionValidation.Storage/RequestTimeGuard.cs": "89278ade89b9af25bbe40f0db7964f3dad3187a40132238f36444d85bdfd4d46",
+    "src/Treehammock.SessionValidation.Storage/DatabaseIdentityPolicy.cs": "aa0c2c4b14226a1520f1b8b85d878c73c4260b0c51371528470feff1072f9ef4",
+    "src/Treehammock.SessionValidation.Storage/BoundedSessionRefillQueue.cs": "1e40a99aa9702637e38f2e445147350a88555ec25981ef3312adee44154e9b08",
+    "src/Treehammock.SessionValidation.Storage/CachedAccountAuthority.cs": "875b3484b46a86d0ea3eca12ccdfb83495226ef1d803b76adb2444278d523595",
+    "src/Treehammock.SessionValidation.Storage/CacheCommandWait.cs": "6a81723705c06e1bc9eda71b0823ed8d7a8cdaef2d6978675674c2388f7a0110",
+    "src/Treehammock.SessionValidation.Storage/Treehammock.SessionValidation.Storage.csproj": "8cda28b58571caabd89e2120bdc407d5c9361c638d4992cb1558a559bcdfce3a",
+    "src/Treehammock.SessionValidation.Storage/AuthorityVersion.cs": "8cc6e4c61051b38e5d078a34e76a084481bf911eb5bdfff7d9e2033f4e2788ce",
+    "src/Treehammock.SessionValidation.Core/SessionValidationInputs.cs": "38cf263edb1e434ad164f31db4bb6337517d119572d231dd527641e4ea255f12",
+    "src/Treehammock.SessionValidation.Core/TreehammockSessionPolicyEvaluator.cs": "374207f255611e1d468cbc9812f1156335745fdb61cd0f14c28c61962c1a7b9a",
+    "src/Treehammock.SessionValidation.Core/SessionDecision.cs": "89d57c6139813f21fa6ac63ec72479766b92cfabb80267718a1e044dd58c8345",
+    "src/Treehammock.SessionValidation.Core/TreehammockTokenVerifier.cs": "730aa261c9f667dff186404a1a62d9bfb6dede7ac3b77cb5f34d10ca40f5f52e",
+    "src/Treehammock.SessionValidation.Core/packages.lock.json": "b08928b9790222c4a652555088c006f5542e11b3e6ae91ea49d510274a34590b",
+    "src/Treehammock.SessionValidation.Core/Treehammock.SessionValidation.Core.csproj": "4a165853602cb94c6aae6423db0bcc9e1a3cd9546a6e7e003200613dee6d0651",
+    "src/Treehammock.SessionValidation.Client/Treehammock.SessionValidation.Client.csproj": "08527341182759fd1fa788b6c176ace4ce24de20c6e5de6d2a03968b7c57d659",
+    "src/Treehammock.SessionValidation.Client/GrpcValidationTransport.cs": "e520efb5fabdd890064886d263ca29ef1e6ca06eaac82ac099d5e79d51855c68",
+    "src/Treehammock.SessionValidation.Client/ClientTrust.cs": "56b91183d854db62006fa267caf4f1fb70ae55db832cf6c1911cc39bc1b77a0f",
+    "src/Treehammock.SessionValidation.Client/ConnectionBudget.cs": "268c9283fa6d164ab095d71a873445ee6cb52580fc45c6ff0eb497ad764677f3",
+    "src/Treehammock.SessionValidation.Client/packages.lock.json": "ffac8aa0f66a83d1f03abd08a20a77f8608be32cef14977ef247f59ebcc1adf3",
+    "src/Treehammock.SessionValidation.Client/SessionValidatorClient.cs": "705db656d442a6dca2c1184a9d94e02bb2283f9d4276934b9b5a8a29aec0834e",
+    "src/Treehammock.SessionValidation.Client/ClientOptions.cs": "0d6b83e0c79c1d66931fb43ae7b442f49e08f08c80646e6f59fa0d5fad6a2557",
+    "src/Treehammock.SessionValidation.Contracts/CallerPolicy.cs": "188da7f998de3c76259fbc4fdc222580317372b9a081a95b79d9044b818f3c0a",
+    "src/Treehammock.SessionValidation.Contracts/Treehammock.SessionValidation.Contracts.csproj": "3d53b7d012c933122d7100a89eecce2c5f5bd9ee2fef0503ceb1ba8b6766191a",
+    "src/Treehammock.SessionValidation.Contracts/ContractRules.cs": "d6a9c1d86658f520ced5e5311a4984f4005907b17521f9017055228a8eea5c09",
+    "src/Treehammock.SessionValidation.Contracts/ContractCodec.cs": "14a7d5fa5c265ae02c652e2b41fb4bccb8d2f2581243e6acec4cd486bd10330d",
+    "src/Treehammock.SessionValidation.Contracts/packages.lock.json": "0205f295141cd758a9027decc26241548a040ecbb53de5e8c5635a4e1784e589",
+    "src/Treehammock.SessionValidation.Api/HostResources.cs": "73d2bb27abcb7538f2bc2a518e3e8375e1c8c421c527dd6b3ac1ee0db99692ea",
+    "src/Treehammock.SessionValidation.Api/CoherentResources.cs": "24c6d4237f7f92e749c8e6b5b7c6a1896f2bb501e0651fee12f11fe40f4f9088",
+    "src/Treehammock.SessionValidation.Api/LocalRefillWorker.cs": "9f228a1a00658113ccef7944d8cf07ccbe0c75937753b217f3b6351aa145aa3f",
+    "src/Treehammock.SessionValidation.Api/RefillSettings.cs": "b246bda8c7e566033ccaffc40e3034209945160d1b103e63d01820159d63ebf4",
+    "src/Treehammock.SessionValidation.Api/Program.cs": "ce88e8adfcd828380f0d695cd5c6eb435aa69c9d856163ad37536133634057ac",
+    "src/Treehammock.SessionValidation.Api/RequestLifetime.cs": "daf5a5ef598baebdfb72bcabf2f2fa7bb080cf8af98f7e5ea9e2ef14080b2dc0",
+    "src/Treehammock.SessionValidation.Api/HostLifecycle.cs": "66fc95f1a3f1afd980c1e2b7caae0ffa29c02178e773c50283953aac948268d2",
+    "src/Treehammock.SessionValidation.Api/SvsHost.cs": "ba26db36b247aa30a9866597d7907b435d37a01b242230d88e06a7eae7e5a01c",
+    "src/Treehammock.SessionValidation.Api/ResponseLifetime.cs": "ad22e8eca39b5ea39465d72081dbfef076d64f1db8a6b7275c2d508025da233a",
+    "src/Treehammock.SessionValidation.Api/ServiceCertificates.cs": "c9cfd59c8af41b515400e5bc73109bc801c9480185aa10df9ae311b099a7a2e0",
+    "src/Treehammock.SessionValidation.Api/HostSettings.cs": "157654b0c16c6d7891b88bbe5b6196ad96a93de2cad25cd70c3517c232dbd1f2",
+    "src/Treehammock.SessionValidation.Api/packages.lock.json": "af5481c634c790212b765e6310d8d6f66ae929e97a5a4340912cc9e22f5b815c",
+    "src/Treehammock.SessionValidation.Api/RuntimeCache.cs": "5c4c7ef161efc445280f41572761a98fbf767b62ec17548bf2c7190511268315",
+    "src/Treehammock.SessionValidation.Api/FleetAgent.cs": "f111da748b3575b51a6a8fcb79616a82cf41ce354e3d1996406a8f86b77d1a3e",
+    "src/Treehammock.SessionValidation.Api/OwnedProjectionLeases.cs": "3d14aed9c6eef05f055c9dcf371854b5973603bd9a10ac570dd42c9d5d1fa20a",
+    "src/Treehammock.SessionValidation.Api/Treehammock.SessionValidation.Api.csproj": "f933ab4204f9128f15fbf9cd5bc1a34304e453de551e9815764a4df92495dcd6",
+    "src/Treehammock.SessionValidation.Api/ValidationService.cs": "990c25b711f4548adc828152a7d5d7597d62fe960949ff5941c99e7ac9ec00e5",
+    "src/Treehammock.SessionValidation.Contracts/Generated/SessionValidationV1.cs": "fe3ab18564d98205bafbc5bc4d4098267951deb3210d09b9a5be9a5b0b47ac10",
+    "src/Treehammock.SessionValidation.Contracts/Generated/Session-validation-v1Grpc.cs": "07ee793d2d002d857840d1e2b39f92b971d1b95218b0176d5903bf806bd85bbd",
+    "src/Treehammock.SessionValidation.Api/Fleet/AuthorityFleetGate.cs": "01ea06dd834b05ca0f6f89f9aee85cd2a2d49cfb6abb0d344fe524a135c71b05",
+    "src/Treehammock.SessionValidation.Api/Fleet/FleetPolicyHashes.cs": "c341d8ec152da7ffebbeeb1882c76bbab371dc3b68c0cb27a2dfa80e02f13022",
+    "src/Treehammock.SessionValidation.Api/Fleet/DatabaseRoleBoundary.cs": "6ee31aa93b54f9e9932e642f61f148404a16fa76b6c23c543b1a4d5ea7348637",
+    "src/Treehammock.SessionValidation.Api/Fleet/FleetProtocol.cs": "2f914a48e2f7914a60afbba568e96ad58dc6b36bb9d2a3b2591d6dd8a6574a3d",
+    "src/Treehammock.SessionValidation.Api/Fleet/AuthorityFleetSettings.cs": "58b3520de33ddb14da784f26c3df09b71741136d3eecf5fee79120f245d6a738",
+    "src/Treehammock.SessionValidation.Api/Fleet/PrivateAuthorityAddress.cs": "d0e5330d6374f8c5841a3389dd001da306a7fd55d8b5bb1c1bd9f0d7918427b3",
+    "RiggingSupport/Enum/PlatformBacker.cs": "da89e9e7caad094377f6fe5aace8f24100b04a837eaa6000595898f06d18e434",
+    "RiggingSupport/Enum/TwoFactorAuthConfiguration.cs": "378b5997c242ab38149b07e32deb9e2fbb7b0675eb02ed2e6de910ecdde7fe16",
+    "RiggingSupport/Enum/RecaptchaMethod.cs": "6c7c23b6eea19174079e130ce8e1e1a52f7706474f9c378d26d4e71244e758ca",
+    "RiggingSupport/Enum/TwoFactorAuthOutcome.cs": "6744fa5fa013ff37acba8e7e68b8fbe58a5b178d647cb965c138c3fd999ae6e6",
+    "RiggingSupport/Enum/AccountRecoveryCompatibility.cs": "e92cbb3239c694608097eddb833adbb3d03f2fe31eebc8b92588b93faca483a4",
+    "RiggingSupport/Enum/ApplicationLayer.cs": "1e92122410da3bec97cd6682a68d719067ea32872fd6ce9e3505f382182e9be4",
+    "RiggingSupport/Enum/FeatureSet.cs": "640e07b5f22626ed98ddad9345ff33bdb642c9621fabe167e85d0f74d4faa8ad",
+    "RiggingSupport/Enum/TwoAuthChallenge.cs": "31cdb6fcc25252a294a9ed64d0a44554b5c03cfee64bc6cc67cb1bf71e323949",
+    "RiggingSupport/Enum/AccountLockDown.cs": "0a013f5fc9f0dae696c32e0d42cd7ae3d6f77c7a83178c4d162edfff998f4b01",
+    "RiggingSupport/Enum/SensitiveActionPurpose.cs": "896bf4be0640511b697fd92a85f9f29525ca1332f77103fef8643650883d2533",
+    "RiggingSupport/Enum/PasswordResetSessionState.cs": "5de88fd4bb4b537012a6dfa947e2160ad62c5edba0c1252e54caa26ea8cd3879",
+    "RiggingSupport/Enum/AccountVerificationProcess.cs": "f8348bb12dd1990f6fd72c7dab0298dbb2cd6b6291c1072fa6782463603b62f2",
+    "RiggingSupport/Enum/LockedOutMethod.cs": "d3d7ea85d3f2ade1c1c7d6a978c8065435e70c08fb6ebaa73f9d59c581fe89c7",
+    "RiggingSupport/Enum/ActivationStatus.cs": "3e52998b338f5cba34a01a6e9195c270a65c4d56b7da3910b224f51c556bbb30",
+    "RiggingSupport/Enum/BackupProvider.cs": "c1fe44274ee8340daddc08328469f377e225e33f5bcc6757b71d240c37d88d53",
+    "RiggingSupport/Enum/TotpProviderType.cs": "073f0f47b87a7225eb4f0e2966e9e4576ad09d4475aac8042211f868f222485f",
+    "RiggingSupport/Enum/PasswordResetBootstrapProof.cs": "759f5c7d8b299ab4b2b0305909a0772c4d1e07c5e7244e70514b9cf6257f9189",
+    "RiggingSupport/Enum/DeletionWorkflow.cs": "7969ea519e935086d555d26f045fa4850cb041e841ca1bccc0d6e5b56f4aa831",
+    "RiggingSupport/Enum/PasswordResetTransition.cs": "d2c5358be773b5932924778e57e519ca2040cd901bca65eece33251adf748bb0",
+    "RiggingSupport/Enum/TwoFactorSessionState.cs": "2ddf3b485c05a2cbb8d18de6ed56e81c29d295e411ddd196319ca8c2157ffab0",
+    "RiggingSupport/Enum/AuthenticationProviderCompatibility.cs": "fda37239d28470dbb38df513eeaee1a775f10fd44c6c8d2933358c7c17c68eaf",
+    "RiggingSupport/Enum/TwoFactorAuthMethod.cs": "cf59406dd5b17aac1b364833a643309a9fd39cb221c7c5e60048513b56d6ebed",
+    "RiggingSupport/Enum/VerificationStatus.cs": "dbfd2b9e1463e844682a2b41bddfc22bfa813d2c6dc4f181ce862911406275ba",
+    "RiggingSupport/Enum/Country.cs": "f4845a69d1a57acd6c1bba7254494b4bce13d82f5664ac610c908eb20d91fb98",
+    "RiggingSupport/Enum/PasswordResetTwoFactorConfigurationResolver.cs": "0697b0f6d6d5c8a34fef697fbe7a635ebeaec0621fd34e02d51268d2f7955559",
+    "RiggingSupport/Enum/AccountUnlockDeliveryMethod.cs": "7c4af72977ad24a89248789303f8ae59a24ba36ea2047f3bcd869867a3ee0511",
+    "RiggingSupport/Status/CachedSessionTrustResult.cs": "424a0a15d904fa66aa8d01dcbe10c07d7e02f2b3f4ec8d449fd58b6ee4d57d84",
+    "RiggingSupport/Status/HttpMessage.cs": "388e2d23c0d97d216b235292b0999a162f0863e30f668c1cd25bd0350b26e92d",
+    "RiggingSupport/Status/CompatibilityStatus.cs": "56eade0bf13d798260fc38c529bce025a2f7957ebdf9465d573cff1750ee5315",
+    "RiggingSupport/Status/SessionRotationResult.cs": "580ce38ec42e4cbdc23d454da34273be9150b190b01f63a3ca62c6d479e5a683",
+    "RiggingSupport/Status/IntraMessage.cs": "8df2d899b22cfec7adc9cae7da34d9bdc935dd9e450b891a578cc2627c4d6957",
+    "RiggingSupport/Status/DbCommandResult.cs": "4957ab2e4977c6379936cefcbb3ae922fd490726f6f43585f74b16987a778eb8",
+    "RiggingSupport/Status/AppStatus.cs": "e8919442a6e866c9dc25afd8a99755e01a85bfd1d22269a41f1a20ede5ae725d",
+    "RiggingSupport/Actions/Account/AccountLoginAction.cs": "aa46a60cb14cc817d500201be0e68d92d4b3f969844cc48a3434bea03e431155",
+    "RiggingSupport/Actions/Account/AccountModifyAction.cs": "ccde40845bfa5b7829b79c4577fe6058ba9e8451d810835e3fa2bc1acdb2c38f",
+    "RiggingSupport/Actions/Account/AccountSetupAction.cs": "34a4dd22cb261098f26e420576949d40bdfb206a101342cc63b22d531bf57264",
+    "eng/session-validation/test-source-inventory.py": "cbca48b4665fd9187183bfd3a37fb269ea2b9c4a629b8eeb3f4410eb24221915",
+    "eng/session-validation/collect-identity-inventory.py": "e9b118ffd9afec030085e09098c56e763f49749308d1364d185917dba42935d8",
+    "eng/session-validation/collect-host-inventory.py": "a0acfea50ae37ca8270204e75f02b1d0b16834e3f9c97ebc608102a8a1c9b8a2",
+    "eng/session-validation/race_manifest.py": "4a9173382717da869f8a55c9c038fa6cb8344fa9a80bb1af155ce9bcc13db831",
+    "eng/session-validation/generate-parity-fixtures.py": "a6fb055b20e944de8ac73084be1027bf1c7f0c51ffc82f6e30d01340d0b5e068",
+    "eng/session-validation/inspect-cache-contract.py": "d140d82de49fb92d28f18fb43c86daf6835cd8bcf98091c143dc0d0ba5cf4f19",
+    "eng/session-validation/validate-client.py": "95c083f7ae40681cdbe50e756a9338a51f39b947a67cb382da93c7bca5714045",
+    "eng/session-validation/validate-storage.py": "e35651a4da9372fd658bdc8c1b81fbda3249f572e69e5455597cd347336c98fe",
+    "eng/session-validation/validate-cooperation.py": "bdcaa7f53e126d15ccae6d7a290467bdde010972753baebb6987bd4901f90451",
+    "eng/session-validation/audit-cache-authorization.py": "b46891de9ea77a60ab2c0b517b85cdde55b79ed044ad93051297bd532e24b486",
+    "eng/session-validation/validate-host.py": "68e6e9ba6204e1902a68a6a3068f37b30ef79560d6de2ea456e7fbca0706ebe2",
+    "eng/session-validation/inspect-joint-contract.py": "ad2722f6c775637040dd4ce08ac2c9506bb5a62dd99545c8f19e66f2140654fb",
+    "eng/session-validation/collect-cooperation-inventory.py": "99f006391d7723a4e596594dcdda09f075ce7b67809b4c823449173729a0bdeb",
+    "eng/session-validation/validate-core.py": "e6df429d56ead2134415491c2dc2d1a9a6b10bd634310c57ba9f2726ee99e92e",
+    "eng/session-validation/validate-rpc.py": "06bffd9bc54003d5b6c2f1b566f3bac8657a189f7faafbdca8ec0b435754a6d4",
+    "eng/session-validation/generate-contract-bindings.py": "bfcca27bf7989576013eacda230dffe17f50b998a5a63df1f6a214b7fc643403",
+    "eng/session-validation/validate-parity.py": "74608029d445780984ce5d7445b2f713f7ba9ecba6b4e9a5e8ed5a08d59b4be9",
+    "eng/session-validation/validate-races.py": "ac9f91e4a59f3a7a53bb29f3a5166d8e9964136dcea3e7308e9e8bd0b4d51be2",
+    "eng/session-validation/collect-storage-inventory.py": "8777944f1bb8fbcf0fc9a865e245c091cf463650400b75000aceed39dfda24d6",
+    "eng/session-validation/collect-source-inventory.py": "6dd082b950270c2b3dcdbb0356a6cb01f57126da664bd28ed3cdcba7fe683597",
+    "eng/session-validation/audit-readonly-sql.py": "eba3420140ccf894180e2d8c01c609225030626dd87c605e5c8494a56599bc3b",
+    "eng/session-validation/inspect-identity-spec.py": "ccc1471be3f6d077bd46bc16d767ceb137ce54bab845161c3a2fc506f17128e3",
+    "eng/session-validation/collect-contract-inventory.py": "450304afd79ac7efa1890e1f9dc38f689c7c92e9775eb92d3b66157a722e2120",
+    "eng/session-validation/verify-enablement-revision.py": "b2923e8cc6ff5fc0eaf061f5dd95fee7b1aae2de13a66af95ed6cda8a4e05c09",
+    "eng/session-validation/inspect-host-contract.py": "0adf9ba78937136f9dc48dbffc226e549cc5f9817b7501ed80a957ae9aa0adfa",
+    "eng/session-validation/collect-core-inventory.py": "1256dfc5ba56356a5536bfad20274b01453634c0b0f733c60749bb143123beb1",
+    "eng/session-validation/validate-local-refill.py": "2fdf69761e4d09be1abcd655e036a96f56ae9a9a81777c7dcc61f8ef890242ad",
+    "eng/session-validation/collect-middleware-inventory.py": "0182d02303654ec3cfabc8fae0b0b514a28c156b140202a8aee640a50cc739f1",
+    "eng/session-validation/collect-client-inventory.py": "b2f636f4886531397325a0c6c03eadd6ff03dadbc0e2469d7cc56d8f21f1c14e",
+    "eng/session-validation/validate-middleware.py": "98625627db37f2cb05f21752e15f95ee4112a947a1aba87701a223b2a53354c5",
+    "eng/session-validation/collect-cache-inventory.py": "01391f1eb8d450071c6185207ba36420c5d8d887b4ee00584716b27eb9401b25",
+    "eng/session-validation/inspect-account-state-parity.py": "1f7ea8e4d40eb854c4d1e5b25876d148edb9592025c0207e930f1cf29158c693",
+    "eng/session-validation/validate-cache.py": "9d3e6c3e9ac51ba4c2e25f22e058a27525197dcd3175214fb69d825cd25aedca",
+    "eng/session-validation/collect-build-correction.py": "26fba08e984db1f31cb89f9ab4f7ec2b8a9a0aededd182e7567af8a15f8859bf",
+    "eng/session-validation/collect-rpc-inventory.py": "cbcf8fa6450729931be54f02b52531f158ed2f50a611bbe5ecdc0b2f98b64d6c",
+    "eng/session-validation/test-contract-inventory.py": "eec13c97ae07dd0c43622ed3c017fbf53df041ec9bc8c529cb8995b4d3bae34b",
+    "eng/session-validation/validate-identity.py": "f0351bf7afca3272262ac7d0dc4191ea554efd94e2e692679cef2292ec15cbb1",
+    "eng/session-validation/test-race-manifest.py": "d8efff4eb1bdb67efeb6ee0ad7f0683ef6d56f59f016525b2b19d4ba8f0cf842",
+    "eng/session-validation/inspect-client-contract.py": "f8706abecb70d87d8e39f5c6ed8708aa2ec158d85fe25664256ab3acce874074",
+    ".gitlab/ci/pipelines/docker-direct.yml": "f7a914c52b8d9030fa6bdd5d0f5fb2710cc677aefec4535705cac5af2355d526",
+    ".gitlab/ci/pipelines/docker-system.yml": "a819c9833cac2fca33e00668ab7eb91da7ec4dc5989a8052745d3be00df586d6",
+    ".gitlab/ci/pipelines/dotnet-unit.yml": "0ea301f6ec29f68fe085ca295b413852d9503b27498bc2498cd715c2ba5c0d12",
+    ".gitlab/ci/pipelines/docker-proxy.yml": "41cd77819c49e32d815977201c6fc7c8c9e5c33bd59f1381f96d1ea0866c06c8",
+    ".gitlab/ci/pipelines/release.yml": "b3ed9384065385ca687ec65572828213aee637226082daf648cb41f4d70c3c2b",
+    ".gitlab/ci/pipelines/dotnet-sql.yml": "31ee2a5e6e20f8786e8207fd7bfb59cc3df03bb9bdb66bd5c21a4bd5018e90e4",
+    ".gitlab/ci/pipelines/dotnet-integration.yml": "7f40aebbffef6f51accab47b3b807022dcd9d627d4fd4fd227e49feb1c4ca3c8",
+    "Rigging/Observability/AbuseOperationalTelemetry.cs": "fa0c0ee02828060ae0e04696c1044c498d77f528932b28704d6852b48e4c9fd5",
+    "Rigging/Sidewalk/AWSService.cs": "390dbf55f8c4b07c1fd97176beeb134d7e832da77bb3c76640016d5f4645e485",
+    "Rigging/Sidewalk/ProviderDeliveryResult.cs": "f72038a6bbda8f710df52c6e7ce35f9e5d1cbc0ed176b67778d9d1c0f27037ab",
+    "Rigging/Sidewalk/AspenTrees.cs": "6e7da0415c0df65a4355aeb1b1e9d4ce0e683922dcd4a76dbfc39813bb921e25",
+    "Rigging/Config/RetentionSettings.cs": "5a9939ec1ea8d78ff80eeaeb1c03c505b03ec36e296a77706785dd18f33fec4f",
+    "Rigging/Config/EmailSubjectSettings.cs": "9110785229a0d4614afb8737a894eac2e7daf30509c63a978bdc402d27e7ea57",
+    "Rigging/Config/EmailTemplateSettings.cs": "cabc6b193173776cc5bcd3cbd5440d1923cb02748a0879bf8162f1d23c47425b",
+    "Rigging/Config/LockingScaleSettings.cs": "8bc373feb6d3618e7c0e1649658c492c638cc6d9b671d865b1451a993bec9127",
+    "Rigging/Config/TotpSettings.cs": "24dfb7c1befdae709e920c7132b49430b5b8500bf8232bed1afdd94120b6fac8",
+    "Rigging/Config/DeliveryOutboxSettings.cs": "1e5f9d7f4dfa4c0dd8a6e369da641761b29bb013248e2960f91ea7a5365d1255",
+    "Rigging/Config/SmsProviderNames.cs": "333ff3290702914cd71e83dd5f9ac2f161bbac082b52d6a522baec1ad662371e",
+    "Rigging/Config/JWTSettings.cs": "07d0481cb91a5dcd3cf61ce4c41c3e71ee990c652f490032bfd71b33506d52ed",
+    "Rigging/Config/HostingSettings.cs": "3b49e58e8f3aa175804e72ac349826fdf3abfe1540d078b4a932ad7ae12ea65f",
+    "Rigging/Config/RequestBodySettings.cs": "c877c7553c4e18bffe452d32cd835676b2605b74cd5f10b19eeb4793499d1f86",
+    "Rigging/Config/TwoFactorSessionCacheSettings.cs": "5fa1c0a39bff9424c01c9a215a4bb69133ccfd64830a11cac8e662ae974fed81",
+    "Rigging/Config/TwilioTransportConfiguration.cs": "e26386890a8ed747f902103fd4dc49511c62af043e988c5e1205eee1aa1469a3",
+    "Rigging/Config/DatabaseSettings.cs": "099ebc9242c1c3c8b80780aed29dd0973d8ba0cbe6159f368e08f906fc8a4428",
+    "Rigging/Config/SidewalkSettings.cs": "0ba4af6cbd58acd97c823faa9e7e96a8a24506f750d4d44cdf7ee7a6ae5dbe35",
+    "Rigging/Config/HealthProbeSettings.cs": "028065681ef879f02d765cd520c223c9a220ca23c588e01caaf25b30ddbead17",
+    "Rigging/Config/AbuseCounterCacheSettings.cs": "4619a64420be3f14306b4ee6b2a48458182fb7accd07ab1de04e02e77123d99b",
+    "Rigging/Config/SessionCacheFallbackSettings.cs": "01564a03f8a812cdfcf5f2704ca8190cf974dd88821e54cc300a264917bf7982",
+    "Rigging/Config/AccountSettings.cs": "f80719a3945691b140e16da2b2f9cffed9985388c6bcb35896ba9a3be602a8c5",
+    "Rigging/Config/SMTPSettings.cs": "3a12d07f02f106481625a46e64c392b1475e0385bcf70a758d3b80d2ce002a9a",
+    "Rigging/Config/RegistrationSettings.cs": "2e4f5c99b8be7a01087d475540a40f7e17d88817c393d802430897fca844c00d",
+    "Rigging/Config/SessionCacheWarmupSettings.cs": "d30d02ae2e96079f641842547eca5e894d6dfd417fd2727b3102f8c21f43ab4d",
+    "Rigging/Config/ProviderHealthSettings.cs": "6d80bcc7d3c602c68f7ef8b76e0cf8374be1ad45be165ae58a3dbdb2d5aca032",
+    "Rigging/Config/ConfigurationValidation.cs": "142c2d97fc847fcaff694e9e8d49423373fd0e72480814401b9794f588c30edd",
+    "Rigging/Config/SmsConfigurationCommand.cs": "640c87d088021b09f2892675246667f93d8f1e79237042bf6bde89365796d41e",
+    "Rigging/Config/SensitiveActionSettings.cs": "4ee57d060eb1e125e49c87bef6585615d8e5ee49c5ab5c722269429f7ac8ee0c",
+    "Rigging/Config/SystemTestSettings.cs": "2e260ff4963f8fd4e7a5fc04cb90ea2f8b1e309f3e8ee83ffe7031a5444f0e1e",
+    "Rigging/Config/AbuseControlSettings.cs": "b7271cdbd34c4a8d3dfd7f48c592799cf15f60908cd9d5150f2dc4fae89e64bd",
+    "Rigging/Config/UserCacheSettings.cs": "6d1388900892bbd927be0bc02ec81d7e8ec2333e68b00d38768c7367786ac267",
+    "Rigging/Config/LoginSettings.cs": "7942d9ee367d44b3fc33829ed7263b91e3c2f7d4f88c9f6686f91ac82e68fdf3",
+    "Rigging/Config/PasswordResetSettings.cs": "2eed43c54b00a8a5e99666b8435df8635ca2f981f709783ada6621eef4fe4fdd",
+    "Rigging/Config/SecurityOperationSettings.cs": "6a87db1fefafaa705b123eb4aaa397b3511ba5aa4ea5fb2f145621f6f019a404",
+    "Rigging/Delivery/DeliveryPayloadProtector.cs": "67e32d9d29c8396ea10aaecd2263aa5e08465899171cf5220d8d3499e87745d1",
+    "Rigging/Delivery/SmtpTransportPolicy.cs": "31ada717d3a70f325f4b5985af6e16b0fa4e5a0e551b238def67f7ae02244ad7",
+    "Rigging/Delivery/DeliveryExecutionPolicy.cs": "ce238556fff68c7978fa3ed3be051a539341cd90d4253c79d85db3b440364ade",
+    "Rigging/Delivery/ProviderHealth.cs": "da5bd7682297e9d0ee509833aa8f5a365c2b690b851b7d611255a58d213a9c85",
+    "Rigging/Delivery/SmtpClientFactory.cs": "8cbd87a6719cdef75a551bbb8f0267d64d0e74650da07f7426f4d94bf1a2860b",
+    "Rigging/Delivery/DeliveryModels.cs": "0704652cd4d59ddde65f16b171f4f99ae51800ef7ba0c60403c312d83dfd1952",
+    "Rigging/Security/PasswordWorkService.cs": "23697d9672396b9d7bd63cff20c25396cf4681be959a2f9f2c1b163295a9d267",
+    "Rigging/Security/AccountCryptoSizes.cs": "fc7c964aa33902948ee1ea424181862d5787138c3a6b9011a68480a168210511",
+    "Rigging/Security/SensitiveActionTargets.cs": "2c90d27fdd1572837777e725895179191f2717e5cc3e9b4f74b770c6bfa81fb8",
+    "Rigging/Security/Argon2idPasswordHashCodec.cs": "fbe3bf35e52b2231fefad51b2635718215739a6e2241887663a33afea7df1add",
+    "Rigging/Security/UserSecretHasher.cs": "d2d914da9c192682e78e9c9458a823f2fbdfe3a2fde43c3f40dc7f6cfeb05c9d",
+    "Rigging/Security/PhoneDestinationNormalizer.cs": "df9afa631cbdf9230ce0a79873050451f3a68ff455bbea81885693f1820ddd0e",
+    "Rigging/Security/AccountSecurityStampGuard.cs": "8892738308c6ca817f535566b22d2bc0b136efc7132d97a47fc28b6d5b7bee94",
+    "Rigging/Security/SensitiveActionTokenConstants.cs": "d141c32acd34514ff5f4deab5959ea8e93ba8374adf4af43797cc74570db730a",
+    "Rigging/Security/SecretHashUtility.cs": "2f4413e9fd3c408946db8fb2084c56d5c80d2e096b2035bafdf900eaa1cad724",
+    "Rigging/Security/PasswordWorkLimiter.cs": "11def01223f90017f777f2e5d9e9670381f1b4d95c2bba1d99a101800adf0b19",
+    "Rigging/Security/AccountVerificationTokenUtility.cs": "8db6d1b862c1246df77157486001e4a6a920b3d17122d1909f4184bd5500feb6",
+    "Rigging/Database/StorageContext.cs": "db960534e3fb0985206767dc0771f94a29d6a660d7e91ebc63327060ee64fa8c",
+    "Rigging/Health/HealthDependencyService.cs": "1ea459432fc09539a360389d565a1dd51953f1c1025563c47d3686d74609ea60",
+    "Rigging/Cache/StalePendingTwoFactorCachePayloadException.cs": "40b4d61830a1d4643c8640b5a17349c05f8594d1e17b4db918c38ba741226a13",
+    "Rigging/Cache/CacheJsonSettings.cs": "b1b26bba46e35f4ae385b534f9b298a181fa5c4d9f709f9e5bf45a6b13e48044",
+    "Rigging/Cache/TwoFactorSessionService.cs": "eb5ec08797335ef2a4ea3e8bf40d2c6237d017413912487e0f95ebd42c2e51ef",
+    "Rigging/Cache/PasswordResetSessionService.cs": "c0549745b1bd14ff47373007e45eb59b775e6739b81816394bf6fb46b3400895",
+    "Rigging/Cache/pending-proof-projection.lua": "1ffc6ae0604d8844ebf5d17ee1f393eb69c01b8940f6ecdb66fa99e73705da60",
+    "Rigging/Cache/StaleActiveSessionCachePayloadException.cs": "7a25d621aa91fd61527c6ecc6509365a33dd74b38faf5ae52621daac3d8e1d6d",
+    "Rigging/Cache/ActiveUserCacheService.cs": "721521f983c10b32a922b1a72e9413d4b6d716a35c4711bc50df8d914c51755d",
+    "Rigging/Cache/CacheConnectionOwner.cs": "30ea07bd1359f815d8c2e8dd8fa4f31ae96cbbff242021c31d336a745bb82625",
+    "Rigging/Hosting/HttpExceptionFallbackMiddleware.cs": "bd069c4d5a85befea28f51aa5e2f4f8b20f73161ae117205058c661038c82767",
+    "Rigging/Hosting/VerificationLinkBuilder.cs": "593f52cab6e34dab570b53fed061609f91c4618b0abb54eb53842ecba8ef456d",
+    "Rigging/Hosting/StrictRequestBodyDecoder.cs": "28e1a97618883040898a673dfd6a0a8a0eb2c872d317787d9f36e5ade094be37",
+    "Rigging/Hosting/HostingConfigurator.cs": "7fadd4a37dff89c4b1b7eaebba0433f33fb78e5a1fb368a0e93b79c8784923c5",
+    "Rigging/Hosting/HostSystemTestIdentity.cs": "cdbeeec162503634661eb2f50fab6ed9aa2fdc590551d991f46d0dfdf19c9c8e",
+    "Rigging/Hosting/SystemTestControllerFeatureProvider.cs": "77a0684d8cc701caa74606646985a285f5f7594cadf097bff9b86b024aa3d19c",
+    "Rigging/Hosting/RequestBodyMiddleware.cs": "57f7c79fd36d390eec7a137cecfa27db986c6bfea2af4de3059e9b63597b8791",
+    "Rigging/Hosting/SecurityResponseCacheMiddleware.cs": "8384bed9feef6108c2a1cce4ae5c77d1a717b315b3ca1c35ab687f8572c0c0fb",
+    "Rigging/Hosting/SystemTestCapability.cs": "ba215cfe839dcd9f71ffcb0a53201dca9e73ee5aa1a26ff1d0abeb1c4cd7ed8c",
+    "Rigging/Hosting/RequestBodyPolicy.cs": "e027d44b7eb8b6d884b1d5348c0cc182d79a96e4be58559a301e18ad3950d9dd",
+    "Rigging/Operations/SecurityOperationMiddleware.cs": "264987bd1b249f4018a25d2dda6c33c96e52dd20c36ee23c3f0d3d0f45f31865",
+    "Rigging/Operations/SecurityOperationRequestContext.cs": "d9876b2adbadd8712a2492a91a4896af63515f8ce612546b2a630560b23fd9a5",
+    "Rigging/Dependencies/DependencyExceptionMiddleware.cs": "6909a8a35c6f90ef2da5efb35aca81bc83af70abaf9f2e44c11acded5328c8c2",
+    "Rigging/Dependencies/DependencyFailure.cs": "accbd5458842f4dfbc9628eca63eeaa7b90dd01094dcbd90a7daa4a6f8cb2d2e",
+    "Rigging/Authentication/JsonWebTokenMiddleware.cs": "52cb62e4dfa424b3ec53520fd16551d8bda3e3408a615f39884be87ad9546e1e",
+    "Rigging/Authentication/TwoFactorChallengeCodeUtility.cs": "775340886c6eb63523301ad4bb0df356591fc7ddb4d682eac0c1c37ebb40dfe7",
+    "Rigging/Authentication/JsonWebTokenUtility.cs": "9b216a0c0d78b2f2debcae062d33f40f5253acdf36eb2f06f13915062da5ad04",
+    "Rigging/Authentication/JsonWebTokenPurpose.cs": "a56eed54b32a5b7ffed2c9bc529409e62787b1cbef924148473566040ed152de",
+    "Rigging/Authentication/SessionProtocol.cs": "e40eef05a947ed30dabe730379c76c9eadcad11e436fef88c91f3c303ec6f8b1",
+    "Rigging/Authentication/AuthContextItems.cs": "6a369d609f3b8e0f7b1ce07bef92b99ff50c122762c69da143aa90062d66b53c",
+    "Rigging/Authentication/AccessTokenHashUtility.cs": "c08708435b47144c6920591f8ec5d21fe8270b4bbf6f16e41f1e48e5b37c8d37",
+    "Rigging/Authentication/AccessTokenTransport.cs": "587a5f1570b23299c6686d4bdbb252c735e30cc62d9a367b62d1ba273d205118",
+    "Rigging/DependencyInjection/TreehammockServiceCollectionExtensions.cs": "b904ed8d308c22d2dc87c5a1031fff40bbdad824e307b237fa1515be0a97006d",
+    "Rigging/Replay/AuthenticatedMutationIdempotency.cs": "a9006fe5a39cacbde183cbe40fba54f4e50aa7901cda65ed607087052fd6fde1",
+    "Rigging/Replay/AuthenticatedMutationReplayScripts.cs": "006e5fb873ce175ea33068e398e89cb2e9a7068c8bb1a9365e0ae4a11a95ed3b",
+    "Rigging/Replay/AuthenticatedMutationSafeResult.cs": "cf87a2544924a77aa0707b04544563ccb749938eca3131df11342803b374b356",
+    "Rigging/Replay/AuthenticatedMutationCanonicalRequest.cs": "b5dcc87943d1016f0f88215cb4b2f6f27e16a6c8c0a10ea61a1e25cbddca7cff",
+    "Rigging/Abuse/AbuseContracts.cs": "d84cabac9a8635c43a43e1371085b482e747b57a08dfe1927be77592e42bec05",
+    "Rigging/Abuse/PostgreSqlAbuseBudgetStore.cs": "6df2613de2011453d0a11e67e79c0cd3d31b5bef4fb984e4f1316ef46f4f528d",
+    "Rigging/Abuse/DragonflyAbuseCounterStore.cs": "dbf4327e7a70db10242dd83f84405929a4895db0a09664378613f10a09a5e284",
+    "Rigging/Abuse/AbuseCounterPolicyCatalog.cs": "1be0a732064e99d7f2c04909c1d75fdb0151cab9ffab8f7aea065844de046cc3",
+    "Rigging/Abuse/AbuseCounterScripts.cs": "e7727058701078fa1b228ac1a6052fc7195085401757e419bec5d0b87df3a8cc",
+    "Rigging/Abuse/AbuseModels.cs": "7ab501d36acea6f9044e9a9100a9f0eab6caac74bb072b383b9292e0bccfe04e",
+    "Rigging/Abuse/SensitiveActionAdmissionPolicy.cs": "54f765a473c18095811081170f6699940633e1cebc8f63750b23ddc804932749",
+    "Rigging/Abuse/SignupAdmissionPolicy.cs": "8270ea06baf10243ec944a899e4ef6b396191f0b17179327f824c07001ad0bcc",
+    "Rigging/Abuse/AbuseReasonCodes.cs": "423a7c878f227e2a21f9d95ecba60ae6d93c8ac192c4f307495748e03ef069af",
+    "Rigging/Database/Baseline/000_canonical_database.sql": "5883047c04aaa39071f3a62e0dfaffcea74e87c60e3cdc8049df677561c4ed9e",
+    "Rigging/Database/Baseline/000_treehammock_canonical_database.sql": "5883047c04aaa39071f3a62e0dfaffcea74e87c60e3cdc8049df677561c4ed9e",
+    "Rigging/Database/Migrations/005_password_cost_upgrade.sql": "243fd9ac70f89117d3130d660c8d95e88c99aa6c7d322a474ee97e34c2a31115",
+    "Rigging/Database/Migrations/002_transaction_authority.sql": "00f2de1ec0a8561d03f9e78d8981f318440752beb4e26699e7212c926ba57842",
+    "Rigging/Database/Migrations/catalog_contract.sql": "08e445691bf701d60e8de2b2cb5e17f95f8552097b632720887fc184ccb48517",
+    "Rigging/Database/Migrations/003_security_operations.sql": "6fbfe7d3f8b65f030bb466c65c1e6fe1580acb8ade1e6123531848e4146fbdc6",
+    "Rigging/Database/Migrations/006_atomic_attempts_and_sensitive_grants.sql": "8a46a369ff1a43a6f3e122f1b436d36e14e026e56b993d94d18516bfb47aafaa",
+    "Rigging/Database/Migrations/001_legacy_baseline.sql": "e287c32d9f9753818b2bc1146f3dc21105b0c43f2b7b3446e96db67720d0ae36",
+    "Rigging/Database/Migrations/004_authenticated_mutation_replays.sql": "f63a9e9b9e4094b1e9cb50944b47d0e97dadbeee48e23fa5b0fa87a2be686b37",
+    "Rigging/Database/Migrations/DatabaseMigrationRunner.cs": "bca2342cec7a265eb896827f5bad2879989284fde350773641d9279a08911a96",
+    "Rigging/Database/Migrations/manifest.json": "39680c778f5159976538cc07cc5b9f17d6911485740df4c69d86537dcefa7254",
+    "Rigging/Database/Migrations/DatabaseMigrationCommand.cs": "b26ab8b40f17b2eff33ca948f968d0ac1fc65ed1b81944301c215cb0655ea3f1",
+    "Rigging/Authentication/Attributes/AllowAnonymous.cs": "54ca3e42af853472f176aa84a7e22f2b060061321d4b542a43c68a1bdabefce2",
+    "Rigging/Authentication/Attributes/RequireCapability.cs": "b0030940f2bded12736f875b6aa6268f660395e3147fca2feea598e13e5c8d13",
+    "Rigging/Authentication/Attributes/Authenticate.cs": "7bd4c1161669b2cca1d7f33f788d43b4072656fa345b879d5035084fee0291f1",
+    "Rigging/Replay/Scripts/reserve-v2.lua": "67249b35954baf72a51bff988e30d3a477db85fcceead501bbc0b47b6744d2fc",
+    "Rigging/Replay/Scripts/complete-v2.lua": "381b11e0a4aa30d5a78a216e1551f0576c7112f5b4f05df4db7652ff81aa4583",
+    "Rigging/Replay/Scripts/renew-v2.lua": "3ed2f3d2225e87ebf7ef7847beff669166047e4d1b2779b4c79514ce15dcdfea",
+    "Rigging/Abuse/Scripts/provider-health-acquire-v1.lua": "3e66aab8040d67f7c42fcb03b4e94bdc2e51b60506947435080ed4ee70154d4d",
+    "Rigging/Abuse/Scripts/captcha-consume-v1.lua": "fcc64af33a71450d199058ad4a3c76728c75daa60814d09a6c6a41378846cfc4",
+    "Rigging/Abuse/Scripts/cooldown-v1.lua": "2409258ca8a2695d1b631bea024bf62a1a5527743cc50c908aab44a6a2a903f2",
+    "Rigging/Abuse/Scripts/increment-v1.lua": "8aca189aa70b605d315866f78daf020a09872d88a4b71432db157f041cf50c84",
+    "Rigging/Abuse/Scripts/provider-health-complete-v1.lua": "70cafad18c481a2ca68c429fb5bf8eb02b8fcf4ceffedeafbb86923ff18d7736",
+    "DataLayer/Account/TwoFactorDetails.cs": "c930afff74d20caac77ac78a543c6ce10a844f4bfbb6f1a79ae070537b908e16",
+    "DataLayer/Account/AccountSessionSummary.cs": "076ca55bb8fb10e87525768d67392a3e035ccb14ea90486cb134b5fb9d12093c",
+    "DataLayer/Account/IntraAccount.cs": "062acd1c7b05d4152b70b5c8a89a8d34751659d221ab49e31e081597140572da",
+    "DataLayer/Security/SensitiveActionTokens.cs": "9dfeaf5cca7e7708332a61b05bc1236b5a823fe511cfb7d7ff14b42c53519bc2",
+    "DataLayer/Security/SensitiveActionProofs.cs": "71eec80240e1907051f5ed8284d0ae0fb26860a7370b6edf68c63bfc92f372de",
+    "DataLayer/Security/LoginAttemptState.cs": "0fc766bcbd72f512799854ddef036f0cdc542605b55fb66ea05e0c2ac4b5b65f",
+    "DataLayer/Entitlements/EntitlementProjection.cs": "7162e20fd2bf8474aff87be9e4ea7f7bf49fec2d4e500f867d656b91bdfd77f4",
+    "DataLayer/Cache/PasswordResetSession.cs": "d81982b4003ca649bf0728eaf3420f9442b584b7c700bfa8d6fd3f201d2927e1",
+    "DataLayer/Cache/ActiveSession.cs": "a5ae7f982de34d2fc37dab05bd0a634cbd60b5d67bd34897c9c9fc7842f32a13",
+    "DataLayer/Cache/TwoFactorSession.cs": "430d0edf6b8103f1596f80bcbfbc4e55be813478915fd4b299adbfd3853b6657",
+    "DataLayer/Operations/SecurityOperation.cs": "0a0ce7cce3e291adda8e5b5e08fa347c522cca0b766ee580bb07099c78cedeca",
+    "Models/Account/AccountEdit.cs": "106ea0c9306d8de8c52d811402f6a74226b8d034fa3d26f02ccc2265a0b737e5",
+    "Models/Account/AccountCreation.cs": "80577f03d9a9309eb21fa525b4da6b0d3b0db218a4c6f2700566d2aed2803f30",
+    "Models/Account/AccountDetails.cs": "29a44769a973eb407a5efd419d0a9a9834ee0c69659cfde10fecf9ae8bbccc81",
+    "Models/Account/AccountDelete.cs": "4804bbf3ec370f820626f35fbdc624624cf8b4d4e19890ad4e13170b93053ed1",
+    "Models/Api/ApiResponse.cs": "460d8d374798d90c9e288d5a88717318bf7ed39394e9ca6576a72ae461206255",
+    "Models/Api/HealthStatusResponse.cs": "f7bd46ad101733964294031997bcf4d5966edafb991ee37d9d576b275d9f9be0",
+    "Models/Api/ApiResponses.cs": "38c48f37ba4cda8ade57f97e42d21c26fd1f4f53f1cade05a796b3aeb76a61bf",
+    "Models/Activation/ActivationUnSubscribe.cs": "c253c11e3946737cd854facafd887a75e366bf26794e0bcb88e28598a6c015ba",
+    "Models/Activation/ActivationDetails.cs": "498d8aa0e7ffb172afc7059a76983470497e38ad2797477bac9112d07addffef",
+    "Models/Activation/ActivationCreation.cs": "b9c7da1c4167265a107327601642f771c4bd767ad1f739ef44ed9b6ab64b446c",
+    "Models/Activation/TrustedGrant.cs": "502e501d329a0f26cd71c3a3d64252cc90c76ac44a6465efede76025ea9c2bb2",
+    "Models/TwoAuthProvider/TwoFactorRemove.cs": "1a919fb24462eab5c67e11a5a50dc294e312a9ae02a4d1dea63e5dee7d1c1305",
+    "Models/TwoAuthProvider/TwoFactorDetails.cs": "83f5f152e5c51514b782d66156cd7c835620a03e3e6016aa58767c2de8324976",
+    "Models/TwoAuthProvider/TwoFactorSetup.cs": "37bc9132d3a87c3607c146745c3edc2e09a0ecfd1e5d41ec8e61067d5290e7f9",
+    "Models/Recovery/AccountRecovery.cs": "3061289d7605cfa8c1ca086b882e4ccf7cdc7ae69965c1bd8aa4dc7eac82e8f5",
+    "Models/PasswordReset/PasswordReset.cs": "981ca4202450c1293259cb6ac79967b84d013e6d87b341ea956daed1b1786970",
+    "Models/SystemTesting/SystemTestSeedVerifiedAccountRequest.cs": "1378474251affc8092fb3488cf327a9815d6bf938bc0feb7b17dcac800698dac",
+    "Models/Authentication/AuthenticateSessions.cs": "9cd55a50d1aa1203d612cab06c217a1c432f97d3da1498e81b0d49e64832fdf4",
+    "Models/Authentication/AuthenticateLogin.cs": "67e0a5fc6983701cffbaf5ecbc20f5727004f94cc72dc42c7875bd12bd140d60",
+    "Models/Authentication/RemoveTwoFactorMethod.cs": "74e6c20e37062964282a4b455443c6a240d617e1dc85b0b0f5893c92510c7f0b",
+    "Models/Authentication/SensitiveAction.cs": "800dfb5e6e90aebc667ec5c269772fb4c71719aac285c4e840b6831f2467ea4f",
+    "Models/Authentication/LayeredAuthenticate.cs": "c49887b4a5e62c8841d7e6676cb6de7cf297557688c45adb03e8ebe888b3062f",
+    "Models/Authentication/SetupLayeredAuthenicateMethod.cs": "582df65aa7bbaf02b6ae6392e9ed4a78e711c6cc9cefe3eefd9aa4d1e7563e4d",
+    "Models/Authentication/LayeredAuthenticateMethods.cs": "700e6c401d113de36913c3c4b224710d2b58320f83c555158b418d9ff6c0bd13",
+    "Models/Authentication/RefreshSession.cs": "ef18d56a75e271d5d734bb89c053f20f683bfe36d9a839960274b3894c53fd5d",
+    "Models/Authentication/AuthenticateLogoff.cs": "4a83a3110f6032e7bc5dc424334c68543433c08d55883d6e78937e7ea8ad1228",
+    "Models/Authentication/AuthenticatorAppSetup.cs": "a78ad210e7352b22b3285b5c51cff7dae01acf6b6d96e6c944f539c850c93a1c",
+    "tests/Treehammock.SessionValidation.UnitTests/packages.lock.json": "5df60f132adf958d4d29f6571b92b312758f78306197eb2d980f7e5e7a8f0793",
+    "tests/Treehammock.SessionValidation.CacheTests/packages.lock.json": "e8068fcabb91feda1c84dd2b0f5015a6dd65bf11e79b8047df551a875542b63d",
+    "tests/Treehammock.SessionValidation.DragonflyTests/packages.lock.json": "353d47b21c15c1ac01441db5880ab0e5d050477f1d06b41641fb923282187121",
+    "tests/Treehammock.SessionValidation.ContractTests/packages.lock.json": "6f325d2653f8750be77a16a194a1d617a7cd51efda3644e78584b1427d2cf040",
+    "tests/Treehammock.SessionValidation.ClientTests/packages.lock.json": "d4afd43a10393ef99adbf2d96ea084812f041f205c8020792c07142bcbd26dfc",
+    "tests/Treehammock.SessionValidation.YsqlTests/packages.lock.json": "353d47b21c15c1ac01441db5880ab0e5d050477f1d06b41641fb923282187121",
+    "tests/Treehammock.SessionValidation.HostTests/packages.lock.json": "04b25de8d6f3c8ddae6f3e59f040af0483986bf999921b6a380be0d5f1f1609a",
+    "tests/Treehammock.SessionValidation.StorageTests/packages.lock.json": "353d47b21c15c1ac01441db5880ab0e5d050477f1d06b41641fb923282187121",
+    "Services/SystemTesting/SystemTestSmsSender.cs": "d42cb8bc7b3b74a340cc3986a3b4b8ee7e168e819afc216cbc94e0b285d8d621",
+    "Services/SystemTesting/SystemTestDeliveryCapture.cs": "e09a0310ec0794159759145113dcc13695e55cd0bdc57f7c967d7caec57e5378",
+    "Services/SystemTesting/SystemTestSmtpService.cs": "e97df2c42ae3219001eb9d521e7f34cea070959b04e4f6030b490fb4e77e3319",
+    "deploy/session-validation/SVS09_CLIENT_OPERATIONS.md": "fd966871267f0f6d083ef798e3d7116603bf21567de062c3e447cca87c2b2beb",
+    "deploy/session-validation/SVS07.Dockerfile": "bb8aceb752a59fb651b2bfbb99ffe0393c28e354307c8ab6055ffe682630b9b8",
+    "deploy/session-validation/SVS07_host.Example.json": "c8886e8eaff3f5c9607bc59bf43d3142f3adbb4884ce4e7aa69f74b1472c380d",
+    "deploy/session-validation/svs07.service": "66878f9a68564a215868d68c1465d5b4e736f7cbfd9928497c4b57991226d6d0",
+    "deploy/session-validation/SVS06_CACHE_OPERATIONS.md": "a5397438c923e78ad096c00c317f076151f6a6fba30dd0c3859ad0b2946f0fc6",
+    "deploy/session-validation/validator-role-specification.json": "dc93e13c3161be896cccbcc103f7f75c894df262e554eefd0d83e08f156a0f37",
+    "deploy/session-validation/host.example.json": "9ff0254a0fae53bf603dcb0fafe4478c020286377aec6f9d1508cd1fcbd35bc0",
+    "deploy/session-validation/client.example.json": "55532c668ec285f5565b9863660e584dce9db38a1c95da312f140fb16ba03a09",
+    "deploy/session-validation/SVS10_CONFORMANCE.md": "2b54e3e4c54bbdf17470c36bf36792677a94c2a52c15538f0315799c548cb3f3",
+    "deploy/session-validation/SVS08_OPERATIONS.md": "0ba7e1dc10e8d4ac066b29a4294ea1ff9551dbf7156fe1601edd20e47f5f3b25",
+    "deploy/session-validation/treehammock-validator-policy.json": "747e3b71a350405d6ca981b5f84e546ab5694f8a7e16cd5c2942de0d53f0e6c1",
+    "deploy/session-validation/SVS06_CACHE_ACL_REQUIREMENTS.json": "fbda10d4390f9a921c60508460ab1d26b42d91e4cccff80ed91385dcf905fa5e",
+    "deploy/session-validation/validator-privilege-audit-specification.json": "4ecb36acd059d8a7e1aaa55ed7cd5c32c25b519a0a8e21670627866e3b6ef6c9",
+    "deploy/session-validation/SVS05_OPERATIONS.md": "1bebf8426341a41636cb9d479896b61354b4f83658059e3cc794ff5736e8776c",
+    "deploy/session-validation/SVS11_OPERATIONS.md": "86e5b403552898687c457f57a321a1c115fd5f0dc687e6b94c0bd9f053ff76b4",
+    "deploy/session-validation/SVS07_OPERATIONS.md": "75ae12bf86b6078fecc753f3e2d30c814ce391cd4ae8f5af620551c9a2011016",
+    "deploy/session-validation/README.md": "979c86791498008d49e23815cc86c44f1f42c3bb5010fa7e513c27f028708f06",
+    "deploy/session-validation/SVS08_host.Example.json": "3930869762174a9f51402c7a2b7e12a04ae6f68fa938528ddf2ed115d8abbab9",
+    "deploy/session-validation/ths12c/100_svs_refill.sql": "f50716f79f28c8eb670379a83c01dbfb933ccd461991ed035a16b5151ee3968d",
+    "deploy/session-validation/ths12c/cache-refill-policy.json": "c99687b005baa34e56392987a90b17d2eaeb9d0e3b3659c8a86cd53d3020f2e0",
+    "deploy/session-validation/ths12c/publication-database-policy.json": "747e3b71a350405d6ca981b5f84e546ab5694f8a7e16cd5c2942de0d53f0e6c1",
+    "deploy/session-validation/ths12c/authority-fleet-v2.schema.json": "3331f250cc39fb7e245a8a0a2d4c1fac2ec643ff442f794d2ebbdfce91ca7e79",
+    "deploy/session-validation/sql/svs05-inspect-identity.sql": "e0b8d9dda6b255e3dfa3b967784279f5a036bf7b65cdfb2d917957ed66f2f575",
+    "deploy/session-validation/sql/svs05-remove-identity.sql": "539f180543773f2a70396e18b701c5c3a56f6a1fdb873e7e1a26fefa32df1b3f",
+    "deploy/session-validation/sql/svs05-provision-identity.sql": "f05e59bc2080d9cbfdaccca2ef1274d04cb323205873e8242e148c64b82693bd",
+    "deploy/session-validation/sql/svs04-readonly-functions.sql": "3af8cfdd5f3e64cfec8d46d7a869bc3de5a7f3669d5b0e73b979a0ac7af7a6b7",
+    "deploy/session-validation/conformance/authority-transition.lua": "5f27adee6652c110017dd377da54e7713aa8770d45a56d71195ef60d4525cab8"
+  },
+  "parent_pipeline": {
+    "stages": [
+      "dispatch"
+    ],
+    "workflow": {
+      "rules": [
+        {
+          "if": "$RUN_DOTNET_UNIT_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_DOTNET_INTEGRATION_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_DOTNET_SQL_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_DOCKER_DIRECT_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_DOCKER_PROXY_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_DOCKER_SYSTEM_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_RELEASE_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"merge_request_event\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"push\""
+        },
+        {
+          "if": "$CI_COMMIT_TAG"
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\""
+        }
+      ]
+    },
+    "trigger-dotnet-unit-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/dotnet-unit.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOTNET_UNIT_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"merge_request_event\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"push\" && $CI_COMMIT_BRANCH"
+        },
+        {
+          "if": "$CI_COMMIT_TAG"
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-dotnet-integration-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/dotnet-integration.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOTNET_INTEGRATION_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"merge_request_event\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"push\" && $CI_COMMIT_BRANCH"
+        },
+        {
+          "if": "$CI_COMMIT_TAG"
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-dotnet-sql-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/dotnet-sql.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOTNET_SQL_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-docker-direct-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/docker-direct.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOCKER_DIRECT_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-docker-proxy-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/docker-proxy.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOCKER_PROXY_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-docker-system-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/docker-system.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_DOCKER_SYSTEM_PIPELINE == \"true\""
+        },
+        {
+          "if": "$RUN_ALL_TREEHAMMOCK_PIPELINES == \"true\""
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    },
+    "trigger-release-pipeline": {
+      "stage": "dispatch",
+      "trigger": {
+        "include": [
+          {
+            "local": ".gitlab/ci/pipelines/release.yml"
+          }
+        ],
+        "strategy": "depend",
+        "forward": {
+          "pipeline_variables": true
+        }
+      },
+      "rules": [
+        {
+          "if": "$RUN_RELEASE_PIPELINE == \"true\""
+        },
+        {
+          "if": "$CI_COMMIT_TAG =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+([-.][0-9A-Za-z.-]+)?$/"
+        },
+        {
+          "if": "$CI_PIPELINE_SOURCE == \"web\"",
+          "when": "manual"
+        },
+        {
+          "when": "never"
+        }
+      ]
+    }
+  },
+  "native_acceptance": "NotRun",
+  "grant_rights": false,
+  "release_ready": false,
+  "reviewed_additions": {
+    "deploy/session-validation/capacity.example.json": "ad321ae961948808218aeb8ba41889d0a5038957942d817ed7193a4b3a064e6a",
+    "deploy/session-validation/compose.integration.yaml": "73f04036ad8318e4d47c3d739deebafab56e32cb140cf442e7ee62015b344400",
+    "deploy/session-validation/disposable/Dockerfile": "369b41804f3e50caae65dda916dc748e1b0f144a1aeac51cf4a167447aa6d387",
+    "deploy/session-validation/disposable/images.example.json": "4461e74eb3dac8f8b235ba8e45c235608c7cc670b2874dc85ed08415f06e2b67",
+    "deploy/session-validation/firewall/session-validation-private.example.nft": "09f5b79af38a89b709e8305fc982bbb8ef00be79c1ad0308203a5a73474b7374",
+    "deploy/session-validation/haproxy/internal.cfg": "89d883864b6f5279984e10e4fcdc8ab62f8e4d0cb7e778c4c06c461cf2c33e71",
+    "deploy/session-validation/linux/sysctl.d/90-session-validation.example.conf": "601395872ad84153cfb94feb4d868cee33bd9bddeb59e5568499ac696ff1088d",
+    "deploy/session-validation/monitoring/alerts.example.yml": "c30341763865b199495d597f783e80e2e548c9fbe7cbf86f92f9b2781c04f10f",
+    "deploy/session-validation/monitoring/dashboard.example.json": "9054793dd38801a8eba60cbc8390ed5bd97f2491b729f4786ede5a31f520bd46",
+    "deploy/session-validation/monitoring/monitoring.example.json": "b2b2d22c53bd2ce98e0deadb11ef391f7fd2c34c44f466b42915c21ab29c662b",
+    "deploy/session-validation/monitoring/prometheus.example.yml": "390b594dc1a9ec49bdcb31f7b1b7d2e68f9026dd71bb7b5961ae82952c6b6e11",
+    "deploy/session-validation/nginx/grpc.conf": "16e690ae136d7d9567b784c3749f66b688cbea22a73c77aa5bbe87f2dc98819d",
+    "deploy/session-validation/nginx/nginx.conf": "ac36a9c25fb2fa22b22f69a919e9801987c454114e141a60d760d0fa804c0b19",
+    "deploy/session-validation/physical/credentials.example.json": "a249128f86b095ec2c0f7889ad3c55db614972ae56defba4b4e3859de30fb584",
+    "deploy/session-validation/physical/datacenter.example.json": "480017d4a1680cf3f3dd1c69a309f86f78f74ac198c61fb7c25a931bac5e9fb0",
+    "deploy/session-validation/security/private-key-inventory.example.json": "a2a51bf0f5d484f3210030f98faf92a894072ec65a8b18f1f16fa781774c2227",
+    "deploy/session-validation/systemd/svs-proxy@.service": "5ea2b83ae34a24c4c6013f5ac73f36f971b46708a6f6d8c92dfec36cf088ad2b",
+    "deploy/session-validation/systemd/session-validation.sysusers.conf": "9edbf75afcfe79a29547bf942783e5e83405b808ba90f571532c310b1568cbb8",
+    "deploy/session-validation/systemd/svs@.service": "97959c84e2b6c02ccbe618d382a3946788c4f71cd1334d44c2e2761f5dfd9d5f",
+    "deploy/session-validation/rollout/policy.example.json": "59c534a523f00118d95e4b9a036149c8239397117daa6d32db05de94cbc68fe2",
+    "deploy/session-validation/rollout/ROLLBACK.md": "d985ed8794ac3ee7ecee5290abdc594e8ec7ade1b2a511220a17047127645592",
+    "deploy/session-validation/rollout/default.json": "1cbe27146be96ec0a568746f28883ffaef2f8855369a41150c338c55a639d3e9"
+  },
+  "reviewed_runtime_changes": {
+    "src/Treehammock.SessionValidation.Api/HostResources.cs": {
+      "baseline_sha256": "73d2bb27abcb7538f2bc2a518e3e8375e1c8c421c527dd6b3ac1ee0db99692ea",
+      "sha256": "e3e9ac377d4f3f3b8d6d95634be283476da08fc10c1824774e20b6aa77669daf",
+      "pr": "SVS-17",
+      "reason": "Explicit API capacity ceilings, raw-operation ownership and fail-fast backpressure; authorization/SQL/Lua contracts unchanged"
+    },
+    "src/Treehammock.SessionValidation.Api/CoherentResources.cs": {
+      "baseline_sha256": "24c6d4237f7f92e749c8e6b5b7c6a1896f2bb501e0651fee12f11fe40f4f9088",
+      "sha256": "cf435fa1bb6da1bce7e2ddbdbba8024d4f634fcaebd80f4f6ccb8940c6218407",
+      "pr": "SVS-17",
+      "reason": "Explicit API capacity ceilings, raw-operation ownership and fail-fast backpressure; authorization/SQL/Lua contracts unchanged"
+    },
+    "src/Treehammock.SessionValidation.Api/RequestLifetime.cs": {
+      "baseline_sha256": "daf5a5ef598baebdfb72bcabf2f2fa7bb080cf8af98f7e5ea9e2ef14080b2dc0",
+      "sha256": "875dad606a715960122542299572f3fb27ebcfc3da98f2e7701ffc347ca97745",
+      "pr": "SVS-17",
+      "reason": "Explicit API capacity ceilings, raw-operation ownership and fail-fast backpressure; authorization/SQL/Lua contracts unchanged"
+    },
+    "src/Treehammock.SessionValidation.Api/HostSettings.cs": {
+      "baseline_sha256": "157654b0c16c6d7891b88bbe5b6196ad96a93de2cad25cd70c3517c232dbd1f2",
+      "sha256": "82fd7415fdf45a9fd9351de19a5c0635359e8c90a9828c2de881dd29fdf636a9",
+      "pr": "SVS-19",
+      "reason": "Private health and fixed-label telemetry; no SQL/Lua/auth predicate or writer changes"
+    },
+    "src/Treehammock.SessionValidation.Api/RuntimeCache.cs": {
+      "baseline_sha256": "5c4c7ef161efc445280f41572761a98fbf767b62ec17548bf2c7190511268315",
+      "sha256": "2d831e7f6dfa1f0a38318b763d7d8f6acfcbffeea323b443f776bb96004fa1ed",
+      "pr": "SVS-17",
+      "reason": "Explicit API capacity ceilings, raw-operation ownership and fail-fast backpressure; authorization/SQL/Lua contracts unchanged"
+    },
+    "src/Treehammock.SessionValidation.Api/SvsHost.cs": {
+      "baseline_sha256": "ba26db36b247aa30a9866597d7907b435d37a01b242230d88e06a7eae7e5a01c",
+      "sha256": "cbba55656f23c735afc5608a31446c27a3fa6cf5802f68119cb0533dc6248602",
+      "pr": "SVS-19",
+      "reason": "Private health and fixed-label telemetry; no SQL/Lua/auth predicate or writer changes"
+    },
+    "src/Treehammock.SessionValidation.Api/ServiceCertificates.cs": {
+      "baseline_sha256": "c9cfd59c8af41b515400e5bc73109bc801c9480185aa10df9ae311b099a7a2e0",
+      "sha256": "78372a7e1d24c1a73cbcd302be52b8c0465a08851e73b6b98c8946ae60ed6e2b",
+      "pr": "SVS-19",
+      "reason": "Private health and fixed-label telemetry; no SQL/Lua/auth predicate or writer changes"
+    },
+    "src/Treehammock.SessionValidation.Api/ValidationService.cs": {
+      "baseline_sha256": "990c25b711f4548adc828152a7d5d7597d62fe960949ff5941c99e7ac9ec00e5",
+      "sha256": "e19396468046fa2ea3a775fd71f0dec8bd8e1ce0f348bbb85e651af92148edff",
+      "pr": "SVS-19",
+      "reason": "Private health and fixed-label telemetry; no SQL/Lua/auth predicate or writer changes"
+    }
+  },
+  "reviewed_runtime_additions": {
+    "src/Treehammock.SessionValidation.Api/CapacitySettings.cs": "588b7389014d4817a8ecab3b81edd58694b67867ccf5322cbb040472f5687663",
+    "src/Treehammock.SessionValidation.Api/ServiceConcurrencyLimiter.cs": "28b4052aed48706a864d9414b49c9fa72036373b5537b35af03fa30035e65abf",
+    "src/Treehammock.SessionValidation.Api/Metrics.cs": "6db402491f78e11db78a82de1f361b5c90d3073a2876ca2ec51c068c8e1570ca",
+    "src/Treehammock.SessionValidation.Api/HealthEndpoints.cs": "8afb1b66db4a0c99d405cc2b6f314ea7f38861c54754b7e7767c60ec0b7e6d00"
+  },
+  "reviewed_runtime_history": [
+    {
+      "file": "src/Treehammock.SessionValidation.Api/HostSettings.cs",
+      "review": {
+        "baseline_sha256": "157654b0c16c6d7891b88bbe5b6196ad96a93de2cad25cd70c3517c232dbd1f2",
+        "sha256": "16eb2190b9297663300cbd7c5fbedd24ac24e80b9cb761d2f3cbb2f4d1e2ee30",
+        "pr": "SVS-17",
+        "reason": "Explicit API capacity ceilings, raw-operation ownership and fail-fast backpressure; authorization/SQL/Lua contracts unchanged"
+      }
+    },
+    {
+      "file": "src/Treehammock.SessionValidation.Api/ServiceConcurrencyLimiter.cs",
+      "addition_sha256": "a38b2d506789ee9bcceebaf5f87de37351542caf62dfe619a9ecff56a8f61a80"
+    }
+  ],
+  "reviewed_test_locks": {
+    "tests/Treehammock.SessionValidation.HostTests/packages.lock.json": {
+      "pr": "SVS-20",
+      "baseline_path": "eng/session-validation/ci/baselines/SVS19-host.packages.lock.json",
+      "baseline_sha256": "04b25de8d6f3c8ddae6f3e59f040af0483986bf999921b6a380be0d5f1f1609a",
+      "sha256": "b8fb5f5dfee61ba4246edcc6a0d7d35642dac0bb80f8eaad98ba8209adf8c0c2",
+      "reason": "Add only eight local Backup project references; all original package versions and content hashes remain identical."
+    }
+  }
+}

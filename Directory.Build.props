@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <Configurations>Debug;Release;Sandbox</Configurations>
+    <TreehammockProofRunId>$(TREEHAMMOCK_BUILD_RUN_ID)</TreehammockProofRunId>
+    <Product>Raptor Balcony</Product>
+    <Authors>Treehammock contributors</Authors>
+    <Company>Treehammock contributors</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <VersionPrefix Condition="'$(TreehammockReleaseTag)' == ''">1.0.0</VersionPrefix>
+    <PackageVersion Condition="'$(TreehammockReleaseTag)' == ''">1.0.0</PackageVersion>
+    <AssemblyVersion Condition="'$(TreehammockReleaseTag)' == ''">1.0.0.0</AssemblyVersion>
+    <FileVersion Condition="'$(TreehammockReleaseTag)' == ''">1.0.0.0</FileVersion>
+    <InformationalVersion Condition="'$(TreehammockReleaseTag)' == ''">1.0.0-dev</InformationalVersion>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' Or '$(GITLAB_CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TreehammockReleaseTag)' != ''">
+    <VersionPrefix>$(TreehammockReleaseBaseVersion)</VersionPrefix>
+    <Version>$(TreehammockReleaseVersion)</Version>
+    <PackageVersion>$(TreehammockReleaseVersion)</PackageVersion>
+    <AssemblyVersion>$(TreehammockReleaseBaseVersion).0</AssemblyVersion>
+    <FileVersion>$(TreehammockReleaseBaseVersion).0</FileVersion>
+    <InformationalVersion>$(TreehammockReleaseVersion)+sha.$(TreehammockReleaseSourceSha)</InformationalVersion>
+    <SourceRevisionId>$(TreehammockReleaseSourceSha)</SourceRevisionId>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TreehammockReleaseTag)' != ''">
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute"><_Parameter1>TreehammockReleaseTag</_Parameter1><_Parameter2>$(TreehammockReleaseTag)</_Parameter2></AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute"><_Parameter1>TreehammockReleaseVersion</_Parameter1><_Parameter2>$(Version)</_Parameter2></AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute"><_Parameter1>TreehammockReleasePackageVersion</_Parameter1><_Parameter2>$(PackageVersion)</_Parameter2></AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute"><_Parameter1>TreehammockReleaseSourceSha</_Parameter1><_Parameter2>$(TreehammockReleaseSourceSha)</_Parameter2></AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TreehammockProofRunId)' != ''">
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>TreehammockProofRunId</_Parameter1>
+      <_Parameter2>$(TreehammockProofRunId)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

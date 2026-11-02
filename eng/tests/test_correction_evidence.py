@@ -101,6 +101,91 @@ class InitialImportedHistoryTests(unittest.TestCase):
                 evidence.verify_initial_import(root, evidence.digest(path))
 
 
+class GitPredecessorResolutionTests(unittest.TestCase):
+    """A root commit is not the same thing as an unavailable shallow parent."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='evidence-git-history-')
+        self.root = Path(self.temp.name) / 'source'
+        self.root.mkdir()
+        self.git('init', '-q', '-b', 'main')
+        self.git('config', 'user.email', 'audit@example.test')
+        self.git('config', 'user.name', 'Audit Test')
+        self.docs = self.root / 'docs/corrections'
+        self.docs.mkdir(parents=True)
+        self.write_evidence()
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def git(self, *arguments, cwd=None):
+        return subprocess.run(['git', *arguments], cwd=cwd or self.root,
+                              check=True, capture_output=True, text=True).stdout.strip()
+
+    def write_evidence(self):
+        findings = {'findings': [dict(id='TEST-01', status='InProgress', history=[
+            dict(**{'from': 'Open', 'to': 'InProgress', 'reason': 'Reviewed initial import'})]) ]}
+        (self.docs / 'FINDING_CLOSURE.json').write_text(json.dumps(findings))
+        (self.docs / 'REVIEW_GATES.json').write_text(json.dumps({'gates': [dict(id='release', status='Open')]}))
+        (self.docs / 'BASELINE_MANIFEST.json').write_text(json.dumps({'baseline_paths': []}))
+
+    def commit(self, message='source checkpoint'):
+        self.git('add', '-A')
+        self.git('commit', '-qm', message)
+
+    def test_actual_root_commit_uses_pinned_import_and_no_fabricated_parent(self):
+        self.commit('initial import')
+        digest = evidence.digest(self.docs / 'FINDING_CLOSURE.json')
+        prior, resource = evidence.predecessor_evidence(self.root, 'HEAD^', digest)
+        self.assertIsNone(prior)
+        self.assertIsNone(resource)
+        with self.assertRaisesRegex(ValueError, 'explicitly pinned'):
+            evidence.predecessor_evidence(self.root, 'HEAD^')
+
+    def test_unknown_predecessor_oid_never_becomes_a_root_import(self):
+        self.commit('initial import')
+        with self.assertRaisesRegex(ValueError, 'Predecessor revision is unavailable'):
+            evidence.predecessor_evidence(self.root, '0' * 40,
+                evidence.digest(self.docs / 'FINDING_CLOSURE.json'))
+
+    def test_parent_snapshot_is_loaded_and_ledger_must_be_complete(self):
+        self.commit('initial import')
+        (self.root / 'README.md').write_text('new update')
+        self.commit('subsequent change')
+        prior, resource = evidence.predecessor_evidence(self.root, 'HEAD^')
+        try:
+            self.assertTrue((prior / 'BASELINE_MANIFEST.json').is_file())
+            self.assertEqual((prior / 'FINDING_CLOSURE.json').read_bytes(),
+                             (self.docs / 'FINDING_CLOSURE.json').read_bytes())
+        finally:
+            resource.cleanup()
+
+    def test_shallow_clone_cannot_claim_to_be_a_root_import(self):
+        self.commit('initial import')
+        (self.root / 'README.md').write_text('new update')
+        self.commit('subsequent change')
+        clone = Path(self.temp.name) / 'shallow'
+        self.git('clone', '--quiet', '--depth', '1', self.root.as_uri(), str(clone))
+        self.assertEqual(self.git('rev-parse', '--is-shallow-repository', cwd=clone), 'true')
+        with self.assertRaisesRegex(ValueError, 'shallow'):
+            evidence.predecessor_evidence(clone, 'HEAD^',
+                evidence.digest(clone / 'docs/corrections/FINDING_CLOSURE.json'))
+
+    def test_new_ledger_after_existing_parent_requires_pinned_import(self):
+        # This is a normal Git predecessor without any correction files.
+        for p in self.docs.glob('*'):
+            p.unlink()
+        self.git('commit', '--allow-empty', '-qm', 'repository before evidence')
+        self.write_evidence()
+        self.commit('import evidence')
+        with self.assertRaisesRegex(ValueError, 'explicitly pinned'):
+            evidence.predecessor_evidence(self.root, 'HEAD^')
+        prior, resource = evidence.predecessor_evidence(
+            self.root, 'HEAD^', evidence.digest(self.docs / 'FINDING_CLOSURE.json'))
+        self.assertIsNone(prior)
+        self.assertIsNone(resource)
+
+
 class RegressionSelectorTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()

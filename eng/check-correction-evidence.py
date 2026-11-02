@@ -517,11 +517,61 @@ def validate(root, previous=None):
     return len(current), len(rows), sum(g['status'] == 'Open' for g in by_id.values())
 
 
+
+def predecessor_evidence(root, revision, initial_import_ledger_sha256=None):
+    """Load the exact Git predecessor; permit a pinned initial import only at a genuine root.
+
+    Missing parent objects in a shallow checkout are not evidence of a first
+    commit. Do not turn an unavailable non-root parent into a fresh import.
+    """
+    require(re.fullmatch(r'(?:HEAD\^|[a-fA-F0-9]{40})', revision) is not None,
+            'Invalid predecessor revision')
+    probe = subprocess.run(['git', 'rev-parse', '--verify', revision],
+                           cwd=root, capture_output=True, text=True)
+    # `git rev-parse --verify` accepts a syntactically valid SHA even when the
+    # corresponding object is absent; require a materialized commit object.
+    present = subprocess.run(['git', 'cat-file', '-e', revision + '^{commit}'],
+                             cwd=root, capture_output=True, text=True)
+    if probe.returncode != 0 or present.returncode != 0:
+        shallow = subprocess.run(['git', 'rev-parse', '--is-shallow-repository'],
+                                 cwd=root, capture_output=True, text=True)
+        require(shallow.returncode == 0 and shallow.stdout.strip() == 'false',
+                'Predecessor revision is unavailable in a shallow or invalid repository; fetch complete history')
+        # Only HEAD^ on an actual root commit may be absent. Other revision
+        # lookups must be present even if the current HEAD has no parent.
+        parents = subprocess.run(['git', 'rev-list', '--parents', '-n', '1', 'HEAD'],
+                                 cwd=root, capture_output=True, text=True)
+        require(revision == 'HEAD^' and parents.returncode == 0 and
+                len(parents.stdout.strip().split()) == 1,
+                'Predecessor revision is unavailable; fetch it before validating transitions')
+        verify_initial_import(root, initial_import_ledger_sha256)
+        return None, None
+
+    prior = subprocess.run(['git', 'show', f'{revision}:docs/corrections/BASELINE_MANIFEST.json'],
+                           cwd=root, capture_output=True, text=True)
+    if prior.returncode != 0:
+        # Later import into existing Git history: the predecessor is present,
+        # but has no correction ledger. Require the same pinned import checks.
+        verify_initial_import(root, initial_import_ledger_sha256)
+        return None, None
+    temporary = tempfile.TemporaryDirectory()
+    try:
+        previous = Path(temporary.name)
+        for name in ['BASELINE_MANIFEST.json', 'FINDING_CLOSURE.json', 'REVIEW_GATES.json']:
+            value = subprocess.run(['git', 'show', f'{revision}:docs/corrections/{name}'],
+                                   cwd=root, capture_output=True, text=True)
+            require(value.returncode == 0, 'Previous correction snapshot is incomplete')
+            (previous / name).write_text(value.stdout, encoding='utf-8')
+        return previous, temporary
+    except Exception:
+        temporary.cleanup()
+        raise
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument('--previous', type=Path, help='Previous docs/corrections snapshot for transition checks')
-    parser.add_argument('--previous-revision', help='Git predecessor revision; absent correction data requires an all-open initial state')
+    parser.add_argument('--previous-revision', help='Git predecessor revision; a genuine root commit or first ledger import requires a pinned initial-import digest')
     parser.add_argument('--initial-import-ledger-sha256', help='Explicitly pinned digest for historical ledgers imported after implementation; never permits closed findings or gates')
     parser.add_argument('--run', type=Path, help='Also validate an executed baseline run manifest')
     args = parser.parse_args()
@@ -529,19 +579,8 @@ def main():
         previous = args.previous
         temporary = None
         if args.previous_revision:
-            require(re.fullmatch(r'(?:HEAD\^|[a-fA-F0-9]{40})', args.previous_revision) is not None, 'Invalid predecessor revision')
-            revision = subprocess.run(['git', 'rev-parse', '--verify', args.previous_revision], cwd=args.root, capture_output=True, text=True)
-            require(revision.returncode == 0, 'Predecessor revision is unavailable; fetch it before validating transitions')
-            prior = subprocess.run(['git', 'show', f'{args.previous_revision}:docs/corrections/BASELINE_MANIFEST.json'], cwd=args.root, capture_output=True, text=True)
-            if prior.returncode == 0:
-                temporary = tempfile.TemporaryDirectory()
-                previous = Path(temporary.name)
-                for name in ['BASELINE_MANIFEST.json', 'FINDING_CLOSURE.json', 'REVIEW_GATES.json']:
-                    value = subprocess.run(['git', 'show', f'{args.previous_revision}:docs/corrections/{name}'], cwd=args.root, capture_output=True, text=True)
-                    require(value.returncode == 0, 'Previous correction snapshot is incomplete')
-                    (previous / name).write_text(value.stdout, encoding='utf-8')
-            else:
-                verify_initial_import(args.root, args.initial_import_ledger_sha256)
+            previous, temporary = predecessor_evidence(
+                args.root, args.previous_revision, args.initial_import_ledger_sha256)
         counts = validate(args.root.resolve(), previous)
         if temporary is not None:
             temporary.cleanup()

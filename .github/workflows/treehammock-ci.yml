@@ -5,10 +5,9 @@ on:
     branches:
       - "**"
   push:
+    # Build and validate every branch push, not only the default/release branches.
     branches:
-      - main
-      - develop
-      - "release/**"
+      - "**"
   workflow_dispatch:
     inputs:
       lane:
@@ -30,8 +29,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: treehammock-ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Different commits must not cancel each other (including rapid pushes).
+  group: treehammock-ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
 
 defaults:
   run:
@@ -51,7 +51,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 2
+          # Exact predecessor comparison needs complete history. The evidence
+          # validator independently distinguishes a true root from a shallow clone.
+          fetch-depth: 0
       - name: Initialize correction diagnostics
         run: |
           mkdir -p .correction-results
